@@ -1,0 +1,13 @@
+@import "./variables";
+@import "./resets";
+@import "./structure";
+@import "./typography";
+@import "./breakpoints";
+
+body {
+  color: $color-main;
+  background-color: #000;
+  margin: 0;
+  font-family: $font-family;
+  text-align: center;
+}

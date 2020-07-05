@@ -33,6 +33,12 @@ module.exports = {
         overlayDrafts: !isProduction
       }
     },
+    {
+      resolve: 'gatsby-plugin-sass',
+      options: {
+        data: `@import "${__dirname}/src/styles/main";`,
+      }
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
