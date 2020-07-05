@@ -1,0 +1,32 @@
+{
+  "name": "civismundi",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A Shopify powered webshop for Tarzana, built with NextJS and Typescript",
+  "main": "package.json",
+  "author": "Wessel <wesselvdp@gmail.com>",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "sanity start",
+    "test": "sanity check"
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "dependencies": {
+    "@sanity/base": "^1.149.15",
+    "@sanity/components": "^1.149.15",
+    "@sanity/core": "^1.149.13",
+    "@sanity/default-layout": "^1.149.15",
+    "@sanity/default-login": "^1.149.11",
+    "@sanity/desk-tool": "^1.149.15",
+    "@sanity/google-maps-input": "^1.149.7",
+    "@sanity/vision": "^1.149.0",
+    "prop-types": "^15.6",
+    "react": "^16.2",
+    "react-dom": "^16.2",
+    "react-icons": "^2.2.5",
+    "sanity-plugin-tabs": "^1.1.8"
+  },
+  "devDependencies": {}
+}

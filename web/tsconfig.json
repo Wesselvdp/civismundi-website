@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "es5",
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false,
+    "baseUrl": "./",
+    "typeRoots": ["node_modules/@types", "types"],
+    "paths": {
+      "@pages/*": ["src/pages/*"],
+      "@stories/*": ["src/schemas/*"],
+      "@utils/*": ["src/utils/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@media/*": ["src/media/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@schemas/*": ["src/schemas/*"]
+    }
+  },
+  "include": ["src", "types"],
+  "exclude": ["node_modules", "public", ".cache"]
+}
