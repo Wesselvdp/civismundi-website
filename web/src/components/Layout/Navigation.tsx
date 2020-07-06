@@ -34,11 +34,13 @@ const MainNavigation: FC<T> = () => {
 
 const Container = styled.div`
   padding: 0 15px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
 `
 
 const Navigation = styled.nav`
   padding: 0 15px;
-
   display: flex;
 
   .item {

@@ -3,11 +3,12 @@
 import React, { FC, useState, useEffect, useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as THREE from 'three'
-import BackgroundVideo from '@components/BackgroundVideo'
+// import Globe from 'react-globe.gl'
+const Globe = React.lazy(() => import('react-globe.gl'));
 
 import { renderToString } from 'react-dom/server'
-import Globe from 'react-globe.gl'
-// import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
+
+import VideoThumbnail from '@components/VideoThumbnail'
 
 type T = {
   onProjectHover: (project: any) => void
@@ -15,16 +16,11 @@ type T = {
 }
 // Gen random data
 
-const Thumbnail: FC<Type> = ({ d }) => {
-  return (
-    <StyledThumbnail>
-      <BackgroundVideo />
-    </StyledThumbnail>
-  )
-}
+
 
 const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
   const globeEl = useRef()
+  const isSSR = typeof window === "undefined"
   const [data, setData] = useState([])
   const [autoplay, setAutoplay] = useState(true)
 
@@ -36,6 +32,8 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
     setAutoplay(!obj)
     onProjectClick(obj)
   }
+
+
 
   useEffect(() => {
     fetch(
@@ -112,7 +110,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
   }, [])
 
   return (
-    <Globe
+    !isSSR && <Globe
       ref={globeEl}
       renderConfig={{
         sortObjects: false
@@ -132,7 +130,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
       onCustomLayerClick={obj => {
         handleProjectClick(obj)
       }}
-      customLayerLabel={d => renderToString(<Thumbnail d={d} />)}
+      customLayerLabel={d => renderToString( <VideoThumbnail d={{title: 'stargazing', slug: '/hey'}} />)}
       customThreeObject={d => {
         const sphereGeometry = new THREE.SphereBufferGeometry(d.radius)
         const sphereMesh = new THREE.Mesh(
@@ -165,9 +163,5 @@ const guiData = {
   strokesWireframe: false
 }
 
-const StyledThumbnail = styled.div`
-  width: 400px;
-  height: 225px;
-  position: relative;
-`
-export default GlobeComponent
+
+export default GlobeComponent;

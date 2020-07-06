@@ -36,7 +36,7 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
         <Content>
           <div className="inner">
             <span>pre-title</span>
-          <TitleAnimated showText={true} text={title} />
+          <TitleAnimated showText={false} text={title} />
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui </p>
           </div>
         </Content>
@@ -93,6 +93,7 @@ const Section = styled.section`
   padding: 2em 0;
   display: flex;
   flex-flow: row wrap;
+
 
   .col {
     &.meta {

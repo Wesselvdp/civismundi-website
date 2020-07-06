@@ -57,7 +57,6 @@ const createCustomPages = async (graphql, createPage) => {
           }
         }
       }
-
     }
   `)
   if (result.errors) {
@@ -86,7 +85,7 @@ const createCustomPages = async (graphql, createPage) => {
 //   // 3. Create citypages
   projects.forEach(({ node }, index) => {
     const page = {
-      path: `/${node.slug.current}`,
+      path: `projects/${node.slug.current}`,
       component: require.resolve(`./src/templates/projectPage.tsx`),
       context: { id: node.id, city: node.slug.current }
     }

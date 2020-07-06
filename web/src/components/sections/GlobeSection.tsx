@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { navigate } from 'gatsby';
 
 // Components
 import TitleAnimated from '@components/TitleAnimated'
@@ -8,15 +9,15 @@ import GlobeComponent from '@components/GlobeComponent'
 type T = any
 
 const SectionGlobe: FC<T> = () => {
+  const transitionTime = 2000;
   const [globeIn, setGlobeIn] = useState<boolean>(false)
   const [globeOut, setGlobeOut] = useState<boolean>(false)
-
   const [projectName, setProjectName] = useState<string>('')
   const [showText, setShowText] = useState<boolean>(false)
   useEffect(() => {
     setTimeout(() => {
       setGlobeIn(true)
-    }, 2000)
+    }, transitionTime)
     return () => {
       setGlobeIn(false)
     }
@@ -40,6 +41,9 @@ const SectionGlobe: FC<T> = () => {
     console.log(project)
     setShowText(false)
     setGlobeOut(true)
+    setTimeout(() => {
+      navigate('/projects/stargazing')
+    }, transitionTime);
   }
 
   return (

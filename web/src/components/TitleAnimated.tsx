@@ -10,7 +10,7 @@ type T = {
 
 const TitleAnimated: FC<T> = ({
   text = 'Title',
-  showText,
+  showText = true,
   className,
   style
 }) => {
