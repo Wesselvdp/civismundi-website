@@ -1,10 +1,13 @@
 // @ts-nocheck
 
-import React, { FC, useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { FC, useState, useEffect, useRef } from 'react'
+import loadable from '@loadable/component'
+
 import styled from 'styled-components'
 import * as THREE from 'three'
 // import Globe from 'react-globe.gl' // use while developing
-const Globe = React.lazy(() => import('react-globe.gl')); // use for production
+// const Globe = React.lazy(() => import('react-globe.gl')); // use for production
+const Globe = loadable(() => import('react-globe.gl'))
 
 import { renderToString } from 'react-dom/server'
 
@@ -17,11 +20,15 @@ type T = {
 
 
 const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
+  // const isSSR = typeof window === "undefined" // prevents builderror
+
   const globeEl = useRef()
-  const isSSR = typeof window === "undefined"
+
   const [data, setData] = useState([])
   const [autoplay, setAutoplay] = useState(true)
+  const [globeLoaded, setGlobeLoaded] = useState(false)
 
+  // Handlers
   const handleProjectHover = obj => {
     setAutoplay(!obj)
     onProjectHover(obj)
@@ -49,7 +56,14 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
       })
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if (globeLoaded) return;
+    if(globeEl.current) setGlobeLoaded(true)
+  }, [globeEl.current])
+
+  useEffect(() => {
+    if( !globeEl.current) return;
+    setGlobeLoaded
     globeEl.current.pointOfView({ altitude: 3.5 })
     globeEl.current.controls().autoRotateSpeed = 0.3
     globeEl.current.pointOfView({ lat: 9.6, lng: -34.5, altitude: 1.5 })
@@ -77,13 +91,15 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
       10
     )
     scene.add(cloudMesh)
-  }, [])
+  }, [globeLoaded])
 
   useEffect(() => {
+    if (!globeLoaded) return;
     globeEl.current.controls().autoRotate = autoplay
   }, [autoplay])
 
   useEffect(() => {
+    if(!globeLoaded) return;
     // custom globe material
     const globeMaterial = globeEl.current.globeMaterial()
     globeMaterial.bumpScale = 10
@@ -103,10 +119,10 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
         .children.find(obj3d => obj3d.type === 'DirectionalLight')
       directionalLight && directionalLight.position.set(1, 1, 1) // change light position to see the specularMap's effect
     })
-  }, [])
+  }, [globeLoaded])
 
   return (
-    !isSSR && (
+
     <React.Suspense fallback={<div />}>
       <Globe
           ref={globeEl}
@@ -114,7 +130,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
             sortObjects: false
           }}
           waitForGlobeReady={true}
-          globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+          globeImageUrl="/earth.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           showAtmosphere={false}
           globeMaterial={{
@@ -151,7 +167,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
           }}
         />
       </React.Suspense>
-    )
+
   )
 }
 

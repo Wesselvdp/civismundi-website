@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { navigate } from 'gatsby';
 
 // Components
-import TitleAnimated from '@components/TitleAnimated'
+import TextAnimated from '@components/TextAnimated'
 import GlobeComponent from '@components/GlobeComponent'
 
 type T = any
@@ -57,7 +57,7 @@ const SectionGlobe: FC<T> = () => {
         />
       </GlobeWrapper>
       <TitleContainer>
-        <TitleAnimated showText={showText} text={projectName} />
+        <TextAnimated tag={'h1'} showText={showText} text={projectName} />
       </TitleContainer>
     </Wrapper>
   )

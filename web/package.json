@@ -6,6 +6,7 @@
   "author": "CityHub <info@cityhub.com>",
   "dependencies": {
     "@juggle/resize-observer": "^3.1.1",
+    "@loadable/component": "^5.13.1",
     "@reach/tooltip": "^0.8.5",
     "@reach/utils": "^0.8.5",
     "@sanity/block-content-to-react": "^2.0.7",
@@ -13,6 +14,7 @@
     "dotenv": "^8.2.0",
     "gatsby": "^2.19.23",
     "gatsby-image": "^2.2.39",
+    "gatsby-plugin-loadable-components-ssr": "^2.1.0",
     "gatsby-plugin-manifest": "^2.2.39",
     "gatsby-plugin-offline": "^3.0.32",
     "gatsby-plugin-react-helmet": "^3.1.21",

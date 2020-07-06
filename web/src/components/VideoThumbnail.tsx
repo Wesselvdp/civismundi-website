@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 // components
 import BackgroundVideo from '@components/BackgroundVideo'
-import TitleAnimated from '@components/TitleAnimated'
+import TextAnimated from '@components/TextAnimated'
 
 type T = {
   d: {
@@ -13,7 +13,7 @@ type T = {
 }
 
 const VideoThumbnail: FC<T> = ({d: {title, slug}}) => {
-  const [showText, setShowText] = useState(false)
+  const [showText, setShowText] = useState(true)
   useEffect(() => {
     setTimeout(() => {
       setShowText(true)
@@ -24,9 +24,8 @@ const VideoThumbnail: FC<T> = ({d: {title, slug}}) => {
       <BackgroundVideo />
       <div className="content">
         <div>
-          heyeyeye
-          <TitleAnimated className="d-block" text="video direction" showText={showText} />
-          <TitleAnimated className="d-block" text="stargazing" showText={showText} />
+          <TextAnimated tag={'span'} className="d-block" text="video direction" showText={showText} />
+          <TextAnimated tag={'h2'} className="d-block" text="stargazing" showText={showText} />
         </div>
       </div>
     </Thumbnail>

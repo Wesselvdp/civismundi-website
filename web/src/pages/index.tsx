@@ -5,20 +5,14 @@ import Layout from '@components/Layout'
 import SEO from '@components/seo'
 
 import GlobeSection from '@components/sections/GlobeSection'
+import VideoThumbnail from '@components/VideoThumbnail'
 
 import localize from '@utils/localize'
 
 type PageProps = {
   data: {
     allSanityProject: {
-      cities: [
-        {
-          slug: {
-            current: string
-          }
-          name: string
-        }
-      ]
+     edges: Project
     }
   }
 }
@@ -28,7 +22,7 @@ const IndexPage = ({ data }: PageProps) => {
   return (
     <Layout>
       <SEO title="Home" />
-      <GlobeSection />
+      <GlobeSection projects={data.allSanityProject.edges} />
     </Layout>
   )
 }

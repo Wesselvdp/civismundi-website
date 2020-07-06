@@ -7,7 +7,7 @@ import { graphql } from 'gatsby'
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
 import Layout from '@components/Layout';
-import TitleAnimated from '@components/TitleAnimated';
+import TextAnimated from '@components/TextAnimated';
 import { breakpoints } from '@utils/breakpoints';
 
 type PageProps = {
@@ -35,9 +35,10 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
         </FixedBackground>
         <Content>
           <div className="inner">
-            <span>pre-title</span>
-          <TitleAnimated showText={true} text={title} />
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui </p>
+          <TextAnimated tag="span" showText={true} text='pre-title' />
+          <TextAnimated tag="h2" showText={true} text={title} />
+          <TextAnimated tag="p" showText={true} text="orem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui " />
+
           </div>
         </Content>
       </StyledMast>

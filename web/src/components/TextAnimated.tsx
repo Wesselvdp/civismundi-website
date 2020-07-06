@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useLayoutEffect } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 type T = {
@@ -6,12 +6,14 @@ type T = {
   showText: boolean
   className?: string
   style?: {}
+  tag: 'h1' | 'h2' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
 }
 
-const TitleAnimated: FC<T> = ({
+const TextAnimated: FC<T> = ({
   text = 'Title',
   showText = true,
   className,
+  tag: Tag,
   style
 }) => {
   const [letters, setLetters] = useState<string[]>([''])
@@ -25,9 +27,9 @@ const TitleAnimated: FC<T> = ({
   const duration = 300
   const [durationTotal, setDurationTotal] = useState<number>(0)
 
-  useLayoutEffect(() => {
-   if(showText) setVisible(true);
-  })
+  useEffect(() => {
+    setVisible(showText);
+  }, [showText])
 
   useEffect(() => {
     if (visible) {
@@ -55,24 +57,24 @@ const TitleAnimated: FC<T> = ({
 
   return (
     <Wrapper>
-      <h2 className={className} style={style}>
+      <Tag className={className} style={style}>
         {letters.map((el, id) => (
           <span
             key={id}
             className={`letter ${enter ? 'enter' : ''} ${
               enterActive ? 'enter-active' : ''
             } ${exit ? 'exit' : ''} ${exitActive ? 'exit-active' : ''}`}
-            style={{ transitionDelay: `${0.025 * id}s` }}
+            style={{ transitionDelay: `${0.0025 * id}s` }}
           >
             {el}
           </span>
         ))}
-      </h2>
+      </Tag>
     </Wrapper>
   )
 }
 
-export default TitleAnimated
+export default TextAnimated
 
 const Wrapper = styled.div`
   .letter {
@@ -104,7 +106,7 @@ const Wrapper = styled.div`
         opacity 0.8s cubic-bezier(0.1, 0.02, 0.08, 1.1);
     }
   }
-  h2 {
+  * {
     /* font-size: 78px; */
     white-space: pre-wrap;
   }

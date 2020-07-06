@@ -14,6 +14,7 @@ module.exports = {
     `gatsby-plugin-typescript`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-tsconfig-paths`,
+    'gatsby-plugin-loadable-components-ssr',
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -21,6 +22,7 @@ module.exports = {
         path: `${__dirname}/src/media`
       }
     },
+    
     {
       resolve: 'gatsby-source-sanity',
       options: {
