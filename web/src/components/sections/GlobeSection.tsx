@@ -1,6 +1,8 @@
 import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { navigate } from 'gatsby';
+import { useStaticQuery, graphql } from "gatsby"
+
 
 // Components
 import TextAnimated from '@components/TextAnimated'
@@ -14,7 +16,26 @@ const SectionGlobe: FC<T> = () => {
   const [globeOut, setGlobeOut] = useState<boolean>(false)
   const [projectName, setProjectName] = useState<string>('')
   const [showText, setShowText] = useState<boolean>(false)
+
+  // Data
+  const data = useStaticQuery(graphql`
+    query HeaderQuery {
+      allSanityProject {
+        edges {
+          node {
+            slug {
+              current
+            }
+            title
+          }
+        }
+      }
+    }
+  `)
+
+
   useEffect(() => {
+    console.log('static data', data)
     setTimeout(() => {
       setGlobeIn(true)
     }, transitionTime)
@@ -38,7 +59,6 @@ const SectionGlobe: FC<T> = () => {
 
   // Click
   const handleProjectClick = (project: any) => {
-    console.log(project)
     setShowText(false)
     setGlobeOut(true)
     setTimeout(() => {
@@ -46,6 +66,7 @@ const SectionGlobe: FC<T> = () => {
     }, transitionTime);
   }
 
+  
   return (
     <Wrapper>
       <GlobeWrapper
@@ -54,6 +75,7 @@ const SectionGlobe: FC<T> = () => {
         <GlobeComponent
           onProjectClick={handleProjectClick}
           onProjectHover={handleProjectHover}
+          projects={data.allSanityProject.edges}
         />
       </GlobeWrapper>
       <TitleContainer>

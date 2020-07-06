@@ -20,7 +20,7 @@ type T = {
 
 
 const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
-  // const isSSR = typeof window === "undefined" // prevents builderror
+  const isSSR = typeof window === "undefined" // prevents builderror
 
   const globeEl = useRef()
 
@@ -122,6 +122,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
   }, [globeLoaded])
 
   return (
+    !isSSR && (
 
     <React.Suspense fallback={<div />}>
       <Globe
@@ -167,7 +168,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
           }}
         />
       </React.Suspense>
-
+    )
   )
 }
 

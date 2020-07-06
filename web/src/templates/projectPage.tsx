@@ -7,7 +7,7 @@ import { graphql } from 'gatsby'
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
 import Layout from '@components/Layout';
-import TextAnimated from '@components/TextAnimated';
+import TextAnimated from '@components/TextAnimated'
 import { breakpoints } from '@utils/breakpoints';
 
 type PageProps = {
