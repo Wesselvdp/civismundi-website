@@ -3,8 +3,8 @@
 import React, { FC, useState, useEffect, useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as THREE from 'three'
-// import Globe from 'react-globe.gl'
-const Globe = React.lazy(() => import('react-globe.gl'));
+import Globe from 'react-globe.gl' // use while developing
+// const Globe = React.lazy(() => import('react-globe.gl')); // use for production
 
 import { renderToString } from 'react-dom/server'
 
@@ -14,8 +14,6 @@ type T = {
   onProjectHover: (project: any) => void
   onProjectClick: (project: any) => void
 }
-// Gen random data
-
 
 
 const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
@@ -32,8 +30,6 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
     setAutoplay(!obj)
     onProjectClick(obj)
   }
-
-
 
   useEffect(() => {
     fetch(
@@ -110,48 +106,52 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
   }, [])
 
   return (
-    !isSSR && <Globe
-      ref={globeEl}
-      renderConfig={{
-        sortObjects: false
-      }}
-      waitForGlobeReady={true}
-      globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-      bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-      showAtmosphere={false}
-      globeMaterial={{
-        transparent: false,
-        alphaTest: 0
-      }}
-      customLayerData={data}
-      onCustomLayerHover={(obj, prevObj) => {
-        handleProjectHover(obj)
-      }}
-      onCustomLayerClick={obj => {
-        handleProjectClick(obj)
-      }}
-      customLayerLabel={d => renderToString( <VideoThumbnail d={{title: 'stargazing', slug: '/hey'}} />)}
-      customThreeObject={d => {
-        const sphereGeometry = new THREE.SphereBufferGeometry(d.radius)
-        const sphereMesh = new THREE.Mesh(
-          sphereGeometry,
-          new THREE.MeshLambertMaterial({ color: 0x000020 })
-        )
-        const outlineMesh = new THREE.Mesh(
-          sphereGeometry,
-          new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide })
-        )
-        outlineMesh.scale.multiplyScalar(1.15)
+    !isSSR && (
+    <React.Suspense fallback={<div />}>
+      <Globe
+          ref={globeEl}
+          renderConfig={{
+            sortObjects: false
+          }}
+          waitForGlobeReady={true}
+          globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+          bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+          showAtmosphere={false}
+          globeMaterial={{
+            transparent: false,
+            alphaTest: 0
+          }}
+          customLayerData={data}
+          onCustomLayerHover={(obj, prevObj) => {
+            handleProjectHover(obj)
+          }}
+          onCustomLayerClick={obj => {
+            handleProjectClick(obj)
+          }}
+          customLayerLabel={d => renderToString( <VideoThumbnail d={{title: 'stargazing', slug: '/hey'}} />)}
+          customThreeObject={d => {
+            const sphereGeometry = new THREE.SphereBufferGeometry(d.radius)
+            const sphereMesh = new THREE.Mesh(
+              sphereGeometry,
+              new THREE.MeshLambertMaterial({ color: 0x000020 })
+            )
+            const outlineMesh = new THREE.Mesh(
+              sphereGeometry,
+              new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide })
+            )
+            outlineMesh.scale.multiplyScalar(1.15)
 
-        return d.outline ? sphereMesh : outlineMesh
-      }}
-      customThreeObjectUpdate={(obj, d) => {
-        Object.assign(
-          obj.position,
-          globeEl.current.getCoords(d.lat, d.lng, d.alt)
-        )
-      }}
-    />
+            return d.outline ? sphereMesh : outlineMesh
+          }}
+          customThreeObjectUpdate={(obj, d) => {
+            Object.assign(
+              obj.position,
+              globeEl.current.getCoords(d.lat, d.lng, d.alt)
+            )
+          }}
+        />
+      </React.Suspense>
+    )
   )
 }
 
