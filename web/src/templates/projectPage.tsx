@@ -36,7 +36,7 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
         <Content>
           <div className="inner">
             <span>pre-title</span>
-          <TitleAnimated showText={false} text={title} />
+          <TitleAnimated showText={true} text={title} />
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui </p>
           </div>
         </Content>

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState, useEffect, useLayoutEffect } from 'react'
 import styled from 'styled-components'
 
 type T = {
@@ -19,13 +19,18 @@ const TitleAnimated: FC<T> = ({
   const [enter, setEnter] = useState<boolean>(true)
   const [exitActive, setExitActive] = useState<boolean>(false)
   const [exit, setExit] = useState<boolean>(false)
+  const [visible, setVisible] = useState<boolean>(false);
 
   // Timing
   const duration = 300
   const [durationTotal, setDurationTotal] = useState<number>(0)
 
+  useLayoutEffect(() => {
+   if(showText) setVisible(true);
+  })
+
   useEffect(() => {
-    if (showText) {
+    if (visible) {
       setEnterActive(true)
       setTimeout(() => {
         setEnter(false)
@@ -33,7 +38,7 @@ const TitleAnimated: FC<T> = ({
         setEnterActive(false)
       }, durationTotal)
     }
-    if (!showText) {
+    if (!visible) {
       setExitActive(true)
       setTimeout(() => {
         setEnter(true)
@@ -41,7 +46,7 @@ const TitleAnimated: FC<T> = ({
         setExitActive(false)
       }, durationTotal)
     }
-  }, [showText])
+  }, [visible])
 
   useEffect(() => {
     setLetters(text.split(''))
