@@ -3,8 +3,8 @@
 import React, { FC, useState, useEffect, useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 import * as THREE from 'three'
-import Globe from 'react-globe.gl' // use while developing
-// const Globe = React.lazy(() => import('react-globe.gl')); // use for production
+// import Globe from 'react-globe.gl' // use while developing
+const Globe = React.lazy(() => import('react-globe.gl')); // use for production
 
 import { renderToString } from 'react-dom/server'
 
