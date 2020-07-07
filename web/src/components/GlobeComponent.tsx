@@ -10,16 +10,17 @@ import * as THREE from 'three'
 const Globe = loadable(() => import('react-globe.gl'))
 
 import { renderToString } from 'react-dom/server'
-
+import { Project } from '@interfaces'
 import VideoThumbnail from '@components/VideoThumbnail'
 
 type T = {
   onProjectHover: (project: any) => void
   onProjectClick: (project: any) => void
+  projects: Project[];
 }
 
 
-const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
+const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => {
   const isSSR = typeof window === "undefined" // prevents builderror
 
   const globeEl = useRef()
@@ -39,21 +40,16 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
   }
 
   useEffect(() => {
-    fetch(
-      'https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/moon-landing-sites/moon_landings.json'
-    )
-      .then(r => r.json())
-      .then(projects => {
-        const a = projects.map(p => ({
-          lat: p.lat,
-          lng: p.lng,
-          label: p.label,
-          alt: 0.05,
-          radius: 2.5
-        }))
-        const b = a.map(el => ({ outline: true, ...el }))
-        setData([...a, ...b])
-      })
+    const newData = projects.map(p => ({
+      lat: (Math.random() - 0.5) * 180,
+      lng: (Math.random() - 0.5) * 360,
+      label: p.node.title,
+      alt: 0.05,
+      radius: 2.5,
+      ...p
+    }))
+
+    setData(newData)
   }, [])
 
   useEffect(() => {
@@ -71,7 +67,10 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
     const cloudMesh = new THREE.Mesh(
       new THREE.SphereGeometry(102, 32, 32),
       new THREE.MeshPhongMaterial({
-        map: THREE.ImageUtils.loadTexture('/clouds.png'),
+        map:  new THREE.TextureLoader().load(
+          '/clouds.png',
+          texture => texture
+        ),
         // side: THREE.DoubleSide,
         transparent: true,
         side: THREE.DoubleSide,
@@ -131,7 +130,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
             sortObjects: false
           }}
           waitForGlobeReady={true}
-          globeImageUrl="/earth.jpg"
+          globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           showAtmosphere={false}
           globeMaterial={{
@@ -147,7 +146,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
           }}
           customLayerLabel={d => renderToString( <VideoThumbnail d={{title: 'stargazing', slug: '/hey'}} />)}
           customThreeObject={d => {
-            const sphereGeometry = new THREE.SphereBufferGeometry(d.radius)
+            const sphereGeometry = new THREE.SphereBufferGeometry(d.radius, 20)
             const sphereMesh = new THREE.Mesh(
               sphereGeometry,
               new THREE.MeshLambertMaterial({ color: 0x000020 })
@@ -156,7 +155,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick }) => {
               sphereGeometry,
               new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide })
             )
-            outlineMesh.scale.multiplyScalar(1.15)
+            outlineMesh.scale.multiplyScalar(1.2)
 
             return d.outline ? sphereMesh : outlineMesh
           }}

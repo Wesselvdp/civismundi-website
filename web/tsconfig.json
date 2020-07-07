@@ -19,6 +19,7 @@
     "typeRoots": ["node_modules/@types", "types"],
     "paths": {
       "@pages/*": ["src/pages/*"],
+      "@types/*": ["src/types/*"],
       "@stories/*": ["src/schemas/*"],
       "@utils/*": ["src/utils/*"],
       "@components/*": ["src/components/*"],

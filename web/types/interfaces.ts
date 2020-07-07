@@ -1,13 +1,12 @@
-interface Project {
+export interface Project {
   slug: {
     current: string
   }
-  id: string
   title: string
   lat?: string
   lng?: string
 }
 
-interface AllProject {
+export interface AllProject {
   edges: { node: Project }[]
 }

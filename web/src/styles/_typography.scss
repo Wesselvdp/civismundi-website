@@ -1,14 +1,27 @@
 @font-face {
-  font-family: "Helvetica Neue LT";
-  src: url("/fonts/HelveticaNeueLTProEx.otf") format("opentype");
+  font-family: 'Druk Wide Web Super';
+  src: url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.eot');
+  src: url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.eot?#iefix')
+      format('embedded-opentype'),
+    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.woff2')
+      format('woff2'),
+    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.woff')
+      format('woff'),
+    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.ttf')
+      format('truetype'),
+    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.svg#Druk Wide Web Super')
+      format('svg');
 }
+$font-family: 'Helvetica Neue LT', Helvetica, Arial, sans-serif;
 
-@font-face {
-  font-family: "Helvetica Neue LT";
-  font-weight: bold;
-  src: url("/fonts/HelveticaNeueLTProHvEx.otf") format("opentype");
+h4,
+h5,
+h6,
+.h4,
+.h5,
+.h6 {
+  font-family: 'Druk Wide Web Super';
 }
-$font-family: "Helvetica Neue LT", Helvetica, Arial, sans-serif;
 
 h1,
 h2,
@@ -46,4 +59,5 @@ body {
 
 a {
   color: inherit;
+  text-decoration: inherit;
 }

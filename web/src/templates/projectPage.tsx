@@ -3,27 +3,24 @@ import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import localize from '@utils/localize'
 import { graphql } from 'gatsby'
+import { breakpoints } from '@utils/breakpoints'
 
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
-import Layout from '@components/Layout';
+import Layout from '@components/Layout'
 import TextAnimated from '@components/TextAnimated'
-import { breakpoints } from '@utils/breakpoints';
+import SectionProjects from '@components/sections/SectionProjects'
 
 type PageProps = {
   data: {
-    sanityProject: {
-      title: string;
-      slug: {
-        current: string
-      }
-    }
+    sanityProject: Project
+    allSanityProject: AllProject
   }
 }
 
 const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
-  console.log(data.sanityProject)
-  const { title } = data.sanityProject
+  const { title, id } = data.sanityProject
+  console.log('projectId', id)
   return (
     <Layout>
       {/* Mast */}
@@ -31,46 +28,50 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
         <FixedBackground>
           <div className="overlay" />
           <BackgroundVideo />
-        
         </FixedBackground>
         <Content>
           <div className="inner">
-          <TextAnimated tag="span" showText={true} text='pre-title' />
-          <TextAnimated tag="h2" showText={true} text={title} />
-          <TextAnimated tag="p" showText={true} text="orem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui " />
-
+            <TextAnimated tag="span" showText={true} text="pre-title" />
+            <TextAnimated tag="h2" showText={true} text={title} />
+            <TextAnimated
+              tag="p"
+              showText={true}
+              text="orem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui "
+            />
           </div>
         </Content>
       </StyledMast>
 
       {/* Project content */}
       <Section>
-        
-      <div className="col meta">
-        <div>
-          <p className="pre-title">Directed by</p>
-          <p className="lead">Nabil Elderkin</p>
+        <div className="col meta">
+          <div>
+            <p className="pre-title">Directed by</p>
+            <p className="lead">Nabil Elderkin</p>
+          </div>
+          <div>
+            <p className="pre-title">Location</p>
+            <p className="lead">Los Angeles</p>
+          </div>
+          <div>
+            <p className="pre-title">Awards & Festivals</p>
+            <p className="lead">Los Angeles</p>
+          </div>
         </div>
-        <div>
-          <p className="pre-title">Location</p>
-          <p className="lead">Los Angeles</p>
-        </div>
-        <div>
-          <p className="pre-title">Awards & Festivals</p>
-          <p className="lead">Los Angeles</p>
-        </div>
-      </div>
-      <div className="col content">
-        content
-      </div>
+        <div className="col content">content</div>
       </Section>
+      <SectionProjects
+        blockId={id}
+        limit={2}
+        projects={data.allSanityProject}
+      />
     </Layout>
   )
 }
 
 const StyledMast = styled.div`
   position: relative;
-  `
+`
 
 const Content = styled.div`
   display: flex;
@@ -95,7 +96,6 @@ const Section = styled.section`
   display: flex;
   flex-flow: row wrap;
 
-
   .col {
     &.meta {
       flex: 100% 1 1;
@@ -110,8 +110,7 @@ const Section = styled.section`
       flex: 2;
       background: green;
     }
-    
-}
+  }
 `
 
 const FixedBackground = styled.div`
@@ -129,14 +128,27 @@ const FixedBackground = styled.div`
     height: 100%;
     background-color: #000;
     opacity: 0.7;
-}`
+  }
+`
 
 export const query = graphql`
   query singleProject($id: String!) {
     sanityProject(id: { eq: $id }) {
-      title 
+      title
       slug {
         current
+      }
+      id
+    }
+    allSanityProject {
+      edges {
+        node {
+          slug {
+            current
+          }
+          title
+          id
+        }
       }
     }
   }

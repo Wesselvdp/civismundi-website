@@ -5,30 +5,29 @@ import Layout from '@components/Layout'
 import SEO from '@components/seo'
 
 import GlobeSection from '@components/sections/GlobeSection'
-import VideoThumbnail from '@components/VideoThumbnail'
+// import { Project } from '@types/interfaces'
 
 import localize from '@utils/localize'
+import SectionProjects from '@components/sections/SectionProjects'
 
 type PageProps = {
   data: {
-    allSanityProject: {
-      edges: Project
-    }
+    allSanityProject: AllProject
   }
 }
 
-const IndexPage = ({ data }: PageProps) => {
+const ProjectsPage = ({ data }: PageProps) => {
   console.log(data)
   return (
     <Layout>
-      <SEO title="Home" />
-      <GlobeSection projects={data.allSanityProject} />
+      <SEO title="Projets" />
+      <SectionProjects projects={data.allSanityProject} />
     </Layout>
   )
 }
 
 export const query = graphql`
-  query IndexQuery {
+  query ProjectsQuery {
     allSanityProject {
       edges {
         node {
@@ -36,10 +35,11 @@ export const query = graphql`
             current
           }
           title
+          id
         }
       }
     }
   }
 `
 
-export default localize(IndexPage)
+export default localize(ProjectsPage)

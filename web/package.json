@@ -1,9 +1,9 @@
 {
-  "name": "cityhub-website-frontend-client",
+  "name": "civismundi-website-frontend-client",
   "private": true,
-  "description": "CityHub website Gatsby client",
+  "description": "Civismundi website Gatsby client",
   "version": "0.1.0",
-  "author": "CityHub <info@cityhub.com>",
+  "author": "Civismundi <info@Civismundi.com>",
   "dependencies": {
     "@juggle/resize-observer": "^3.1.1",
     "@loadable/component": "^5.13.1",

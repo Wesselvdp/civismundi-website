@@ -1,8 +1,8 @@
-@import "./variables";
-@import "./resets";
-@import "./structure";
-@import "./typography";
-@import "./breakpoints";
+@import './variables';
+@import './resets';
+@import './structure';
+@import './typography';
+@import './breakpoints';
 
 body {
   color: $color-main;
@@ -10,4 +10,7 @@ body {
   margin: 0;
   font-family: $font-family;
   text-align: center;
+  * {
+    box-sizing: border-box;
+  }
 }
