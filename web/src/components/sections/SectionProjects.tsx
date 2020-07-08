@@ -5,7 +5,8 @@ import { breakpoints } from '@utils/breakpoints'
 import ProjectCard from '@components/ProjectCard'
 import Button from '@components/Button'
 import LocalizedLink from '@components/LocalizedLink'
-import { ECKeyPairKeyObjectOptions } from 'crypto'
+
+
 
 type T = {
   limit?: number // we might want to limit the amount of projects to display

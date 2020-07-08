@@ -16,12 +16,15 @@ import VideoThumbnail from '@components/VideoThumbnail'
 type T = {
   onProjectHover: (project: any) => void
   onProjectClick: (project: any) => void
-  projects: Project[];
+  projects: Project[]
 }
 
-
-const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => {
-  const isSSR = typeof window === "undefined" // prevents builderror
+const GlobeComponent: FC<T> = ({
+  onProjectHover,
+  onProjectClick,
+  projects
+}) => {
+  const isSSR = typeof window === 'undefined' // prevents builderror
 
   const globeEl = useRef()
 
@@ -40,25 +43,29 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => 
   }
 
   useEffect(() => {
-    const newData = projects.map(p => ({
-      lat: (Math.random() - 0.5) * 180,
-      lng: (Math.random() - 0.5) * 360,
-      label: p.node.title,
-      alt: 0.05,
-      radius: 2.5,
-      ...p
-    }))
+    console.log('project', projects)
+    const newData = projects.map(p => {
+      const geocode = p.node.location || null
+      return {
+        lat: geocode ? geocode.lat : 0,
+        lng: geocode ? geocode.lng : 0,
+        label: p.node.title,
+        alt: 0.05,
+        radius: 2.5,
+        ...p
+      }
+    })
 
     setData(newData)
   }, [])
 
   useEffect(() => {
-    if (globeLoaded) return;
-    if(globeEl.current) setGlobeLoaded(true)
+    if (globeLoaded) return
+    if (globeEl.current) setGlobeLoaded(true)
   }, [globeEl.current])
 
   useEffect(() => {
-    if( !globeEl.current) return;
+    if (!globeEl.current) return
     setGlobeLoaded
     globeEl.current.pointOfView({ altitude: 3.5 })
     globeEl.current.controls().autoRotateSpeed = 0.3
@@ -67,10 +74,7 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => 
     const cloudMesh = new THREE.Mesh(
       new THREE.SphereGeometry(102, 32, 32),
       new THREE.MeshPhongMaterial({
-        map:  new THREE.TextureLoader().load(
-          '/clouds.png',
-          texture => texture
-        ),
+        map: new THREE.TextureLoader().load('/clouds.png', texture => texture),
         // side: THREE.DoubleSide,
         transparent: true,
         side: THREE.DoubleSide,
@@ -93,12 +97,12 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => 
   }, [globeLoaded])
 
   useEffect(() => {
-    if (!globeLoaded) return;
+    if (!globeLoaded) return
     globeEl.current.controls().autoRotate = autoplay
   }, [autoplay])
 
   useEffect(() => {
-    if(!globeLoaded) return;
+    if (!globeLoaded) return
     // custom globe material
     const globeMaterial = globeEl.current.globeMaterial()
     globeMaterial.bumpScale = 10
@@ -122,9 +126,8 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => 
 
   return (
     !isSSR && (
-
-    <React.Suspense fallback={<div />}>
-      <Globe
+      <React.Suspense fallback={<div />}>
+        <Globe
           ref={globeEl}
           renderConfig={{
             sortObjects: false
@@ -144,7 +147,11 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => 
           onCustomLayerClick={obj => {
             handleProjectClick(obj)
           }}
-          customLayerLabel={d => renderToString( <VideoThumbnail d={{title: 'stargazing', slug: '/hey'}} />)}
+          customLayerLabel={d =>
+            renderToString(
+              <VideoThumbnail d={{ title: 'stargazing', slug: '/hey' }} />
+            )
+          }
           customThreeObject={d => {
             const sphereGeometry = new THREE.SphereBufferGeometry(d.radius, 20)
             const sphereMesh = new THREE.Mesh(
@@ -153,7 +160,10 @@ const GlobeComponent: FC<T> = ({ onProjectHover, onProjectClick, projects }) => 
             )
             const outlineMesh = new THREE.Mesh(
               sphereGeometry,
-              new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.BackSide })
+              new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.BackSide
+              })
             )
             outlineMesh.scale.multiplyScalar(1.2)
 
@@ -179,5 +189,4 @@ const guiData = {
   strokesWireframe: false
 }
 
-
-export default GlobeComponent;
+export default GlobeComponent

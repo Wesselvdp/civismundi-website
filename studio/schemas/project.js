@@ -1,86 +1,63 @@
-import icon from "react-icons/lib/md/local-movies";
+import icon from 'react-icons/lib/md/local-movies'
 
 export default {
-  name: "project",
-  title: "Project",
-  type: "document",
+  name: 'project',
+  title: 'Project',
+  type: 'document',
   icon,
   fields: [
     {
-      name: "title",
-      title: "Title",
-      type: "string",
+      name: 'title',
+      title: 'Title',
+      type: 'string'
     },
     {
-      name: "slug",
-      title: "Slug",
-      type: "slug",
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
       options: {
-        source: "title",
-        maxLength: 100,
-      },
+        source: 'title',
+        maxLength: 100
+      }
     },
     {
-      name: "overview",
-      title: "Overview",
-      type: "blockContent",
+      name: 'overview',
+      title: 'Overview',
+      type: 'array',
+      of: [{ type: 'block' }]
     },
     {
-      name: "releaseDate",
-      title: "Release date",
-      type: "datetime",
+      title: 'Launchpad Location',
+      name: 'location',
+      type: 'geopoint'
     },
+
     {
-      name: "externalId",
-      title: "External ID",
-      type: "number",
-    },
-    {
-      name: "popularity",
-      title: "Popularity",
-      type: "number",
-    },
-    {
-      name: "poster",
-      title: "Poster Image",
-      type: "image",
+      name: 'poster',
+      title: 'Poster Image',
+      type: 'image',
       options: {
-        hotspot: true,
-      },
-    },
-    {
-      name: "castMembers",
-      title: "Cast Members",
-      type: "array",
-      of: [{ type: "castMember" }],
-    },
-    {
-      name: "crewMembers",
-      title: "Crew Members",
-      type: "array",
-      of: [{ type: "crewMember" }],
-    },
+        hotspot: true
+      }
+    }
   ],
   preview: {
     select: {
-      title: "title",
-      date: "releaseDate",
-      media: "poster",
-      castName0: "castMembers.0.person.name",
-      castName1: "castMembers.1.person.name",
+      title: 'title',
+      media: 'poster'
     },
     prepare(selection) {
-      const year = selection.date && selection.date.split("-")[0];
+      const year = selection.date && selection.date.split('-')[0]
       const cast = [selection.castName0, selection.castName1]
         .filter(Boolean)
-        .join(", ");
+        .join(', ')
 
       return {
-        title: `${selection.title} ${year ? `(${year})` : ""}`,
+        title: `${selection.title} ${year ? `(${year})` : ''}`,
         date: selection.date,
         subtitle: cast,
-        media: selection.media,
-      };
-    },
-  },
-};
+        media: selection.media
+      }
+    }
+  }
+}

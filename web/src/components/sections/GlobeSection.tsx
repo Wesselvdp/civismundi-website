@@ -1,8 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { navigate } from 'gatsby';
-import { useStaticQuery, graphql } from "gatsby"
-
+import { navigate } from 'gatsby'
+import { useStaticQuery, graphql } from 'gatsby'
 
 // Components
 import TextAnimated from '@components/TextAnimated'
@@ -11,7 +10,7 @@ import GlobeComponent from '@components/GlobeComponent'
 type T = any
 
 const SectionGlobe: FC<T> = () => {
-  const transitionTime = 2000;
+  const transitionTime = 2000
   const [globeIn, setGlobeIn] = useState<boolean>(false)
   const [globeOut, setGlobeOut] = useState<boolean>(false)
   const [projectName, setProjectName] = useState<string>('')
@@ -27,12 +26,15 @@ const SectionGlobe: FC<T> = () => {
               current
             }
             title
+            location {
+              lat
+              lng
+            }
           }
         }
       }
     }
   `)
-
 
   useEffect(() => {
     console.log('static data', data)
@@ -63,10 +65,9 @@ const SectionGlobe: FC<T> = () => {
     setGlobeOut(true)
     setTimeout(() => {
       navigate('/projects/stargazing')
-    }, transitionTime);
+    }, transitionTime)
   }
 
-  
   return (
     <Wrapper>
       <GlobeWrapper

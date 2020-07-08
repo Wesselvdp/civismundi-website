@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import localize from '@utils/localize'
 import { graphql } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
+import BlockContent from '@sanity/block-content-to-react'
 
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
@@ -19,8 +20,9 @@ type PageProps = {
 }
 
 const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
-  const { title, id } = data.sanityProject
-  console.log('projectId', id)
+  const { title, id, _rawOverview } = data.sanityProject
+
+  console.log('projectId', id, _rawOverview)
   return (
     <Layout>
       {/* Mast */}
@@ -58,7 +60,9 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
             <p className="lead">Los Angeles</p>
           </div>
         </div>
-        <div className="col content">content</div>
+        <div className="col content">
+          <BlockContent blocks={_rawOverview} />
+        </div>
       </Section>
       <SectionProjects
         blockId={id}
@@ -139,6 +143,7 @@ export const query = graphql`
         current
       }
       id
+      _rawOverview
     }
     allSanityProject {
       edges {
@@ -154,4 +159,4 @@ export const query = graphql`
   }
 `
 
-export default localize(ProjectPageTemplate)
+export default ProjectPageTemplate

@@ -18,7 +18,6 @@ type PageProps = {
 }
 
 const IndexPage = ({ data }: PageProps) => {
-  console.log(data)
   return (
     <Layout>
       <SEO title="Home" />
@@ -36,10 +35,14 @@ export const query = graphql`
             current
           }
           title
+          location {
+            lat
+            lng
+          }
         }
       }
     }
   }
 `
 
-export default localize(IndexPage)
+export default IndexPage

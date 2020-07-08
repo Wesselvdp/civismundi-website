@@ -97,7 +97,7 @@ const Button = styled('button')<StyleProps>`
       buttonStyle === 'solid' &&
       color !== 'secondary' &&
       `
-      color: #fff;
+      color: #fff
       background-color:  #000;
       border: 2px solid #000;
 
