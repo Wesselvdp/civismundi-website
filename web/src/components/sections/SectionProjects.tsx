@@ -55,7 +55,7 @@ const Container = styled.div`
 const Grid = styled.div`
   display: flex;
   flex-flow: row wrap;
-  padding: 30px 45px 30px;
+  padding: 30px 45px 50px;
 `
 const GridItem = styled.div`
   flex: 100% 0 0;

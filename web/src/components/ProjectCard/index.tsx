@@ -17,7 +17,7 @@ const ProjectCard: FC<T> = ({ data }) => {
         <Content>
           <p className="pre-title">VIDEO DIRECTION</p>
           <h4 className="title">{title}</h4>
-          <p className="text-lighter">
+          <p className="excerpt text-lighter">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia
             quaerat numquam labore aut excepturi veritatis laboriosam
           </p>
@@ -33,10 +33,13 @@ const Card = styled.div`
   margin: 0 auto;
 `
 const Content = styled.div`
-  max-width: 600px;
   padding-left: 1em;
   text-decoration: none;
   margin-top: -3.5em;
+
+  .excerpt {
+    max-width: 75%;
+  }
 `
 const Visual = styled.div`
   margin-bottom: 1rem;
