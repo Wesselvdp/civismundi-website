@@ -17,24 +17,24 @@ const SectionGlobe: FC<T> = () => {
   const [showText, setShowText] = useState<boolean>(false)
 
   // Data
-  const data = useStaticQuery(graphql`
-    query HeaderQuery {
-      allSanityProject {
-        edges {
-          node {
-            slug {
-              current
-            }
-            title
-            location {
-              lat
-              lng
-            }
-          }
-        }
-      }
-    }
-  `)
+  // const data = useStaticQuery(graphql`
+  //   query HeaderQuery {
+  //     allSanityProject {
+  //       edges {
+  //         node {
+  //           slug {
+  //             current
+  //           }
+  //           title
+  //           location {
+  //             lat
+  //             lng
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
 
   useEffect(() => {
     console.log('static data', data)

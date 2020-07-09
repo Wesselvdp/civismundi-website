@@ -4,10 +4,7 @@ import React from 'react'
 import Layout from '@components/Layout'
 import SEO from '@components/seo'
 
-import GlobeSection from '@components/sections/GlobeSection'
-import VideoThumbnail from '@components/VideoThumbnail'
-
-import localize from '@utils/localize'
+import WorldContainer from '@components/World/WorldContainer'
 
 type PageProps = {
   data: {
@@ -21,7 +18,7 @@ const IndexPage = ({ data }: PageProps) => {
   return (
     <Layout>
       <SEO title="Home" />
-      <GlobeSection projects={data.allSanityProject} />
+      <WorldContainer />
     </Layout>
   )
 }

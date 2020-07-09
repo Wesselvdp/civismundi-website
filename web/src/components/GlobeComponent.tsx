@@ -43,8 +43,7 @@ const GlobeComponent: FC<T> = ({
   }
 
   useEffect(() => {
-    console.log('project', projects)
-    const newData = projects.map(p => {
+    setData(projects.map(p => {
       const geocode = p.node.location || null
       return {
         lat: geocode ? geocode.lat : 0,
@@ -54,9 +53,7 @@ const GlobeComponent: FC<T> = ({
         radius: 2.5,
         ...p
       }
-    })
-
-    setData(newData)
+    }))
   }, [])
 
   useEffect(() => {
@@ -64,37 +61,37 @@ const GlobeComponent: FC<T> = ({
     if (globeEl.current) setGlobeLoaded(true)
   }, [globeEl.current])
 
-  useEffect(() => {
-    if (!globeEl.current) return
-    setGlobeLoaded
-    globeEl.current.pointOfView({ altitude: 3.5 })
-    globeEl.current.controls().autoRotateSpeed = 0.3
-    globeEl.current.pointOfView({ lat: 9.6, lng: -34.5, altitude: 1.5 })
+  // useEffect(() => {
+  //   if (!globeEl.current) return
+  //   setGlobeLoaded
+  //   globeEl.current.pointOfView({ altitude: 3.5 })
+  //   globeEl.current.controls().autoRotateSpeed = 0.3
+  //   globeEl.current.pointOfView({ lat: 9.6, lng: -34.5, altitude: 1.5 })
 
-    const cloudMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(102, 32, 32),
-      new THREE.MeshPhongMaterial({
-        map: new THREE.TextureLoader().load('/clouds.png', texture => texture),
-        // side: THREE.DoubleSide,
-        transparent: true,
-        side: THREE.DoubleSide,
-        // depthWrite: false,
-        // depthTest: false,
-        alphaTest: 0.1,
-        opacity: 0.5
-      })
-    )
-    const scene = globeEl.current.scene()
+  //   const cloudMesh = new THREE.Mesh(
+  //     new THREE.SphereGeometry(102, 32, 32),
+  //     new THREE.MeshPhongMaterial({
+  //       map: new THREE.TextureLoader().load('/clouds.png', texture => texture),
+  //       // side: THREE.DoubleSide,
+  //       transparent: true,
+  //       side: THREE.DoubleSide,
+  //       // depthWrite: false,
+  //       // depthTest: false,
+  //       alphaTest: 0.1,
+  //       opacity: 0.5
+  //     })
+  //   )
+  //   const scene = globeEl.current.scene()
 
-    cloudMesh.renderOrder = 1
-    setInterval(
-      () => (
-        (cloudMesh.rotation.y -= 0.00005), (cloudMesh.rotation.x -= 0.00001)
-      ),
-      10
-    )
-    scene.add(cloudMesh)
-  }, [globeLoaded])
+  //   cloudMesh.renderOrder = 1
+  //   setInterval(
+  //     () => (
+  //       (cloudMesh.rotation.y -= 0.00005), (cloudMesh.rotation.x -= 0.00001)
+  //     ),
+  //     10
+  //   )
+  //   scene.add(cloudMesh)
+  // }, [globeLoaded])
 
   useEffect(() => {
     if (!globeLoaded) return
@@ -133,7 +130,7 @@ const GlobeComponent: FC<T> = ({
             sortObjects: false
           }}
           waitForGlobeReady={true}
-          globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+          globeImageUrl="/earth.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           showAtmosphere={false}
           globeMaterial={{
