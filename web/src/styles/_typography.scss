@@ -14,15 +14,6 @@
 }
 $font-family: 'Helvetica Neue LT', Helvetica, Arial, sans-serif;
 
-h4,
-h5,
-h6,
-.h4,
-.h5,
-.h6 {
-  font-family: 'Druk Wide Web Super';
-}
-
 h1,
 h2,
 h3,
@@ -40,12 +31,61 @@ h6,
   margin-bottom: 0.5em;
 }
 
+h1, .h1 {
+  font-size: 64px;
+}
+
+h2, .h2 {
+  font-size: 42px;
+}
+
+h3, .h3 {
+  font-size: 36px;
+}
+
+h4, .h4 {
+  font-size: 30px;
+}
+
+h5, .h5 {
+  font-size: 22px;
+}
+
 .heading {
   color: green;
 }
 
 .title {
-  color: purple;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.pre-title {
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0;
+  font-family: 'Druk Wide Web Super';
+}
+
+.content--sanity {
+  strong {
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: -16px;
+    display: inherit;
+    font-family: 'Druk Wide Web Super';
+  }
+
+  p {
+    font-weight: 300;
+    opacity: 0.9;
+  }
+}
+
+.text-lighter {
+  opacity: 0.9;
+  font-weight: 300;
 }
 
 p {

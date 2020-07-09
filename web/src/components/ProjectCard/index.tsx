@@ -15,13 +15,11 @@ const ProjectCard: FC<T> = ({ data }) => {
           style={{ backgroundImage: `url('https://picsum.photos/400/300')` }}
         />
         <Content>
-          <h4>type</h4>
-          <h2>{title}</h2>
-          <p>
+          <p className="pre-title">VIDEO DIRECTION</p>
+          <h4 className="title">{title}</h4>
+          <p className="text-lighter">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia
-            quaerat numquam labore aut excepturi veritatis laboriosam porro
-            vitae quas non! Reprehenderit consequatur natus beatae blanditiis
-            porro ipsum necessitatibus accusamus expedita!
+            quaerat numquam labore aut excepturi veritatis laboriosam
           </p>
         </Content>
       </Card>
@@ -35,10 +33,10 @@ const Card = styled.div`
   margin: 0 auto;
 `
 const Content = styled.div`
-  margin-top: -3em;
   max-width: 600px;
-  padding: 0 3em;
+  padding-left: 1em;
   text-decoration: none;
+  margin-top: -3.5em;
 `
 const Visual = styled.div`
   margin-bottom: 1rem;

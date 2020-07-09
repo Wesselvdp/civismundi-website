@@ -47,10 +47,10 @@ const Button = styled('button')<StyleProps>`
     border: 2px solid;
     text-transform: uppercase;
     font-weight: bold;
-    padding: 1.5em 3em;
+    padding: 1em 4em;
     cursor: pointer;
     box-sizing: border-box;
-
+    font-family: 'Druk Wide Web Super';
     border: 2px solid #fff;
     color: #fff;
     background-color: transparent;

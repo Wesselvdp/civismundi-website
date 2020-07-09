@@ -22,7 +22,6 @@ type PageProps = {
 const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
   const { title, id, _rawOverview } = data.sanityProject
 
-  console.log('projectId', id, _rawOverview)
   return (
     <Layout>
       {/* Mast */}
@@ -33,12 +32,13 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
         </FixedBackground>
         <Content>
           <div className="inner">
-            <TextAnimated tag="span" showText={true} text="pre-title" />
-            <TextAnimated tag="h2" showText={true} text={title} />
+            <TextAnimated className="pre-title pre-title--big" tag="span" showText={true} text="VIDEO DIRECTION" />
+            <TextAnimated className="title h1" tag="h2" showText={true} text={title} />
             <TextAnimated
               tag="p"
               showText={true}
-              text="orem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quasi odio, minima, quam debitis qui "
+              text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
+              className="text-lighter"
             />
           </div>
         </Content>
@@ -46,25 +46,28 @@ const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
 
       {/* Project content */}
       <Section>
-        <div className="col meta">
-          <div>
-            <p className="pre-title">Directed by</p>
-            <p className="lead">Nabil Elderkin</p>
+        <div className="row">
+          <div className="col meta">
+            <div>
+              <p className="pre-title">DIRECTED BY</p>
+              <p className="lead text-lighter">NABIL ELDERKIN</p>
+            </div>
+            <div>
+              <p className="pre-title">AWARDS & FESTIVALS</p>
+              <p className="lead text-lighter">LOS ANGELES</p>
+            </div>
+            <div>
+              <p className="pre-title">LOCATION</p>
+              <p className="lead text-lighter">LOS ANGELES</p>
+            </div>
           </div>
-          <div>
-            <p className="pre-title">Location</p>
-            <p className="lead">Los Angeles</p>
+          <div className="col content content--sanity">
+            <BlockContent blocks={_rawOverview} />
           </div>
-          <div>
-            <p className="pre-title">Awards & Festivals</p>
-            <p className="lead">Los Angeles</p>
-          </div>
-        </div>
-        <div className="col content">
-          <BlockContent blocks={_rawOverview} />
         </div>
       </Section>
       <SectionProjects
+        title="Other projects"
         blockId={id}
         limit={2}
         projects={data.allSanityProject}
@@ -92,19 +95,30 @@ const Content = styled.div`
 
   .inner {
     padding: 15px;
+
+    .text-lighter {
+      max-width: 450px;
+      margin: 0 auto;
+    }
   }
 `
 
 const Section = styled.section`
-  padding: 2em 0;
+  padding: 10em 0 5em;
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
+
+  .row {
+    max-width: 800px;
+    display: flex;
+  }
 
   .col {
     &.meta {
       flex: 100% 1 1;
-      background: purple;
-
+      text-align: left;
+      padding-right: 2em;
       @media ${breakpoints.tabletLandscapeUp} {
         flex: 1;
       }
@@ -112,7 +126,7 @@ const Section = styled.section`
 
     &.content {
       flex: 2;
-      background: green;
+      text-align: left;
     }
   }
 `

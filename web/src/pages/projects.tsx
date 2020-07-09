@@ -20,7 +20,7 @@ const ProjectsPage = ({ data }: PageProps) => {
   console.log(data)
   return (
     <Layout>
-      <SEO title="Projets" />
+      <SEO title="Projects" />
       <SectionProjects projects={data.allSanityProject} />
     </Layout>
   )

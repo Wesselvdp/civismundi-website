@@ -9,12 +9,13 @@ import LocalizedLink from '@components/LocalizedLink'
 
 
 type T = {
+  title: string
   limit?: number // we might want to limit the amount of projects to display
   blockId?: string // We want to block a project id
   projects: AllProject
 }
 
-const SectionProjects: FC<T> = ({ limit, projects, blockId }) => {
+const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
   const [projectsVisible, setProjectsVisible] = useState<Project[]>([])
   console.log(projects)
   useEffect(() => {
@@ -31,8 +32,8 @@ const SectionProjects: FC<T> = ({ limit, projects, blockId }) => {
   }, [projects])
 
   return (
-    <>
-      <h3>Other projects</h3>
+    <Container>
+      <h2 className="title">{title}</h2>
       <Grid>
         {projectsVisible.map((p: Project) => (
           <GridItem key={p.id}>
@@ -40,17 +41,21 @@ const SectionProjects: FC<T> = ({ limit, projects, blockId }) => {
           </GridItem>
         ))}
       </Grid>
-
       <Button buttonStyle="outlined">
         <LocalizedLink to="/projects">See all </LocalizedLink>
       </Button>
-    </>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  padding-bottom: 30px;
+`
 
 const Grid = styled.div`
   display: flex;
   flex-flow: row wrap;
+  padding: 30px 45px 30px;
 `
 const GridItem = styled.div`
   flex: 100% 0 0;
