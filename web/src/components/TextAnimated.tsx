@@ -77,7 +77,11 @@ const TextAnimated: FC<T> = ({
 export default TextAnimated
 
 const Wrapper = styled.div`
+  pointer-events: none;
+  user-select: none;
+
   .letter {
+    pointer-events: none;
     display: inline-block;
     /* transition: transform 300ms ease-in, opacity 0.1s ease; */
     will-change: transform;
