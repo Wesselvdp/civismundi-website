@@ -9,6 +9,9 @@ import { initGlobe } from './utils'
 // import console = require('console');
 // import console = require('console');
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -43,15 +46,18 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
   const [isInitialized, setInitialized] = useState(false);
   const [labels, setLabels] = useState([]);
   const [labelActive, setLabelActive] = useState(null);
+  const [cameraChanged, setCameraChanged] = useState(false);
 
   useEffect(() => {
     if (loaded && ref.current && !isInitialized) {
       initGlobe(ref.current);
 
       // add event listener that listen on orbit control changes
-      // ref.current.controls().addEventListener('change', (e) => {
-      //   updateLabelsLookat();
-      // })
+      ref.current.controls().addEventListener('change', () => {
+        if (!cameraChanged) {
+          setCameraChanged(true);
+        }
+      })
 
       setTimeout(() => {
         setInitialized(true);
@@ -82,6 +88,19 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
       Object.assign(labelActive.__threeObj.scale, scale.large);
     }
   }, [labelActive]);
+
+  useEffect(() => {
+    if (!cameraChanged) return;
+
+    // let labels look at the screen
+    labels.forEach(label => {
+      label.__threeObj.quaternion.copy(ref.current.camera().quaternion);
+    })
+
+    setTimeout(() => {
+      setCameraChanged(false);
+    }, 100);
+  }, [cameraChanged]);
 
   /* ----- Labels ------ */
   const labelObject = () => {
@@ -119,15 +138,6 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
       }
     }
   }
-
-  // const updateLabelsLookat = () => {
-  //   console.log('updating labels');
-
-  //   labels.forEach(label => {
-  //     console.log('updating label to look at', ref.current.camera().position);
-  //     label.__threeObj.geometry.lookAt(ref.current.camera().position);
-  //   })
-  // }
 
   return (
     !isSSR && (
