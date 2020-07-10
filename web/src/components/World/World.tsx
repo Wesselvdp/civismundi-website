@@ -1,4 +1,5 @@
 // @ts-nocheck
+
 import React, { FC, useEffect, useRef, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
@@ -55,6 +56,7 @@ const calibrateVideoPos = (project, current, titleEl, videoEl) => {
       get(project, 'location.lng', 0),
       0.05
     );
+    
     
     // 2. Possible calibrate the Y coordinate so that it does not
     //    conflict with title.
@@ -114,36 +116,36 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
   
 
   return (
+    !isSSR && (
      <React.Suspense fallback={<div />}>
-      {!isSSR && (
-        <Globe
-          // ref
-          ref={ref}
-          // appearance
-          globeImageUrl="/earth.jpg"
-          bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-          backgroundColor={settings.backgroundColor}
-          // labels
-          customLayerData={projects}
-          customThreeObject={d => labelObject(d)}
-          customThreeObjectUpdate={(obj, d) => {
-            Object.assign(obj.position, ref.current.getCoords(
-              get(d, 'node.location.lat', 0),
-              get(d, 'node.location.lng', 0),
-              0.05
-            ));
-          }}
-          onCustomLayerHover={obj => {
-             setActiveProject(obj)
-             setActiveLabelObj(obj ? obj.__threeObj : null)
-          }}
+      <Globe
+        // ref
+        ref={ref}
+        // appearance
+        globeImageUrl="/earth.jpg"
+        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+        backgroundColor={settings.backgroundColor}
+        // labels
+        customLayerData={projects}
+        customThreeObject={d => labelObject(d)}
+        customThreeObjectUpdate={(obj, d) => {
+          Object.assign(obj.position, ref.current.getCoords(
+            get(d, 'node.location.lat', 0),
+            get(d, 'node.location.lng', 0),
+            0.05
+          ));
+        }}
+        onCustomLayerHover={obj => {
+            setActiveProject(obj)
+            setActiveLabelObj(obj ? obj.__threeObj : null)
+        }}
 
-          // settings
-          animateIn={false}
-          showAtmosphere={false}
-        />
-      )}
+        // settings
+        animateIn={false}
+        showAtmosphere={false}
+      />
      </React.Suspense>
+    )
   )
 }
 
