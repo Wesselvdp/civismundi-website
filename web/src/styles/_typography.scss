@@ -1,18 +1,44 @@
+@font-face {font-family: "Druk Wide Bold"; src: url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.eot"); src: url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.woff") format("woff"), url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.svg#Druk Wide Bold") format("svg"); }
+
 @font-face {
-  font-family: 'Druk Wide Web Super';
-  src: url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.eot');
-  src: url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.eot?#iefix')
-      format('embedded-opentype'),
-    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.woff2')
-      format('woff2'),
-    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.woff')
-      format('woff'),
-    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.ttf')
-      format('truetype'),
-    url('//db.onlinewebfonts.com/t/2f8845bdde42e943355a39765c5be5c0.svg#Druk Wide Web Super')
-      format('svg');
+  font-family: 'OriyaMN';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/OriyaMN.woff2') format('woff2'), url('/OriyaMN.woff') format('woff')
 }
-$font-family: 'Helvetica Neue LT', Helvetica, Arial, sans-serif;
+
+@font-face {
+  font-family: 'OriyaMN';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/OriyaMN-Bold.woff2') format('woff2'), url('/OriyaMN-Bold.woff') format('woff')
+}
+
+  // @font-face {
+  //   font-family: Rubik;
+  //   font-weight: 400;
+  //   font-style: normal;
+  //   src: url("Rubik.woff2") format("woff2"), url("Rubik.woff") format("woff");
+  //   font-display: swap;
+  // }
+  // @font-face {
+  //   font-family: Rubik;
+  //   font-weight: 400;
+  //   font-style: italic;
+  //   src: url("Rubik-Italic.woff2") format("woff2"), url("Rubik-Italic.woff")
+  //       format("woff");
+  //   font-display: swap;
+  // }
+  // @font-face {
+  //   font-family: Rubik;
+  //   font-weight: 700;
+  //   font-style: normal;
+  //   src: url("Rubik-Bold.woff2") format("woff2"), url("Rubik-Bold.woff") format("woff");
+  //   font-display: swap;
+  // }
+// }
+
+$font-family: 'OriyaMN', 'Helvetica Neue LT', Helvetica, Arial, sans-serif;
 
 h1,
 h2,
@@ -63,18 +89,16 @@ h5, .h5 {
 
 .pre-title {
   text-transform: uppercase;
-  font-weight: 700;
   margin-bottom: 0;
-  font-family: 'Druk Wide Web Super';
+  font-family: 'Druk Wide Bold';
 }
 
 .content--sanity {
   strong {
     text-transform: uppercase;
-    font-weight: 700;
     margin-bottom: -16px;
     display: inherit;
-    font-family: 'Druk Wide Web Super';
+    font-family: 'Druk Wide Bold';
   }
 
   p {

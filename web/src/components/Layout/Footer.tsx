@@ -21,7 +21,7 @@ const Footer = () => {
   //       }
   //     }
   //   `)
-  return ''
+  return null;
 }
 
 export default Footer

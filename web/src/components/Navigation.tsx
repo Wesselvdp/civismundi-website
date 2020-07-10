@@ -1,34 +1,34 @@
 import React, { FC } from 'react'
-
 import styled from 'styled-components'
+
 import LocalizedLink from '@components/LocalizedLink'
 import Logo from '@components/Logo'
 
 type T = any
 
-const MainNavigation: FC<T> = () => {
+const Navigation: FC<T> = () => {
   return (
     <Container>
-      <Navigation>
+      <Nav>
         {/* Left */}
         <div className="item">
           <LocalizedLink to="/">
-            <div className="navItem">All projects</div>
+            All projects
           </LocalizedLink>{' '}
         </div>
 
         {/* Center logo */}
-        <div className="item item--center">
+        <div className="item--center">
           <Logo />
         </div>
 
         {/* Right */}
         <div className="item">
           <LocalizedLink to="/">
-            <div className="navItem">About</div>
+            About
           </LocalizedLink>
         </div>
-      </Navigation>
+      </Nav>
     </Container>
   )
 }
@@ -36,26 +36,26 @@ const MainNavigation: FC<T> = () => {
 const Container = styled.div`
   padding: 0 15px;
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  z-index: 1;
+  z-index: 10;
 `
 
-const Navigation = styled.nav`
-  padding: 0 15px;
+const Nav = styled.nav`
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 40px;
 
   .item {
-    &--center {
-      flex: 1;
-      text-align: center;
-    }
+    flex: 0 0 100px;
+    margin-top: -10px;
   }
 
-  .navItem {
-    padding: 1em;
-    cursor: pointer;
-    text-transform: uppercase;
+  .item--center {
+    flex: 1 1 auto;
   }
 `
 
-export default MainNavigation
+export default Navigation

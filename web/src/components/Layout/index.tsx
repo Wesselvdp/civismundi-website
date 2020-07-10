@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components';
 // Components
 import Footer from './Footer'
-import Navigation from './Navigation'
+import Navigation from '../Navigation'
 
 type T = any
 

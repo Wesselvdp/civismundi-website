@@ -8,10 +8,15 @@ type T = any
 type TransitionState = 'transition-in' | 'transition-out' | undefined
 type ScreenCoordinates = { x: string, y: string }
 
+const INTRO_TEXT = {
+  content: 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion',
+  hideAfter: 3000
+}
 const WorldContainer: FC<T> = () => {
   const [transition, setTransition] = useState<TransitionState>(undefined);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null);
+  const [showIntro, setShowIntro] = useState(false);
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -33,24 +38,43 @@ const WorldContainer: FC<T> = () => {
     }
   `)
 
+  useEffect(() => {
+    setShowIntro(true);
+  }, []);
+
+  useEffect(() => {
+    if (showIntro) {
+      const timer = setTimeout(() => {
+        setShowIntro(false)
+      }, INTRO_TEXT.hideAfter);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showIntro])
+
   return (
-    <Wrapper className={transition}>
-      <World
-        projects={data.allSanityProject.edges}
-        onLoaded={() => setTransition('transition-in') }
-        activeProject={activeProject}
-        setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
-        setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
-      />
-      {activeProject && <h1 className="title">{activeProject.title}</h1>}
-      {videoPos && (
-        <VideoBox style={{ left: videoPos.x, top: videoPos.y }}>
-          <video id="videoBG" autoPlay muted loop>
-            <source src="/stargazing.mp4" type="video/mp4" />
-          </video>
-        </VideoBox>
-      )}
-    </Wrapper>
+    <Page>
+      <Wrapper className={transition}>
+        <World
+          projects={data.allSanityProject.edges}
+          onLoaded={() => setTransition('transition-in') }
+          activeProject={activeProject}
+          setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
+          setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
+        />
+        {activeProject && <h1 className="title">{activeProject.title}</h1>}
+        {videoPos && (
+          <VideoBox style={{ left: videoPos.x, top: videoPos.y }}>
+            <video id="videoBG" autoPlay muted loop>
+              <source src="/stargazing.mp4" type="video/mp4" />
+            </video>
+          </VideoBox>
+        )}
+      </Wrapper>
+      <ContentContainer>
+        {showIntro && <h1 className="title">{INTRO_TEXT.content}</h1>}
+      </ContentContainer>
+    </Page>
   )
 }
 
@@ -89,10 +113,29 @@ const VideoBox = styled.div`
   width: 200px;
   display: flex;
   overflow: hidden;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 
   video {
     height: 100%;
     object-fit: cover;
   }
 `;
+
+const ContentContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 75%;
+
+  .title {
+    font-size: 32px;
+    margin: 0;
+  }
+`
+
+const Page = styled.div`
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+`

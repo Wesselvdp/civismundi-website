@@ -93,7 +93,6 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
             ));
           }}
           onCustomLayerHover={obj => {
-            console.log(obj);
             setActiveProject(obj)
           }}
 
