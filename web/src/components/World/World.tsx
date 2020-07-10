@@ -6,6 +6,7 @@ import { get } from 'lodash'
 
 import * as THREE from 'three'
 import { initGlobe } from './utils'
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -75,8 +76,8 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
 
   // update video box position
   useEffect(() => {
-    setActiveProject(activeProject);
-
+    console.log('active project', activeProject);
+  
     if (!activeProject || !ref.current) {
       return setVideoPos(null)
     }
@@ -93,6 +94,8 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
 
   // update label size
   useEffect(() => {
+    setActiveProject(labelActive);
+
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default));
     
     if (labelActive) {

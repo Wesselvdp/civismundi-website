@@ -74,11 +74,15 @@ const WorldContainer: FC<T> = () => {
           titleEl={titleEl}
           videoEl={videoEl}
         />
-        <TextAnimated showText={!!activeProject} tag="h1" className="title" text={activeProject ? activeProject.title : ''} />
+        <TextAnimated showText={!!activeProject} tag="h1" className="title title--main" text={activeProject ? activeProject.title : ''} />
         <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
           <video id="videoBG" autoPlay muted loop>
             <source src="/stargazing.mp4" type="video/mp4" />
           </video>
+          <VideoContent>
+            <TextAnimated tag="h6" showText={!!activeProject} text="video direction" className="pre-title" />
+            <TextAnimated tag="h6" showText={!!activeProject} text={activeProject ? activeProject.title : ''} className="title" />
+          </VideoContent>
         </VideoBox>
       </Wrapper>
       <ContentContainer>
@@ -96,7 +100,7 @@ const Wrapper = styled.div`
   transform: scale(0);
   transition: all ${GLOBE_TRANSITION_TIME}s ease-out;
 
-  .title {
+  .title--main {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -120,8 +124,8 @@ const Wrapper = styled.div`
 
 const VideoBox = styled.div`
   position: absolute;
-  height: 100px;
-  width: 200px;
+  height: 175px;
+  width: 350px;
   display: flex;
   overflow: hidden;
   transform: translate(-50%);
@@ -131,6 +135,24 @@ const VideoBox = styled.div`
     object-fit: cover;
   }
 `;
+
+const VideoContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 15px;
+  width: 100%;
+
+  .title {
+    margin: 0;
+    font-size: 28px;
+  }
+
+  .pre-title {
+    font-size: 16px;
+  }
+`
 
 const ContentContainer = styled.div`
   position: absolute;
