@@ -6,7 +6,7 @@ import { useStaticQuery, graphql } from 'gatsby'
 import * as THREE from 'three'
 
 import World from './World'
-
+import TextAnimated from '@components/TextAnimated'
 
 type T = any
 type TransitionState = 'transition-in' | 'transition-out' | undefined
@@ -16,6 +16,9 @@ const INTRO_TEXT = {
   content: 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion',
   hideAfter: 3000
 }
+
+const GLOBE_TRANSITION_TIME = 1.6;
+
 const WorldContainer: FC<T> = () => {
   const titleEl = useRef();
   const videoEl = useRef();
@@ -46,28 +49,16 @@ const WorldContainer: FC<T> = () => {
     }
   `)
 
-  useEffect(() => {
-    setShowIntro(true);
-  }, []);
+  const _onInitialized = () => {
+    setTransition('transition-in');
 
-  useEffect(() => {
-    if (showIntro) {
-      const timer = setTimeout(() => {
-        setShowIntro(false)
-      }, INTRO_TEXT.hideAfter);
+    setTimeout(() => {
+      setShowIntro(true);
 
-      return () => clearTimeout(timer);
-    }
-  }, [showIntro])
-
-  const _setActiveLabelObj = (obj) => {
-    if (obj) {
-      Object.assign(obj.scale, new THREE.Vector3(1.3, 1.3, 1.3));
-    } else if (labelObj){
-      Object.assign(labelObj.scale, new THREE.Vector3(1, 1, 1));
-    }
-
-    setActiveLabelObj(obj);
+      setTimeout(() => {
+        setShowIntro(false);
+      }, 3000);
+    }, 200);
   }
 
   return (
@@ -75,7 +66,7 @@ const WorldContainer: FC<T> = () => {
       <Wrapper className={transition}>
         <World
           projects={data.allSanityProject.edges}
-          onLoaded={() => setTransition('transition-in') }
+          onInitialized={_onInitialized}
           activeProject={activeProject}
           setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
@@ -92,7 +83,7 @@ const WorldContainer: FC<T> = () => {
         </VideoBox>
       </Wrapper>
       <ContentContainer>
-        {showIntro && <h1 className="title">{INTRO_TEXT.content}</h1>}
+        <TextAnimated showText={showIntro} tag="h1" className="title" text={INTRO_TEXT.content} />
       </ContentContainer>
     </Page>
   )
@@ -104,7 +95,7 @@ const Wrapper = styled.div`
   height: 90%;
   width: auto;
   transform: scale(0);
-  transition: all 1.6s ease-out;
+  transition: all ${GLOBE_TRANSITION_TIME}s ease-out;
 
   .title {
     position: absolute;
@@ -146,7 +137,7 @@ const ContentContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 75%;
+  max-width: 750px;
 
   .title {
     font-size: 32px;

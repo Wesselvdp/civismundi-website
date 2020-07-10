@@ -11,9 +11,9 @@ const Navigation: FC<T> = () => {
     <Container>
       <Nav>
         {/* Left */}
-        <div className="item">
+        <div className="item item--left">
           <LocalizedLink to="/">
-            All projects
+            <span>All projects</span>
           </LocalizedLink>{' '}
         </div>
 
@@ -23,9 +23,9 @@ const Navigation: FC<T> = () => {
         </div>
 
         {/* Right */}
-        <div className="item">
+        <div className="item item--right">
           <LocalizedLink to="/">
-            About
+            <span>About</span>
           </LocalizedLink>
         </div>
       </Nav>
@@ -34,7 +34,7 @@ const Navigation: FC<T> = () => {
 }
 
 const Container = styled.div`
-  padding: 0 15px;
+  padding: 0 30px;
   position: absolute;
   top: 0;
   left: 0;
@@ -49,8 +49,20 @@ const Nav = styled.nav`
   height: 40px;
 
   .item {
-    flex: 0 0 100px;
+    flex: 0 0 200px;
     margin-top: -10px;
+
+    span {
+      text-transform: uppercase;
+    }
+
+    &.item--left {
+      text-align: left;
+    }
+
+    &.item--right {
+      text-align: right;
+    }
   }
 
   .item--center {

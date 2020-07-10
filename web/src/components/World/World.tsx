@@ -5,12 +5,16 @@ import loadable from '@loadable/component'
 import { get } from 'lodash'
 
 import * as THREE from 'three'
+import { initGlobe } from './utils'
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
 type T = {
   projects: Project[],
-  onLoaded: Function,
+  onInitialized: Function,
   activeProject: any,
   setActiveProject: Function,
   setVideoPos: Function,
@@ -26,59 +30,34 @@ const settings = {
   labelColor: '#FFF'
 }
 
-const calibrateVideoY = (sCoords, titleEl, videoEl) => {
-  const titleC = get(titleEl, 'current');
-  const videoC = get(videoEl, 'current');
-  if (titleC && videoC) {
-    const tRect = titleC.getBoundingClientRect();
-    const vRect = videoC.getBoundingClientRect();
-    const title = { top: tRect.y, bottom: tRect.y + tRect.height };
-    const video = { top: sCoords.y, bottom: sCoords.y + vRect.height };
-  //   if (video.top < title.top && video.bottom < title.bottom) {
-  //     // move up
-  //     console.log('moving up!', title, video);
-  //     sCoords.y += title.top - video.bottom < vRect.height ? title.top - video.bottom : 0
-  //   } else if (video.top > title.top && video.bottom > title.bottom) {
-  //     // move down
-  //     console.log('moving down!', title, video);
-  //     sCoords.y += video.top - title.bottom < vRect.height ? title.bottom - video.top : 0
-  //   }
-  }
-
-  sCoords.y += 20
-
-  return sCoords;
+const scale = {
+  default: new THREE.Vector3(1, 1, 1),
+  large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const calibrateVideoPos = (project, current, titleEl, videoEl) => {
-    // 1. Get screen coordinates
-    let sCoords = current.getScreenCoords(
-      get(project, 'location.lat', 0),
-      get(project, 'location.lng', 0),
-      0.05
-    );
-    
-    
-    // 2. Possible calibrate the Y coordinate so that it does not
-    //    conflict with title.
-    sCoords = calibrateVideoY(sCoords, titleEl, videoEl);
-    
-    return sCoords;
-}
-
-const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setActiveLabelObj, setVideoPos, titleEl, videoEl }) => {
+const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject, setActiveLabelObj, setVideoPos, titleEl, videoEl }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
-  // globe ref
-  const ref = useRef(null);
+  const ref = useRef();
   const [loaded, setLoaded] = useState(false)
+  const [isInitialized, setInitialized] = useState(false);
+  const [labels, setLabels] = useState([]);
+  const [labelActive, setLabelActive] = useState(null);
 
   useEffect(() => {
-    setLoaded(true);
-  }, []);
+    if (loaded && ref.current && !isInitialized) {
+      initGlobe(ref.current);
 
-  useEffect(() => {
-    if (loaded) onLoaded()
+      // add event listener that listen on orbit control changes
+      // ref.current.controls().addEventListener('change', (e) => {
+      //   updateLabelsLookat();
+      // })
+
+      setTimeout(() => {
+        setInitialized(true);
+        onInitialized();
+      }, 1000)
+    }
   }, [loaded]);
 
   useEffect(() => {
@@ -88,17 +67,24 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
     
     // set position of the video box
     setVideoPos(
-      calibrateVideoPos(
-        activeProject,
-        ref.current,
-        titleEl,
-        videoEl
+      ref.current.getScreenCoords(
+        get(activeProject, 'location.lat', 0),
+        get(activeProject, 'location.lng', 0),
+        0.05
       )
     );
   }, [activeProject])
 
-  /* THREE label (circle) */
-  const labelObject = d => {
+  useEffect(() => {
+    labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default));
+    
+    if (labelActive) {
+      Object.assign(labelActive.__threeObj.scale, scale.large);
+    }
+  }, [labelActive]);
+
+  /* ----- Labels ------ */
+  const labelObject = () => {
     const texture = new THREE.TextureLoader().load('/marker@2x.png');
 
     return (
@@ -114,7 +100,34 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
       )
     );
   }
-  
+
+  const onLabelUpdate = (obj, d) => {
+    if (!loaded) setLoaded(true);
+
+    if (ref.current) {
+      Object.assign(
+        obj.position,
+        ref.current.getCoords(
+          get(d, 'node.location.lat', 0),
+          get(d, 'node.location.lng', 0),
+          0.05
+        )
+      );
+
+      if (labels.length !== projects.length && !labels.some(label => label.__threeObj.uuid === d.__threeObj.uuid)) {
+        setLabels([...labels, d]);
+      }
+    }
+  }
+
+  // const updateLabelsLookat = () => {
+  //   console.log('updating labels');
+
+  //   labels.forEach(label => {
+  //     console.log('updating label to look at', ref.current.camera().position);
+  //     label.__threeObj.geometry.lookAt(ref.current.camera().position);
+  //   })
+  // }
 
   return (
     !isSSR && (
@@ -128,22 +141,15 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
           backgroundColor={settings.backgroundColor}
           // labels
           customLayerData={projects}
-          customThreeObject={d => labelObject(d)}
-          customThreeObjectUpdate={(obj, d) => {
-            Object.assign(obj.position, ref.current.getCoords(
-              get(d, 'node.location.lat', 0),
-              get(d, 'node.location.lng', 0),
-              0.05
-            ));
-          }}
-          onCustomLayerHover={obj => {
-              setActiveProject(obj)
-              setActiveLabelObj(obj ? obj.__threeObj : null)
-          }}
-
+          customThreeObject={() => labelObject()}
+          customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
+          onCustomLayerHover={obj => setLabelActive(obj)}
           // settings
           animateIn={false}
-          showAtmosphere={false}
+          renderConfig={{
+            sortObjects: false
+          }}
+          waitForGlobeReady={true}
         />
      </React.Suspense>
     )
