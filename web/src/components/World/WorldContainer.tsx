@@ -65,6 +65,7 @@ const WorldContainer: FC<T> = () => {
     <Page>
       <Wrapper className={transition}>
         <World
+          height="100%"
           projects={data.allSanityProject.edges}
           onInitialized={_onInitialized}
           introFinished={introStatus === 'hide'}

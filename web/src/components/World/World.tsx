@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useLayoutEffect, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
 
@@ -116,6 +116,18 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
       setCameraChanged(false);
     }, 100);
   }, [cameraChanged]);
+
+  useLayoutEffect(() => {
+    window.addEventListener('resize', () => {
+      const camera = ref.current.camera();
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+
+      ref.current.renderer().setSize( window.innerWidth, window.innerHeight );
+    })
+
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   const labelObject = () => {
     const texture = new THREE.TextureLoader().load('/marker@2x.png');
