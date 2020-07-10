@@ -18,6 +18,7 @@ const Globe = loadable(() => import('react-globe.gl'))
 type T = {
   projects: Project[],
   onInitialized: Function,
+  introFinished: boolean,
   activeProject: any,
   setActiveProject: Function,
   setVideoPos: Function,
@@ -36,7 +37,7 @@ const scale = {
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject, setVideoPos, titleEl, videoEl }) => {
+const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, setActiveProject, setVideoPos, titleEl, videoEl }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
@@ -50,7 +51,10 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     if (loaded && ref.current && !isInitialized) {
       initGlobe(ref.current);
 
-      ref.current.controls().enableZoom = false;
+      // disable controls untill intro has finished
+      const controls = ref.current.controls();
+      controls.enabled = false;
+      controls.enableZoom = false;
 
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
@@ -65,6 +69,15 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
       }, 1000)
     }
   }, [loaded]);
+
+  useEffect(() => {
+    if (introFinished && ref.current) {
+      setTimeout(() => {
+        const controls = ref.current.controls();
+        controls.enabled = true;
+      }, 500)
+    }
+  }, [introFinished])
 
   // update video box position
   useEffect(() => {
@@ -107,7 +120,6 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     }, 100);
   }, [cameraChanged]);
 
-  /* ----- Labels ------ */
   const labelObject = () => {
     const texture = new THREE.TextureLoader().load('/marker@2x.png');
 

@@ -9,8 +9,9 @@ import World from './World'
 import TextAnimated from '@components/TextAnimated'
 
 type T = any
-type TransitionState = 'transition-in' | 'transition-out' | undefined
+type TransitionState = 'transition-in' | 'transition-out'
 type ScreenCoordinates = { x: string, y: string }
+type IntroStatus = 'show' | 'hide'
 
 const INTRO_TEXT = {
   content: 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion',
@@ -23,10 +24,10 @@ const WorldContainer: FC<T> = () => {
   const titleEl = useRef();
   const videoEl = useRef();
 
-  const [transition, setTransition] = useState<TransitionState>(undefined);
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null);
-  const [showIntro, setShowIntro] = useState(false);
+  const [transition, setTransition] = useState<TransitionState | undefined>(undefined)
+  const [activeProject, setActiveProject] = useState<Project | null>(null)
+  const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null)
+  const [introStatus, setIntroStatus] = useState<IntroStatus | undefined>(undefined)
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -52,10 +53,10 @@ const WorldContainer: FC<T> = () => {
     setTransition('transition-in');
 
     setTimeout(() => {
-      setShowIntro(true);
+      setIntroStatus('show');
 
       setTimeout(() => {
-        setShowIntro(false);
+        setIntroStatus('hide');
       }, 3000);
     }, 200);
   }
@@ -66,10 +67,10 @@ const WorldContainer: FC<T> = () => {
         <World
           projects={data.allSanityProject.edges}
           onInitialized={_onInitialized}
+          introFinished={introStatus === 'hide'}
           activeProject={activeProject}
           setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
-          setActiveLabelObj={(obj: any) => { _setActiveLabelObj(obj); }}
           titleEl={titleEl}
           videoEl={videoEl}
         />
@@ -81,7 +82,7 @@ const WorldContainer: FC<T> = () => {
         </VideoBox>
       </Wrapper>
       <ContentContainer>
-        <TextAnimated showText={showIntro} tag="h1" className="title" text={INTRO_TEXT.content} />
+        <TextAnimated showText={introStatus === 'show'} tag="h1" className="title" text={INTRO_TEXT.content} />
       </ContentContainer>
     </Page>
   )
