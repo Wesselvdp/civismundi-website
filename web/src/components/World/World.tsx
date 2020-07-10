@@ -10,9 +10,11 @@ const Globe = loadable(() => import('react-globe.gl'))
 type T = {
   projects: Project[],
   onLoaded: Function,
-  activeProject: Project | null
+  activeProject: any,
   setActiveProject: Function,
   setVideoPos: Function,
+  activeLabelObj: any,
+  setActiveLabelObj: Function,
   titleEl: any,
   videoEl: any
 }
@@ -30,8 +32,6 @@ const calibrateVideoY = (sCoords, titleEl, videoEl) => {
     const { y: tY, height: tH } = titleC.getBoundingClientRect();
     const { y: vY, height: vH } = videoC.getBoundingClientRect();
 
-    console.log('title props (y + height)', tY, tH);
-    console.log('vidoe props (y + height)', vY, vH);
     // title and video overlap
     if (sCoords.y + vH > tY && sCoords.y < tY + tH) {
       // video should be placed under title
@@ -56,12 +56,14 @@ const calibrateVideoPos = (project, current, titleEl, videoEl) => {
       0.05
     );
     
+    // 2. Possible calibrate the Y coordinate so that it does not
+    //    conflict with title.
     sCoords = calibrateVideoY(sCoords, titleEl, videoEl);
     
     return sCoords;
 }
 
-const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setVideoPos, titleEl, videoEl }) => {
+const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setActiveLabelObj, setVideoPos, titleEl, videoEl }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   // globe ref
@@ -81,7 +83,15 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
       return setVideoPos(null)
     }
     
-    setVideoPos(calibrateVideoPos(activeProject, ref.current, titleEl, videoEl));
+    // set position of the video box
+    setVideoPos(
+      calibrateVideoPos(
+        activeProject,
+        ref.current,
+        titleEl,
+        videoEl
+      )
+    );
   }, [activeProject])
 
   /* THREE label (circle) */
@@ -123,7 +133,10 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
               0.05
             ));
           }}
-          onCustomLayerHover={obj => setActiveProject(obj)}
+          onCustomLayerHover={obj => {
+             setActiveProject(obj)
+             setActiveLabelObj(obj ? obj.__threeObj : null)
+          }}
 
           // settings
           animateIn={false}
