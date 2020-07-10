@@ -1,8 +1,12 @@
-import React, { FC, useState, useEffect } from 'react'
+// @ts-nocheck
+import React, { FC, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 
+import * as THREE from 'three'
+
 import World from './World'
+
 
 type T = any
 type TransitionState = 'transition-in' | 'transition-out' | undefined
@@ -13,10 +17,14 @@ const INTRO_TEXT = {
   hideAfter: 3000
 }
 const WorldContainer: FC<T> = () => {
+  const titleEl = useRef();
+  const videoEl = useRef();
+
   const [transition, setTransition] = useState<TransitionState>(undefined);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null);
   const [showIntro, setShowIntro] = useState(false);
+  const [labelObj, setActiveLabelObj] = useState(null);
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -52,6 +60,16 @@ const WorldContainer: FC<T> = () => {
     }
   }, [showIntro])
 
+  const _setActiveLabelObj = (obj) => {
+    if (obj) {
+      Object.assign(obj.scale, new THREE.Vector3(1.3, 1.3, 1.3));
+    } else if (labelObj){
+      Object.assign(labelObj.scale, new THREE.Vector3(1, 1, 1));
+    }
+
+    setActiveLabelObj(obj);
+  }
+
   return (
     <Page>
       <Wrapper className={transition}>
@@ -61,15 +79,17 @@ const WorldContainer: FC<T> = () => {
           activeProject={activeProject}
           setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
+          activeLabelObj={labelObj}
+          setActiveLabelObj={(obj: any) => { _setActiveLabelObj(obj); }}
+          titleEl={titleEl}
+          videoEl={videoEl}
         />
-        {activeProject && <h1 className="title">{activeProject.title}</h1>}
-        {videoPos && (
-          <VideoBox style={{ left: videoPos.x, top: videoPos.y }}>
-            <video id="videoBG" autoPlay muted loop>
-              <source src="/stargazing.mp4" type="video/mp4" />
-            </video>
-          </VideoBox>
-        )}
+        {activeProject && <h1 ref={titleEl} className="title">{activeProject.title}</h1>}
+        <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
+          <video id="videoBG" autoPlay muted loop>
+            <source src="/stargazing.mp4" type="video/mp4" />
+          </video>
+        </VideoBox>
       </Wrapper>
       <ContentContainer>
         {showIntro && <h1 className="title">{INTRO_TEXT.content}</h1>}
@@ -113,7 +133,7 @@ const VideoBox = styled.div`
   width: 200px;
   display: flex;
   overflow: hidden;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
 
   video {
     height: 100%;

@@ -1,4 +1,5 @@
 // @ts-nocheck
+
 import React, { FC, useEffect, useRef, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
@@ -10,19 +11,62 @@ const Globe = loadable(() => import('react-globe.gl'))
 type T = {
   projects: Project[],
   onLoaded: Function,
-  activeProject: Project | null
+  activeProject: any,
   setActiveProject: Function,
   setVideoPos: Function,
+  activeLabelObj: any,
+  setActiveLabelObj: Function,
+  titleEl: any,
+  videoEl: any
 }
 
 const settings = {
   backgroundColor: '#000',
-  labelRadius: 2.5,
+  labelRadius: 3.5,
   labelColor: '#FFF'
 }
 
+const calibrateVideoY = (sCoords, titleEl, videoEl) => {
+  const titleC = get(titleEl, 'current');
+  const videoC = get(videoEl, 'current');
+  if (titleC && videoC) {
+    const tRect = titleC.getBoundingClientRect();
+    const vRect = videoC.getBoundingClientRect();
+    const title = { top: tRect.y, bottom: tRect.y + tRect.height };
+    const video = { top: sCoords.y, bottom: sCoords.y + vRect.height };
+  //   if (video.top < title.top && video.bottom < title.bottom) {
+  //     // move up
+  //     console.log('moving up!', title, video);
+  //     sCoords.y += title.top - video.bottom < vRect.height ? title.top - video.bottom : 0
+  //   } else if (video.top > title.top && video.bottom > title.bottom) {
+  //     // move down
+  //     console.log('moving down!', title, video);
+  //     sCoords.y += video.top - title.bottom < vRect.height ? title.bottom - video.top : 0
+  //   }
+  }
 
-const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setVideoPos }) => {
+  sCoords.y += 20
+
+  return sCoords;
+}
+
+const calibrateVideoPos = (project, current, titleEl, videoEl) => {
+    // 1. Get screen coordinates
+    let sCoords = current.getScreenCoords(
+      get(project, 'location.lat', 0),
+      get(project, 'location.lng', 0),
+      0.05
+    );
+    
+    
+    // 2. Possible calibrate the Y coordinate so that it does not
+    //    conflict with title.
+    sCoords = calibrateVideoY(sCoords, titleEl, videoEl);
+    
+    return sCoords;
+}
+
+const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setActiveLabelObj, setVideoPos, titleEl, videoEl }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   // globe ref
@@ -42,15 +86,15 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
       return setVideoPos(null)
     }
     
-    // 1. Get screen coordinates
-    const sCoords = ref.current.getScreenCoords(
-      get(activeProject, 'location.lat', 0),
-      get(activeProject, 'location.lng', 0),
-      0.05
+    // set position of the video box
+    setVideoPos(
+      calibrateVideoPos(
+        activeProject,
+        ref.current,
+        titleEl,
+        videoEl
+      )
     );
-      
-    // 2. Use these to position video box
-    setVideoPos(sCoords);
   }, [activeProject])
 
   /* THREE label (circle) */
@@ -73,8 +117,8 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
   
 
   return (
-     <React.Suspense fallback={<div />}>
-      {!isSSR && (
+    !isSSR && (
+      <React.Suspense fallback={<div />}>
         <Globe
           // ref
           ref={ref}
@@ -93,15 +137,16 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
             ));
           }}
           onCustomLayerHover={obj => {
-            setActiveProject(obj)
+              setActiveProject(obj)
+              setActiveLabelObj(obj ? obj.__threeObj : null)
           }}
 
           // settings
           animateIn={false}
           showAtmosphere={false}
         />
-      )}
      </React.Suspense>
+    )
   )
 }
 
