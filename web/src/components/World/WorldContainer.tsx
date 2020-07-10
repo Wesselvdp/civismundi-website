@@ -95,7 +95,6 @@ const Wrapper = styled.div`
   width: auto;
   transform: scale(0);
   transition: all ${GLOBE_TRANSITION_TIME}s ease-out;
-  outline: 0;
 
   .title {
     position: absolute;
@@ -115,7 +114,7 @@ const Wrapper = styled.div`
   * { outline: 0 };
 
   &.transition-in {
-    transform: scale(0.9);
+    transform: scale(1);
   }
 `
 

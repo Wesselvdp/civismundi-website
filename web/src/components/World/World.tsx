@@ -6,12 +6,6 @@ import { get } from 'lodash'
 
 import * as THREE from 'three'
 import { initGlobe } from './utils'
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
