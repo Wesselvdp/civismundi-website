@@ -13,6 +13,8 @@ type T = {
   activeProject: Project | null
   setActiveProject: Function,
   setVideoPos: Function,
+  titleEl: any,
+  videoEl: any
 }
 
 const settings = {
@@ -21,8 +23,45 @@ const settings = {
   labelColor: '#FFF'
 }
 
+const calibrateVideoY = (sCoords, titleEl, videoEl) => {
+  const titleC = get(titleEl, 'current');
+  const videoC = get(videoEl, 'current');
+  if (titleC && videoC) {
+    const { y: tY, height: tH } = titleC.getBoundingClientRect();
+    const { y: vY, height: vH } = videoC.getBoundingClientRect();
 
-const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setVideoPos }) => {
+    console.log('title props (y + height)', tY, tH);
+    console.log('vidoe props (y + height)', vY, vH);
+    // title and video overlap
+    if (sCoords.y + vH > tY && sCoords.y < tY + tH) {
+      // video should be placed under title
+      if ((tY + tH / 2) - (sCoords.y + vH / 2) > 0) {
+        sCoords.y = tY + tH;
+      }
+      // video should be placed above title
+      else {
+        sCoords.y = tY - vH;
+      }
+    }
+  }
+
+  return sCoords;
+}
+
+const calibrateVideoPos = (project, current, titleEl, videoEl) => {
+    // 1. Get screen coordinates
+    let sCoords = current.getScreenCoords(
+      get(project, 'location.lat', 0),
+      get(project, 'location.lng', 0),
+      0.05
+    );
+    
+    sCoords = calibrateVideoY(sCoords, titleEl, videoEl);
+    
+    return sCoords;
+}
+
+const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, setVideoPos, titleEl, videoEl }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   // globe ref
@@ -42,15 +81,7 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
       return setVideoPos(null)
     }
     
-    // 1. Get screen coordinates
-    const sCoords = ref.current.getScreenCoords(
-      get(activeProject, 'location.lat', 0),
-      get(activeProject, 'location.lng', 0),
-      0.05
-    );
-      
-    // 2. Use these to position video box
-    setVideoPos(sCoords);
+    setVideoPos(calibrateVideoPos(activeProject, ref.current, titleEl, videoEl));
   }, [activeProject])
 
   /* THREE label (circle) */
@@ -92,10 +123,7 @@ const World: FC<T> = ({ projects, onLoaded, activeProject, setActiveProject, set
               0.05
             ));
           }}
-          onCustomLayerHover={obj => {
-            console.log(obj);
-            setActiveProject(obj)
-          }}
+          onCustomLayerHover={obj => setActiveProject(obj)}
 
           // settings
           animateIn={false}

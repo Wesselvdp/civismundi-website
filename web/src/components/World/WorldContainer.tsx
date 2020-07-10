@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from 'react'
+// @ts-nocheck
+import React, { FC, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 
@@ -9,6 +10,9 @@ type TransitionState = 'transition-in' | 'transition-out' | undefined
 type ScreenCoordinates = { x: string, y: string }
 
 const WorldContainer: FC<T> = () => {
+  const titleEl = useRef();
+  const videoEl = useRef();
+
   const [transition, setTransition] = useState<TransitionState>(undefined);
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null);
@@ -41,14 +45,15 @@ const WorldContainer: FC<T> = () => {
         activeProject={activeProject}
         setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
         setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
+        titleEl={titleEl}
+        videoEl={videoEl}
       />
-      {activeProject && <h1 className="title">{activeProject.title}</h1>}
-      {videoPos && (
-        <VideoBox style={{ left: videoPos.x, top: videoPos.y }}>
-          <video id="videoBG" autoPlay muted loop>
-            <source src="/stargazing.mp4" type="video/mp4" />
-          </video>
-        </VideoBox>
+      {activeProject && <h1 ref={titleEl} className="title">{activeProject.title}</h1>}
+      <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
+        <video id="videoBG" autoPlay muted loop>
+          <source src="/stargazing.mp4" type="video/mp4" />
+        </video>
+      </VideoBox>
       )}
     </Wrapper>
   )
