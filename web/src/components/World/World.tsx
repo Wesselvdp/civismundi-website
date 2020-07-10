@@ -52,6 +52,8 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     if (loaded && ref.current && !isInitialized) {
       initGlobe(ref.current);
 
+      ref.current.controls().enableZoom = false;
+
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
         if (!cameraChanged) {
@@ -66,12 +68,12 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     }
   }, [loaded]);
 
+  // update video box position
   useEffect(() => {
     if (!activeProject || !ref.current) {
       return setVideoPos(null)
     }
     
-    // set position of the video box
     setVideoPos(
       ref.current.getScreenCoords(
         get(activeProject, 'location.lat', 0),
@@ -81,6 +83,7 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     );
   }, [activeProject])
 
+  // update label size
   useEffect(() => {
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default));
     
@@ -93,8 +96,9 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     if (!cameraChanged) return;
 
     // let labels look at the screen
+    const cameraQ = ref.current.camera().quaternion
     labels.forEach(label => {
-      label.__threeObj.quaternion.copy(ref.current.camera().quaternion);
+      label.__threeObj.quaternion.copy(cameraQ);
     })
 
     setTimeout(() => {
@@ -157,7 +161,9 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
           // settings
           animateIn={false}
           renderConfig={{
-            sortObjects: false
+            sortObjects: false,
+            antialias: true,
+            alpha: true 
           }}
           waitForGlobeReady={true}
         />
