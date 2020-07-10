@@ -27,7 +27,6 @@ const WorldContainer: FC<T> = () => {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null);
   const [showIntro, setShowIntro] = useState(false);
-  const [labelObj, setActiveLabelObj] = useState(null);
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -70,12 +69,11 @@ const WorldContainer: FC<T> = () => {
           activeProject={activeProject}
           setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
-          activeLabelObj={labelObj}
           setActiveLabelObj={(obj: any) => { _setActiveLabelObj(obj); }}
           titleEl={titleEl}
           videoEl={videoEl}
         />
-        {activeProject && <h1 ref={titleEl} className="title">{activeProject.title}</h1>}
+        <TextAnimated showText={!!activeProject} tag="h1" className="title" text={activeProject ? activeProject.title : ''} />
         <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
           <video id="videoBG" autoPlay muted loop>
             <source src="/stargazing.mp4" type="video/mp4" />
@@ -96,6 +94,7 @@ const Wrapper = styled.div`
   width: auto;
   transform: scale(0);
   transition: all ${GLOBE_TRANSITION_TIME}s ease-out;
+  outline: 0;
 
   .title {
     position: absolute;
@@ -103,7 +102,6 @@ const Wrapper = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 86px;
-    pointer-events: none;
   }
 
   .video {
@@ -113,8 +111,10 @@ const Wrapper = styled.div`
     background-color: red;
   }
 
+  * { outline: 0 };
+
   &.transition-in {
-    transform: scale(1);
+    transform: scale(0.9);
   }
 `
 

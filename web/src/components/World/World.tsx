@@ -21,8 +21,6 @@ type T = {
   activeProject: any,
   setActiveProject: Function,
   setVideoPos: Function,
-  activeLabelObj: any,
-  setActiveLabelObj: Function,
   titleEl: any,
   videoEl: any
 }
@@ -38,7 +36,7 @@ const scale = {
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject, setActiveLabelObj, setVideoPos, titleEl, videoEl }) => {
+const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject, setVideoPos, titleEl, videoEl }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
@@ -70,6 +68,8 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
 
   // update video box position
   useEffect(() => {
+    setActiveProject(activeProject);
+
     if (!activeProject || !ref.current) {
       return setVideoPos(null)
     }
@@ -81,6 +81,7 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
         0.05
       )
     );
+    
   }, [activeProject])
 
   // update label size
@@ -92,10 +93,10 @@ const World: FC<T> = ({ projects, onInitialized, activeProject, setActiveProject
     }
   }, [labelActive]);
 
+  // update label's quaternion (to always look at screen)
   useEffect(() => {
     if (!cameraChanged) return;
 
-    // let labels look at the screen
     const cameraQ = ref.current.camera().quaternion
     labels.forEach(label => {
       label.__threeObj.quaternion.copy(cameraQ);
