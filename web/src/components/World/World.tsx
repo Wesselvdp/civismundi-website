@@ -42,7 +42,7 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
   const [loaded, setLoaded] = useState(false)
   const [isInitialized, setInitialized] = useState(false)
   const [cameraChanged, setCameraChanged] = useState(false)
-  const [cameraRotating, setCameraRotating] = useState(false)
+  const [cameraRotating, setCameraRotating] = useState(true)
 
   // labels
   const [labels, setLabels] = useState([])
@@ -57,6 +57,7 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       const controls = ref.current.controls()
       controls.enabled = false
       controls.enableZoom = false
+      controls.autoRotate = true
 
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
@@ -68,7 +69,6 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       setTimeout(() => {
         setInitialized(true)
         onInitialized()
-        setCameraRotating(true)
       }, 1000)
     }
   }, [loaded]);
