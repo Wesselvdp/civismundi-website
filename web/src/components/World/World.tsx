@@ -60,6 +60,7 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       controls.enabled = false
       controls.enableZoom = false
       controls.autoRotate = true
+      controls.autoRotateSpeed = 0.3
 
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
