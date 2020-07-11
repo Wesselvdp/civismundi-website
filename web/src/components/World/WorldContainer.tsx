@@ -99,8 +99,6 @@ const WorldContainer: FC<T> = () => {
 export default WorldContainer
 
 const Wrapper = styled.div`
-  height: 90%;
-  width: auto;
   transform: scale(0);
   transition: all ${GLOBE_TRANSITION_TIME}s ease-out;
 
