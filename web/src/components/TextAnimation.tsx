@@ -4,9 +4,6 @@ import { CSSTransition } from 'react-transition-group';
 import { slice } from 'lodash'
 // import console = require('console');
 
-// import console = require('console');
-// import console = require('console');
-
 type T = {
   text: string | undefined
   className?: string
@@ -14,6 +11,8 @@ type T = {
   style?: {},
   inProp: any,
   timeout: number
+  letterSpeedIn: number,
+  letterSpeedOut: number
 }
 
 type WordObject = {
@@ -30,6 +29,8 @@ const TextAnimation: FC<T> = ({
   style,
   inProp,
   timeout,
+  letterSpeedIn = 0.01,
+  letterSpeedOut = 0.005,
   ...rest
 }) => {
   const [letters, setLetters] = useState<string[]>([])
@@ -53,6 +54,10 @@ const TextAnimation: FC<T> = ({
     }
   }, [text])
 
+  useEffect(() => {
+   console.log('inProp changed', inProp); 
+  }, [inProp])
+
   if (!text) return null;
 
   return (
@@ -62,7 +67,7 @@ const TextAnimation: FC<T> = ({
           {words.map((w) => (
             <span style={{ display: 'inline-block' }}>
               {slice(letters, w.position, w.position + w.length).map((l, i) => (
-                <span className="letter" style={{ transitionDelay: `${(inProp ? 0.01 : 0.005) * (w.position + i)}s`}}>{l}</span>
+                <span className="letter" style={{ transitionDelay: `${(inProp ? letterSpeedIn : letterSpeedOut) * (w.position + i)}s`}}>{l}</span>
               ))}
               &nbsp;&nbsp;
             </span>
@@ -74,25 +79,27 @@ const TextAnimation: FC<T> = ({
 }
 
 const Wrapper = styled.div`
-  pointer-events: none;
-  user-select: none;
+  // pointer-events: none;
+  // user-select: none;
 
   .letter {
     pointer-events: none;
     display: inline-block;
     will-change: transform;
     opacity: 0;
+    transform: scale(0);
+    transition: transform ${letterTransitionDuration}ms ease-in
   }
 
-  &.text-enter {
+  &.text-enter, &.text-appear {
     .letter {
       transform: scale(0.2);
-      transform-origin: 50% 80%;
+      transform-origin: 50% 50%;
       opacity: 0;
     }
   }
 
-  &.text-enter-active {
+  &.text-enter-active, &.text-appear-active {
     .letter {
       transform: none;
       opacity: 1;
@@ -100,7 +107,7 @@ const Wrapper = styled.div`
     }
   }
 
-  &.text-enter-done {
+  &.text-enter-done, &.text-appear-done {
     .letter {
       transform: none;
       opacity: 1;
@@ -110,17 +117,14 @@ const Wrapper = styled.div`
   &.text-exit {
     .letter {
       opacity: 1;
-      transform-origin: 50% 80%;
       transform: none;
     }
   }
 
   &.text-exit-active {
     .letter {
-      transform: scale(0.2);
-      opacity: 0;
-      transition: transform ${letterTransitionDuration}ms ease-in,
-      opacity 0.25s cubic-bezier(0.1, 0.02, 0.08, 1.1);
+      transform-origin: 50% 50%;
+      transform: scale(0);
     }
   }
 `

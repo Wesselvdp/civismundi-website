@@ -2,14 +2,12 @@
 import React, { FC, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
-import { CSSTransition } from 'react-transition-group';
-
-import * as THREE from 'three'
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import World from './World'
-import TextAnimated from '@components/TextAnimated'
 import TextAnimation from '@components/TextAnimation'
-import LocalizedLink from '@components/LocalizedLink'
+import VideoThumbnail from '@components/VideoThumbnail'
+
 // import console = require('console');
 
 type T = any
@@ -72,22 +70,16 @@ const WorldContainer: FC<T> = () => {
           titleEl={titleEl}
           videoEl={videoEl}
         />
-        {transitionPhase >= Phase.EXPLORE && (
-          <>
-            <TextAnimated showText={!!preview} tag="h1" className="title title--main" text={preview ? preview.node.title : ''} />
-            <LocalizedLink to={preview ?  `/projects/${preview.node.slug.current}` : ''}>
-              <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
-                  <video id="videoBG" autoPlay muted loop>
-                    <source src="/stargazing.mp4" type="video/mp4" />
-                  </video>
-                  <VideoContent>
-                    <TextAnimated tag="h6" showText={!!preview} text="video direction" className="pre-title" />
-                    <TextAnimated tag="h6" showText={!!preview} text={preview ? preview.node.title : ''} className="title" />
-                  </VideoContent>
-              </VideoBox>
-            </LocalizedLink>
-          </>
-        )}
+        <TextAnimation
+          inProp={!!preview}
+          appear={true}
+          timeout={1000}
+          tag="h1"
+          className="title title--main"
+          text={preview ? preview.node.title : ''}
+          unmountOnExit
+        />
+        <VideoThumbnail videoEl={videoEl} position={videoPos} preview={preview} />
       </Wrapper>
     </CSSTransition>
     <ContentContainer>
@@ -99,6 +91,7 @@ const WorldContainer: FC<T> = () => {
         tag="h1"
         className="title"
         text={INTRO_TEXT}
+        letterSpeedIn={0.01}
       />
     </ContentContainer>
   </Page>
@@ -131,46 +124,7 @@ const Wrapper = styled.div`
     font-size: 86px;
   }
 
-  .video {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background-color: red;
-  }
-
   * { outline: 0 };
-`
-
-const VideoBox = styled.div`
-  position: absolute;
-  height: 175px;
-  width: 350px;
-  display: flex;
-  overflow: hidden;
-  transform: translate(-50%);
-
-  video {
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const VideoContent = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 0 15px;
-  width: 100%;
-
-  .title {
-    margin: 0;
-    font-size: 28px;
-  }
-
-  .pre-title {
-    font-size: 16px;
-  }
 `
 
 const ContentContainer = styled.div`
@@ -179,7 +133,7 @@ const ContentContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 750px;
-  pointer-events: none;
+  // pointer-events: none;
 
   .title {
     font-size: 32px;
