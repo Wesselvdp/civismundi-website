@@ -16,7 +16,7 @@ const initClouds = (curr: any) => {
     cloudMesh.renderOrder = 1
     setInterval(
       () => (
-        (cloudMesh.rotation.y -= 0.00005), (cloudMesh.rotation.x -= 0.00001)
+        (cloudMesh.rotation.y -= 0.00012), (cloudMesh.rotation.x -= 0.00003)
       ),
       10
     )
