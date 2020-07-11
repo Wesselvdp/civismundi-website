@@ -9,6 +9,8 @@ import { navigate } from 'gatsby'
 import * as THREE from 'three'
 import { initGlobe } from './utils'
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -138,9 +140,10 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       label.__threeObj.quaternion.copy(cameraQ)
     })
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setCameraChanged(false);
-    }, 100);
+    }, 150);
+    return () => clearTimeout(timer)
   }, [cameraChanged])
 
   useEffect(() => {
@@ -206,7 +209,7 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
           // ref
           ref={ref}
           // appearance
-          globeImageUrl="/earth.jpg"
+          globeImageUrl="/earth-blue-marble-alt.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           backgroundColor={settings.backgroundColor}
           // labels
