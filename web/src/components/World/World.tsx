@@ -59,6 +59,8 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       const controls = ref.current.controls()
       controls.enabled = false
       controls.enableZoom = false
+      controls.autoRotate = true
+      controls.autoRotateSpeed = 0.3
 
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
@@ -80,19 +82,17 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       const controls = ref.current.controls();
 
       controls.enabled = true;
-      controls.autoRotate = true
-      controls.autoRotateSpeed = 0.3
     }
   }, [introFinished])
 
   // on preview selected
   useEffect(() => {
-    setCameraRotating(!(!!preview))
 
     if (!preview || !ref.current) {
+      setCameraRotating(true)
       return setVideoPos(null)
     }
-    
+
     // update video pos
     setVideoPos(
       ref.current.getScreenCoords(
@@ -101,6 +101,10 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
         0.05
       )
     );
+
+    if (!introFinished) return
+    setCameraRotating(!(!!preview))
+  
   }, [preview])
 
   // on label hover
