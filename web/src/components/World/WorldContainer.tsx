@@ -16,7 +16,6 @@ type Phase = 'globe-in'
 type ScreenCoordinates = { x: string, y: string }
 
 const GLOBE_TRANSITION_LENGTH = 1600;
-const INTRO_TRANSITION_LENGTH = 1600;
 
 const INTRO_TEXT = {
   content: 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion',
@@ -86,7 +85,7 @@ const WorldContainer: FC<T> = () => {
       </Wrapper>
     </CSSTransition>
     <ContentContainer>
-      <TextAnimation inProp={transitionPhase === 'globe-in'} timeout={INTRO_TRANSITION_LENGTH} tag="h1" className="title" text={INTRO_TEXT.content} />
+      <TextAnimation inProp={transitionPhase === 'globe-in'} timeout={INTRO_TEXT.hideAfter} tag="h1" className="title" text={INTRO_TEXT.content} />
     </ContentContainer>
   </Page>
   )
@@ -166,7 +165,7 @@ const ContentContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 750px;
-  pointer-events: none;
+  // pointer-events: none;
 
   .title {
     font-size: 32px;
