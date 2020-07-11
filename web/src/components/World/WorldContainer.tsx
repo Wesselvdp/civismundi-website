@@ -26,7 +26,7 @@ const WorldContainer: FC<T> = () => {
   const videoEl = useRef();
 
   const [transition, setTransition] = useState<TransitionState | undefined>(undefined)
-  const [activeProject, setActiveProject] = useState<Project | null>(null)
+  const [preview, setPreview] = useState<Project | null>(null)
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null)
   const [introStatus, setIntroStatus] = useState<IntroStatus | undefined>(undefined)
 
@@ -70,21 +70,21 @@ const WorldContainer: FC<T> = () => {
           projects={data.allSanityProject.edges}
           onInitialized={_onInitialized}
           introFinished={introStatus === 'hide'}
-          activeProject={activeProject}
-          setActiveProject={(project: any) => { setActiveProject(project ? project.node : null)} }
+          preview={preview}
+          setPreview={(project: any) => { setPreview(project)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
           titleEl={titleEl}
           videoEl={videoEl}
         />
-        <TextAnimated showText={!!activeProject} tag="h1" className="title title--main" text={activeProject ? activeProject.title : ''} />
-        <LocalizedLink to={activeProject ?  `/projects/${activeProject.slug.current}` : ''}>
+        <TextAnimated showText={!!preview} tag="h1" className="title title--main" text={preview ? preview.node.title : ''} />
+        <LocalizedLink to={preview ?  `/projects/${preview.node.slug.current}` : ''}>
           <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
               <video id="videoBG" autoPlay muted loop>
                 <source src="/stargazing.mp4" type="video/mp4" />
               </video>
               <VideoContent>
-                <TextAnimated tag="h6" showText={!!activeProject} text="video direction" className="pre-title" />
-                <TextAnimated tag="h6" showText={!!activeProject} text={activeProject ? activeProject.title : ''} className="title" />
+                <TextAnimated tag="h6" showText={!!preview} text="video direction" className="pre-title" />
+                <TextAnimated tag="h6" showText={!!preview} text={preview ? preview.node.title : ''} className="title" />
               </VideoContent>
           </VideoBox>
         </LocalizedLink>

@@ -3,6 +3,8 @@
 import React, { FC, useEffect, useRef, useLayoutEffect, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
+import { isMobile } from 'react-device-detect'
+import { navigate } from 'gatsby'
 
 import * as THREE from 'three'
 import { initGlobe } from './utils'
@@ -14,8 +16,8 @@ type T = {
   projects: Project[],
   onInitialized: Function,
   introFinished: boolean,
-  activeProject: any,
-  setActiveProject: Function,
+  preview: any,
+  setPreview: Function,
   setVideoPos: Function,
   titleEl: any,
   videoEl: any
@@ -32,15 +34,18 @@ const scale = {
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, setActiveProject, setVideoPos, titleEl, videoEl }) => {
+const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinished, setVideoPos }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
+  // globe
   const [loaded, setLoaded] = useState(false)
   const [isInitialized, setInitialized] = useState(false);
-  const [labels, setLabels] = useState([]);
-  const [labelActive, setLabelActive] = useState(null);
   const [cameraChanged, setCameraChanged] = useState(false);
+  // labels
+  const [labels, setLabels] = useState([]);
+  const [labelHovered, onLabelHovered] = useState(null);
+  const [labelClicked, onLabelClicked] = useState(null);
 
   useEffect(() => {
     if (loaded && ref.current && !isInitialized) {
@@ -65,6 +70,7 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
     }
   }, [loaded]);
 
+  // on intro finished
   useEffect(() => {
     if (introFinished && ref.current) {
       setTimeout(() => {
@@ -76,32 +82,49 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
 
   // update video box position
   useEffect(() => {
-    console.log('active project', activeProject);
+    console.log('active project', preview);
   
-    if (!activeProject || !ref.current) {
+    if (!preview || !ref.current) {
       return setVideoPos(null)
     }
     
     setVideoPos(
       ref.current.getScreenCoords(
-        get(activeProject, 'location.lat', 0),
-        get(activeProject, 'location.lng', 0),
+        get(preview, 'node.location.lat', 0),
+        get(preview, 'node.location.lng', 0),
         0.05
       )
     );
     
-  }, [activeProject])
+  }, [preview])
 
-  // update label size
+  // on label hover
   useEffect(() => {
-    setActiveProject(labelActive);
+    setPreview(labelHovered);
 
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default));
     
-    if (labelActive) {
-      Object.assign(labelActive.__threeObj.scale, scale.large);
+    if (labelHovered) {
+      Object.assign(labelHovered.__threeObj.scale, scale.large);
     }
-  }, [labelActive]);
+  }, [labelHovered]);
+
+  // on label click
+  useEffect(() => {
+    if (!labelClicked) return;
+  
+    // On desktop, go to project detailed page on click
+    if (!isMobile) {
+      return navigate(`/projects/${labelClicked.node.slug.current}`)
+    }
+
+    // On mobile:
+    if (preview && preview.node.slug.current === labelClicked.node.slug.current) {
+      return navigate(`/projects/${labelClicked.node.slug.current}`)
+    }
+    
+    setPreview(labelClicked);
+  }, [labelClicked]);
 
   // update label's quaternion (to always look at screen)
   useEffect(() => {
@@ -180,7 +203,8 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
           customLayerData={projects}
           customThreeObject={() => labelObject()}
           customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-          onCustomLayerHover={obj => setLabelActive(obj)}
+          onCustomLayerHover={obj => onLabelHovered(obj)}
+          onCustomLayerClick={obj => onLabelClicked(obj)}
           // settings
           animateIn={false}
           renderConfig={{
