@@ -7,8 +7,8 @@ const initClouds = (curr: any) => {
       map: new THREE.TextureLoader().load('/clouds.png', texture => texture),
       transparent: true,
       side: THREE.DoubleSide,
-      alphaTest: 0.5,
-      opacity: 0.7
+      alphaTest: 0.1,
+      opacity: 0.5
     })
     )
     const scene = curr.scene()
@@ -25,6 +25,7 @@ const initClouds = (curr: any) => {
 
 const initDirectionalLight = (curr: any) => {
   const globeMaterial = curr.globeMaterial()
+
     globeMaterial.bumpScale = 10
     new THREE.TextureLoader().load(
       '//unpkg.com/three-globe/example/img/earth-water.png',
@@ -45,6 +46,7 @@ const initDirectionalLight = (curr: any) => {
 }
 
 export const initGlobe = (curr: any) => {
+  
   initClouds(curr);
   initDirectionalLight(curr);
 }

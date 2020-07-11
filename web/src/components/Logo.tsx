@@ -4,7 +4,6 @@ import styled from 'styled-components'
 type T = any
 
 const SPEED = 2.5;
-const HEIGHT = 60;
 
 const Logo: FC<T> = () => {
   const ref = useRef();
@@ -23,7 +22,9 @@ return (
 };
 
 const Video = styled.video`
-  height: ${HEIGHT}px;
+  margin-top: -15px;
+  height: 75px;
+  width: 245px;
   position: absolute;
   top: 10px;
   left: 50%;
