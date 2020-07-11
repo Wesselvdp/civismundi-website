@@ -7,6 +7,7 @@ import * as THREE from 'three'
 
 import World from './World'
 import TextAnimated from '@components/TextAnimated'
+import LocalizedLink from '@components/LocalizedLink'
 
 type T = any
 type TransitionState = 'transition-in' | 'transition-out'
@@ -76,15 +77,17 @@ const WorldContainer: FC<T> = () => {
           videoEl={videoEl}
         />
         <TextAnimated showText={!!activeProject} tag="h1" className="title title--main" text={activeProject ? activeProject.title : ''} />
-        <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
-          <video id="videoBG" autoPlay muted loop>
-            <source src="/stargazing.mp4" type="video/mp4" />
-          </video>
-          <VideoContent>
-            <TextAnimated tag="h6" showText={!!activeProject} text="video direction" className="pre-title" />
-            <TextAnimated tag="h6" showText={!!activeProject} text={activeProject ? activeProject.title : ''} className="title" />
-          </VideoContent>
-        </VideoBox>
+        <LocalizedLink to={activeProject ?  `/projects/${activeProject.slug.current}` : ''}>
+          <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
+              <video id="videoBG" autoPlay muted loop>
+                <source src="/stargazing.mp4" type="video/mp4" />
+              </video>
+              <VideoContent>
+                <TextAnimated tag="h6" showText={!!activeProject} text="video direction" className="pre-title" />
+                <TextAnimated tag="h6" showText={!!activeProject} text={activeProject ? activeProject.title : ''} className="title" />
+              </VideoContent>
+          </VideoBox>
+        </LocalizedLink>
       </Wrapper>
       <ContentContainer>
         <TextAnimated showText={introStatus === 'show'} tag="h1" className="title" text={INTRO_TEXT.content} />

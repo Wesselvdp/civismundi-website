@@ -118,14 +118,15 @@ const World: FC<T> = ({ projects, onInitialized, introFinished, activeProject, s
   }, [cameraChanged]);
 
   useLayoutEffect(() => {
-    window.addEventListener('resize', () => {
+    function updateSize() {
       const camera = ref.current.camera();
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
 
       ref.current.renderer().setSize( window.innerWidth, window.innerHeight );
-    })
+    }
 
+    window.addEventListener('resize', () => updateSize())
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
