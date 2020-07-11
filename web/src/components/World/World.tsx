@@ -59,8 +59,6 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
       const controls = ref.current.controls()
       controls.enabled = false
       controls.enableZoom = false
-      controls.autoRotate = true
-      controls.autoRotateSpeed = 0.3
 
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
@@ -79,10 +77,11 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
   // on intro finished
   useEffect(() => {
     if (introFinished && ref.current) {
-      setTimeout(() => {
-        const controls = ref.current.controls()
-        controls.enabled = true
-      }, 500)
+      const controls = ref.current.controls();
+
+      controls.enabled = true;
+      controls.autoRotate = true
+      controls.autoRotateSpeed = 0.3
     }
   }, [introFinished])
 
@@ -107,6 +106,7 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
   // on label hover
   useEffect(() => {
     setPreview(labelHovered)
+    if (!introFinished) return;
 
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
     
@@ -147,11 +147,11 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
     return () => clearTimeout(timer)
   }, [cameraChanged])
 
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     ref.current.controls().autoRotate = cameraRotating
-  //   }
-  // }, [cameraRotating])
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.controls().autoRotate = cameraRotating
+    }
+  }, [cameraRotating])
 
   // window resize listener
   useLayoutEffect(() => {
