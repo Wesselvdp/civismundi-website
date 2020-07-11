@@ -29,7 +29,7 @@ const TextAnimation: FC<T> = ({
   style,
   inProp,
   timeout,
-  letterSpeedIn = 0.01,
+  letterSpeedIn = 0.025,
   letterSpeedOut = 0.005,
   ...rest
 }) => {
@@ -79,8 +79,8 @@ const TextAnimation: FC<T> = ({
 }
 
 const Wrapper = styled.div`
-  // pointer-events: none;
-  // user-select: none;
+  pointer-events: none;
+  user-select: none;
 
   .letter {
     pointer-events: none;
