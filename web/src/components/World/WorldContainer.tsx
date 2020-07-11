@@ -10,24 +10,30 @@ import World from './World'
 import TextAnimated from '@components/TextAnimated'
 import TextAnimation from '@components/TextAnimation'
 import LocalizedLink from '@components/LocalizedLink'
+// import console = require('console');
 
 type T = any
-type Phase = 'globe-in'
 type ScreenCoordinates = { x: string, y: string }
+
+enum Phase {
+  INITIALIZING = 0,
+  LOADING = 1,
+  INTRO = 2,
+  EXPLORE = 3
+}
+
+type TransitionPhase = Phase
 
 const GLOBE_TRANSITION_LENGTH = 1600;
 
-const INTRO_TEXT = {
-  content: 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion',
-  hideAfter: 3000
-}
-
+const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
+const INTRO_DURATION = 4000;
 
 const WorldContainer: FC<T> = () => {
   const titleEl = useRef();
   const videoEl = useRef();
 
-  const [transitionPhase, setTransitionPhase] = useState<Phase | null>(null);
+  const [transitionPhase, setTransitionPhase] = useState<TransitionPhase>(Phase.INITIALIZING);
   const [preview, setPreview] = useState<Project | null>(null)
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null)
 
@@ -51,41 +57,49 @@ const WorldContainer: FC<T> = () => {
     }
   `)
 
-  const _onInitialized = () => {
-    setTransitionPhase('globe-in');
-  }
-
   return (
     <Page>
-    <CSSTransition in={transitionPhase === 'globe-in'} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
+    <CSSTransition in={transitionPhase >= Phase.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
       <Wrapper>
         <World
           height="100%"
           projects={data.allSanityProject.edges}
-          onInitialized={_onInitialized}
-          introFinished={!!(transitionPhase && transitionPhase !== 'globe-in')}
+          onInitialized={() => setTransitionPhase(Phase.LOADING)}
+          introFinished={transitionPhase > Phase.INTRO}
           preview={preview}
           setPreview={(project: any) => { setPreview(project)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
           titleEl={titleEl}
           videoEl={videoEl}
         />
-        <TextAnimated showText={!!preview} tag="h1" className="title title--main" text={preview ? preview.node.title : ''} />
-        <LocalizedLink to={preview ?  `/projects/${preview.node.slug.current}` : ''}>
-          <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
-              <video id="videoBG" autoPlay muted loop>
-                <source src="/stargazing.mp4" type="video/mp4" />
-              </video>
-              <VideoContent>
-                <TextAnimated tag="h6" showText={!!preview} text="video direction" className="pre-title" />
-                <TextAnimated tag="h6" showText={!!preview} text={preview ? preview.node.title : ''} className="title" />
-              </VideoContent>
-          </VideoBox>
-        </LocalizedLink>
+        {transitionPhase >= Phase.EXPLORE && (
+          <>
+            <TextAnimated showText={!!preview} tag="h1" className="title title--main" text={preview ? preview.node.title : ''} />
+            <LocalizedLink to={preview ?  `/projects/${preview.node.slug.current}` : ''}>
+              <VideoBox ref={videoEl} style={videoPos ? { left: videoPos.x, top: videoPos.y, opacity: 1 } : { opacity: 0 }}>
+                  <video id="videoBG" autoPlay muted loop>
+                    <source src="/stargazing.mp4" type="video/mp4" />
+                  </video>
+                  <VideoContent>
+                    <TextAnimated tag="h6" showText={!!preview} text="video direction" className="pre-title" />
+                    <TextAnimated tag="h6" showText={!!preview} text={preview ? preview.node.title : ''} className="title" />
+                  </VideoContent>
+              </VideoBox>
+            </LocalizedLink>
+          </>
+        )}
       </Wrapper>
     </CSSTransition>
     <ContentContainer>
-      <TextAnimation inProp={transitionPhase === 'globe-in'} timeout={INTRO_TEXT.hideAfter} tag="h1" className="title" text={INTRO_TEXT.content} />
+      <TextAnimation 
+        inProp={transitionPhase === Phase.LOADING} 
+        onEntered={() => setTransitionPhase(Phase.EXPLORE)}
+        unmountOnExit
+        timeout={INTRO_DURATION}
+        tag="h1"
+        className="title"
+        text={INTRO_TEXT}
+      />
     </ContentContainer>
   </Page>
   )
@@ -102,7 +116,7 @@ const Wrapper = styled.div`
 
   &.globe-enter-active {
     transform: scale(1);
-    transition: all ${GLOBE_TRANSITION_LENGTH}ms ease-out;
+    transition: all 1600ms ease-out;
   }
 
   &.globe-enter-done {
@@ -165,7 +179,7 @@ const ContentContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 750px;
-  // pointer-events: none;
+  pointer-events: none;
 
   .title {
     font-size: 32px;

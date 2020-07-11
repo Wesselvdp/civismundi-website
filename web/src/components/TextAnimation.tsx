@@ -29,7 +29,8 @@ const TextAnimation: FC<T> = ({
   tag: Tag,
   style,
   inProp,
-  timeout
+  timeout,
+  ...rest
 }) => {
   const [letters, setLetters] = useState<string[]>([])
   const [words, setWords] = useState<WordObject[]>([])
@@ -52,18 +53,16 @@ const TextAnimation: FC<T> = ({
     }
   }, [text])
 
-  console.log(words);
-
   if (!text) return null;
 
   return (
-    <CSSTransition in={inProp} timeout={timeout} classNames="text">
+    <CSSTransition in={inProp} timeout={timeout} classNames="text" {...rest}>
       <Wrapper>
         <Tag className={className} style={style}>
           {words.map((w) => (
             <span style={{ display: 'inline-block' }}>
               {slice(letters, w.position, w.position + w.length).map((l, i) => (
-                <span className="letter" style={{ transitionDelay: `${0.01 * (w.position + i)}s`}}>{l}</span>
+                <span className="letter" style={{ transitionDelay: `${(inProp ? 0.01 : 0.005) * (w.position + i)}s`}}>{l}</span>
               ))}
               &nbsp;&nbsp;
             </span>
@@ -75,6 +74,9 @@ const TextAnimation: FC<T> = ({
 }
 
 const Wrapper = styled.div`
+  pointer-events: none;
+  user-select: none;
+
   .letter {
     pointer-events: none;
     display: inline-block;
@@ -118,7 +120,7 @@ const Wrapper = styled.div`
       transform: scale(0.2);
       opacity: 0;
       transition: transform ${letterTransitionDuration}ms ease-in,
-      opacity 0.8s cubic-bezier(0.1, 0.02, 0.08, 1.1);
+      opacity 0.25s cubic-bezier(0.1, 0.02, 0.08, 1.1);
     }
   }
 `
