@@ -2,33 +2,34 @@
 import React, { FC, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
+import { CSSTransition } from 'react-transition-group';
 
 import * as THREE from 'three'
 
 import World from './World'
 import TextAnimated from '@components/TextAnimated'
+import TextAnimation from '@components/TextAnimation'
 import LocalizedLink from '@components/LocalizedLink'
 
 type T = any
-type TransitionState = 'transition-in' | 'transition-out'
+type Phase = 'globe-in'
 type ScreenCoordinates = { x: string, y: string }
-type IntroStatus = 'show' | 'hide'
+
+const GLOBE_TRANSITION_LENGTH = 1600;
 
 const INTRO_TEXT = {
   content: 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion',
   hideAfter: 3000
 }
 
-const GLOBE_TRANSITION_TIME = 1.6;
 
 const WorldContainer: FC<T> = () => {
   const titleEl = useRef();
   const videoEl = useRef();
 
-  const [transition, setTransition] = useState<TransitionState | undefined>(undefined)
+  const [transitionPhase, setTransitionPhase] = useState<Phase | null>(null);
   const [preview, setPreview] = useState<Project | null>(null)
   const [videoPos, setVideoPos] = useState<ScreenCoordinates | null>(null)
-  const [introStatus, setIntroStatus] = useState<IntroStatus | undefined>(undefined)
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -51,25 +52,18 @@ const WorldContainer: FC<T> = () => {
   `)
 
   const _onInitialized = () => {
-    setTransition('transition-in');
-
-    setTimeout(() => {
-      setIntroStatus('show');
-
-      setTimeout(() => {
-        setIntroStatus('hide');
-      }, 3000);
-    }, 200);
+    setTransitionPhase('globe-in');
   }
 
   return (
     <Page>
-      <Wrapper className={transition}>
+    <CSSTransition in={transitionPhase === 'globe-in'} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
+      <Wrapper>
         <World
           height="100%"
           projects={data.allSanityProject.edges}
           onInitialized={_onInitialized}
-          introFinished={introStatus === 'hide'}
+          introFinished={!!(transitionPhase && transitionPhase !== 'globe-in')}
           preview={preview}
           setPreview={(project: any) => { setPreview(project)} }
           setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
@@ -89,10 +83,11 @@ const WorldContainer: FC<T> = () => {
           </VideoBox>
         </LocalizedLink>
       </Wrapper>
-      <ContentContainer>
-        <TextAnimated showText={introStatus === 'show'} tag="h1" className="title" text={INTRO_TEXT.content} />
-      </ContentContainer>
-    </Page>
+    </CSSTransition>
+    <ContentContainer>
+      <TextAnimation inProp={transitionPhase === 'globe-in'} timeout={INTRO_TEXT.hideAfter} tag="h1" className="title" text={INTRO_TEXT.content} />
+    </ContentContainer>
+  </Page>
   )
 }
 
@@ -100,7 +95,19 @@ export default WorldContainer
 
 const Wrapper = styled.div`
   transform: scale(0);
-  transition: all ${GLOBE_TRANSITION_TIME}s ease-out;
+
+  &.globe-enter {
+    transform: scale(0);
+  }
+
+  &.globe-enter-active {
+    transform: scale(1);
+    transition: all ${GLOBE_TRANSITION_LENGTH}ms ease-out;
+  }
+
+  &.globe-enter-done {
+    transform: scale(1);
+  }
 
   .title--main {
     position: absolute;
@@ -118,10 +125,6 @@ const Wrapper = styled.div`
   }
 
   * { outline: 0 };
-
-  &.transition-in {
-    transform: scale(1);
-  }
 `
 
 const VideoBox = styled.div`
@@ -162,7 +165,7 @@ const ContentContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 750px;
-  pointer-events: none;
+  // pointer-events: none;
 
   .title {
     font-size: 32px;

@@ -25,6 +25,7 @@ const initClouds = (curr: any) => {
 
 const initDirectionalLight = (curr: any) => {
   const globeMaterial = curr.globeMaterial()
+
     globeMaterial.bumpScale = 10
     new THREE.TextureLoader().load(
       '//unpkg.com/three-globe/example/img/earth-water.png',
@@ -45,6 +46,7 @@ const initDirectionalLight = (curr: any) => {
 }
 
 export const initGlobe = (curr: any) => {
+  
   initClouds(curr);
   initDirectionalLight(curr);
 }

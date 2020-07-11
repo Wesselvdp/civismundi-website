@@ -147,11 +147,11 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
     return () => clearTimeout(timer)
   }, [cameraChanged])
 
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.controls().autoRotate = cameraRotating
-    }
-  }, [cameraRotating])
+  // useEffect(() => {
+  //   if (ref.current) {
+  //     ref.current.controls().autoRotate = cameraRotating
+  //   }
+  // }, [cameraRotating])
 
   // window resize listener
   useLayoutEffect(() => {
