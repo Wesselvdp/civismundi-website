@@ -37,7 +37,7 @@ h6,
 }
 
 h1 {
-  font-size: 44px;
+  font-size: 56px;
 
   &.h1--large {
     @include tablet-landscape-up {
@@ -102,25 +102,26 @@ p {
   text-transform: uppercase;
   margin-bottom: 3px;
   font-family: 'Druk Wide Bold';
+  font-weight: 700;
 }
 
 .content--sanity {
   strong {
     text-transform: uppercase;
-    margin-bottom: -16px;
+    margin-bottom: 0;
     display: inherit;
     font-family: 'Druk Wide Bold';
+    font-size: 16px;
+    opacity: 1;
   }
 
   p {
     font-weight: 300;
-    opacity: 0.9;
   }
 }
 
 .text-lighter {
-  opacity: 0.9;
-  font-weight: 300;
+  opacity: 0.75;
 }
 
 p {
@@ -130,6 +131,7 @@ p {
 
 body {
   font-size: 16px;
+  font-family: 'OriyaMN';
 }
 
 a {

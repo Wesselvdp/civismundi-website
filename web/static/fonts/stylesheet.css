@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Oriya MN';
+    src: url('OriyaMN.woff2') format('woff2'),
+        url('OriyaMN.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

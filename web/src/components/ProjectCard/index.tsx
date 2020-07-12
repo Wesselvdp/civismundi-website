@@ -15,9 +15,9 @@ const ProjectCard: FC<T> = ({ data }) => {
           style={{ backgroundImage: `url('https://picsum.photos/400/300')` }}
         />
         <Content>
-          <p className="pre-title">VIDEO DIRECTION</p>
+          <h6 className="pre-title">VIDEO DIRECTION</h6>
           <h4 className="title">{title}</h4>
-          <p className="excerpt text-lighter">
+          <p className="p--small text-lighter">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officia
             quaerat numquam labore aut excepturi veritatis laboriosam
           </p>
@@ -37,7 +37,15 @@ const Content = styled.div`
   text-decoration: none;
   margin-top: -3.5em;
 
-  .excerpt {
+  h6 {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    margin-bottom: 0;
+  }
+
+  p {
     max-width: 75%;
   }
 `

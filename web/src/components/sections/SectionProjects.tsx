@@ -33,7 +33,7 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
 
   return (
     <Container>
-      <h2 className="title">{title}</h2>
+      <h3>{title}</h3>
       <Grid>
         {projectsVisible.map((p: Project) => (
           <GridItem key={p.id}>
@@ -41,9 +41,9 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
           </GridItem>
         ))}
       </Grid>
-      <Button buttonStyle="outlined">
+      {/* <Button buttonStyle="outlined">
         <LocalizedLink to="/projects">See all </LocalizedLink>
-      </Button>
+      </Button> */}
     </Container>
   )
 }

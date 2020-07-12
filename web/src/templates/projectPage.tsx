@@ -74,15 +74,15 @@ const ProjectPageTemplate= ({ data }) => {
                 <div className="col meta">
                   <div>
                     <p className="pre-title">DIRECTED BY</p>
-                    <p className="lead text-lighter">NABIL ELDERKIN</p>
+                    <p>NABIL ELDERKIN</p>
                   </div>
                   <div>
                     <p className="pre-title">AWARDS & FESTIVALS</p>
-                    <p className="lead text-lighter">LOS ANGELES</p>
+                    <p>LOS ANGELES</p>
                   </div>
                   <div>
                     <p className="pre-title">LOCATION</p>
-                    <p className="lead text-lighter">LOS ANGELES</p>
+                    <p>LOS ANGELES</p>
                   </div>
                 </div>
                 <div className="col content content--sanity">
@@ -150,18 +150,40 @@ const Section = styled.section`
   }
 
   .col {
+    p {
+      opacity: 0.75;
+    }
+
     &.meta {
       flex: 100% 1 1;
       text-align: left;
       padding-right: 2em;
+
       @media ${breakpoints.tabletLandscapeUp} {
-        flex: 1;
+        flex: 1.5 1 0;
+      }
+
+      p {
+        font-size: 18px;
+
+        &.pre-title {
+          font-size: 16px;
+          opacity: 1;
+        }
+      }
+
+      div {
+        margin-bottom: 20px;
       }
     }
 
     &.content {
       flex: 2;
       text-align: left;
+      
+      p {
+        font-size: 18px;
+      }
     }
   }
 `

@@ -65,7 +65,7 @@ const TextAnimation: FC<T> = ({
               {slice(letters, w.position, w.position + w.length).map((l, i) => (
                 <span className="letter" style={{ transitionDelay: `${(inProp ? letterSpeedIn : letterSpeedOut) * (w.position + i)}s`}}>{l}</span>
               ))}
-              &nbsp;&nbsp;
+              &nbsp;
             </span>
           ))}
         </Tag>

@@ -20,6 +20,7 @@ const Layout: FC<T> = ({ children, className }) => {
 
 const Main = styled.main`
   min-height: 100vh;
+  overflow-x: hidden;
 
   &.page-transition {
     &-exited {
