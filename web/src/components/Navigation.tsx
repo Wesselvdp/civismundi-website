@@ -54,6 +54,7 @@ const Nav = styled.nav`
 
     span {
       text-transform: uppercase;
+      font-size: 14px;
     }
 
     &.item--left {

@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { FC, useEffect, useRef, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
 import { isMobile } from 'react-device-detect'
@@ -40,7 +40,7 @@ const scale = {
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinished, setVideoPos }) => {
+const World = ({ projects, preview, setPreview, onInitialized, introFinished, setVideoPos }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();

@@ -7,7 +7,7 @@ import { slice } from 'lodash'
 type T = {
   text: string | undefined
   className?: string
-  tag: 'h1' | 'h2' | 'h4' | 'h5' | 'h6' | 'p' | 'span',
+  tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span',
   style?: {},
   inProp: any,
   timeout: number
