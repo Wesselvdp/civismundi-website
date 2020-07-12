@@ -54,10 +54,6 @@ const TextAnimation: FC<T> = ({
     }
   }, [text])
 
-  useEffect(() => {
-   console.log('inProp changed', inProp); 
-  }, [inProp])
-
   if (!text) return null;
 
   return (

@@ -122,6 +122,7 @@ const Wrapper = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 86px;
+    white-space: nowrap;
   }
 
   * { outline: 0 };

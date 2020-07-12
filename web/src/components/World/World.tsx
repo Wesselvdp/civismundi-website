@@ -11,6 +11,10 @@ import { initGlobe } from './utils'
 // import console = require('console');
 // import console = require('console');
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -46,6 +50,10 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
   const [cameraChanged, setCameraChanged] = useState(false)
   const [cameraRotating, setCameraRotating] = useState(true)
 
+  // scene objects
+  const [clouds, setClouds] = useState(null);
+  const [lightning, setLightning] = useState(null);
+
   // labels
   const [labels, setLabels] = useState([])
   const [labelHovered, onLabelHovered] = useState(null)
@@ -53,7 +61,10 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
 
   useEffect(() => {
     if (loaded && ref.current && !isInitialized) {
-      initGlobe(ref.current);
+      initGlobe(ref.current).then(res => {
+        setClouds(res[0]);
+        setLightning(res[1]);
+      })
 
       // disable controls untill intro has finished
       const controls = ref.current.controls()
@@ -136,13 +147,14 @@ const World: FC<T> = ({ projects, preview, setPreview, onInitialized, introFinis
     setPreview(labelClicked);
   }, [labelClicked]);
 
-  // update label's quaternion (to always look at screen)
+  // on camera changed
   useEffect(() => {
     if (!cameraChanged) return;
 
-    const cameraQ = ref.current.camera().quaternion
+    // update labels rotation
+    const camera = ref.current.camera();
     labels.forEach(label => {
-      label.__threeObj.quaternion.copy(cameraQ)
+      label.__threeObj.quaternion.copy(camera.quaternion)
     })
 
     const timer = setTimeout(() => {
