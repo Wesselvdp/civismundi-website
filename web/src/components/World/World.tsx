@@ -120,8 +120,8 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
 
   // on label hover
   useEffect(() => {
-    setPreview(labelHovered)
     if (!introFinished) return;
+    setPreview(labelHovered)
 
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
     
@@ -132,6 +132,7 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
 
   // on label click
   useEffect(() => {
+    if (!introFinished) return;
     if (!labelClicked) return;
   
     // On desktop, go to project detailed page on click
