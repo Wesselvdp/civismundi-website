@@ -20,6 +20,17 @@ const Layout: FC<T> = ({ children, className }) => {
 
 const Main = styled.main`
   min-height: 100vh;
+
+  &.page-transition {
+    &-exited {
+      opacity: 0;
+    }
+
+    &-entering {
+      opacity: 1;
+      transition: opacity 5s ease;
+    }
+  }
 `
 
 export default Layout

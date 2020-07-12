@@ -66,79 +66,89 @@ const WorldContainer = () => {
   const onProjectDetailed = () => {
     console.log('going to a project!!');
   }
+
   return (
-    <Page>
-      <TransitionState>
+      <TransitionState className="test">
        {({ transitionStatus, exit, entry, mount }) => {
-        // console.log("[home] current page's transition status is", transitionStatus)
+        if (transitionStatus === 'exiting' || transitionStatus === 'exited')console.log("[home] current page's transition status is", transitionStatus)
 
         return (
-          <CSSTransition in={transitionPhase >= Phase.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
-            <Wrapper>
-              {/* World component*/}
-              <World
-                height="100%"
-                projects={data.allSanityProject.edges}
-                onInitialized={() => setTransitionPhase(Phase.LOADING)}
-                introFinished={transitionPhase > Phase.INTRO}
-                preview={preview}
-                setPreview={(project: any) => { setPreview(project)} }
-                setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
-                titleEl={titleEl}
-                videoEl={videoEl}
-              />
-              {/* project preview title */}
-              <TextAnimation
-                inProp={!!preview}
-                appear={true}
-                timeout={1000}
-                tag="h1"
-                className="h1--large project-title"
-                text={preview ? preview.node.title : ''}
-                unmountOnExit
-              />
-              {/* project preview thumbnail */}
-              <VideoThumbnail videoEl={videoEl} position={videoPos} preview={preview} onProjectDetailed={onProjectDetailed} />
-            </Wrapper>
-          </CSSTransition>
-        )}}
-      </TransitionState>
-    <ContentContainer>
-      {/* introduction text */}
-      <TextAnimation 
-        inProp={transitionPhase === Phase.LOADING} 
-        onEntered={() => setTransitionPhase(Phase.TUTORIAL)}
-        unmountOnExit
-        timeout={INTRO_DURATION}
-        tag="h1"
-        className="title"
-        text={INTRO_TEXT}
-        letterSpeedIn={0.01}
-      />
-    </ContentContainer>
-    <FooterContainer>
-      <div className="footer--content">
-        {transitionPhase >= Phase.TUTORIAL && (
-          <>
-            <img src="/grab-icon.svg" />
-            {TUTORIAL_TEXT.map(text => <p class="p--small">{text}</p>)}
-          </>
-        )}
-        {/* {TUTORIAL_TEXT.map(text => (
-          <TextAnimation
-            inProp={transitionPhase >= Phase.TUTORIAL}
-            timeout={{ enter: 10000 }}
-            onEntered={() => setTransitionPhase(Phase.EXPLORE)}
-            tag="p"
-            text={text}
-            className="p--small"
-            letterSpeedIn={0.01}
-          />
-        ))} */}
-      </div>
-    </FooterContainer>
-  </Page>
-  )
+          <Page className={`page-transition-${transitionStatus}`}>
+            <CSSTransition in={transitionPhase >= Phase.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
+              <Wrapper>
+                {/* World component*/}
+                <World
+                  height="100%"
+                  projects={data.allSanityProject.edges}
+                  onInitialized={() => setTransitionPhase(Phase.LOADING)}
+                  introFinished={transitionPhase > Phase.INTRO}
+                  preview={preview}
+                  setPreview={(project: any) => { setPreview(project)} }
+                  setVideoPos={(coords: ScreenCoordinates) => { setVideoPos(coords)}}
+                  titleEl={titleEl}
+                  videoEl={videoEl}
+                />
+                {/* project preview title */}
+                {transitionStatus !== 'exiting' && (
+                  <>
+                    <TextAnimation
+                      inProp={!!preview}
+                      appear={true}
+                      timeout={1000}
+                      tag="h1"
+                      className="h1--large project-title"
+                      text={preview ? preview.node.title : ''}
+                      unmountOnExit
+                    />
+                    {/* project preview thumbnail */}
+                    <VideoThumbnail 
+                      videoEl={videoEl} 
+                      position={videoPos} 
+                      preview={preview} 
+                      onProjectDetailed={onProjectDetailed}
+                    />
+                  </>
+                )}
+              </Wrapper>
+            </CSSTransition>
+          <ContentContainer>
+            {/* introduction text */}
+            <TextAnimation 
+              inProp={transitionPhase === Phase.LOADING} 
+              onEntered={() => setTransitionPhase(Phase.TUTORIAL)}
+              unmountOnExit
+              timeout={INTRO_DURATION}
+              tag="h1"
+              className="title"
+              text={INTRO_TEXT}
+              letterSpeedIn={0.01}
+            />
+          </ContentContainer>
+          <FooterContainer>
+            <div className="footer--content">
+              {transitionPhase >= Phase.TUTORIAL && (
+                <>
+                  <img src="/grab-icon.svg" />
+                  {TUTORIAL_TEXT.map(text => <p class="p--small">{text}</p>)}
+                </>
+              )}
+              {/* {TUTORIAL_TEXT.map(text => (
+                <TextAnimation
+                  inProp={transitionPhase >= Phase.TUTORIAL}
+                  timeout={{ enter: 10000 }}
+                  onEntered={() => setTransitionPhase(Phase.EXPLORE)}
+                  tag="p"
+                  text={text}
+                  className="p--small"
+                  letterSpeedIn={0.01}
+                />
+              ))} */}
+            </div>
+          </FooterContainer>
+        </Page>
+     )}}
+    </TransitionState>
+  );
 }
 
 export default WorldContainer
@@ -211,4 +221,18 @@ const Page = styled.div`
   position: relative;
   height: 100vh;
   overflow: hidden;
+  will-change: transform;
+
+  &.page-transition {
+    &-entered {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-exiting {
+      opacity: 0;
+      transform: scale(3);
+      transition: transform 2s ease-out, opacity 1.75s ease-in;
+    }
+  }
 `

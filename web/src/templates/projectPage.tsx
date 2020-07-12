@@ -26,26 +26,26 @@ const ProjectPageTemplate= ({ data }) => {
   return (
     <TransitionState>
        {({ transitionStatus }) => {
-        console.log("[project-detailed] current page's transition status is", transitionStatus)
+        if (transitionStatus === 'entering' || transitionStatus === 'entered') console.log("[project-detailed] current page's transition status is", transitionStatus)
 
         return (
-          <Layout>
+          <Layout className={`page-transition-${transitionStatus}`}>
             {/* Mast */}
             <StyledMast>
-              <FixedBackground className={transitionStatus}>
+              <FixedBackground>
                 <div className="overlay" />
                 <BackgroundVideo />
               </FixedBackground>
               <Content>
                 <div className="inner">
-                  <TextAnimated className="pre-title pre-title--big" tag="span" showText={true} text="VIDEO DIRECTION" />
+                  {/* <TextAnimated className="pre-title pre-title--big" tag="span" showText={true} text="VIDEO DIRECTION" />
                   <TextAnimated className="title h1" tag="h2" showText={true} text={title} />
                   <TextAnimated
                     tag="p"
                     showText={true}
                     text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
                     className="text-lighter"
-                  />
+                  /> */}
                 </div>
               </Content>
             </StyledMast>
@@ -144,8 +144,6 @@ const FixedBackground = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
-  opacity: 0;
 
   .overlay {
     position: absolute;
@@ -155,15 +153,6 @@ const FixedBackground = styled.div`
     height: 100%;
     background-color: #000;
     opacity: 0.7;
-  }
-
-  &.entering {
-    opacity: 1;
-    transition: opacity 50s ease;
-  }
-
-  &.entered  {
-    opacity: 1;
   }
 `
 

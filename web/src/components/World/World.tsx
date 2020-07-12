@@ -179,7 +179,7 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
       ref.current.renderer().setSize( window.innerWidth, window.innerHeight )
     }
 
-    window.addEventListener('resize', () => updateSize())
+    window.addEventListener('resize', () => { if (ref.current) updateSize() })
     return () => window.removeEventListener('resize', updateSize)
   }, []);
 
