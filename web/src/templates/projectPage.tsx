@@ -42,6 +42,7 @@ const ProjectPageTemplate= ({ data }) => {
                   <TextAnimation
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+                    timeout={5000}
                     className="h5 pre-title"
                     tag="h6"
                     text="Video direction"
@@ -49,6 +50,7 @@ const ProjectPageTemplate= ({ data }) => {
                   <TextAnimation
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+                    timeout={5000}
                     className="h1"
                     tag="h1"
                     text={title}
@@ -56,6 +58,7 @@ const ProjectPageTemplate= ({ data }) => {
                   <TextAnimation
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+                    timeout={5000}
                     tag="p"
                     text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
                     letterSpeedIn={0.01}
