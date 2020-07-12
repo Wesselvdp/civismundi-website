@@ -20,8 +20,8 @@ const VideoThumbnail = ({
   return (
     <TransitionLink
       to="/projects/stargazing"
-      exit={{ delay: 0, length: 3.5, zIndex: 1 }}
-      entry={{ delay: 0, length: 5, zIndex: 0 }}
+      exit={{ delay: 0, length: 3, zIndex: 1 }}
+      entry={{ delay: 0, length: 0.5, zIndex: 0 }}
     >
       <CSSTransition in={!!preview} appear={true} timeout={300} classNames="video">
         <VideoBox ref={videoEl} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>

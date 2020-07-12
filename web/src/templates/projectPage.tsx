@@ -10,8 +10,9 @@ import { TransitionState } from 'gatsby-plugin-transition-link'
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
 import Layout from '@components/Layout'
-import TextAnimated from '@components/TextAnimated'
+import TextAnimation from '@components/TextAnimation'
 import SectionProjects from '@components/sections/SectionProjects'
+// import console = require('console');
 
 type PageProps = {
   data: {
@@ -26,7 +27,7 @@ const ProjectPageTemplate= ({ data }) => {
   return (
     <TransitionState>
        {({ transitionStatus }) => {
-        if (transitionStatus === 'entering' || transitionStatus === 'entered') console.log("[project-detailed] current page's transition status is", transitionStatus)
+        console.log(transitionStatus);
 
         return (
           <Layout className={`page-transition-${transitionStatus}`}>
@@ -38,14 +39,31 @@ const ProjectPageTemplate= ({ data }) => {
               </FixedBackground>
               <Content>
                 <div className="inner">
-                  {/* <TextAnimated className="pre-title pre-title--big" tag="span" showText={true} text="VIDEO DIRECTION" />
-                  <TextAnimated className="title h1" tag="h2" showText={true} text={title} />
-                  <TextAnimated
+                  <TextAnimation
+                    appear={true}
+                    inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+                    timeout={{ enter: 1000 }}
+                    className="h5 pre-title"
+                    tag="h6"
+                    text="Video direction"
+                  />
+                  <TextAnimation
+                    appear={true}
+                    inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+                    timeout={{ enter: 1000 }}
+                    className="h1"
+                    tag="h1"
+                    text={title}
+                  />
+                  <TextAnimation
+                    appear={true}
+                    inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+                    timeout={{ enter: 1000 }}
                     tag="p"
-                    showText={true}
                     text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
-                    className="text-lighter"
-                  /> */}
+                    letterSpeedIn={0.01}
+                  />
+
                 </div>
               </Content>
             </StyledMast>
@@ -104,9 +122,18 @@ const Content = styled.div`
   .inner {
     padding: 15px;
 
-    .text-lighter {
+    p {
+      opacity: 0.75;
       max-width: 450px;
       margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .pre-title {
+      font-size: 18px;
     }
   }
 `

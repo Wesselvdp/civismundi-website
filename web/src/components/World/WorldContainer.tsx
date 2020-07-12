@@ -231,8 +231,8 @@ const Page = styled.div`
 
     &-exiting {
       opacity: 0;
-      transform: scale(3);
-      transition: transform 2s ease-in, opacity 1.75s ease-in;
+      transform: scale(3.5);
+      transition: transform 1.25s ease-in, opacity 1.25s ease-in;
     }
   }
 `
