@@ -8,6 +8,7 @@ import { navigate } from 'gatsby'
 
 import * as THREE from 'three'
 import { initGlobe } from './utils'
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -169,8 +170,6 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
       const camera = ref.current.camera()
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
-
-      ref.current.renderer().setSize( window.innerWidth, window.innerHeight )
     }
 
     window.addEventListener('resize', () => { if (ref.current) updateSize() })
