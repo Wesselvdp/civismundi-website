@@ -232,7 +232,7 @@ const Page = styled.div`
     &-exiting {
       opacity: 0;
       transform: scale(3);
-      transition: transform 2s ease-out, opacity 1.75s ease-in;
+      transition: transform 2s ease-in, opacity 1.75s ease-in;
     }
   }
 `
