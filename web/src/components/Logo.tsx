@@ -1,5 +1,6 @@
 import React, { FC, useRef } from 'react'
 import styled from 'styled-components'
+import { isMobile } from 'react-device-detect'
 
 type T = any
 
@@ -29,6 +30,12 @@ const Video = styled.video`
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
+
+  ${isMobile ? `
+    width: 200px;
+    height: auto;
+    margin-top: -10px;
+  ` : ''}
 `
 
 export default Logo;

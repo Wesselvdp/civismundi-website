@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { isMobile } from 'react-device-detect'
 
 import styled from 'styled-components'
 import LocalizedLink from '@components/LocalizedLink'
@@ -13,7 +14,7 @@ const MainNavigation: FC<T> = () => {
         {/* Left */}
         <div className="item">
           <LocalizedLink to="/">
-            <div className="navItem">All projects</div>
+            <div className="navItem">{isMobile ? 'Work' : 'All projects'}</div>
           </LocalizedLink>{' '}
         </div>
 

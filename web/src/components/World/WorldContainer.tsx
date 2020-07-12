@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { TransitionState } from 'gatsby-plugin-transition-link'
+import { isMobile } from 'react-device-detect'
 
 import World from './World'
 import TextAnimation from '@components/TextAnimation'
@@ -119,32 +120,34 @@ const WorldContainer = () => {
               unmountOnExit
               timeout={INTRO_DURATION}
               tag="h1"
-              className="title"
+              className="h3"
               text={INTRO_TEXT}
               letterSpeedIn={0.01}
             />
           </ContentContainer>
-          <FooterContainer>
-            <div className="footer--content">
-              {transitionPhase >= Phase.TUTORIAL && (
-                <>
-                  <img src="/grab-icon.svg" />
-                  {TUTORIAL_TEXT.map(text => <p class="p--small">{text}</p>)}
-                </>
-              )}
-              {/* {TUTORIAL_TEXT.map(text => (
-                <TextAnimation
-                  inProp={transitionPhase >= Phase.TUTORIAL}
-                  timeout={{ enter: 10000 }}
-                  onEntered={() => setTransitionPhase(Phase.EXPLORE)}
-                  tag="p"
-                  text={text}
-                  className="p--small"
-                  letterSpeedIn={0.01}
-                />
-              ))} */}
-            </div>
-          </FooterContainer>
+          {!isMobile && (
+            <FooterContainer>
+              <div className="footer--content">
+                {transitionPhase >= Phase.TUTORIAL && (
+                  <>
+                    <img src="/grab-icon.svg" />
+                    {TUTORIAL_TEXT.map(text => <p class="p--small">{text}</p>)}
+                  </>
+                )}
+                {/* {TUTORIAL_TEXT.map(text => (
+                  <TextAnimation
+                    inProp={transitionPhase >= Phase.TUTORIAL}
+                    timeout={{ enter: 10000 }}
+                    onEntered={() => setTransitionPhase(Phase.EXPLORE)}
+                    tag="p"
+                    text={text}
+                    className="p--small"
+                    letterSpeedIn={0.01}
+                  />
+                ))} */}
+              </div>
+            </FooterContainer>
+          )}
         </Page>
      )}}
     </TransitionState>
@@ -185,13 +188,19 @@ const ContentContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 100%;
   max-width: 750px;
   pointer-events: none;
 
-  .title {
-    font-size: 32px;
-    margin: 0;
-  }
+  ${isMobile ? 
+    `
+      max-width: 95%;
+
+      .h3 {
+        font-size: 24px;
+        font-weight: 400;
+      }
+    ` : ''}
 `
 
 const FooterContainer = styled.div`

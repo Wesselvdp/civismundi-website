@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { isMobile } from 'react-device-detect'
 
 import LocalizedLink from '@components/LocalizedLink'
 import Logo from '@components/Logo'
@@ -13,7 +14,7 @@ const Navigation: FC<T> = () => {
         {/* Left */}
         <div className="item item--left">
           <LocalizedLink to="/">
-            <span>All projects</span>
+            <span>{isMobile ? 'Work' : 'All projects'}</span>
           </LocalizedLink>{' '}
         </div>
 
@@ -40,6 +41,8 @@ const Container = styled.div`
   left: 0;
   width: 100%;
   z-index: 10;
+
+  ${isMobile && 'padding: 0 10px'}
 `
 
 const Nav = styled.nav`
@@ -51,6 +54,8 @@ const Nav = styled.nav`
   .item {
     flex: 0 0 200px;
     margin-top: -10px;
+  
+    ${isMobile ? `flex: 0 0 auto;` : ''}
 
     span {
       text-transform: uppercase;

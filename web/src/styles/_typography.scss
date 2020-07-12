@@ -56,6 +56,10 @@ h2, .h2 {
 
 h3, .h3 {
   font-size: 38px;
+
+  @include phone-only {
+    font-size: 24px;
+  }
 }
 
 h4, .h4 {
