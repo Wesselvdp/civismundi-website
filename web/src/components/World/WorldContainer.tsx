@@ -192,13 +192,16 @@ const ContentContainer = styled.div`
   max-width: 750px;
   pointer-events: none;
 
+  .h3 {
+    font-weight: 400;
+  }
+
   ${isMobile ? 
     `
       max-width: 95%;
 
       .h3 {
         font-size: 24px;
-        font-weight: 400;
       }
     ` : ''}
 `
