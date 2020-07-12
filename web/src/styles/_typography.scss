@@ -136,3 +136,8 @@ a {
   color: inherit;
   text-decoration: inherit;
 }
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
