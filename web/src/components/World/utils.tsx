@@ -49,6 +49,8 @@ const initDirectionalLight = (curr: any) => {
         .find(obj3d => obj3d.type === 'DirectionalLight')
 
       directionalLight && directionalLight.position.set(1, 1, 1)
+      console.log(directionalLight);
+      // if (directionalLight) directionalLight.target = curr.camera()
       resolve(directionalLight);
     })
   })

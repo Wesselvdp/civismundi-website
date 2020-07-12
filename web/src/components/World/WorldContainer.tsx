@@ -193,7 +193,7 @@ const ContentContainer = styled.div`
   pointer-events: none;
 
   .h3 {
-    font-weight: 400;
+    font-weight: 300;
   }
 
   ${isMobile ? 
