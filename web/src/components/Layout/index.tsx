@@ -6,12 +6,12 @@ import Navigation from '../Navigation'
 
 type T = any
 
-const Layout: FC<T> = ({ children }) => {
+const Layout: FC<T> = ({ children, className }) => {
   return (
     <>
       <Navigation />
 
-      <Main>{children}</Main>
+      <Main className={className}>{children}</Main>
 
       <Footer />
     </>

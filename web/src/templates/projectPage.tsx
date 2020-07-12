@@ -5,6 +5,7 @@ import localize from '@utils/localize'
 import { graphql } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
+import { TransitionState } from 'gatsby-plugin-transition-link'
 
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
@@ -19,60 +20,67 @@ type PageProps = {
   }
 }
 
-const ProjectPageTemplate: FC<PageProps> = ({ data }) => {
+const ProjectPageTemplate= ({ data }) => {
   const { title, id, _rawOverview } = data.sanityProject
 
   return (
-    <Layout>
-      {/* Mast */}
-      <StyledMast>
-        <FixedBackground>
-          <div className="overlay" />
-          <BackgroundVideo />
-        </FixedBackground>
-        <Content>
-          <div className="inner">
-            <TextAnimated className="pre-title pre-title--big" tag="span" showText={true} text="VIDEO DIRECTION" />
-            <TextAnimated className="title h1" tag="h2" showText={true} text={title} />
-            <TextAnimated
-              tag="p"
-              showText={true}
-              text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
-              className="text-lighter"
-            />
-          </div>
-        </Content>
-      </StyledMast>
+    <TransitionState>
+       {({ transitionStatus }) => {
+        console.log("[project-detailed] current page's transition status is", transitionStatus)
 
-      {/* Project content */}
-      <Section>
-        <div className="row">
-          <div className="col meta">
-            <div>
-              <p className="pre-title">DIRECTED BY</p>
-              <p className="lead text-lighter">NABIL ELDERKIN</p>
-            </div>
-            <div>
-              <p className="pre-title">AWARDS & FESTIVALS</p>
-              <p className="lead text-lighter">LOS ANGELES</p>
-            </div>
-            <div>
-              <p className="pre-title">LOCATION</p>
-              <p className="lead text-lighter">LOS ANGELES</p>
-            </div>
-          </div>
-          <div className="col content content--sanity">
-            <BlockContent blocks={_rawOverview} />
-          </div>
-        </div>
-      </Section>
-      <SectionProjects
-        title="Other projects"
-        blockId={id}
-        limit={2}
-        projects={data.allSanityProject}
-      />
-    </Layout>
+        return (
+          <Layout>
+            {/* Mast */}
+            <StyledMast>
+              <FixedBackground className={transitionStatus}>
+                <div className="overlay" />
+                <BackgroundVideo />
+              </FixedBackground>
+              <Content>
+                <div className="inner">
+                  <TextAnimated className="pre-title pre-title--big" tag="span" showText={true} text="VIDEO DIRECTION" />
+                  <TextAnimated className="title h1" tag="h2" showText={true} text={title} />
+                  <TextAnimated
+                    tag="p"
+                    showText={true}
+                    text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
+                    className="text-lighter"
+                  />
+                </div>
+              </Content>
+            </StyledMast>
+
+            {/* Project content */}
+            <Section>
+              <div className="row">
+                <div className="col meta">
+                  <div>
+                    <p className="pre-title">DIRECTED BY</p>
+                    <p className="lead text-lighter">NABIL ELDERKIN</p>
+                  </div>
+                  <div>
+                    <p className="pre-title">AWARDS & FESTIVALS</p>
+                    <p className="lead text-lighter">LOS ANGELES</p>
+                  </div>
+                  <div>
+                    <p className="pre-title">LOCATION</p>
+                    <p className="lead text-lighter">LOS ANGELES</p>
+                  </div>
+                </div>
+                <div className="col content content--sanity">
+                  <BlockContent blocks={_rawOverview} />
+                </div>
+              </div>
+            </Section>
+            <SectionProjects
+              title="Other projects"
+              blockId={id}
+              limit={2}
+              projects={data.allSanityProject}
+            />
+          </Layout>
+        )}}
+      </TransitionState>
   )
 }
 
@@ -137,6 +145,7 @@ const FixedBackground = styled.div`
   width: 100%;
   height: 100%;
   z-index: -1;
+  opacity: 0;
 
   .overlay {
     position: absolute;
@@ -146,6 +155,15 @@ const FixedBackground = styled.div`
     height: 100%;
     background-color: #000;
     opacity: 0.7;
+  }
+
+  &.entering {
+    opacity: 1;
+    transition: opacity 50s ease;
+  }
+
+  &.entered  {
+    opacity: 1;
   }
 `
 

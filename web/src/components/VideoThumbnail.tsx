@@ -1,9 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
+import TransitionLink from 'gatsby-plugin-transition-link'
 
-import LocalizedLink from '@components/LocalizedLink'
 import TextAnimation from '@components/TextAnimation'
+// import console = require('console');
+// import console = require('console');
 
 type T = {
   preview: any,
@@ -11,25 +13,29 @@ type T = {
   videoEl: any,
 }
 
-const VideoThumbnail: FC<T> = ({
+const VideoThumbnail = ({
   preview,
   position,
   videoEl,
+  onProjectDetailed
 }) => {
   return (
-    <LocalizedLink to={preview ?  `/projects/${preview.node.slug.current}` : ''}>
+    <TransitionLink
+      to="/projects/stargazing"
+    >
       <CSSTransition in={!!preview} appear={true} timeout={300} classNames="video">
         <VideoBox ref={videoEl} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
           <video id="videoBG" autoPlay muted loop>
             <source src="/stargazing.mp4" type="video/mp4" />
           </video>
           <VideoContent>
-            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h6" text="Video direction" className="pre-title" />
-            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h6" text={preview ? preview.node.title : ''} className="title" />
+            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h6" text="Video direction" className="pre-title small" />
+            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h4" text={preview ? preview.node.title : ''}  />
+            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h6" text="View project" />
           </VideoContent>
         </VideoBox>
       </CSSTransition>
-    </LocalizedLink>
+    </TransitionLink>
   )
 }
 
@@ -55,6 +61,7 @@ const VideoBox = styled.div`
 
   &.video-enter-done, &.video-appear-done {
     transform: none;
+    opacity: 1;
   }
 
   &.video-exit {
@@ -83,13 +90,9 @@ const VideoContent = styled.div`
   padding: 0 15px;
   width: 100%;
 
-  .title {
-    margin: 0;
-    font-size: 28px;
-  }
-
-  .pre-title {
-    font-size: 16px;
+  h4 {
+    margin-bottom: 5px;
+    font-size: 30px;
   }
 `
 
