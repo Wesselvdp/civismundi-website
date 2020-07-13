@@ -6,13 +6,14 @@ import { graphql } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
 import { TransitionState } from 'gatsby-plugin-transition-link'
+import { get } from 'lodash'
 
 // Components
 import BackgroundVideo from '@components/BackgroundVideo'
 import Layout from '@components/Layout'
 import TextAnimation from '@components/TextAnimation'
 import SectionProjects from '@components/sections/SectionProjects'
-// import console = require('console');
+
 
 type PageProps = {
   data: {
@@ -22,12 +23,11 @@ type PageProps = {
 }
 
 const ProjectPageTemplate= ({ data }) => {
-  const { title, id, _rawOverview } = data.sanityProject
+  const { title, id, video, _rawOverview } = data.sanityProject
 
   return (
     <TransitionState>
        {({ transitionStatus }) => {
-        console.log(transitionStatus);
 
         return (
           <Layout className={`page-transition-${transitionStatus}`}>
@@ -35,7 +35,7 @@ const ProjectPageTemplate= ({ data }) => {
             <StyledMast>
               <FixedBackground>
                 <div className="overlay" />
-                <BackgroundVideo />
+                <BackgroundVideo video={get(video, 'asset.url')} />
               </FixedBackground>
               <Content>
                 <div className="inner">
@@ -211,6 +211,11 @@ export const query = graphql`
       title
       slug {
         current
+      }
+      video {
+        asset {
+          url
+        }
       }
       id
       _rawOverview

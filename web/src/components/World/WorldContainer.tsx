@@ -16,6 +16,7 @@ import { breakpoints } from '@utils/breakpoints'
 // import console = require('console');
 // import console = require('console');
 // import console = require('console');
+// import console = require('console');
 
 type ScreenCoordinates = { x: string, y: string }
 
@@ -62,12 +63,18 @@ const WorldContainer = () => {
               lat
               lng
             }
+            video {
+              asset {
+                url
+              }
+            }
           }
         }
       }
     }
   `)
 
+  console.log(data);
   return (
       <TransitionState className="test">
        {({ transitionStatus }) => {

@@ -5,11 +5,15 @@ import TransitionLink from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
 
 import TextAnimation from '@components/TextAnimation'
+// import console = require('console');
 
 const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
+  const video = get(project, 'node.video.asset.url')
+  const slug = get(project, 'node.slug.current')
+
   return (
     <TransitionLink
-      to="/projects/stargazing"
+      to={`/projects/${slug}`}
       exit={{ 
         delay: 0,
         length: 3,
@@ -20,9 +24,11 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
     >
       <CSSTransition in={project} appear={true} timeout={300} classNames="video">
         <VideoBox ref={ref} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
-          <video id="videoBG" autoPlay muted loop>
-            <source src="/stargazing.mp4" type="video/mp4" />
-          </video>
+          {video && (
+            <video id="videoBG" autoPlay muted loop>
+              <source src={video} type="video/mp4" />
+            </video>
+          )}
           <VideoContent>
             <TextAnimation
               inProp={project}

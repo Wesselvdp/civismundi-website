@@ -39,6 +39,11 @@ export default {
       options: {
         hotspot: true
       }
+    },
+    {
+      name: 'video',
+      title: 'Video',
+      type: 'file'
     }
   ],
   preview: {

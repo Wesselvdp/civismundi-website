@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 type T = any
 
-const BackgroundVideo: FC<T> = () => {
+const BackgroundVideo: FC<T> = ({ video }) => {
   return (
     <VideoContainer>
       <video
@@ -13,7 +13,7 @@ const BackgroundVideo: FC<T> = () => {
         muted
         loop
       >
-        <source src="/stargazing.mp4" type="video/mp4" />
+        <source src={video} type="video/mp4" />
       </video>
     </VideoContainer>
   )
