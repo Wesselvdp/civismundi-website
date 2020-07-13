@@ -1,20 +1,13 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import ReactPlayer from 'react-player'
+
 type T = any
 
 const BackgroundVideo: FC<T> = ({ video }) => {
   return (
     <VideoContainer>
-      <video
-        // style={{ clipPath: "url(#clipPathVideo)" }}
-        id="videoBG"
-        // poster="poster.JPG"
-        autoPlay
-        muted
-        loop
-      >
-        <source src={video} type="video/mp4" />
-      </video>
+      <ReactPlayer url={video} muted playing={true} loop={true} volume={0} />
     </VideoContainer>
   )
 }

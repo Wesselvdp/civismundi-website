@@ -23,6 +23,7 @@
     "url": "https://github.com/cityhubhq/cityhub-website-frontend"
   },
   "dependencies": {
-    "@loadable/component": "^5.13.1"
+    "@loadable/component": "^5.13.1",
+    "react-player": "^2.5.0"
   }
 }
