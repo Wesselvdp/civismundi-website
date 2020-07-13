@@ -10,6 +10,8 @@ import { get } from 'lodash'
 import World from './World'
 import TextAnimation from '@components/TextAnimation'
 import VideoThumbnail from '@components/VideoThumbnail'
+import Fade from '@components/Fade'
+
 import { breakpoints } from '@utils/breakpoints'
 // import console = require('console');
 // import console = require('console');
@@ -24,8 +26,9 @@ export enum State {
   INITIALIZING = 0,
   LOADING = 1,
   INTRODUCTION = 2,
-  TUTORIAL = 3,
-  EXPLORE = 4
+  INTRODUCTION_COMPLETE = 3,
+  TUTORIAL = 4,
+  EXPLORE = 5
 }
 
 type StateType = State
@@ -74,7 +77,6 @@ const WorldContainer = () => {
     }
   `)
 
-  console.log(data);
   return (
       <TransitionState className="test">
        {({ transitionStatus }) => {
@@ -120,10 +122,11 @@ const WorldContainer = () => {
           <ContentContainer>
             {/* introduction text */}
             <TextAnimation 
-              inProp={state === State.LOADING} 
-              onEntered={() => setState(State.INTRODUCTION)}
+              inProp={state === State.LOADING || state === State.INTRODUCTION} 
+              onEnter={() => setState(State.INTRODUCTION)}
+              onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
               onExited={() => setState(State.TUTORIAL)}
-              timeout={{ enter: 5000, exit: 1500 }}
+              timeout={{ enter: 4000, exit: 1500 }}
               unmountOnExit
               tag="h1"
               className="h3"
@@ -133,12 +136,17 @@ const WorldContainer = () => {
           </ContentContainer>
           <FooterContainer>
             <div className="footer--content">
-              {state >= State.TUTORIAL && (
+              <Fade timeout={2500} in={state === State.TUTORIAL}>
                 <>
                   <img src="/grab-icon.svg" />
-                  {TUTORIAL_TEXT.map(text => <p class="p--small">{text}</p>)}
+                  {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
                 </>
-              )}
+              </Fade>
+              <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+                <>
+                  <p className="skip-intro p--small" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
+                </>
+              </Fade>
             </div>
           </FooterContainer>
         </Page>
@@ -221,6 +229,10 @@ const FooterContainer = styled.div`
       line-height: 1.5em;
       margin-bottom: 0;
       opacity: 0.75;
+    }
+
+    .skip-intro {
+      cursor: pointer;
     }
   }
 `
