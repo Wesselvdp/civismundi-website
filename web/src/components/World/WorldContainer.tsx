@@ -44,6 +44,7 @@ const TUTORIAL_TEXT = [
 
 const WorldContainer = () => {
   const [state, setState] = useState<StateType>(State.INITIALIZING)
+  const [showIntro, setShowIntro] = useState<boolean>(true)
   const [project, setProject] = useState<Project | null>(null)
   const [thumbnailPosition, setThumbnailPosition] = useState<ScreenCoordinates | null>(null)
   const [movingToProject, setMovingToProject] = useState(false)
@@ -78,7 +79,7 @@ const WorldContainer = () => {
   `)
 
   return (
-      <TransitionState className="test">
+      <TransitionState>
        {({ transitionStatus }) => {
     
         return (
@@ -97,6 +98,8 @@ const WorldContainer = () => {
                   // thumbnail
                   setThumbnailPosition={setThumbnailPosition}
                   movingToProject={movingToProject}
+                  // intro
+                  setShowIntro={setShowIntro}
                 />
                 {transitionStatus !== 'exiting' && (
                   <>
@@ -121,18 +124,20 @@ const WorldContainer = () => {
             </CSSTransition>
           <ContentContainer>
             {/* introduction text */}
-            <TextAnimation 
-              inProp={state === State.LOADING || state === State.INTRODUCTION} 
-              onEnter={() => setState(State.INTRODUCTION)}
-              onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
-              onExited={() => setState(State.TUTORIAL)}
-              timeout={{ enter: 4000, exit: 1500 }}
-              unmountOnExit
-              tag="h1"
-              className="h3"
-              text={INTRO_TEXT}
-              letterSpeedIn={0.01}
-            />
+            {showIntro && (
+              <TextAnimation 
+                inProp={state === State.LOADING || state === State.INTRODUCTION} 
+                onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
+                onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
+                onExited={() => setState(State.TUTORIAL)}
+                timeout={{ enter: 4000, exit: 1500 }}
+                unmountOnExit
+                tag="h1"
+                className="h3"
+                text={INTRO_TEXT}
+                letterSpeedIn={0.01}
+              />
+            )}
           </ContentContainer>
           <FooterContainer>
             <div className="footer--content">

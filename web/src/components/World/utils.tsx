@@ -56,7 +56,7 @@ const initDirectionalLight = (curr: any) => {
   })
 }
 
-export const initialize = (curr: any) => {
+export const initialize = (curr: any, fullMode = false) => {
   const scene = curr.scene()
   const camera = curr.camera()
   const controls = curr.controls()
@@ -70,8 +70,8 @@ export const initialize = (curr: any) => {
   if (isMobile) camera.fov = 70
 
   // custom objects
-  const clouds = initClouds(curr)
-  const lightning = initDirectionalLight(curr)
+  const clouds = fullMode && initClouds(curr) // todo; give back lightning
+  const lightning = fullMode && initDirectionalLight(curr) // todo; give back clouds 
 
   return Promise.all([
     scene,

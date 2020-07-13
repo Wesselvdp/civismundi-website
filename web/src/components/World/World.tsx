@@ -10,6 +10,9 @@ import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -28,7 +31,7 @@ const moveToProject = (curr, project, alt = 0.05, ms = 2000) => {
   curr.pointOfView(coords, ms)
 }
 
-const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition }) => {
+const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
   const ref = useRef();
 
@@ -61,23 +64,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 
   useEffect(() => {
     if (initialized || !ref.current) return
-  
-    initialize(ref.current).then(([_scene, _camera, _controls, _renderer, _clouds, _lightning]) => {
-      setScene(_scene)
-      setCamera(_camera)
-      setControls(_controls)
-      setRenderer(_renderer)
-      setClouds(_clouds)
-      setLightning(_lightning)
-
-      _controls.addEventListener('change', () => { if (!cameraChanged) setCameraChanged(true) })
-    })
-
-    setInitialized(true)
-
-    // animates globe in
-    const timer = setTimeout(() => setState(State.LOADING), 1000)
-    return () => clearTimeout(timer)
+    _init(true)
   }, [loaded]);
 
   useEffect(() => {
@@ -87,6 +74,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, [movingToProject])
 
   useEffect(() => {
+    if (state === State.INITIALIZING && ref.current) _init(false)
     if (state > State.INTRODUCTION) controls.enabled = true
   }, [state])
 
@@ -178,6 +166,26 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     window.addEventListener('resize', () => updateSize())
     return () => window.removeEventListener('resize', updateSize)
   }, []);
+
+  const _init = (fullMode = true) => {
+    initialize(ref.current, fullMode).then(([_scene, _camera, _controls, _renderer, _clouds, _lightning]) => {
+      setScene(_scene)
+      setCamera(_camera)
+      setControls(_controls)
+      setRenderer(_renderer)
+      setClouds(_clouds)
+      setLightning(_lightning)
+
+      _controls.addEventListener('change', () => { if (!cameraChanged) setCameraChanged(true) })
+    })
+
+    setInitialized(true)
+    setShowIntro(fullMode)
+  
+    // animates globe in
+    const timer = setTimeout(() => setState(fullMode ? State.LOADING : State.TUTORIAL), 1000)
+    return () => clearTimeout(timer)
+  }
 
   const onLabelUpdate = (obj, d) => {
     // this way we determine when ref.current is populated
