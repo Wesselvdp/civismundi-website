@@ -7,7 +7,7 @@ type T = any
 const BackgroundVideo: FC<T> = ({ video }) => {
   return (
     <VideoContainer>
-      <ReactPlayer url={video} muted playing={true} loop={true} volume={0} />
+      <ReactPlayer width="100%" height="100%" className="video" url={video} muted playing={true} loop={true} volume={0} />
     </VideoContainer>
   )
 }
@@ -16,7 +16,7 @@ export default BackgroundVideo
 const VideoContainer = styled.div`
   position: absolute;
   top: 0;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   z-index: -1;
   display: flex;
@@ -24,10 +24,6 @@ const VideoContainer = styled.div`
   overflow: hidden;
 
   video {
-    /* position: absolute; */
-    /* left: 0;
-    right: 0;*/
-    height: 100%;
     object-fit: cover;
   }
   /*  */
