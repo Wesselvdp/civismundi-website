@@ -7,7 +7,7 @@ type T = any
 const BackgroundVideo: FC<T> = ({ video }) => {
   return (
     <VideoContainer>
-      <ReactPlayer width="100%" height="100%" className="video" url={video} muted playing={true} loop={true} volume={0} />
+      <ReactPlayer width="100%" height="100%" className="video" url={video} muted playing={true} autoPlay={true} loop={true} volume={0} />
     </VideoContainer>
   )
 }
