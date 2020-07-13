@@ -2,36 +2,50 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 import TransitionLink from 'gatsby-plugin-transition-link'
+import { get } from 'lodash'
 
 import TextAnimation from '@components/TextAnimation'
 
-type T = {
-  preview: any,
-  position: any,
-  videoEl: any,
-}
-
-const VideoThumbnail = ({
-  preview,
-  position,
-  videoEl,
-  onProjectDetailed
-}) => {
+const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
   return (
     <TransitionLink
       to="/projects/stargazing"
-      exit={{ delay: 0, length: 3, zIndex: 1 }}
-      entry={{ delay: 0, length: 0.5, zIndex: 0 }}
+      exit={{ 
+        delay: 0,
+        length: 3,
+        zIndex: 1,
+        trigger: () => moveToProject()
+      }}
+      entry={{ delay: 0, length: 1, zIndex: 0 }}
     >
-      <CSSTransition in={!!preview} appear={true} timeout={300} classNames="video">
-        <VideoBox ref={videoEl} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
+      <CSSTransition in={project} appear={true} timeout={300} classNames="video">
+        <VideoBox ref={ref} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
           <video id="videoBG" autoPlay muted loop>
             <source src="/stargazing.mp4" type="video/mp4" />
           </video>
           <VideoContent>
-            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h6" text="Video direction" className="pre-title small" />
-            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h4" text={preview ? preview.node.title : ''}  />
-            <TextAnimation inProp={!!preview} timeout={1000} appear={true} tag="h6" text="View project" />
+            <TextAnimation
+              inProp={project}
+              timeout={1000}
+              appear={true}
+              tag="h6"
+              text="Video direction"
+              className="pre-title small"
+            />
+            <TextAnimation 
+              inProp={project}
+              timeout={1000}
+              appear={true}
+              tag="h4"
+              text={get(project, 'node.title', '')}
+            />
+            <TextAnimation 
+              inProp={project}
+              timeout={1000}
+              appear={true}
+              tag="h6"
+              text="View project"
+            />
           </VideoContent>
         </VideoBox>
       </CSSTransition>

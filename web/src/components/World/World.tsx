@@ -7,47 +7,50 @@ import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 
 import * as THREE from 'three'
-import { initGlobe } from './utils'
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
+import { initialize, labelObject } from './utils'
+import { State } from './WorldContainer'
 // import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
-
-type T = {
-  projects: Project[],
-  onInitialized: Function,
-  introFinished: boolean,
-  preview: any,
-  setPreview: Function,
-  setVideoPos: Function,
-  titleEl: any,
-  videoEl: any
-}
-
-const settings = {
-  backgroundColor: '#000',
-  labelRadius: 3.5,
-  labelColor: '#FFF'
-}
 
 const scale = {
   default: new THREE.Vector3(1, 1, 1),
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const World = ({ projects, preview, setPreview, onInitialized, introFinished, setVideoPos }) => {
-  const isSSR = typeof window === 'undefined' // prevents builderror
+const moveToProject = (curr, project, alt = 0.05, ms = 2000) => {
+  const coords = { 
+    lat: get(project, 'node.location.lat'),
+    lng: get(project, 'node.location.lng'),
+    alt
+  }
 
+  curr.pointOfView(coords, ms)
+}
+
+const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition }) => {
+  const isSSR = typeof window === 'undefined' // prevents builderror
   const ref = useRef();
+
   // globe
-  const [loaded, setLoaded] = useState(false)
-  const [isInitialized, setInitialized] = useState(false)
+  const [loaded, setLoaded] = useState<boolean | null>(null)
+  const [initialized, setInitialized] = useState<boolean | null>(null)
+
+  // scene
+  const [scene, setScene] = useState(null)
+
+  // camera
+  const [camera, setCamera] = useState(null)
   const [cameraChanged, setCameraChanged] = useState(false)
   const [cameraRotating, setCameraRotating] = useState(true)
 
-  // scene objects
+  // controls
+  const [controls, setControls] = useState(null)
+  
+  // renderer
+  const [renderer, setRenderer] = useState(null)
+
+  // custom scene objects
   const [clouds, setClouds] = useState(null);
   const [lightning, setLightning] = useState(null);
 
@@ -57,166 +60,142 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
   const [labelClicked, onLabelClicked] = useState(null)
 
   useEffect(() => {
-    if (loaded && ref.current && !isInitialized) {
-      initGlobe(ref.current).then(res => {
-        setClouds(res[0]);
-        setLightning(res[1]);
-      })
+    if (initialized || !ref.current) return
+  
+    initialize(ref.current).then(([_scene, _camera, _controls, _renderer, _clouds, _lightning]) => {
+      setScene(_scene)
+      setCamera(_camera)
+      setControls(_controls)
+      setRenderer(_renderer)
+      setClouds(_clouds)
+      setLightning(_lightning)
 
-      // disable controls untill intro has finished
-      const controls = ref.current.controls()
-      controls.enabled = false
-      controls.enableZoom = false
-      controls.autoRotate = true
-      controls.autoRotateSpeed = 0.3
+      _controls.addEventListener('change', () => { if (!cameraChanged) setCameraChanged(true) })
+    })
 
-      if (isMobile) {
-        ref.current.camera().fov = 75
-      }
+    setInitialized(true)
 
-      // add event listener that listen on orbit control changes
-      ref.current.controls().addEventListener('change', () => {
-        if (!cameraChanged) {
-          setCameraChanged(true)
-        }
-      })
-
-      setTimeout(() => {
-        setInitialized(true)
-        onInitialized()
-      }, 1000)
-    }
+    // animates globe in
+    const timer = setTimeout(() => setState(State.LOADING), 1000)
+    return () => clearTimeout(timer)
   }, [loaded]);
 
-  // on intro finished
   useEffect(() => {
-    if (introFinished && ref.current) {
-      const controls = ref.current.controls();
-
-      controls.enabled = true;
+    if (movingToProject) {
+      moveToProject(ref.current, project)
     }
-  }, [introFinished])
+  }, [movingToProject])
 
-  // on preview selected
   useEffect(() => {
+    if (state > State.INTRODUCTION) controls.enabled = true
+  }, [state])
 
-    if (!preview || !ref.current) {
+  useEffect(() => {
+    if (!initialized) return
+    if (state <= State.INTRODUCTION) return
+
+    if (!project) {
       setCameraRotating(true)
-      return setVideoPos(null)
+      setThumbnailPosition(null)
+      return
     }
 
-    // update video pos
-    setVideoPos(
+    setCameraRotating(false)
+    setThumbnailPosition(
       ref.current.getScreenCoords(
-        get(preview, 'node.location.lat', 0),
-        get(preview, 'node.location.lng', 0),
+        get(project, 'node.location.lat'),
+        get(project, 'node.location.lng'),
         0.05
       )
-    );
+    )
+  }, [project])
 
-    if (!introFinished) return
-    setCameraRotating(!(!!preview))
-  
-  }, [preview])
 
-  // on label hover
   useEffect(() => {
-    if (isMobile) return;
-    if (!introFinished) return;
-    setPreview(labelHovered)
+    if (isMobile) return
+    if (state <= State.INTRODUCTION) return
+    setProject(labelHovered)
 
+    // update label size
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
-    
-    if (labelHovered) {
-      Object.assign(labelHovered.__threeObj.scale, scale.large)
-    }
+    if (labelHovered) Object.assign(labelHovered.__threeObj.scale, scale.large)
   }, [labelHovered])
 
-  // on label click
   useEffect(() => {
-    if (!introFinished) return;
-    if (!labelClicked) return;
-  
-    // On desktop, go to project detailed page on click
+    if (state <= State.INTRODUCTION) return
+
+    // always go to page if not on mobile
     if (!isMobile) {
-      return navigate(`/projects/${labelClicked.node.slug.current}`)
+      moveToProject(ref.current, labelClicked)
+      navigate(`/projects/${labelClicked.node.slug.current}`)
+      return
     }
 
-    // On mobile:
-    if (preview && preview.node.slug.current === labelClicked.node.slug.current) {
-      return navigate(`/projects/${labelClicked.node.slug.current}`)
+    // if clicked on marker that's already active, go to page
+    if (project && project.node.slug.current === labelClicked.node.slug.current) {
+      moveToProject(ref.current, labelClicked)
+      navigate(`/projects/${project.node.slug.current}`)
+      return
     }
     
-    setPreview(labelClicked);
+    // mobile, new marker clicked
+    setProject(null)
+    moveToProject(ref.current, labelClicked)
+    const timer = setTimeout(() => { setProject(labelClicked) }, 2000);
+    return () => clearTimeout(timer)
   }, [labelClicked]);
 
-  // on camera changed
+
   useEffect(() => {
-    if (!cameraChanged) return;
+    if (!initialized) return
+    if (!cameraChanged) return
 
     // update labels rotation
-    const camera = ref.current.camera();
     labels.forEach(label => {
       label.__threeObj.quaternion.copy(camera.quaternion)
     })
 
-    const timer = setTimeout(() => {
-      setCameraChanged(false);
-    }, 150);
+    // so that camera changed only triggers every 150ms
+    const timer = setTimeout(() => setCameraChanged(false), 150);
     return () => clearTimeout(timer)
   }, [cameraChanged])
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.controls().autoRotate = cameraRotating
-    }
+    if (!initialized) return
+
+    controls.autoRotate = cameraRotating
   }, [cameraRotating])
 
-  // window resize listener
   useLayoutEffect(() => {
     function updateSize() {
-      const camera = ref.current.camera()
+      if (!initialized) return
+
       camera.aspect = window.innerWidth / window.innerHeight
+      renderer.setSize(window.innerWidth, window.innerHeight)
       camera.updateProjectionMatrix()
     }
 
-    window.addEventListener('resize', () => { if (ref.current) updateSize() })
+    window.addEventListener('resize', () => updateSize())
     return () => window.removeEventListener('resize', updateSize)
   }, []);
 
-  const labelObject = () => {
-    const texture = new THREE.TextureLoader().load('/marker@2x.png')
+  const onLabelUpdate = (obj, d) => {
+    // this way we determine when ref.current is populated
+    if (!loaded) setLoaded(true)
+    if (!initialized) return
 
-    return (
-      new THREE.Mesh(
-        new THREE.CircleGeometry(settings.labelRadius, 25, 25),
-        [
-          new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-            color: 0xffffff
-          }),
-        ]
+    Object.assign(
+      obj.position,
+      ref.current.getCoords(
+        get(d, 'node.location.lat', 0),
+        get(d, 'node.location.lng', 0),
+        0.05
       )
     )
-  }
 
-  const onLabelUpdate = (obj, d) => {
-    if (!loaded) setLoaded(true);
-
-    if (ref.current) {
-      Object.assign(
-        obj.position,
-        ref.current.getCoords(
-          get(d, 'node.location.lat', 0),
-          get(d, 'node.location.lng', 0),
-          0.05
-        )
-      )
-
-      if (labels.length !== projects.length && !labels.some(label => label.__threeObj.uuid === d.__threeObj.uuid)) {
-        setLabels([...labels, d])
-      }
+    // if new, add to labels
+    if (labels.length !== projects.length && !labels.some(label => label.__threeObj.uuid === d.__threeObj.uuid)) {
+      setLabels([...labels, d])
     }
   }
 
@@ -229,7 +208,7 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
           // appearance
           globeImageUrl="/earth-blue-marble-alt.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-          backgroundColor={settings.backgroundColor}
+          backgroundColor="#000"
           // labels
           customLayerData={projects}
           customThreeObject={() => labelObject()}

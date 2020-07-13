@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { DirectionalLight } from 'three';
+import { isMobile } from 'react-device-detect'
 
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
@@ -56,11 +56,46 @@ const initDirectionalLight = (curr: any) => {
   })
 }
 
-export const initGlobe = (curr: any) => {
+export const initialize = (curr: any) => {
+  const scene = curr.scene()
+  const camera = curr.camera()
+  const controls = curr.controls()
+  const renderer = curr.renderer()
   
-  
-  const clouds = initClouds(curr);
-  const lightning = initDirectionalLight(curr);
+  // control options
+  controls.enabled = false
+  controls.enableZoom = false
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 0.3
+  if (isMobile) camera.fov = 70
 
-  return Promise.all([clouds, lightning]);
+  // custom objects
+  const clouds = initClouds(curr)
+  const lightning = initDirectionalLight(curr)
+
+  return Promise.all([
+    scene,
+    camera,
+    controls,
+    renderer,
+    clouds,
+    lightning
+  ]);
+}
+
+export const labelObject = () => {
+  const texture = new THREE.TextureLoader().load('/marker@2x.png')
+
+  return (
+    new THREE.Mesh(
+      new THREE.CircleGeometry(isMobile ? 5 : 3.5, 25, 25),
+      [
+        new THREE.MeshBasicMaterial({
+          map: texture,
+          transparent: true,
+          color: 0xffffff
+        }),
+      ]
+    )
+  )
 }
