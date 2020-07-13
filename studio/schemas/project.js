@@ -21,6 +21,11 @@ export default {
       }
     },
     {
+      name: 'city',
+      title: 'City',
+      type: 'string'
+    },
+    {
       name: 'overview',
       title: 'Overview',
       type: 'array',

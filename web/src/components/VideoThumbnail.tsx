@@ -73,7 +73,7 @@ const VideoBox = styled.div`
   &.video-enter-active, &.video-appear-active {
     transform: none;
     opacity: 1;
-    transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 250ms;
+    transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s, opacity 250ms ease 0.5s;
   }
 
   &.video-enter-done, &.video-appear-done {
