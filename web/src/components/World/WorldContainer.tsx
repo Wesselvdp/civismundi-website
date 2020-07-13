@@ -79,7 +79,7 @@ const WorldContainer = () => {
               <Wrapper>
                 {/* World component*/}
                 <World
-                  height="100%"
+                  // height="100%"
                   projects={data.allSanityProject.edges}
                   onInitialized={() => setTransitionPhase(Phase.LOADING)}
                   introFinished={transitionPhase > Phase.INTRO}
@@ -157,8 +157,6 @@ const WorldContainer = () => {
 export default WorldContainer
 
 const Wrapper = styled.div`
-  transform: scale(0);
-
   &.globe-enter {
     transform: scale(0);
   }

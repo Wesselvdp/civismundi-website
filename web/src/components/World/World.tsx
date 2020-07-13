@@ -9,6 +9,9 @@ import { navigate } from 'gatsby'
 import * as THREE from 'three'
 import { initGlobe } from './utils'
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -67,6 +70,10 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
       controls.autoRotate = true
       controls.autoRotateSpeed = 0.3
 
+      if (isMobile) {
+        ref.current.camera().fov = 75
+      }
+
       // add event listener that listen on orbit control changes
       ref.current.controls().addEventListener('change', () => {
         if (!cameraChanged) {
@@ -114,6 +121,7 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
 
   // on label hover
   useEffect(() => {
+    if (isMobile) return;
     if (!introFinished) return;
     setPreview(labelHovered)
 
@@ -228,6 +236,7 @@ const World = ({ projects, preview, setPreview, onInitialized, introFinished, se
           customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
           onCustomLayerHover={obj => onLabelHovered(obj)}
           onCustomLayerClick={obj => onLabelClicked(obj)}
+          onCustomLayerRightClick={obj => console.log(obj)}
           // settings
           animateIn={false}
           renderConfig={{
