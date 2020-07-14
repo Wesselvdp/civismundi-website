@@ -70,23 +70,25 @@ const ProjectPageTemplate= ({ data }) => {
 
             {/* Project content */}
             <Section>
-              <div className="row">
-                <div className="col meta">
-                  <div>
-                    <p className="pre-title">DIRECTED BY</p>
-                    <p>NABIL ELDERKIN</p>
+              <div className="container">
+                <div className="row">
+                  <div className="col meta">
+                    <div>
+                      <p className="pre-title">DIRECTED BY</p>
+                      <p>NABIL ELDERKIN</p>
+                    </div>
+                    <div>
+                      <p className="pre-title">AWARDS & FESTIVALS</p>
+                      <p>LOS ANGELES</p>
+                    </div>
+                    <div>
+                      <p className="pre-title">LOCATION</p>
+                      <p>LOS ANGELES</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="pre-title">AWARDS & FESTIVALS</p>
-                    <p>LOS ANGELES</p>
+                  <div className="col content content--sanity">
+                    <BlockContent blocks={_rawOverview} />
                   </div>
-                  <div>
-                    <p className="pre-title">LOCATION</p>
-                    <p>LOS ANGELES</p>
-                  </div>
-                </div>
-                <div className="col content content--sanity">
-                  <BlockContent blocks={_rawOverview} />
                 </div>
               </div>
             </Section>
@@ -145,45 +147,36 @@ const Section = styled.section`
   flex-flow: row wrap;
   justify-content: center;
 
-  .row {
+  .container {
     max-width: 800px;
+  }
+
+  .row {
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
   }
 
   .col {
-    p {
-      opacity: 0.75;
-    }
+    display: flex;
+    text-align: left;
 
     &.meta {
-      flex: 100% 1 1;
-      text-align: left;
-      padding-right: 2em;
+      flex: 0 0 300px;
+      flex-wrap: wrap;
 
-      @media ${breakpoints.tabletLandscapeUp} {
-        flex: 1.5 1 0;
-      }
-
-      p {
-        font-size: 18px;
-
-        &.pre-title {
-          font-size: 16px;
-          opacity: 1;
-        }
-      }
-
-      div {
-        margin-bottom: 20px;
+      & > div {
+        margin-bottom: 25px;
+        width: 100%;
       }
     }
 
     &.content {
-      flex: 2;
-      text-align: left;
-      
-      p {
-        font-size: 18px;
+      flex: 1 1 auto;
+
+      & > div {
+        width: 100%;
+        max-width: 300px;
       }
     }
   }

@@ -202,22 +202,21 @@ const ContentContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 750px;
+  width: 900px;
+  max-width: 90%;
   pointer-events: none;
 
   .h3 {
-    font-weight: 300;
+    font-size: 48px;
   }
 
-  ${isMobile ? 
-    `
-      max-width: 95%;
+  @media ${breakpoints.phoneOnly} {
+    max-width: 95%;
 
-      .h3 {
-        font-size: 24px;
-      }
-    ` : ''}
+    .h3 {
+      font-size: 24px;
+    }
+  }
 `
 
 const FooterContainer = styled.div`
