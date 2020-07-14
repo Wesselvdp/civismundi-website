@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import ReactPlayer from 'react-player'
 
 type T = any
 
@@ -28,6 +27,8 @@ const VideoContainer = styled.div`
   video {
     height: 100%;
     object-fit: cover;
+    position: absolute;
+    left: 0;
+    right: 0;
   }
-  /*  */
 `

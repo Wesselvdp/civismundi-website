@@ -13,9 +13,9 @@ const MainNavigation: FC<T> = () => {
       <Navigation>
         {/* Left */}
         <div className="item">
-          <LocalizedLink to="/">
+          {/* <LocalizedLink to="/"> */}
             <div className="navItem">{isMobile ? 'Work' : 'All projects'}</div>
-          </LocalizedLink>{' '}
+          {/* </LocalizedLink>{' '} */}
         </div>
 
         {/* Center logo */}
@@ -25,9 +25,9 @@ const MainNavigation: FC<T> = () => {
 
         {/* Right */}
         <div className="item">
-          <LocalizedLink to="/">
+          {/* <LocalizedLink to="/"> */}
             <div className="navItem">About</div>
-          </LocalizedLink>
+          {/* </LocalizedLink> */}
         </div>
       </Navigation>
     </Container>
