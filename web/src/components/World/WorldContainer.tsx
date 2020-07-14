@@ -135,23 +135,25 @@ const WorldContainer = () => {
             />
           )}
         </ContentContainer>
-        <FooterContainer>
-          <div className="footer--content">
-            <Fade timeout={2500} in={state === State.TUTORIAL && !movingToProject}>
-              <>
-                <RotateY appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
-                  <img src="/grab-icon.svg" />
-                </RotateY>
-                {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
-              </>
-            </Fade>
-            <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
-              <>
-                <p className="skip-intro p--small" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
-              </>
-            </Fade>
-          </div>
-        </FooterContainer>
+        {transitionStatus !== 'exiting' && (
+          <FooterContainer>
+            <div className="footer--content">
+              <Fade timeout={2500} in={state === State.TUTORIAL}>
+                <>
+                  <RotateY appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
+                    <img src="/grab-icon.svg" />
+                  </RotateY>
+                  {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
+                </>
+              </Fade>
+              <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+                <>
+                  <p className="skip-intro p--small" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
+                </>
+              </Fade>
+            </div>
+          </FooterContainer>
+        )}
       </>
      )}}
     </TransitionState>

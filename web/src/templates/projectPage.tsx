@@ -111,7 +111,8 @@ const Content = styled.div`
   align-items: flex-end;
   justify-content: center;
   text-align: center;
-  min-height: 100vh;
+  height: 100vh;
+  height: -webkit-fill-available;
   position: relative;
   z-index: 1;
 

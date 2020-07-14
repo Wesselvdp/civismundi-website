@@ -112,6 +112,10 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   useEffect(() => {
     if (state <= State.INTRODUCTION) return
 
+    // update label size
+    labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
+    if (labelHovered) Object.assign(labelClicked.__threeObj.scale, scale.large)
+
     // always go to page if not on mobile
     if (!isMobile) {
       moveToProject(ref.current, labelClicked)
