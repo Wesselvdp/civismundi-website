@@ -33,7 +33,7 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
 
   return (
     <Container>
-      <h3>{title}</h3>
+      <h4>{title}</h4>
       <Grid>
         {projectsVisible.map((p: Project) => (
           <GridItem key={p.id}>
