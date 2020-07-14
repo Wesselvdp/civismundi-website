@@ -6,7 +6,7 @@ import { get } from 'lodash'
 import ReactPlayer from 'react-player'
 
 import TextAnimation from '@components/TextAnimation'
-// import console = require('console');
+import { breakpoints } from '@utils/breakpoints'
 
 const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
   const video = get(project, 'node.video.asset.url')
@@ -64,33 +64,64 @@ const VideoBox = styled.div`
   overflow: hidden;
   will-change: transform;
 
+  @media ${breakpoints.phoneOnly} {
+    height: 125px;
+    width: 100%;
+    max-width: 250px;
+  }
+
   &.video-enter, &.video-appear {
-    transform: scale(0.2);
-    transform-origin: 50% 50%;
     opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0.2);
+
+    @media ${breakpoints.phoneOnly} {
+      transform: translate(-50%, -100%) scale(0.2);
+      transform: translate(-50%, calc(-100% - 15px)) scale(0.2);
+    }
   } 
 
   &.video-enter-active, &.video-appear-active {
-    transform: none;
     opacity: 1;
+    transform: none;
     transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s, opacity 250ms ease 0.5s;
+
+    @media ${breakpoints.phoneOnly} {
+      transform: translate(-50%, -100%) scale(1);
+      transform: translate(-50%, calc(-100% - 15px)) scale(1);
+    }
   }
 
   &.video-enter-done, &.video-appear-done {
-    transform: none;
     opacity: 1;
+    transform: none;
+
+    @media ${breakpoints.phoneOnly} {
+      transform: translate(-50%, -100%) scale(1);
+      transform: translate(-50%, calc(-100% - 15px)) scale(1);
+    }
   }
 
   &.video-exit {
     opacity: 1;
-    transform-origin: 50% 50%;
     transform: none;
+    transform-origin: 50% 50%;
+
+    @media ${breakpoints.phoneOnly} {
+      transform: translate(-50%, -100%) scale(1);
+      transform: translate(-50%, calc(-100% - 15px)) scale(1);
+    }
   }
 
   &.video-exit-active {
-    transform: scale(0.8);
     opacity: 0;
+    transform: scale(0.8);
     transition: transform 300ms ease, opacity 250ms ease;
+
+    @media ${breakpoints.phoneOnly} {
+      transform: translate(-50%, -100%) scale(0.8);
+      transform: translate(-50%, calc(-100% - 15px)) scale(0.8);
+    }
   }
 
   video {
@@ -110,6 +141,10 @@ const VideoContent = styled.div`
   h4 {
     margin-bottom: 5px;
     font-size: 30px;
+  }
+
+  h6:not(.pre-title) {
+    margin-bottom: 0;
   }
 `
 

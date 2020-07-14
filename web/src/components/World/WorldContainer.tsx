@@ -11,14 +11,7 @@ import World from './World'
 import TextAnimation from '@components/TextAnimation'
 import VideoThumbnail from '@components/VideoThumbnail'
 import Fade from '@components/Fade'
-
 import { breakpoints } from '@utils/breakpoints'
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
 
 type ScreenCoordinates = { x: string, y: string }
 
@@ -184,6 +177,10 @@ const Wrapper = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     white-space: nowrap;
+
+    @media ${breakpoints.phonyOnly} {
+      padding-top: 75px;
+    }
   }
 
   * { outline: 0 };

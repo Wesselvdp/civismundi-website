@@ -21,14 +21,14 @@ const scale = {
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const moveToProject = (curr, project, alt = 0.05, ms = 2000) => {
-  const coords = { 
+const moveToProject = (curr, project) => {
+  let coords = { 
     lat: get(project, 'node.location.lat'),
     lng: get(project, 'node.location.lng'),
-    alt
+    alt: 0.05
   }
 
-  curr.pointOfView(coords, ms)
+  curr.pointOfView(coords, 2000)
 }
 
 const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro }) => {
@@ -129,7 +129,10 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     // mobile, new marker clicked
     setProject(null)
     moveToProject(ref.current, labelClicked)
-    const timer = setTimeout(() => { setProject(labelClicked) }, 2000);
+  
+    const timer = setTimeout(() => { 
+      setProject(labelClicked)
+    }, 2000);
     return () => clearTimeout(timer)
   }, [labelClicked]);
 
