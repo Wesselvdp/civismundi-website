@@ -7,7 +7,7 @@ const Fade = ({
   timeout,
   ...props
 }) => (
-  <CSSTransition {...props} timeout={timeout} classNames="fade">
+  <CSSTransition {...props} unmountOnExit timeout={timeout} classNames="fade">
     <FadeWrapper timeout={timeout}>{children}</FadeWrapper>
   </CSSTransition>
 )
@@ -37,7 +37,7 @@ const FadeWrapper = styled.div`
 
     &-exit-active {
       opacity: 0;
-      transition: opacity ${props => props.timeout | 1000} ms ease-in;
+      transition: opacity ${props => props.timeout | 1000}ms ease-in;
     }
   }
 `

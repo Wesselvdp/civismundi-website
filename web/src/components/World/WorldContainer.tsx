@@ -247,8 +247,7 @@ const FooterContainer = styled.div`
 
 const Page = styled.div`
   position: relative;
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  height: 100%;
   overflow: hidden;
   will-change: transform;
 
