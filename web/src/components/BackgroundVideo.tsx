@@ -18,6 +18,7 @@ const VideoContainer = styled.div`
   position: absolute;
   top: 0;
   height: 100vh;
+  height: -webkit-fill-available;
   width: 100%;
   z-index: -1;
   display: flex;
