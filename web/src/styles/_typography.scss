@@ -1,43 +1,5 @@
 @import './breakpoints';
 
-@font-face {
-  font-family: 'Druk Wide Bold';
-  font-weight: 700;
-  src: url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.eot"); 
-  src:
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.eot?#iefix") format("embedded-opentype"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.woff2") format("woff2"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.woff") format("woff"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.ttf") format("truetype"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.svg#Druk Wide Bold") format("svg");
-}
-
-@font-face {
-  font-family: 'OriyaMN';
-  font-weight: 300;
-  font-style: normal;
-  src: url('OriyaMN.eot');
-  src: 
-    url('OriyaMN.eot') format('embedded-opentype'),
-    url('OriyaMN.woff2') format('woff2'), 
-    url('OriyaMN.woff') format('woff'),
-    url('OriyaMN.ttf') format('truetype'),
-    url('OriyaMN.svg') format('svg');
-}
-
-@font-face {
-  font-family: 'OriyaMN';
-  font-weight: 700;
-  font-style: normal;
-  src: url('OriyaMN-Bold.eot');
-  src:
-    url('OriyaMN-Bold.eot') format('embedded-opentype'),
-    url('OriyaMN-Bold.woff2') format('woff2'),
-    url('OriyaMN-Bold.woff') format('woff'),
-    url('OriyaMN-Bold.ttf') format('truetype'),
-    url('OriyaMN-Bold.svg') format('svg');
-}
-
 $font-family: 'OriyaMN', 'Helvetica Neue LT', Helvetica, Arial, sans-serif;
 
 h1,

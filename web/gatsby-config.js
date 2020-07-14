@@ -25,11 +25,13 @@ module.exports = {
       }
     },
     {
-      resolve: "gatsby-source-filesystem",
+      resolve: "gatsby-plugin-web-font-loader",
       options: {
-        name: 'fonts',
-        path: `${__dirname}/static/fonts`
-      }
+        custom: {
+          families: ['OriyaMN', 'Druk Wide Bold'],
+          urls: ['/fonts/fonts.css'],
+        },
+      },
     },
     {
       resolve: 'gatsby-source-sanity',
