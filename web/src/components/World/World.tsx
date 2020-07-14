@@ -186,7 +186,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     setShowIntro(fullMode)
   
     // animates globe in
-    const timer = setTimeout(() => setState(fullMode ? State.LOADING : State.TUTORIAL), 1000)
+    const timer = setTimeout(() => setState(fullMode ? State.INTRODUCTION : State.TUTORIAL), 1000)
     return () => clearTimeout(timer)
   }
 

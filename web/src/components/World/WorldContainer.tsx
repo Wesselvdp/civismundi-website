@@ -121,7 +121,7 @@ const WorldContainer = () => {
           {/* introduction text */}
           {showIntro && (
             <TextAnimation 
-              inProp={state === State.LOADING || state === State.INTRODUCTION} 
+              inProp={state === State.INTRODUCTION} 
               onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
               onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
               onExited={() => setState(State.TUTORIAL)}

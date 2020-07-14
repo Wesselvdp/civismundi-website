@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
+import { Link } from 'gatsby'
 
-import LocalizedLink from '@components/LocalizedLink'
 import Logo from '@components/Logo'
 
 type T = any
@@ -18,7 +18,9 @@ const Navigation: FC<T> = () => {
 
         {/* Center logo */}
         <div className="item--center">
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
         </div>
 
         {/* Right */}
