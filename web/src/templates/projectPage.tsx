@@ -126,7 +126,6 @@ const Content = styled.div`
     padding: 15px;
 
     p {
-      opacity: 0.75;
       max-width: 450px;
       margin: 0 auto;
     }
