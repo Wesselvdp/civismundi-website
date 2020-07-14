@@ -56,11 +56,19 @@ const Grid = styled.div`
   display: flex;
   flex-flow: row wrap;
   padding: 30px 45px 50px;
+
+  @media ${breakpoints.phoneOnly} {
+    padding: 2em 15px 2em;
+  }
 `
 const GridItem = styled.div`
   flex: 100% 0 0;
   margin: 0 auto;
   padding: 15px;
+
+  @media ${breakpoints.phoneOnly} {
+    padding: 15px 0;
+  }
 
   @media ${breakpoints.tabletLandscapeUp} {
     flex: calc(50% - 30px) 0 0;

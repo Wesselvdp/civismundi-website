@@ -1,6 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+
 import LocalizedLink from '@components/LocalizedLink'
+import { breakpoints } from '@utils/breakpoints'
 
 type T = {
   data: Project
@@ -47,6 +49,10 @@ const Content = styled.div`
 
   p {
     max-width: 75%;
+
+    @media ${breakpoints.phoneOnly} {
+      max-width: none;
+    }
   }
 `
 const Visual = styled.div`
