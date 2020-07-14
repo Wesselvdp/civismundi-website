@@ -18,9 +18,7 @@ const Navigation: FC<T> = () => {
 
         {/* Center logo */}
         <div className="item--center">
-          <Link to="/">
-            <Logo />
-          </Link>
+          <Logo />
         </div>
 
         {/* Right */}
