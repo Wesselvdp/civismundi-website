@@ -11,6 +11,7 @@ import World from './World'
 import TextAnimation from '@components/TextAnimation'
 import VideoThumbnail from '@components/VideoThumbnail'
 import Fade from '@components/Fade'
+import RotateY from '@components/RotateY'
 import { breakpoints } from '@utils/breakpoints'
 
 type ScreenCoordinates = { x: string, y: string }
@@ -138,7 +139,9 @@ const WorldContainer = () => {
           <div className="footer--content">
             <Fade timeout={2500} in={state === State.TUTORIAL && !movingToProject}>
               <>
-                <img src="/grab-icon.svg" />
+                <RotateY appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
+                  <img src="/grab-icon.svg" />
+                </RotateY>
                 {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
               </>
             </Fade>
@@ -231,6 +234,7 @@ const FooterContainer = styled.div`
 
     img {
       margin-bottom: 10px;
+      transform: rotate3d(0, 1, 0, -180);
     }
 
     p {
