@@ -76,6 +76,7 @@ const WorldContainer = () => {
        {({ transitionStatus }) => {
     
         return (
+          <>
           <Page className={`page-transition-${transitionStatus}`}>
             <CSSTransition in={state >= State.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
               <Wrapper>
@@ -115,39 +116,40 @@ const WorldContainer = () => {
                 )}
               </Wrapper>
             </CSSTransition>
-          <ContentContainer>
-            {/* introduction text */}
-            {showIntro && (
-              <TextAnimation 
-                inProp={state === State.LOADING || state === State.INTRODUCTION} 
-                onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
-                onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
-                onExited={() => setState(State.TUTORIAL)}
-                timeout={{ enter: 4000, exit: 1500 }}
-                unmountOnExit
-                tag="h1"
-                className="h3"
-                text={INTRO_TEXT}
-                letterSpeedIn={0.01}
-              />
-            )}
-          </ContentContainer>
-          <FooterContainer>
-            <div className="footer--content">
-              <Fade timeout={2500} in={state === State.TUTORIAL}>
-                <>
-                  <img src="/grab-icon.svg" />
-                  {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
-                </>
-              </Fade>
-              <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
-                <>
-                  <p className="skip-intro p--small" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
-                </>
-              </Fade>
-            </div>
-          </FooterContainer>
         </Page>
+        <ContentContainer>
+          {/* introduction text */}
+          {showIntro && (
+            <TextAnimation 
+              inProp={state === State.LOADING || state === State.INTRODUCTION} 
+              onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
+              onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
+              onExited={() => setState(State.TUTORIAL)}
+              timeout={{ enter: 4000, exit: 1500 }}
+              unmountOnExit
+              tag="h1"
+              className="h3"
+              text={INTRO_TEXT}
+              letterSpeedIn={0.01}
+            />
+          )}
+        </ContentContainer>
+        <FooterContainer>
+          <div className="footer--content">
+            <Fade timeout={2500} in={state === State.TUTORIAL}>
+              <>
+                <img src="/grab-icon.svg" />
+                {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
+              </>
+            </Fade>
+            <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+              <>
+                <p className="skip-intro p--small" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
+              </>
+            </Fade>
+          </div>
+        </FooterContainer>
+      </>
      )}}
     </TransitionState>
   );

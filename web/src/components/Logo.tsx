@@ -16,7 +16,7 @@ const Logo: FC<T> = () => {
   }
 
 return (
-    <Video ref={ref} onCanPlay={() => setVideoSpeed()} autoPlay muted>
+    <Video ref={ref} onCanPlay={() => setVideoSpeed()} autoPlay playsInline muted>
       <source src="/logo.webm" type="video/webm" />
     </Video>
   );
