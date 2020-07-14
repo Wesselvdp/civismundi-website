@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 import TransitionLink from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
-import ReactPlayer from 'react-player'
 
 import TextAnimation from '@components/TextAnimation'
 import { breakpoints } from '@utils/breakpoints'
