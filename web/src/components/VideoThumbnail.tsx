@@ -71,7 +71,7 @@ const VideoBox = styled.div`
   @media ${breakpoints.phoneOnly} {
     top: 75px !important;
     left: 50% !important;
-    height: 150px;
+    height: 125px;
   }
 
   &.video-enter, &.video-appear {
@@ -129,9 +129,13 @@ const VideoBox = styled.div`
   }
 
   video {
-    width: 100%;
     height: 100%;
     object-fit: cover;
+
+    @media ${breakpoints.phoneOnly} {
+      width: 100%;
+      padding: 0 50px;
+    }
   }
 `;
 
