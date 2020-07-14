@@ -136,7 +136,7 @@ const WorldContainer = () => {
         </ContentContainer>
         <FooterContainer>
           <div className="footer--content">
-            <Fade timeout={2500} in={state === State.TUTORIAL}>
+            <Fade timeout={2500} in={state === State.TUTORIAL && !movingToProject}>
               <>
                 <img src="/grab-icon.svg" />
                 {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
@@ -247,7 +247,8 @@ const FooterContainer = styled.div`
 
 const Page = styled.div`
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
   overflow: hidden;
   will-change: transform;
 
