@@ -159,9 +159,11 @@ export default WorldContainer
 
 const Wrapper = styled.div`
   transform: scale(0);
+  opacity: 0;
 
   &.globe-enter {
     transform: scale(0);
+    opacity: 1;
   }
 
   &.globe-enter-active {
