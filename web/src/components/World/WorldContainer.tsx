@@ -168,11 +168,13 @@ const Wrapper = styled.div`
 
   &.globe-enter-active {
     transform: scale(1);
+    opacity: 1;
     transition: all 1600ms ease-out;
   }
 
   &.globe-enter-done {
     transform: scale(1);
+    opacity: 1;
   }
 
   .project-title {
