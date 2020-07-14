@@ -193,7 +193,7 @@ const Wrapper = styled.div`
     transform: translate(-50%, -50%);
     white-space: nowrap;
 
-    @media ${breakpoints.phonyOnly} {
+    @media ${breakpoints.phoneOnly} {
       padding-top: 100px;
     }
   }
