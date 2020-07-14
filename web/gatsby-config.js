@@ -16,6 +16,7 @@ module.exports = {
     `gatsby-plugin-tsconfig-paths`,
     'gatsby-plugin-loadable-components-ssr',
     `gatsby-plugin-transition-link`,
+    `gatsby-plugin-styled-components`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {

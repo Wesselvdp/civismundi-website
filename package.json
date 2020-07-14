@@ -24,6 +24,8 @@
   },
   "dependencies": {
     "@loadable/component": "^5.13.1",
-    "react-player": "^2.5.0"
+    "babel-plugin-styled-components": "^1.10.7",
+    "react-player": "^2.5.0",
+    "styled-components": "^5.1.1"
   }
 }
