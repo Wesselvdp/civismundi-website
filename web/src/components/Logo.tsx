@@ -4,19 +4,19 @@ import { isMobile } from 'react-device-detect'
 
 type T = any
 
-const SPEED = 2.5;
+// const SPEED = 2.5;
 
 const Logo: FC<T> = () => {
-  const ref = useRef();
+  // const ref = useRef();
 
-  const setVideoSpeed = () => {
-    if (ref.current) {
-      ref.current.playbackRate = SPEED;
-    }
-  }
+  // const setVideoSpeed = () => {
+  //   if (ref.current) {
+  //     ref.current.playbackRate = SPEED;
+  //   }
+  // }
 
-return (
-    <Video ref={ref} onCanPlay={() => setVideoSpeed()} autoPlay playsInline muted>
+  return (
+    <Video autoPlay playsInline muted>
       <source src="/logo.webm" type="video/webm" />
     </Video>
   );
