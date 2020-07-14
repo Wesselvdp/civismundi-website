@@ -29,7 +29,7 @@ module.exports = {
       options: {
         custom: {
           families: ['OriyaMN', 'Druk Wide Bold'],
-          urls: ['/fonts/fonts.css'],
+          urls: ['/fonts/font.css'],
         },
       },
     },
