@@ -52,15 +52,15 @@ const ProjectPageTemplate= ({ data }) => {
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
                     timeout={5000}
-                    className="h5 pre-title"
-                    tag="h6"
+                    className="subtitle"
+                    tag="h2"
                     text="Video direction"
                   />
                   <TextAnimation
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
                     timeout={5000}
-                    className="h1"
+                    className="h2"
                     tag="h1"
                     text={title}
                   />
@@ -91,16 +91,16 @@ const ProjectPageTemplate= ({ data }) => {
                 <div className="row">
                   <div className="col meta">
                     <div>
-                      <p className="pre-title">DIRECTED BY</p>
-                      <p>NABIL ELDERKIN</p>
+                      <h5 className="subtitle">DIRECTED BY</h5>
+                      <h5>NABIL ELDERKIN</h5>
                     </div>
                     <div>
-                      <p className="pre-title">AWARDS</p>
-                      <p>LOS ANGELES</p>
+                      <h5 className="subtitle">AWARDS</h5>
+                      <h5>LOS ANGELES</h5>
                     </div>
                     <div>
-                      <p className="pre-title">LOCATION</p>
-                      <p>LOS ANGELES</p>
+                      <h5 className="subtitle">LOCATION</h5>
+                      <h5>LOS ANGELES</h5>
                     </div>
                   </div>
                   <div className="col content content--sanity">
@@ -138,7 +138,7 @@ const PlayButton = styled.div`
   }
 
   &.desktop {
-    padding-top: 25px;
+    padding-top: 2em;
 
     @media ${breakpoints.phoneOnly} {
       display: none;
@@ -169,15 +169,6 @@ const Content = styled.div`
   
     p {
       max-width: 450px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .pre-title {
-      font-size: 18px;
     }
   }
 `
@@ -246,8 +237,20 @@ const Section = styled.section`
 
       & > div {
         width: 100%;
-        max-width: 300px;
       }
+
+      strong {
+        font-weight: 700;
+        font-family: 'Druk Wide Bold';
+        font-size: 14px;
+        text-transform: uppercase;
+        margin-bottom: -16px;
+        display: block;
+      }
+    }
+
+    h5 {
+      margin-bottom: 0.5em;
     }
   }
 `

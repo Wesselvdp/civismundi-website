@@ -107,7 +107,7 @@ const WorldContainer = () => {
                       appear={true}
                       timeout={1000}
                       tag="h1"
-                      className="h1--large project-title"
+                      className="h1"
                       text={get(project, 'node.title', '')}
                       unmountOnExit
                     />
@@ -133,7 +133,7 @@ const WorldContainer = () => {
               timeout={{ enter: 4000, exit: 1500 }}
               unmountOnExit
               tag="h1"
-              className="h3"
+              className="h2"
               text={INTRO_TEXT}
               letterSpeedIn={0.01}
             />
@@ -147,12 +147,12 @@ const WorldContainer = () => {
                   <RotateY appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
                     <img src="/grab-icon.svg" />
                   </RotateY>
-                  {TUTORIAL_TEXT.map((text, i) => <p key={i} className="p--small">{text}</p>)}
+                  {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
                 </>
               </Fade>
               <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
                 <>
-                  <p className="skip-intro p--small" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
+                  <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
                 </>
               </Fade>
             </div>
@@ -210,16 +210,8 @@ const ContentContainer = styled.div`
   max-width: 90%;
   pointer-events: none;
 
-  .h3 {
-    font-size: 48px;
-  }
-
   @media ${breakpoints.phoneOnly} {
     max-width: 95%;
-
-    .h3 {
-      font-size: 24px;
-    }
   }
 `
 
