@@ -25,7 +25,11 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
     >
       <CSSTransition in={project} appear={true} timeout={300} classNames="video">
         <VideoBox ref={ref} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
-          {video && <ReactPlayer url={video} muted playing={true} loop={true} autoPlay={true} volume={0} />}
+          {video && (
+            <video id="videoBG" playsInline autoPlay muted loop>
+              <source src={video} type="video/mp4" />
+            </video>
+          )}
           <VideoContent>
             <TextAnimation
               inProp={project}
