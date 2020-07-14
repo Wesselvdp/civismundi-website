@@ -67,7 +67,7 @@ export const initialize = (curr: any, fullMode = false) => {
   controls.enableZoom = false
   controls.autoRotate = true
   controls.autoRotateSpeed = 0.3
-  if (isMobile) camera.fov = 70
+  if (isMobile) camera.fov = 75
 
   // custom objects
   const clouds = fullMode && initClouds(curr) // todo; give back lightning
@@ -88,7 +88,7 @@ export const labelObject = () => {
 
   return (
     new THREE.Mesh(
-      new THREE.CircleGeometry(isMobile ? 5 : 3.5, 25, 25),
+      new THREE.CircleGeometry(isMobile ? 7 : 3.5, 25, 25),
       [
         new THREE.MeshBasicMaterial({
           map: texture,

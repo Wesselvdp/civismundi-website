@@ -69,9 +69,9 @@ const VideoBox = styled.div`
   will-change: transform;
 
   @media ${breakpoints.phoneOnly} {
-    height: 125px;
-    width: 100%;
-    max-width: 250px;
+    top: 75px !important;
+    left: 50% !important;
+    height: 150px;
   }
 
   &.video-enter, &.video-appear {
@@ -80,8 +80,8 @@ const VideoBox = styled.div`
     transform: scale(0.2);
 
     @media ${breakpoints.phoneOnly} {
-      transform: translate(-50%, -100%) scale(0.2);
-      transform: translate(-50%, calc(-100% - 15px)) scale(0.2);
+      transform: translate(-50%, 0) scale(0.2);
+      transform: translate(-50%, 0) scale(0.2);
     }
   } 
 
@@ -91,8 +91,8 @@ const VideoBox = styled.div`
     transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 250ms ease;
 
     @media ${breakpoints.phoneOnly} {
-      transform: translate(-50%, -100%) scale(1);
-      transform: translate(-50%, calc(-100% - 15px)) scale(1);
+      transform: translate(-50%, 0) scale(1);
+      transform: translate(-50%, 0) scale(1);
     }
   }
 
@@ -101,8 +101,8 @@ const VideoBox = styled.div`
     transform: none;
 
     @media ${breakpoints.phoneOnly} {
-      transform: translate(-50%, -100%) scale(1);
-      transform: translate(-50%, calc(-100% - 15px)) scale(1);
+      transform: translate(-50%, 0) scale(1);
+      transform: translate(-50%, 0) scale(1);
     }
   }
 
@@ -112,8 +112,8 @@ const VideoBox = styled.div`
     transform-origin: 50% 50%;
 
     @media ${breakpoints.phoneOnly} {
-      transform: translate(-50%, -100%) scale(1);
-      transform: translate(-50%, calc(-100% - 15px)) scale(1);
+      transform: translate(-50%, 0) scale(1);
+      transform: translate(-50%, 0) scale(1);
     }
   }
 
@@ -123,12 +123,13 @@ const VideoBox = styled.div`
     transition: transform 300ms ease, opacity 250ms ease;
 
     @media ${breakpoints.phoneOnly} {
-      transform: translate(-50%, -100%) scale(0.8);
-      transform: translate(-50%, calc(-100% - 15px)) scale(0.8);
+      transform: translate(-50%, 0) scale(0.8);
+      transform: translate(-50%, 0) scale(0.8);
     }
   }
 
   video {
+    width: 100%;
     height: 100%;
     object-fit: cover;
   }

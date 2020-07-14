@@ -194,7 +194,7 @@ const Wrapper = styled.div`
     white-space: nowrap;
 
     @media ${breakpoints.phonyOnly} {
-      padding-top: 75px;
+      padding-top: 100px;
     }
   }
 
