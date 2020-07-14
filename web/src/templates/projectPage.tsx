@@ -78,7 +78,7 @@ const ProjectPageTemplate= ({ data }) => {
                       <p>NABIL ELDERKIN</p>
                     </div>
                     <div>
-                      <p className="pre-title">AWARDS & FESTIVALS</p>
+                      <p className="pre-title">AWARDS</p>
                       <p>LOS ANGELES</p>
                     </div>
                     <div>
