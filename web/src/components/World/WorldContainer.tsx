@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { TransitionState } from 'gatsby-plugin-transition-link'
-import { isMobile } from 'react-device-detect'
 import { get } from 'lodash'
 
 import World from './World'
@@ -60,6 +59,11 @@ const WorldContainer = () => {
             location {
               lat
               lng
+            }
+            poster {
+              asset {
+                url
+              }
             }
             video {
               asset {

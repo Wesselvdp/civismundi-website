@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
-import { Link } from 'gatsby'
 
+import { breakpoints } from '@utils/breakpoints'
 import Logo from '@components/Logo'
 
 type T = any
@@ -38,7 +38,9 @@ const Container = styled.div`
   width: 100%;
   z-index: 10;
 
-  ${isMobile && 'padding: 0 10px'}
+  @media ${breakpoints.phoneOnly} {
+    padding: 0 10px;
+  }
 `
 
 const Nav = styled.nav`
@@ -51,7 +53,9 @@ const Nav = styled.nav`
     flex: 0 0 200px;
     margin-top: -10px;
   
-    ${isMobile ? `flex: 0 0 auto;` : ''}
+    @media ${breakpoints.phoneOnly} {
+      flex: 0 0 auto;
+    }
 
     span {
       text-transform: uppercase;

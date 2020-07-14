@@ -9,6 +9,7 @@ import { breakpoints } from '@utils/breakpoints'
 
 const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
   const video = get(project, 'node.video.asset.url')
+  const poster = get(project, 'node.poster.asset.url')
   const slug = get(project, 'node.slug.current')
 
   return (
@@ -25,7 +26,7 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
       <CSSTransition in={project} appear={true} timeout={300} classNames="video">
         <VideoBox ref={ref} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
           {video && (
-            <video id="videoBG" playsInline autoPlay muted loop>
+            <video id="videoBG" poster={poster} playsInline autoPlay muted loop>
               <source src={video} type="video/mp4" />
             </video>
           )}
@@ -87,7 +88,7 @@ const VideoBox = styled.div`
   &.video-enter-active, &.video-appear-active {
     opacity: 1;
     transform: none;
-    transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s, opacity 250ms ease 0.5s;
+    transition: transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 250ms ease;
 
     @media ${breakpoints.phoneOnly} {
       transform: translate(-50%, -100%) scale(1);

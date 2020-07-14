@@ -23,7 +23,7 @@ type PageProps = {
 }
 
 const ProjectPageTemplate= ({ data }) => {
-  const { title, id, video, _rawOverview } = data.sanityProject
+  const { title, id, video, poster, _rawOverview } = data.sanityProject
 
   return (
     <TransitionState>
@@ -35,7 +35,7 @@ const ProjectPageTemplate= ({ data }) => {
             <StyledMast>
               <FixedBackground>
                 <div className="overlay" />
-                <BackgroundVideo video={get(video, 'asset.url')} />
+                <BackgroundVideo video={get(video, 'asset.url')} poster={get(poster, 'asset.url')} />
               </FixedBackground>
               <Content>
                 <div className="inner">
