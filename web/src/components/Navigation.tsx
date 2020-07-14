@@ -13,9 +13,7 @@ const Navigation: FC<T> = () => {
       <Nav>
         {/* Left */}
         <div className="item item--left">
-          <LocalizedLink to="/">
-            <span>{isMobile ? 'Work' : 'All projects'}</span>
-          </LocalizedLink>{' '}
+          <span>{isMobile ? 'Work' : 'All projects'}</span>
         </div>
 
         {/* Center logo */}
@@ -25,9 +23,7 @@ const Navigation: FC<T> = () => {
 
         {/* Right */}
         <div className="item item--right">
-          <LocalizedLink to="/">
-            <span>About</span>
-          </LocalizedLink>
+          <span>About</span>
         </div>
       </Nav>
     </Container>
