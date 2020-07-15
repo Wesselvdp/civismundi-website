@@ -28,9 +28,9 @@ const Video = styled.video`
   transform: translateX(-50%);
 
   @media ${breakpoints.phoneOnly} {
-    width: 180px;
+    width: 200px;
     height: auto;
-    margin-top: -10px;
+    margin-top: -15px;
     top: 15px;
   }
 `

@@ -193,6 +193,7 @@ const Wrapper = styled.div`
 
     @media ${breakpoints.phoneOnly} {
       padding-top: 100px;
+      font-size: 18px;
     }
   }
 
