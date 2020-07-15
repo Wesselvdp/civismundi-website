@@ -189,7 +189,7 @@ const Section = styled.section`
   justify-content: center;
  
   @media ${breakpoints.phoneOnly} {
-    padding: 2em 0 5em;
+    padding: 2em 0;
   }
 
   .container {
