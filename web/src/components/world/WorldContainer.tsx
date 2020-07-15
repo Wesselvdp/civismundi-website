@@ -128,7 +128,7 @@ const WorldContainer = () => {
               onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
               onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
               onExited={() => setState(State.TUTORIAL)}
-              timeout={{ enter: 4000, exit: 1500 }}
+              timeout={{ enter: 6000, exit: 1500 }}
               unmountOnExit
               tag="h1"
               className="h2 intro"
