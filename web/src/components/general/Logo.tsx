@@ -9,14 +9,6 @@ type T = any
 // const SPEED = 2.5;
 
 const Logo: FC<T> = () => {
-  // const ref = useRef();
-
-  // const setVideoSpeed = () => {
-  //   if (ref.current) {
-  //     ref.current.playbackRate = SPEED;
-  //   }
-  // }
-
   return (
     <Link to="/">
       <Video autoPlay playsInline muted>

@@ -92,11 +92,11 @@ const ProjectPageTemplate= ({ data }) => {
                       <h5>NABIL ELDERKIN</h5>
                     </div>
                     <div>
-                      <h5 className="subtitle">AWARDS</h5>
+                      <h5 className="subtitle">LOCATION</h5>
                       <h5>LOS ANGELES</h5>
                     </div>
                     <div>
-                      <h5 className="subtitle">LOCATION</h5>
+                      <h5 className="subtitle">AWARDS</h5>
                       <h5>LOS ANGELES</h5>
                     </div>
                   </div>
