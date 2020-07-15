@@ -9,8 +9,6 @@ import { navigate } from 'gatsby'
 import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
-// import console = require('console');
-// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -26,7 +24,7 @@ const moveToProject = (curr, project) => {
     alt: 0.05
   }
 
-  curr.pointOfView(coords, 2000)
+  curr.pointOfView(coords, isMobile ? 1000 : 2000)
 }
 
 const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro }) => {
@@ -134,7 +132,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   
     const timer = setTimeout(() => { 
       setProject(labelClicked)
-    }, 2000);
+    }, isMobile ? 1000: 2000);
     return () => clearTimeout(timer)
   }, [labelClicked]);
 

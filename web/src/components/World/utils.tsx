@@ -1,9 +1,5 @@
 import * as THREE from 'three'
 import { isMobile } from 'react-device-detect'
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
 
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
