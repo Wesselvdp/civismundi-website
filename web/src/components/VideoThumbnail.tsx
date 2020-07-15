@@ -35,9 +35,9 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
               inProp={project}
               timeout={1000}
               appear={true}
-              tag="h6"
+              tag="h5"
+              className="subtitle"
               text="Video direction"
-              className="pre-title small"
             />
             <TextAnimation 
               inProp={project}
@@ -50,7 +50,7 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
               inProp={project}
               timeout={1000}
               appear={true}
-              tag="h6"
+              tag="h5"
               text="View project"
             />
           </VideoContent>
@@ -147,13 +147,8 @@ const VideoContent = styled.div`
   padding: 0 15px;
   width: 100%;
 
-  h4 {
-    margin-bottom: 5px;
-    font-size: 30px;
-  }
-
-  h6:not(.pre-title) {
-    margin-bottom: 0;
+  h4, h5 {
+    margin: 0;
   }
 `
 
