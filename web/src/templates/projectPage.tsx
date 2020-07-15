@@ -246,7 +246,7 @@ const Section = styled.section`
         font-family: 'Druk Wide Bold';
         font-size: 14px;
         text-transform: uppercase;
-        margin-bottom: -16px;
+        margin-bottom: -14px;
         display: block;
 
         @media ${breakpoints.phoneOnly} {
