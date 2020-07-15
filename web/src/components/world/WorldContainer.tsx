@@ -213,7 +213,7 @@ const ContentContainer = styled.div`
     padding: 0 15px;
 
     .intro {
-      font-size: 28px;
+      font-size: 26px;
     }
   }
 `
