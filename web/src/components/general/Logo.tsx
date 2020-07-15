@@ -28,10 +28,10 @@ const Video = styled.video`
   transform: translateX(-50%);
 
   @media ${breakpoints.phoneOnly} {
-    width: 200px;
+    width: 220px;
     height: auto;
     margin-top: -15px;
-    top: 15px;
+    top: 11px;
   }
 `
 
