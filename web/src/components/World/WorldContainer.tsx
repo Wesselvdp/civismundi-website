@@ -7,10 +7,8 @@ import { TransitionState } from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
 
 import World from './World'
-import TextAnimation from '@components/TextAnimation'
-import VideoThumbnail from '@components/VideoThumbnail'
-import Fade from '@components/Fade'
-import RotateY from '@components/RotateY'
+import VideoThumbnail from './VideoThumbnail'
+import { TextAnim, FadeAnim, RotateAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
 
 type ScreenCoordinates = { x: string, y: string }
@@ -102,7 +100,7 @@ const WorldContainer = () => {
                 />
                 {transitionStatus !== 'exiting' && (
                   <>
-                    <TextAnimation
+                    <TextAnim
                       inProp={project}
                       appear={true}
                       timeout={1000}
@@ -125,7 +123,7 @@ const WorldContainer = () => {
         <ContentContainer>
           {/* introduction text */}
           {showIntro && (
-            <TextAnimation 
+            <TextAnim 
               inProp={state === State.INTRODUCTION} 
               onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
               onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
@@ -142,19 +140,19 @@ const WorldContainer = () => {
         {transitionStatus !== 'exiting' && (
           <FooterContainer>
             <div className="footer--content">
-              <Fade timeout={2500} in={state === State.TUTORIAL}>
+              <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
                 <>
-                  <RotateY appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
+                  <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
                     <img src="/grab-icon.svg" />
-                  </RotateY>
+                  </RotateAnim>
                   {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
                 </>
-              </Fade>
-              <Fade timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+              </FadeAnim>
+              <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
                 <>
                   <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
                 </>
-              </Fade>
+              </FadeAnim>
             </div>
           </FooterContainer>
         )}

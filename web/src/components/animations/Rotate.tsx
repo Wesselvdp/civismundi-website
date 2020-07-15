@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group';
 
-const RotateY = ({ 
+const Rotate = ({ 
   children,
   timeout,
   delay,
@@ -13,7 +13,7 @@ const RotateY = ({
   </CSSTransition>
 )
 
-export default RotateY
+export default Rotate
 
 const RotateWrapper = styled.div`
   transform: rotate3d(0, 1, 0, -180deg);

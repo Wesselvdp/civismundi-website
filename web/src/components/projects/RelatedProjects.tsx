@@ -2,11 +2,7 @@ import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 
-import ProjectCard from '@components/ProjectCard'
-import Button from '@components/Button'
-import LocalizedLink from '@components/LocalizedLink'
-
-
+import { ProjectCard } from '@components/projects'
 
 type T = {
   title: string
@@ -43,9 +39,6 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
           </GridItem>
         ))}
       </Grid>
-      {/* <Button buttonStyle="outlined">
-        <LocalizedLink to="/projects">See all </LocalizedLink>
-      </Button> */}
     </Container>
   )
 }

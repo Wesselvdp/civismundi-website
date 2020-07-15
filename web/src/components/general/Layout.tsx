@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components';
-// Components
-import Footer from './Footer'
-import Navigation from '../Navigation'
+
+import Navigation from './Navigation'
 
 type T = any
 
@@ -10,10 +9,7 @@ const Layout: FC<T> = ({ children, className }) => {
   return (
     <>
       <Navigation />
-
       <Main className={className}>{children}</Main>
-
-      <Footer />
     </>
   )
 }

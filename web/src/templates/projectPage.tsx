@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react'
 
 import styled from 'styled-components'
-import localize from '@utils/localize'
 import { graphql } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
@@ -9,11 +8,9 @@ import { TransitionState } from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
 
 // Components
-import BackgroundVideo from '@components/BackgroundVideo'
-import Layout from '@components/Layout'
-import TextAnimation from '@components/TextAnimation'
-import SectionProjects from '@components/sections/SectionProjects'
-import Fade from '@components/Fade'
+import { BackgroundVideo, ProjectRelatedSection } from '@components/projects'
+import { Layout } from '@components/general'
+import { TextAnim, FadeAnim } from '@components/animations'
 
 type PageProps = {
   data: {
@@ -37,7 +34,7 @@ const ProjectPageTemplate= ({ data }) => {
                 <div className="overlay" />
                 <BackgroundVideo video={get(video, 'asset.url')} poster={get(poster, 'asset.url')} />
               </FixedBackground>
-              <Fade 
+              <FadeAnim 
                 timeout={1000}
                 appear={true}
                 in={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
@@ -45,10 +42,10 @@ const ProjectPageTemplate= ({ data }) => {
                 <PlayButton className="mobile">
                   <img src="/play.svg" />
                 </PlayButton>
-              </Fade>
+              </FadeAnim>
               <Content>
                 <div className="inner">
-                  <TextAnimation
+                  <TextAnim
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
                     timeout={5000}
@@ -56,7 +53,7 @@ const ProjectPageTemplate= ({ data }) => {
                     tag="h2"
                     text="Video direction"
                   />
-                  <TextAnimation
+                  <TextAnim
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
                     timeout={5000}
@@ -64,7 +61,7 @@ const ProjectPageTemplate= ({ data }) => {
                     tag="h1"
                     text={title}
                   />
-                  <TextAnimation
+                  <TextAnim
                     appear={true}
                     inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
                     timeout={5000}
@@ -72,7 +69,7 @@ const ProjectPageTemplate= ({ data }) => {
                     text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
                     letterSpeedIn={0.01}
                   />
-                  <Fade 
+                  <FadeAnim 
                     timeout={1000}
                     appear={true}
                     in={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
@@ -80,7 +77,7 @@ const ProjectPageTemplate= ({ data }) => {
                     <PlayButton className="desktop">
                       <img src="/play.svg" />
                     </PlayButton>
-                  </Fade>
+                  </FadeAnim>
                 </div>
               </Content>
             </StyledMast>
@@ -109,7 +106,7 @@ const ProjectPageTemplate= ({ data }) => {
                 </div>
               </div>
             </Section>
-            <SectionProjects
+            <ProjectRelatedSection
               title="Other projects"
               blockId={id}
               limit={2}
@@ -221,8 +218,13 @@ const Section = styled.section`
           flex-wrap: wrap;
           flex-basis: 50%;
 
-          &:nth-child(2) {
+          &:nth-child(even) {
             text-align: right;
+          }
+
+          h5.subtitle {
+            display: flex;
+            flex-basis: 100%;
           }
         }
       }

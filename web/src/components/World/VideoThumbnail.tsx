@@ -4,7 +4,7 @@ import { CSSTransition } from 'react-transition-group'
 import TransitionLink from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
 
-import TextAnimation from '@components/TextAnimation'
+import { TextAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
 
 const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
@@ -31,7 +31,7 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
             </video>
           )}
           <VideoContent>
-            <TextAnimation
+            <TextAnim
               inProp={project}
               timeout={1000}
               appear={true}
@@ -39,14 +39,14 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
               className="subtitle"
               text="Video direction"
             />
-            <TextAnimation 
+            <TextAnim 
               inProp={project}
               timeout={1000}
               appear={true}
               tag="h4"
               text={get(project, 'node.title', '')}
             />
-            <TextAnimation 
+            <TextAnim 
               inProp={project}
               timeout={1000}
               appear={true}

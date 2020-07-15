@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { Link } from 'gatsby'
 
-import LocalizedLink from '@components/LocalizedLink'
 import { breakpoints } from '@utils/breakpoints'
 
 type T = {
@@ -11,7 +11,7 @@ type T = {
 const ProjectCard: FC<T> = ({ data }) => {
   const { title, slug } = data
   return (
-    <LocalizedLink to={`/projects/${slug.current}`}>
+    <Link to={`/projects/${slug.current}`}>
       <Card>
         <Visual
           style={{ backgroundImage: `url('https://picsum.photos/400/300')` }}
@@ -25,7 +25,7 @@ const ProjectCard: FC<T> = ({ data }) => {
           </p>
         </Content>
       </Card>
-    </LocalizedLink>
+    </Link>
   )
 }
 

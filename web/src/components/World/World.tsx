@@ -9,10 +9,6 @@ import { navigate } from 'gatsby'
 import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 

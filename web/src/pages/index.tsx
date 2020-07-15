@@ -1,10 +1,9 @@
 import { graphql } from 'gatsby'
 import React from 'react'
 
-import Layout from '@components/Layout'
-import SEO from '@components/seo'
+import { Layout, SEO } from '@components/general'
 
-import WorldContainer from '@components/World/WorldContainer'
+import WorldContainer from '@components/world/WorldContainer'
 
 type PageProps = {
   data: {

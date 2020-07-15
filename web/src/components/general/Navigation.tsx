@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
 
 import { breakpoints } from '@utils/breakpoints'
-import Logo from '@components/Logo'
+import { Logo } from '@components/general'
 
 type T = any
 
