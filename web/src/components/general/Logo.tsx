@@ -36,7 +36,7 @@ const Video = styled.video`
   transform: translateX(-50%);
 
   @media ${breakpoints.phoneOnly} {
-    width: 165px;
+    width: 180px;
     height: auto;
     margin-top: -10px;
     top: 15px;
