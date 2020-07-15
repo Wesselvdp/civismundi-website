@@ -1,6 +1,7 @@
 import React, { FC, useRef } from 'react'
 import styled from 'styled-components'
-import { isMobile } from 'react-device-detect'
+
+import { breakpoints } from '@utils/breakpoints'
 
 type T = any
 
@@ -31,11 +32,12 @@ const Video = styled.video`
   left: 50%;
   transform: translateX(-50%);
 
-  ${isMobile ? `
-    width: 200px;
+  @media ${breakpoints.phoneOnly} {
+    width: 165px;
     height: auto;
     margin-top: -10px;
-  ` : ''}
+    top: 15px;
+  }
 `
 
 export default Logo;
