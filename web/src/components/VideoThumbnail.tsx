@@ -43,15 +43,15 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
               inProp={project}
               timeout={1000}
               appear={true}
-              tag="h4"
+              tag="h3"
               text={get(project, 'node.title', '')}
             />
             <TextAnimation 
               inProp={project}
               timeout={1000}
               appear={true}
-              tag="h5"
-              text="View project"
+              tag="p"
+              text="VIEW PROJECT"
             />
           </VideoContent>
         </VideoBox>
@@ -67,6 +67,7 @@ const VideoBox = styled.div`
   display: flex;
   overflow: hidden;
   will-change: transform;
+  overflow: hidden;
 
   @media ${breakpoints.phoneOnly} {
     top: 75px !important;
@@ -130,6 +131,7 @@ const VideoBox = styled.div`
 
   video {
     height: 100%;
+    width: 100%;
     object-fit: cover;
 
     @media ${breakpoints.phoneOnly} {
@@ -142,13 +144,21 @@ const VideoBox = styled.div`
 const VideoContent = styled.div`
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 0 15px;
+  left: 0;
   width: 100%;
+  padding: 0 15px;
+  transform: translateY(-50%);
 
-  h4, h5 {
+  h4, h5, p {
     margin: 0;
+
+    &.subtitle {
+      font-size: 10px;
+
+      @media ${breakpoints.phoneOnly} {
+        font-size: 8px;
+      }
+    }
   }
 `
 

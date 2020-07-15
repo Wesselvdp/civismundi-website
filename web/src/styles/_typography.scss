@@ -63,10 +63,6 @@ h3, .h3 {
 
 h4, .h4 {
   font-size: 36px;
-
-  // @include phone-only {
-  //   font-size: 30px;
-  // }
 }
 
 h5, .h5 {
@@ -189,12 +185,12 @@ h6 {
 }
 
 p {
-  font-size: 15px;
+  font-size: 16px;
   margin-top: 0;
   line-height: 1.8;
 
   @include phone-only {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 

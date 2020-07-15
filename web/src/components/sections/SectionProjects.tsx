@@ -33,7 +33,9 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
 
   return (
     <Container>
-      <h4>{title}</h4>
+      <TitleContainer>
+        <h3>{title}</h3>
+      </TitleContainer>
       <Grid>
         {projectsVisible.map((p: Project) => (
           <GridItem key={p.id}>
@@ -50,6 +52,10 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
 
 const Container = styled.div`
   padding-bottom: 30px;
+`
+
+const TitleContainer = styled.div`
+  padding: 0 15px;
 `
 
 const Grid = styled.div`

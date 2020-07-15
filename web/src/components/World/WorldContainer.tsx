@@ -107,7 +107,7 @@ const WorldContainer = () => {
                       appear={true}
                       timeout={1000}
                       tag="h1"
-                      className="h1"
+                      className="project-title"
                       text={get(project, 'node.title', '')}
                       unmountOnExit
                     />
@@ -133,7 +133,7 @@ const WorldContainer = () => {
               timeout={{ enter: 4000, exit: 1500 }}
               unmountOnExit
               tag="h1"
-              className="h2"
+              className="h2 intro"
               text={INTRO_TEXT}
               letterSpeedIn={0.01}
             />
@@ -211,7 +211,12 @@ const ContentContainer = styled.div`
   pointer-events: none;
 
   @media ${breakpoints.phoneOnly} {
-    max-width: 95%;
+    width: 100%;
+    padding: 0 15px;
+
+    .intro {
+      font-size: 28px;
+    }
   }
 `
 
