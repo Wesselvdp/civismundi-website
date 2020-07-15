@@ -52,6 +52,10 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
 
 const Container = styled.div`
   padding-bottom: 30px;
+
+  h3 {
+    line-height: 40px;
+  }
 `
 
 const TitleContainer = styled.div`

@@ -246,6 +246,10 @@ const Section = styled.section`
         text-transform: uppercase;
         margin-bottom: -16px;
         display: block;
+
+        @media ${breakpoints.phoneOnly} {
+          font-size: 12px;
+        }
       }
     }
 

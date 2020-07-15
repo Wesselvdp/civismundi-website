@@ -43,7 +43,7 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
               inProp={project}
               timeout={1000}
               appear={true}
-              tag="h3"
+              tag="h4"
               text={get(project, 'node.title', '')}
             />
             <TextAnimation 
