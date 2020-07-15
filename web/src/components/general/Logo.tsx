@@ -1,5 +1,6 @@
 import React, { FC, useRef } from 'react'
 import styled from 'styled-components'
+import { Link } from 'gatsby'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -17,9 +18,11 @@ const Logo: FC<T> = () => {
   // }
 
   return (
-    <Video autoPlay playsInline muted>
-      <source src="/logo.webm" type="video/webm" />
-    </Video>
+    <Link to="/">
+      <Video autoPlay playsInline muted>
+        <source src="/logo.webm" type="video/webm" />
+      </Video>
+    </Link>
   );
 };
 
