@@ -106,7 +106,7 @@ const WorldContainer = () => {
                       timeout={1000}
                       tag="h1"
                       className="project-title"
-                      text={get(project, 'node.title', '')}
+                      text={get(project, 'node.city', get(project, 'node.title', ''))}
                       unmountOnExit
                     />
                     {/* project preview thumbnail */}
