@@ -2,25 +2,6 @@
 
 $font-family: 'OriyaMN', 'Helvetica Neue LT', Helvetica, Arial, sans-serif;
 
-// h1,
-// h2,
-// h3,
-// h4,
-// h5,
-// h6,
-// .h1,
-// .h2,
-// .h1,
-// .h3,
-// .h4,
-// .h5,
-// .h6 {
-//   font-family: $font-family;
-//   font-weight: 300;
-//   text-transform: uppercase;
-//   margin: 0 0 0.5em;
-// }
-
 h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   font-weight: 300;
@@ -45,7 +26,7 @@ h2, .h2 {
   &.subtitle {
     font-family: 'Druk Wide Bold';
     font-weight: 700;
-    font-size: 18px; // todo check
+    font-size: 18px;
 
     @include phone-only {
       font-size: 16px;
@@ -92,98 +73,6 @@ h6 {
   }
 }
 
-// h1 {
-//   font-size: 56px;
-
-//   &.h1--large {
-//     @include tablet-landscape-up {
-//       font-size: 64px;
-//     }
-
-//     @include desktop-up {
-//       font-size: 132px;
-//     }
-//   }
-// }
-
-// h2, .h2 {
-//   font-size: 64px;
-// }
-
-// h3, .h3 {
-//   font-size: 38px;
-
-//   @include phone-only {
-//     font-size: 24px;
-//   }
-// }
-
-// h4, .h4 {
-//   font-size: 26px;
-// }
-
-// h5, .h5 {
-//   font-size: 16px;
-// }
-
-// h6, .h6 {
-//   font-size: 14px;
-// }
-
-// p {
-//   font-size: 16px;
-//   margin-bottom: 5px;
-
-//   &.p--small {
-//     font-size: 14px;
-//   }
-// }
-
-.lower-case {
-  text-transform: none;
-}
-
-// .small {
-//   font-size: 9px;
-// }
-
-.heading {
-  color: green;
-}
-
-// .title {
-//   font-weight: 400;
-//   text-transform: uppercase;
-//   margin-bottom: 16px;
-//   line-height: 1.5em;
-// }
-
-// .pre-title {
-//   text-transform: uppercase;
-//   margin-bottom: 3px;
-//   font-family: 'Druk Wide Bold';
-//   font-weight: 700;
-// }
-
-// .content--sanity {
-//   strong {
-//     text-transform: uppercase;
-//     margin-bottom: 0;
-//     display: inherit;
-//     font-family: 'Druk Wide Bold';
-//     font-size: 16px;
-//     opacity: 1;
-//   }
-
-//   p {
-//     font-weight: 300;
-//   }
-// }
-
-.text-lighter {
-  opacity: 0.75;
-}
-
 p {
   font-size: 16px;
   margin-top: 0;
@@ -192,6 +81,18 @@ p {
   @include phone-only {
     font-size: 14px;
   }
+}
+
+.lower-case {
+  text-transform: none;
+}
+
+.heading {
+  color: green;
+}
+
+.text-lighter {
+  opacity: 0.75;
 }
 
 body {
