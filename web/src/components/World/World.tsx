@@ -9,6 +9,8 @@ import { navigate } from 'gatsby'
 import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
+// import console = require('console');
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -179,7 +181,10 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
       setClouds(_clouds)
       setLightning(_lightning)
 
-      _controls.addEventListener('change', () => { if (!cameraChanged) setCameraChanged(true) })
+      _controls.addEventListener('change', () => {
+        if (_lightning && _camera) _lightning.position.copy(_camera.position)
+        if (!cameraChanged) setCameraChanged(true)
+      })
     })
 
     setInitialized(true)

@@ -1,5 +1,9 @@
 import * as THREE from 'three'
 import { isMobile } from 'react-device-detect'
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
@@ -48,8 +52,29 @@ const initDirectionalLight = (curr: any) => {
         .children
         .find(obj3d => obj3d.type === 'DirectionalLight')
 
-      directionalLight && directionalLight.position.set(1, 1, 1)
-      console.log(directionalLight);
+      // // directionalLight.position.set(1, 0, 0)
+      directionalLight.position.copy(curr.camera().position)
+      // curr.camera().add(directionalLight)
+      // console.log(curr.camera())
+      // console.log(directionalLight)
+      // console.log('camera position', curr.camera().position)
+      // if (directionalLight) {
+      //   directionalLight.position.copy(
+      //     curr.camera().position.x,
+      //     curr.camera().position.y,
+      //     curr.camera().position.z
+      //   )
+
+      //   curr.camera().add(directionalLight)
+      // }
+
+      
+      // const pointLight = new THREE.PointLight( 0xffffff );
+      // pointLight.position.set(1,1,2);
+      // curr.camera().add(pointLight)
+
+      // if (directionalLight) directionalLight.target = curr.camera()
+  
       // if (directionalLight) directionalLight.target = curr.camera()
       resolve(directionalLight);
     })
