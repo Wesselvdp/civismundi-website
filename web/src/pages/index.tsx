@@ -2,7 +2,7 @@ import { graphql } from 'gatsby'
 import React from 'react'
 
 import { Layout, SEO } from '@components/general'
-import { WorldContainer } from '@components/world'
+import { WorldContainer } from '@components/worldd'
 
 type PageProps = {
   data: {
