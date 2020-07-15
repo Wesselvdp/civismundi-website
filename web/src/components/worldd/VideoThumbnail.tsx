@@ -149,6 +149,12 @@ const VideoContent = styled.div`
   padding: 0 15px;
   transform: translateY(-50%);
 
+  h4 {
+    @media ${breakpoints.phoneOnly} {
+      font-size: 28px;
+    }
+  }
+
   h4, h5, p {
     margin: 0;
 
