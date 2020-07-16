@@ -302,6 +302,11 @@ export const query = graphql`
           }
           title
           id
+          poster {
+            asset {
+              url
+            }
+          }
         }
       }
     }

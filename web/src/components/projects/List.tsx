@@ -58,8 +58,6 @@ const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, blockId })
 }
 
 const Container = styled.div`
-  padding-bottom: 30px;
-
   h3 {
     line-height: 40px;
   }
