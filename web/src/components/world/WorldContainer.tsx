@@ -243,6 +243,12 @@ const FooterContainer = styled.div`
       line-height: 1.5em;
       margin-bottom: 0;
       opacity: 0.75;
+
+      &:not(.skip-intro) {
+        @media ${breakpoints.phoneOnly} {
+          font-size: 12px;
+        }
+      }
     }
 
     .skip-intro {

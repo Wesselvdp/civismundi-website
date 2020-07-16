@@ -166,6 +166,12 @@ const VideoContent = styled.div`
       }
     }
   }
+
+  p {
+    @media ${breakpoints.phoneOnly} {
+      font-size: 12px;
+    }
+  }
 `
 
 export default VideoThumbnail

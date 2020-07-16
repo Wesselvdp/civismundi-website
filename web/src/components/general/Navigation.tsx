@@ -60,6 +60,7 @@ const Nav = styled.nav`
     span {
       text-transform: uppercase;
       font-size: 14px;
+      opacity: 0.85;
     }
 
     &.item--left {
