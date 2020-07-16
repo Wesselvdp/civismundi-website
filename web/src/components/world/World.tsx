@@ -5,6 +5,7 @@ import loadable from '@loadable/component'
 import { get } from 'lodash'
 import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
+import styled from 'styled-components'
 
 import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
@@ -28,7 +29,7 @@ const moveToProject = (curr, project) => {
   curr.pointOfView(coords, isMobile ? 1000 : 2000)
 }
 
-const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro }) => {
+const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
   const ref = useRef();
 
@@ -222,32 +223,42 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   return (
     !isSSR && (
       <React.Suspense fallback={<div />}>
-        <Globe
-          // ref
-          ref={ref}
-          // appearance
-          globeImageUrl="/earth-blue-marble-alt.jpg"
-          bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-          backgroundColor="#000"
-          // labels
-          customLayerData={projects}
-          customThreeObject={() => labelObject()}
-          customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-          onCustomLayerHover={obj => onLabelHovered(obj)}
-          onCustomLayerClick={obj => onLabelClicked(obj)}
-          onCustomLayerRightClick={obj => console.log(obj)}
-          // settings
-          animateIn={false}
-          renderConfig={{
-            sortObjects: false,
-            antialias: true,
-            alpha: true 
-          }}
-          waitForGlobeReady={true}
-        />
+        <Wrapper className={className}>
+          <Globe
+            // ref
+            ref={ref}
+            // appearance
+            globeImageUrl="/earth-blue-marble-alt.jpg"
+            bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+            backgroundColor="#000"
+            // labels
+            customLayerData={projects}
+            customThreeObject={() => labelObject()}
+            customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
+            onCustomLayerHover={obj => onLabelHovered(obj)}
+            onCustomLayerClick={obj => onLabelClicked(obj)}
+            onCustomLayerRightClick={obj => console.log(obj)}
+            // settings
+            animateIn={false}
+            renderConfig={{
+              sortObjects: false,
+              antialias: true,
+              alpha: true 
+            }}
+            waitForGlobeReady={true}
+          />
+        </Wrapper>
      </React.Suspense>
     )
   )
 }
 
+const Wrapper = styled.div`
+  opacity: 0.6;
+
+  &.introduction-complete {
+    transition: opacity 0.5s cubic-bezier(0.05, 0.66, 0.25, 1);
+    opacity: 1;
+  }
+`
 export default World
