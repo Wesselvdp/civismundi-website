@@ -20,7 +20,7 @@ const options = [
   { title: 'Director #2', value: 'director-2' }
 ]
 
-const perPage = 2
+const perPage = 4
 
 const ProjectsPage = ({ data }: PageProps) => {
   const [page, setPage] = useState(0)
