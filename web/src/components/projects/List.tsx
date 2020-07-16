@@ -3,19 +3,25 @@ import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 
 import { ProjectCard } from '@components/projects'
+import { Button } from '@components/general'
+// import console = require('console');
 
 type T = {
   title: string
-  limit?: number // we might want to limit the amount of projects to display
   blockId?: string // We want to block a project id
-  projects: AllProject
+  projects: AllProject,
+  page?: number,
+  perPage?: number,
+  onMore?: Function,
 }
 
-const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
+const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, blockId }) => {
   const [projectsVisible, setProjectsVisible] = useState<Project[]>([])
-  console.log(projects)
+  const [projectsCount, setProjectsCount] = useState<number>(0)
+
   useEffect(() => {
     const noNodes: Project[] = projects.edges.map(p => p.node)
+    setProjectsCount(noNodes.length)
 
     // Filter if blocked is defined
     const filtered: Project[] = blockId
@@ -23,9 +29,12 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
       : noNodes
 
     // slice if limit is defined
-    const sliced: Project[] = limit ? filtered.slice(0, limit) : filtered
+    const sliced: Project[] = perPage
+      ? filtered.slice(0, ((page || 0) + 1) * perPage)
+      : filtered
+
     setProjectsVisible(sliced)
-  }, [projects])
+  }, [projects, page, perPage])
 
   return (
     <Container>
@@ -39,6 +48,11 @@ const SectionProjects: FC<T> = ({ title, limit, projects, blockId }) => {
           </GridItem>
         ))}
       </Grid>
+      {onMore && projectsVisible.length < projectsCount && (
+        <Button buttonStyle="outlined" onClick={onMore}>
+          SEE MORE
+        </Button>
+      )}
     </Container>
   )
 }
@@ -48,6 +62,10 @@ const Container = styled.div`
 
   h3 {
     line-height: 40px;
+  }
+
+  button {
+    margin-bottom: 2em;
   }
 `
 
@@ -77,4 +95,4 @@ const GridItem = styled.div`
     flex: calc(50% - 30px) 0 0;
   }
 `
-export default SectionProjects
+export default ProjectList

@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import { get } from 'lodash'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -10,11 +11,13 @@ type T = {
 
 const ProjectCard: FC<T> = ({ data }) => {
   const { title, slug } = data
+  const poster = get(data, 'poster.asset.url')
+
   return (
     <Link to={`/projects/${slug.current}`}>
       <Card>
         <Visual
-          style={{ backgroundImage: `url('https://picsum.photos/400/300')` }}
+          style={{ backgroundImage: `url(${poster})` }}
         />
         <Content>
           <h5 className="subtitle">VIDEO DIRECTION</h5>

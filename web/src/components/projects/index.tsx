@@ -1,5 +1,5 @@
 import ProjectCard from './Card'
-import ProjectRelatedSection from './RelatedProjects'
+import ProjectList from './List'
 import BackgroundVideo from './BackgroundVideo'
 
-export { ProjectCard, ProjectRelatedSection, BackgroundVideo }
+export { ProjectCard, ProjectList, BackgroundVideo }

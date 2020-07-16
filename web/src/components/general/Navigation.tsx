@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
+import { Link } from 'gatsby'
 import { isMobile } from 'react-device-detect'
+import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/general'
@@ -13,7 +14,9 @@ const Navigation: FC<T> = () => {
       <Nav>
         {/* Left */}
         <div className="item item--left">
-          <span>{isMobile ? 'Work' : 'All projects'}</span>
+          <Link to="/projects">
+            <span>{isMobile ? 'Work' : 'All projects'}</span>
+          </Link>
         </div>
 
         {/* Center logo */}
@@ -23,7 +26,9 @@ const Navigation: FC<T> = () => {
 
         {/* Right */}
         <div className="item item--right">
-          <span>About</span>
+          <Link to="/about">
+            <span>About</span>
+          </Link>
         </div>
       </Nav>
     </Container>

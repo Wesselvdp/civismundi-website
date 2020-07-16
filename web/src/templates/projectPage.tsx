@@ -8,7 +8,7 @@ import { TransitionState } from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
 
 // Components
-import { BackgroundVideo, ProjectRelatedSection } from '@components/projects'
+import { BackgroundVideo, ProjectList } from '@components/projects'
 import { Layout } from '@components/general'
 import { TextAnim, FadeAnim } from '@components/animations'
 
@@ -106,11 +106,11 @@ const ProjectPageTemplate= ({ data }) => {
                 </div>
               </div>
             </Section>
-            <ProjectRelatedSection
+            <ProjectList
               title="Other projects"
               blockId={id}
-              limit={2}
               projects={data.allSanityProject}
+              perPage={2}
             />
           </Layout>
         )}}
