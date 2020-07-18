@@ -66,6 +66,10 @@ const Nav = styled.nav`
       text-transform: uppercase;
       font-size: 14px;
       opacity: 0.85;
+
+      @media ${breakpoints.phoneOnly} {
+        font-size: 12px;
+      }
     }
 
     &.item--left {
