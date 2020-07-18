@@ -42,14 +42,6 @@ const Content = styled.div`
   text-decoration: none;
   margin-top: -3.5em;
 
-  // h6 {
-  //   margin-bottom: 0;
-  // }
-
-  // h4 {
-  //   margin-bottom: 0;
-  // }
-
   p {
     max-width: 75%;
 

@@ -52,6 +52,7 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
               appear={true}
               tag="p"
               text="VIEW PROJECT"
+              className="heading"
             />
           </VideoContent>
         </VideoBox>
