@@ -63,7 +63,8 @@ const Content = styled.div`
 
   p {
     max-width: 75%;
-
+    margin: 0;
+  
     @media ${breakpoints.phoneOnly} {
       max-width: none;
     }

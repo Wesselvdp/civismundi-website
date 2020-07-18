@@ -82,9 +82,17 @@ const Grid = styled.div`
 `
 const GridItem = styled.div`
   flex: 100% 0 0;
-  margin: 0 auto;
   padding: 15px;
 
+  @media ${breakpoints.tabletLandscapeUp} {
+    &:nth-child(odd) {
+      margin-left: auto;
+    }
+
+    &:nth-children(even) {
+      margin-right: auto;
+    }
+  }
   @media ${breakpoints.phoneOnly} {
     padding: 15px 0;
   }
