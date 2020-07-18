@@ -31,7 +31,7 @@ const ProjectPageTemplate= ({ data }) => {
     setState(ProjectState.SUBTITLE_IN)
   }, [])
 
-  const [width, height] = useWindowSize()
+  const { size, outerSize } = useWindowSize()
 
   return (
     <TransitionState>
@@ -40,7 +40,7 @@ const ProjectPageTemplate= ({ data }) => {
         return (
           <Layout className={`page-transition-${transitionStatus}`}>
             {/* Mast */}
-            <StyledMast style={height ? { height: height } : {}}>
+            <StyledMast>
               <FixedBackground>
                 <div className="overlay" />
                 <BackgroundVideo video={get(video, 'asset.url')} poster={get(poster, 'asset.url')} />
@@ -54,7 +54,7 @@ const ProjectPageTemplate= ({ data }) => {
                   <img src="/play.svg" />
                 </PlayButton>
               </FadeAnim>
-              <Content style={height ? { height: height } : {}}>
+              <Content style={outerSize[1] ? { paddingBottom: outerSize[1] - size[1] } : {}}>
                 <div className="inner">
                   <TextAnim
                     inProp={state >= ProjectState.SUBTITLE_IN}
