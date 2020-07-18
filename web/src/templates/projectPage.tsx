@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
@@ -29,6 +29,12 @@ const ProjectPageTemplate= ({ data }) => {
 
   useEffect(() => {
     setState(ProjectState.SUBTITLE_IN)
+  }, [])
+
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0,1)
+    }
   }, [])
 
   const { size, outerSize } = useWindowSize()
