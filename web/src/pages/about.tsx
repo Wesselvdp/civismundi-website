@@ -12,32 +12,40 @@ const AboutPage = () => {
     <Layout>
       <SEO title="About" />
       <Page>
-        <BackgroundLines
-          subtitle="About us"
-          title="Lorem ipsum dolor sit amet"
-          content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
-        />
-        <ContactInfo>
-          <div className="row">
-            <div className="col">
-              <h5 className="subtitle">E-MAIL</h5>
-              <h6>info@civismundi.com</h6>
+        <div>
+          <BackgroundLines
+            subtitle="About us"
+            title="Lorem ipsum dolor sit amet"
+            content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
+          />
+          <ContactInfo>
+            <div className="row">
+              <div className="col">
+                <h5 className="subtitle">E-MAIL</h5>
+                <h6>info@civismundi.com</h6>
+              </div>
+              <div className="col">
+                <h5 className="subtitle">PHONE</h5>
+                <h6>+370 495 385 30</h6>
+              </div>
             </div>
-            <div className="col">
-              <h5 className="subtitle">PHONE</h5>
-              <h6>+370 495 385 30</h6>
-            </div>
-          </div>
-        </ContactInfo>
+          </ContactInfo>
+        </div>
       </Page>
     </Layout>
   )
 }
 
 const Page = styled.div`
-  padding-top: 8em;
+  padding-top: 4em;
   min-height: 100vh;
   position: relative;
+  
+  @media ${breakpoints.tabletLandscapeUp} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   @media ${breakpoints.phoneOnly} {
     padding-top: 3em;
