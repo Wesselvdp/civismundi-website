@@ -20,7 +20,7 @@ h2, .h2 {
   font-size: 56px;
 
   @include phone-only {
-    font-size: 42px;
+    font-size: 38px;
   }
 
   &.subtitle {

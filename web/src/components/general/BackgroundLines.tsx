@@ -66,7 +66,6 @@ const Wrapper = styled.div`
 
   h2 {
     @media ${breakpoints.phoneOnly} {
-      font-size: 36px;
       margin-bottom: 10px;
 
       &.subtitle {
