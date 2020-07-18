@@ -84,23 +84,9 @@ const Grid = styled.div`
 const GridItem = styled.div`
   padding: 15px;
   
-  // @media ${breakpoints.tabletLandscapeUp} {
-  //   &:nth-child(odd) {
-  //     margin-left: auto;
-
-  //     .card {
-  //       margin-left: auto;
-  //     }
-  //   }
-
-  //   &:nth-children(even) {
-  //     margin-right: auto;
-
-  //     .card {
-  //       margin-right: auto;
-  //     }
-  //   }
-  // }
+  @media ${breakpoints.tabletLandscapeUp} {
+    max-width: 50%;
+  }
 
   @media ${breakpoints.phoneOnly} {
     padding: 15px 0;

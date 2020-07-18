@@ -54,7 +54,7 @@ const ProjectPageTemplate= ({ data }) => {
                   <img src="/play.svg" />
                 </PlayButton>
               </FadeAnim>
-              <Content style={outerSize[1] ? { paddingBottom: outerSize[1] - size[1] } : {}}>
+              <Content>
                 <div className="inner">
                   <TextAnim
                     inProp={state >= ProjectState.SUBTITLE_IN}
