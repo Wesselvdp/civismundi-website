@@ -84,7 +84,7 @@ const Wrapper = styled.div`
     will-change: transform;
     opacity: 0;
     transform: scale(0);
-    transition: transform ${letterTransitionDuration}ms ease-in
+    transition: transform ${letterTransitionDuration}ms ease-in-out;
   }
 
   &.text-enter, &.text-appear {
@@ -99,7 +99,7 @@ const Wrapper = styled.div`
     .letter {
       transform: none;
       opacity: 1;
-      transition: transform ${letterTransitionDuration}ms ease-in, opacity 0.25s ease;
+      transition: transform ${letterTransitionDuration}ms ease-in-out, opacity 0.25s ease-in-out;
     }
   }
 

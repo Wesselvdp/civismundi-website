@@ -24,7 +24,7 @@ const FadeWrapper = styled.div`
 
     &-enter-active, &-appear-active {
       opacity: 1;
-      transition: opacity ${props => props.timeout | 1000}ms ease-out;
+      transition: opacity ${props => props.timeout | 1000}ms ease-in-out;
     }
 
     &-enter-done, &-appear-done {
@@ -37,7 +37,7 @@ const FadeWrapper = styled.div`
 
     &-exit-active {
       opacity: 0;
-      transition: opacity ${props => props.timeout | 1000}ms ease-in;
+      transition: opacity ${props => props.timeout | 1000}ms ease-in-out;
     }
   }
 `

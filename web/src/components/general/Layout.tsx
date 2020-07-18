@@ -26,7 +26,7 @@ const Main = styled.main`
 
     &-entering {
       opacity: 1;
-      transition: opacity 2.5s ease;
+      transition: opacity 2.5s ease-in-out;
     }
   }
 `

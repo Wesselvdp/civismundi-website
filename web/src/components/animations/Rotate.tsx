@@ -25,7 +25,7 @@ const RotateWrapper = styled.div`
 
     &-enter-active, &-appear-active {
       transform: rotate3d(0, 1, 0, 0);
-      transition: transform ${props => props.timeout | 1000}ms ease ${props => props.delay || 0}ms;
+      transition: transform ${props => props.timeout | 1000}ms ease-in-out ${props => props.delay || 0}ms;
     }
 
     &-enter-done, &-appear-done, &-exit, &-exit-active {

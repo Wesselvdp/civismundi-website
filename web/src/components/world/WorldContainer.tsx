@@ -177,7 +177,7 @@ const Wrapper = styled.div`
   &.globe-enter-active {
     transform: scale(1);
     opacity: 1;
-    transition: all 1600ms ease-out;
+    transition: all 1600ms ease-in-out;
   }
 
   &.globe-enter-done {
@@ -272,7 +272,7 @@ const Page = styled.div`
     &-exiting {
       opacity: 0;
       transform: scale(3);
-      transition: transform 2s ease-in, opacity 1s ease-in 0.5s;
+      transition: transform 2s ease-in-out, opacity 1s ease-in-out 0.5s;
     }
   }
 `
