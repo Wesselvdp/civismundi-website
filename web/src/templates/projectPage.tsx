@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
@@ -12,15 +12,21 @@ import { BackgroundVideo, ProjectList } from '@components/projects'
 import { Layout } from '@components/general'
 import { TextAnim, FadeAnim } from '@components/animations'
 
-type PageProps = {
-  data: {
-    sanityProject: Project
-    allSanityProject: AllProject
-  }
-}
+export enum ProjectState {
+  LOADING = 1,
+  SUBTITLE_IN = 2,
+  TITLE_IN = 3,
+  PARAGRAPH_IN = 4,
+  VIDEO_BUTTON_IN = 5
+} 
 
 const ProjectPageTemplate= ({ data }) => {
   const { title, id, video, poster, _rawOverview } = data.sanityProject
+  const [state, setState] = useState(ProjectState.LOADING)
+
+  useEffect(() => {
+    setState(ProjectState.SUBTITLE_IN)
+  }, [])
 
   return (
     <TransitionState>
@@ -46,25 +52,24 @@ const ProjectPageTemplate= ({ data }) => {
               <Content>
                 <div className="inner">
                   <TextAnim
-                    appear={true}
-                    inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
-                    timeout={5000}
+                    inProp={state >= ProjectState.SUBTITLE_IN}
+                    timeout={{ enter: 300 }}
+                    onEntered={() => setState(ProjectState.TITLE_IN)}
                     className="subtitle"
                     tag="h2"
                     text="Video direction"
                   />
                   <TextAnim
-                    appear={true}
-                    inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
-                    timeout={5000}
+                    inProp={state >= ProjectState.TITLE_IN}
+                    timeout={{ enter: 300 }}
+                    onEntered={() => setState(ProjectState.PARAGRAPH_IN)}
                     className="h2"
                     tag="h1"
                     text={title}
                   />
                   <TextAnim
-                    appear={true}
-                    inProp={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
-                    timeout={5000}
+                    inProp={state >= ProjectState.PARAGRAPH_IN}
+                    timeout={{ enter: 300 }}
                     tag="p"
                     text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
                     letterSpeedIn={0.01}
