@@ -40,7 +40,7 @@ const ProjectPageTemplate= ({ data }) => {
         return (
           <Layout className={`page-transition-${transitionStatus}`}>
             {/* Mast */}
-            <StyledMast style={{ height: height }}>
+            <StyledMast style={height ? { height: height } : {}}>
               <FixedBackground>
                 <div className="overlay" />
                 <BackgroundVideo video={get(video, 'asset.url')} poster={get(poster, 'asset.url')} />
@@ -54,7 +54,7 @@ const ProjectPageTemplate= ({ data }) => {
                   <img src="/play.svg" />
                 </PlayButton>
               </FadeAnim>
-              <Content>
+              <Content style={height ? { height: height } : {}}>
                 <div className="inner">
                   <TextAnim
                     inProp={state >= ProjectState.SUBTITLE_IN}
@@ -159,7 +159,6 @@ const Content = styled.div`
   justify-content: center;
   text-align: center;
   height: 100vh;
-  height: -webkit-fill-available;
   position: relative;
   z-index: 1;
 
