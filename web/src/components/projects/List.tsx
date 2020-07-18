@@ -75,39 +75,35 @@ const Grid = styled.div`
   display: flex;
   flex-flow: row wrap;
   padding: 30px 45px 50px;
+  justify-content: center;
 
   @media ${breakpoints.phoneOnly} {
     padding: 2em 15px 2em;
   }
 `
 const GridItem = styled.div`
-  flex: 100% 0 0;
   padding: 15px;
+  
+  // @media ${breakpoints.tabletLandscapeUp} {
+  //   &:nth-child(odd) {
+  //     margin-left: auto;
 
-  @media ${breakpoints.tabletLandscapeUp} {
-    &:nth-child(odd) {
-      margin-left: auto;
+  //     .card {
+  //       margin-left: auto;
+  //     }
+  //   }
 
-      .card {
-        margin-left: auto;
-      }
-    }
+  //   &:nth-children(even) {
+  //     margin-right: auto;
 
-    &:nth-children(even) {
-      margin-right: auto;
-
-      .card {
-        margin-right: auto;
-      }
-    }
-  }
+  //     .card {
+  //       margin-right: auto;
+  //     }
+  //   }
+  // }
 
   @media ${breakpoints.phoneOnly} {
     padding: 15px 0;
-  }
-
-  @media ${breakpoints.tabletLandscapeUp} {
-    flex: calc(50% - 30px) 0 0;
   }
 `
 export default ProjectList
