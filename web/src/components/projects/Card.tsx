@@ -53,7 +53,7 @@ const ProjectCard: FC<T> = ({ data }) => {
 
 const Card = styled.div`
   text-align: left;
-  max-width: 650px;
+  max-width: 750px;
 `
 const Content = styled.div`
   padding-left: 1em;
@@ -72,7 +72,7 @@ const Content = styled.div`
 const Visual = styled.div`
   margin-bottom: 1rem;
   position: relative;
-  padding-top: 75%;
+  padding-top: 60%;
   
   .poster, video {
     position: absolute;

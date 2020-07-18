@@ -12,7 +12,7 @@ const Logo: FC<T> = () => {
   return (
     <Link to="/">
       <Video autoPlay playsInline muted>
-        <source src="/logo.webm" type="video/webm" />
+        <source src="/logo4.webm" type="video/webm" />
       </Video>
     </Link>
   );
