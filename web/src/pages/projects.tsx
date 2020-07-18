@@ -82,6 +82,11 @@ export const query = graphql`
               url
             }
           }
+          video {
+            asset {
+              url
+            }
+          }
           title
           id
         }

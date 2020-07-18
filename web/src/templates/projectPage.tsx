@@ -296,6 +296,11 @@ export const query = graphql`
           url
         }
       }
+      poster {
+        asset {
+          url
+        }
+      }
       id
       _rawOverview
     }
@@ -308,6 +313,11 @@ export const query = graphql`
           title
           id
           poster {
+            asset {
+              url
+            }
+          }
+          video {
             asset {
               url
             }

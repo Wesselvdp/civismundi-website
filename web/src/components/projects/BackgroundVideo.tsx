@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 type T = any
 
-const BackgroundVideo: FC<T> = ({ video }) => {
+const BackgroundVideo: FC<T> = ({ video, poster }) => {
   return (
     <VideoContainer>
-      <video playsInline autoPlay muted loop>
+      <video poster={poster} playsInline autoPlay muted loop>
         <source src={video} type="video/mp4" />
       </video>
     </VideoContainer>
