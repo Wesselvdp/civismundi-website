@@ -87,12 +87,21 @@ const GridItem = styled.div`
   @media ${breakpoints.tabletLandscapeUp} {
     &:nth-child(odd) {
       margin-left: auto;
+
+      .card {
+        margin-left: auto;
+      }
     }
 
     &:nth-children(even) {
       margin-right: auto;
+
+      .card {
+        margin-right: auto;
+      }
     }
   }
+
   @media ${breakpoints.phoneOnly} {
     padding: 15px 0;
   }

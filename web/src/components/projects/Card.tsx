@@ -31,7 +31,7 @@ const ProjectCard: FC<T> = ({ data }) => {
 
   return (
     <Link to={`/projects/${slug.current}`}>
-      <Card onMouseEnter={() => _onMouseEnter()} onMouseLeave={() => _onMouseLeave()}>
+      <Card className="card" onMouseEnter={() => _onMouseEnter()} onMouseLeave={() => _onMouseLeave()}>
         <Visual>
           <div className={`poster ${hidePoster ? 'hide' : ''}`} style={{ backgroundImage: `url(${poster})` }}></div>
           <video ref={ref} muted loop>
@@ -54,7 +54,6 @@ const ProjectCard: FC<T> = ({ data }) => {
 const Card = styled.div`
   text-align: left;
   max-width: 650px;
-  margin: 0 auto;
 `
 const Content = styled.div`
   padding-left: 1em;
