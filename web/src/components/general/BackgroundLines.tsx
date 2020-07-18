@@ -1,38 +1,52 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 import { TextAnim } from '@components/animations'
 
-const BackgroundLines = ({ subtitle, title, content }) => (
-  <Wrapper>
-    <img src="/lines-circle.svg" />
-    <TextAnim
-      appear={true}
-      inProp={true}
-      timeout={5000}
-      className="subtitle"
-      tag="h2"
-      text={subtitle}
-    />
-    <TextAnim
-      appear={true}
-      inProp={true}
-      timeout={5000}
-      className="h2"
-      tag="h1"
-      text={title}
-    />
-    <TextAnim
-      appear={true}
-      inProp={true}
-      timeout={5000}
-      tag="p"
-      text={content}
-      letterSpeedIn={0.01}
-    />
-  </Wrapper>
-)
+export enum LineState {
+  LOADING = 1,
+  SUBTITLE_IN = 2,
+  TITLE_IN = 3,
+  PARAGRAPH_IN = 4
+} 
+
+const BackgroundLines = ({ subtitle, title, content }) => {
+  const [state, setState] = useState(LineState.LOADING)
+
+  useEffect(() => {
+    setState(LineState.SUBTITLE_IN)
+  }, [])
+
+  return (
+    <Wrapper>
+      <img src="/lines-circle.svg" />
+      <TextAnim
+        inProp={state >= LineState.SUBTITLE_IN}
+        timeout={{ enter: 300 }}
+        onEntered={() => setState(LineState.TITLE_IN)}
+        className="subtitle"
+        tag="h2"
+        text={subtitle}
+      />
+      <TextAnim
+        inProp={state >= LineState.TITLE_IN}
+        timeout={{ enter: 300 }}
+        onEntered={() => setState(LineState.PARAGRAPH_IN)}
+        className="h2"
+        tag="h1"
+        text={title}
+      />
+      <TextAnim
+        inProp={state >= LineState.PARAGRAPH_IN}
+        timeout={{ enter: 300 }}
+        tag="p"
+        text={content}
+        letterSpeedIn={0.01}
+      />
+    </Wrapper>
+  )
+}
 
 export default BackgroundLines
 
