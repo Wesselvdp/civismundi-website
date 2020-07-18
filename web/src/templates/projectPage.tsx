@@ -12,6 +12,9 @@ import { BackgroundVideo, ProjectList } from '@components/projects'
 import { Layout } from '@components/general'
 import { TextAnim, FadeAnim } from '@components/animations'
 
+// Hooks
+import useWindowSize from '@hooks/useWindowSize'
+
 export enum ProjectState {
   LOADING = 1,
   SUBTITLE_IN = 2,
@@ -28,6 +31,8 @@ const ProjectPageTemplate= ({ data }) => {
     setState(ProjectState.SUBTITLE_IN)
   }, [])
 
+  const [width, height] = useWindowSize()
+
   return (
     <TransitionState>
        {({ transitionStatus }) => {
@@ -35,7 +40,7 @@ const ProjectPageTemplate= ({ data }) => {
         return (
           <Layout className={`page-transition-${transitionStatus}`}>
             {/* Mast */}
-            <StyledMast>
+            <StyledMast style={{ height: height }}>
               <FixedBackground>
                 <div className="overlay" />
                 <BackgroundVideo video={get(video, 'asset.url')} poster={get(poster, 'asset.url')} />
