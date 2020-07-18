@@ -40,14 +40,15 @@ const Page = styled.div`
   padding-top: 4em;
   min-height: 100vh;
   position: relative;
-  
-  @media ${breakpoints.tabletLandscapeUp} {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media ${breakpoints.phoneOnly} {
+    display: block;
     padding-top: 3em;
   }
 `
