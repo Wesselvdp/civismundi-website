@@ -18,18 +18,14 @@ const ProjectCard: FC<T> = ({ data }) => {
   const [hidePoster, setHidePoster] = useState(false)
   
   const _onMouseEnter = () => {
-    if (!ref.current) return
-
     setHidePoster(true)
-    ref.current.play()
+    if (ref.current) ref.current.play()
   }
 
   const _onMouseLeave = () => {
-    if (!ref.current) return
-
     setHidePoster(false)
     setTimeout(() => {
-      ref.current.pause()
+      if (ref.current) ref.current.pause()
     }, 500)
   }
 
