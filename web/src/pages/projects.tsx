@@ -34,12 +34,13 @@ const ProjectsPage = ({ data }: PageProps) => {
           subtitle="Projects"
           title="Lorem ipsum dolor sit amet"
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
-        />
-        <Select
-          options={options}
-          value={director}
-          onChange={(value) => setDirector(value)}
-        />
+        >
+          <Select
+            options={options}
+            value={director}
+            onChange={(value) => setDirector(value)}
+          />
+        </BackgroundLines>
         <ProjectList
           projects={data.allSanityProject}
           page={page}
@@ -58,14 +59,6 @@ const Page = styled.div`
 
   @media ${breakpoints.phoneOnly} {
     padding-top: 3em;
-  }
-
-  select {
-    margin-top: 25px;
-
-    @media ${breakpoints.phoneOnly} {
-      margin-top: 0;
-    }
   }
 `
 

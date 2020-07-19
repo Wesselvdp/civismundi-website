@@ -11,7 +11,7 @@ export enum LineState {
   PARAGRAPH_IN = 4
 } 
 
-const BackgroundLines = ({ subtitle, title, content }) => {
+const BackgroundLines = ({ children, subtitle, title, content }) => {
   const [state, setState] = useState(LineState.LOADING)
 
   useEffect(() => {
@@ -44,6 +44,9 @@ const BackgroundLines = ({ subtitle, title, content }) => {
         text={content}
         letterSpeedIn={0.01}
       />
+      <div class="children">
+        {children}
+      </div>
     </Wrapper>
   )
 }
@@ -60,7 +63,7 @@ const Wrapper = styled.div`
     margin: 3em auto;
   }
 
-  img {
+  & > img {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -86,5 +89,17 @@ const Wrapper = styled.div`
         font-size: 18px;
       }
     }
+  }
+
+  .children {
+    margin-top: 50px;
+
+    @media ${breakpoints.phoneOnly} {
+      margin-top: 0;
+    }
+  }
+
+  select {
+    background-color: #000;
   }
 `

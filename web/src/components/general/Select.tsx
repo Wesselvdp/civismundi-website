@@ -39,5 +39,4 @@ const StyledSelect = styled.select`
   text-transform: uppercase;
   color: #fff;
   font-family: 'Druk Wide Bold';
-  margin-top: 0 !important;
 `
