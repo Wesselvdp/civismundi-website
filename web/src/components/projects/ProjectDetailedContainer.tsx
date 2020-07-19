@@ -10,6 +10,7 @@ import { useSpring, animated as a } from 'react-spring'
 // Components
 import { BackgroundVideo, ProjectList } from '@components/projects'
 import { TextAnim, FadeAnim } from '@components/animations'
+import useWindowSize from '@hooks/useWindowSize'
 
 export enum ProjectState {
   LOADING = 1,
@@ -32,17 +33,14 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
 
   useEffect(() => {
     if (transitionStatus === 'entered') setState(ProjectState.SUBTITLE_IN)
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0,25)
+    }
   }, [])
 
   useEffect(() => {
     if (transitionStatus === 'entered') setState(ProjectState.SUBTITLE_IN)
   }, [transitionStatus])
-
-  useLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0,1)
-    }
-  }, [])
 
   return (
     <a.div style={{ opacity }}>
@@ -255,7 +253,7 @@ const Content = styled.div`
     padding: 15px;
 
     @media ${breakpoints.phoneOnly} {
-      padding: 15px 15px 4em;
+      padding: 15px 15px 8em;
     }
   
     p {
@@ -360,7 +358,7 @@ const FixedBackground = styled.div`
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   .overlay {
     position: absolute;
