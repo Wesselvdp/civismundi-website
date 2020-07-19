@@ -6,6 +6,7 @@ import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
 import { TransitionState } from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
+import ModalVideo from 'react-modal-video'
 
 // Components
 import { BackgroundVideo, ProjectList } from '@components/projects'
@@ -25,7 +26,9 @@ export enum ProjectState {
 
 const ProjectPageTemplate= ({ data }) => {
   const { title, id, video, poster, _rawOverview } = data.sanityProject
+
   const [state, setState] = useState(ProjectState.LOADING)
+  const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
     setState(ProjectState.SUBTITLE_IN)
@@ -37,15 +40,23 @@ const ProjectPageTemplate= ({ data }) => {
     }
   }, [])
 
-  const { size, outerSize } = useWindowSize()
-
   return (
     <TransitionState>
        {({ transitionStatus }) => {
 
         return (
           <Layout className={`page-transition-${transitionStatus}`}>
-            {/* Mast */}
+            <ModalWrapper className={videoOpen ? 'open' : ''}>
+              <ModalVideo
+                channel='vimeo'
+                isOpen={videoOpen}
+                videoId="397128195"
+                onClose={() => openVideo(false)}
+                width={1000}
+                height={1000}
+              />
+              <img className="modal-close" src="/close.png" onClick={() => openVideo(false)} /> 
+            </ModalWrapper>
             <StyledMast>
               <FixedBackground>
                 <div className="overlay" />
@@ -56,7 +67,7 @@ const ProjectPageTemplate= ({ data }) => {
                 appear={true}
                 in={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
               >
-                <PlayButton className="mobile">
+                <PlayButton className="mobile" onClick={() => openVideo(true)}>
                   <img src="/play.svg" />
                 </PlayButton>
               </FadeAnim>
@@ -90,7 +101,7 @@ const ProjectPageTemplate= ({ data }) => {
                     appear={true}
                     in={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
                   >
-                    <PlayButton className="desktop">
+                    <PlayButton className="desktop" onClick={() => openVideo(true)}>
                       <img src="/play.svg" />
                     </PlayButton>
                   </FadeAnim>
@@ -138,7 +149,71 @@ const StyledMast = styled.div`
   position: relative;
 `
 
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.5s ease-in-out;
+
+  img.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    height: 75px;
+    width: 75px;
+    opacity: 0;
+    color: #fff;
+    transition: opacity 0.5s ease-in-out;
+    cursor: pointer;
+
+    @media ${breakpoints.phoneOnly} {
+      top: 5px;
+      right: 0px;
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  &.open {
+    background-color: rgba(0, 0, 0, 0.75);
+    pointer-events: initial;
+
+    img.modal-close {
+      opacity: 1;
+    }
+  }
+
+  .modal-video-movie-wrap {
+    padding-bottom: 0 !important;
+  }
+
+  .modal-video, .modal-video-body, .modal-video-inner, .modal-video-movie-wrap {
+    height: 100%;
+    width: 100%;
+    outline: 0;
+  }
+
+  .modal-video-close-btn {
+    display: none !important;
+  }
+
+  iframe {
+    height: 1200px;
+    width: 1200px;
+    max-width: 90%;
+    max-height: 90%;
+  }
+`
+
 const PlayButton = styled.div`
+  z-index: 100;
+
   &.mobile {
     position: absolute;
     top: 50%;
@@ -156,6 +231,10 @@ const PlayButton = styled.div`
     @media ${breakpoints.phoneOnly} {
       display: none;
     }
+  }
+
+  img:hover {
+    cursor: pointer;
   }
 `
 

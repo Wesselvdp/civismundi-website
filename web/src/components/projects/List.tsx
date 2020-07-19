@@ -28,19 +28,17 @@ const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, director, 
       ? noNodes.filter(({ id }) => id !== blockId)
       : noNodes
 
-    console.log('filtered', filtered)
-    console.log('director', director)
-    filtered = director !== 'all'
+    // Filter on director
+    filtered = director && director !== 'all'
       ? filtered.filter(({ director: directors }) => directors.some(d => d.id === director))
       : filtered
-
-    setProjectsCount(filtered.length)
 
     // slice if limit is defined
     const sliced: Project[] = perPage
       ? filtered.slice(0, ((page || 0) + 1) * perPage)
       : filtered
 
+    setProjectsCount(filtered.length)
     setProjectsVisible(sliced)
   }, [projects, page, perPage, director])
 

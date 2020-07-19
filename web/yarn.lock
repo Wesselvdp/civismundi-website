@@ -15852,6 +15852,13 @@ react-merge-refs@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-merge-refs/-/react-merge-refs-1.0.0.tgz#d6b297b9a62a266460a3c0d8b9d920731d8bbe63"
   integrity sha512-VkvWuCR5VoTjb+VYUcOjkFo66HDv1Hw8VjKcwQtWr2lJnT8g7epRRyfz8+Zkl2WhwqNeqR0gIe0XYrBa9ePeXg==
 
+react-modal-video@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/react-modal-video/-/react-modal-video-1.2.5.tgz#5f00d732e0808050715dd0e33a8b618375f6ed14"
+  integrity sha512-wUqbQd4lWBe/g+eANgMY8070BrUZJU/VfHjMYoBJGJRp1g3fPfsr5d7gbeiCKvtn171jJyr8tRlKcBQ3GHdglA==
+  dependencies:
+    react-transition-group "^2.2.1"
+
 react-moment-proptypes@^1.6.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-moment-proptypes/-/react-moment-proptypes-1.7.0.tgz#89881479840a76c13574a86e3bb214c4ba564e7a"
@@ -16036,7 +16043,7 @@ react-three-fiber@^4.0.19:
     tiny-emitter "^2.1.0"
     utility-types "^3.10.0"
 
-react-transition-group@^2.5.0:
+react-transition-group@^2.2.1, react-transition-group@^2.5.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"
   integrity sha512-+HzNTCHpeQyl4MJ/bdE0u6XRMe9+XG/+aL4mCxVN4DnPBQ0/5bfHWPDuOZUzYdMj94daZaZdCCc1Dzt9R/xSSg==
