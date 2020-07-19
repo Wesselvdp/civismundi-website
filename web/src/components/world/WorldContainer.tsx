@@ -263,4 +263,20 @@ const Page = styled.div`
       transition: opacity 2s ease-in;
     }
   }
+
+  @media ${breakpoints.phoneOnly} {
+    will-change: opacity, transform;
+
+    &.page-transition {
+      &-entered {
+        transform: scale(1);
+      }
+
+      &-exiting {
+        opacity: 0;
+        transform: scale(3);
+        transition: transform 2s ease-in-out, opacity 1s ease-in-out 0.5s;
+      }
+    }
+  }
 `

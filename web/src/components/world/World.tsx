@@ -21,11 +21,20 @@ const scale = {
 }
 
 const moveToProject = (curr, project) => {
-  console.log('moving to porject');
+  if (isMobile) {
+    const coords = { 
+      lat: get(project, 'node.location.lat'),
+      lng: get(project, 'node.location.lng'),
+      alt: 0.05
+    }
+  
+    curr.pointOfView(coords, 1000)
+    return
+  }
 
   const cFrom = curr.camera().position
   const cTo = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
-  const cToAfter = curr.getCoords(get(project, 'node.location.lat') - 20, get(project, 'node.location.lng'), 0.5)
+  const cToAfter = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
 
   curr.camera().target = null
   curr.camera().rotation.y = -90 * Math.PI / 180
