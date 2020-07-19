@@ -179,7 +179,7 @@ const ModalWrapper = styled.div`
   }
 
   &.open {
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.85);
     pointer-events: initial;
 
     img.modal-close {
