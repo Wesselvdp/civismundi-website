@@ -15806,6 +15806,13 @@ react-hotkeys@2.0.0:
   dependencies:
     prop-types "^15.6.1"
 
+react-in-viewport@^1.0.0-alpha.14:
+  version "1.0.0-alpha.14"
+  resolved "https://registry.yarnpkg.com/react-in-viewport/-/react-in-viewport-1.0.0-alpha.14.tgz#7f75c44ac6731e5bd9bef99a67834b6d84eda0de"
+  integrity sha512-kKjfWogLy3T8xtk0lWJVWGHxtjScEOonfa11swYkGC3ISxl9C/7Mvi+NORw5EctfCHR9oQM5W47DnRQK43iK1g==
+  dependencies:
+    hoist-non-react-statics "^3.0.0"
+
 react-input-autosize@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-input-autosize/-/react-input-autosize-2.2.2.tgz#fcaa7020568ec206bc04be36f4eb68e647c4d8c2"

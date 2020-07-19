@@ -1,37 +1,43 @@
-import React, { FC, useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { get } from 'lodash'
+import handleViewport from 'react-in-viewport';
 
 import { breakpoints } from '@utils/breakpoints'
 
-type T = {
-  data: Project
-}
 
-const ProjectCard: FC<T> = ({ data }) => {
+const ProjectCard = ({ data, forwardedRef, allViewport, id }) => {
   const { title, slug } = data
   const poster = get(data, 'poster.asset.url')
   const video = get(data, 'video.asset.url')
 
   const ref = useRef()
   const [hidePoster, setHidePoster] = useState(false)
-  
-  const _onMouseEnter = () => {
+
+  const playVideo = (pause = false) => {
     setHidePoster(true)
     if (ref.current) ref.current.play()
   }
 
-  const _onMouseLeave = () => {
+  const pauseVideo = () => {
     setHidePoster(false)
-    setTimeout(() => {
-      if (ref.current) ref.current.pause()
-    }, 500)
+    if (ref.current) ref.current.pause()
   }
 
+  useEffect(() => {
+    if (allViewport && allViewport.length) {
+      if (id === allViewport[Math.max(0, Math.floor(allViewport.length / 2))]) {
+        playVideo()
+      } else {
+        pauseVideo()
+      }
+    }
+  }, [allViewport])
+
   return (
-    <Link to={`/projects/${slug.current}`}>
-      <Card className="card" onMouseEnter={() => _onMouseEnter()} onMouseLeave={() => _onMouseLeave()}>
+    <Link to={`/projects/${slug.current}`} ref={forwardedRef}>
+      <Card className="card" onMouseEnter={() => playVideo()} onMouseLeave={() => pauseVideo()}>
         <Visual>
           <div className={`poster ${hidePoster ? 'hide' : ''}`} style={{ backgroundImage: `url(${poster})` }}></div>
           <video ref={ref} muted loop>
@@ -50,6 +56,8 @@ const ProjectCard: FC<T> = ({ data }) => {
     </Link>
   )
 }
+
+export default handleViewport(ProjectCard)
 
 const Card = styled.div`
   text-align: left;
@@ -97,5 +105,3 @@ const Visual = styled.div`
     }
   }
 `
-
-export default ProjectCard

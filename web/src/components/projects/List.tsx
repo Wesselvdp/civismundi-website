@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { breakpoints } from '@utils/breakpoints'
 
+import { breakpoints } from '@utils/breakpoints'
 import { ProjectCard } from '@components/projects'
 import { Button } from '@components/general'
 // import console = require('console');
@@ -18,6 +18,7 @@ type T = {
 const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, blockId }) => {
   const [projectsVisible, setProjectsVisible] = useState<Project[]>([])
   const [projectsCount, setProjectsCount] = useState<number>(0)
+  const [inViewport, setInViewport] = useState([])
 
   useEffect(() => {
     const noNodes: Project[] = projects.edges.map(p => p.node)
@@ -44,7 +45,7 @@ const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, blockId })
       <Grid>
         {projectsVisible.map((p: Project) => (
           <GridItem key={p.id}>
-            <ProjectCard data={p} />
+            <ProjectCard id={p.id} data={p} allViewport={inViewport} onLeaveViewport={() => setInViewport(inViewport.filter(n => n !== p.id))} onEnterViewport={() => setInViewport([...inViewport, p.id])} />
           </GridItem>
         ))}
       </Grid>
