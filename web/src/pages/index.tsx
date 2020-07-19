@@ -15,7 +15,7 @@ type PageProps = {
 
 const IndexPage = ({ data }: PageProps) => {
   return (
-    <Layout>
+    <Layout style={{ overflow: 'hidden', height: '100vh' }}>
       <TransitionState>
         {({ transitionStatus }) => {
           return (

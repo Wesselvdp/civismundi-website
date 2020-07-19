@@ -5,11 +5,11 @@ import Navigation from './Navigation'
 
 type T = any
 
-const Layout: FC<T> = ({ children, className }) => {
+const Layout: FC<T> = ({ children, className, style }) => {
   return (
     <>
       <Navigation />
-      <Main className={className}>{children}</Main>
+      <Main style={style} className={className}>{children}</Main>
     </>
   )
 }
