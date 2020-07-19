@@ -21,20 +21,51 @@ export default {
       }
     },
     {
-      name: 'city',
-      title: 'City',
-      type: 'string'
+      name: 'director',
+      title: 'Directors',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'director' }]
+        }
+      ]
     },
+    {
+      name: 'awards',
+      title: 'Awards & Festivals',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'award' }]
+        }
+      ]
+    },
+
     {
       name: 'overview',
       title: 'Overview',
       type: 'array',
       of: [{ type: 'block' }]
     },
+
     {
-      title: 'Launchpad Location',
+      title: 'Location',
       name: 'location',
-      type: 'geopoint'
+      type: 'object',
+      fields: [
+        {
+          name: 'city',
+          title: 'City',
+          type: 'string'
+        },
+        {
+          title: 'Coordinates',
+          name: 'coords',
+          type: 'geopoint'
+        }
+      ]
     },
 
     {
