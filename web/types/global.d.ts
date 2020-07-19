@@ -11,6 +11,7 @@ interface Project {
     lat: number
     lng: number
   }
+  director?: any,
   _rawOverview: any
 }
 

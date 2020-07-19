@@ -15,19 +15,26 @@ type T = {
   onMore?: Function,
 }
 
-const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, blockId }) => {
+const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, director, blockId }) => {
   const [projectsVisible, setProjectsVisible] = useState<Project[]>([])
   const [projectsCount, setProjectsCount] = useState<number>(0)
   const [inViewport, setInViewport] = useState([])
 
   useEffect(() => {
     const noNodes: Project[] = projects.edges.map(p => p.node)
-    setProjectsCount(noNodes.length)
 
     // Filter if blocked is defined
-    const filtered: Project[] = blockId
+    let filtered: Project[] = blockId
       ? noNodes.filter(({ id }) => id !== blockId)
       : noNodes
+
+    console.log('filtered', filtered)
+    console.log('director', director)
+    filtered = director !== 'all'
+      ? filtered.filter(({ director: directors }) => directors.some(d => d.id === director))
+      : filtered
+
+    setProjectsCount(filtered.length)
 
     // slice if limit is defined
     const sliced: Project[] = perPage
@@ -35,7 +42,7 @@ const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, blockId })
       : filtered
 
     setProjectsVisible(sliced)
-  }, [projects, page, perPage])
+  }, [projects, page, perPage, director])
 
   return (
     <Container>

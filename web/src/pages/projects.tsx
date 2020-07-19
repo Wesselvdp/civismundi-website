@@ -1,6 +1,7 @@
 import { graphql } from 'gatsby'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { uniqBy } from 'lodash'
 
 import { Layout, SEO, BackgroundLines, Select, Button } from '@components/general'
 import { ProjectList } from '@components/projects'
@@ -15,9 +16,7 @@ type PageProps = {
 }
 
 const options = [
-  { title: 'All directors', value: 'all' },
-  { title: 'Director #1', value: 'director-1' },
-  { title: 'Director #2', value: 'director-2' }
+  { title: 'All directors', value: 'all' }
 ]
 
 const perPage = 4
@@ -25,6 +24,25 @@ const perPage = 4
 const ProjectsPage = ({ data }: PageProps) => {
   const [page, setPage] = useState(0)
   const [director, setDirector] = useState('all')
+  const [selectOptions, setSelectOptions] = useState(options)
+
+  useEffect(() => {
+    const directorsUnique = uniqBy(
+      [].concat(...data.allSanityProject.edges.map(
+        p => p.node.director.map(
+          director => ({ 
+            title: director.name,
+            value: director.id 
+          })
+        )
+      )), director => director.value)
+
+    setSelectOptions([...options, ...directorsUnique])
+  }, [])
+
+  useEffect(() => {
+    setPage(0)
+  }, [director])
 
   return (
     <Layout>
@@ -36,7 +54,7 @@ const ProjectsPage = ({ data }: PageProps) => {
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
         >
           <Select
-            options={options}
+            options={selectOptions}
             value={director}
             onChange={(value) => setDirector(value)}
           />
@@ -46,6 +64,7 @@ const ProjectsPage = ({ data }: PageProps) => {
           page={page}
           perPage={perPage}
           onMore={() => setPage(page + 1)}
+          director={director}
         />
       </Page>
     </Layout>
@@ -79,6 +98,10 @@ export const query = graphql`
             asset {
               url
             }
+          }
+          director {
+            name,
+            id
           }
           title
           id
