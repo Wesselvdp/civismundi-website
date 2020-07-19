@@ -31,7 +31,7 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
       to={`/projects/${slug}`}
       exit={{ 
         delay: 0,
-        length: 3,
+        length: 2,
         zIndex: 1,
         trigger: () => moveToProject()
       }}
