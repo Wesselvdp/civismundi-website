@@ -38,33 +38,33 @@ const moveToProject = (curr, project) => {
 
   curr.camera().target = null
   // curr.camera().rotation.y = -90 * Math.PI / 180
-  const lookAtPoint = new TWEEN.Tween(cFrom)
-    .to(cTo, 2000)
-    .onUpdate(() => {
-      curr.camera().position.set(
-        cFrom.x,
-        cFrom.y,
-        cFrom.z
-      )
-      curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
-    })
-    .start()
+  // const lookAtPoint = new TWEEN.Tween(cFrom)
+  //   .to(cTo, 2000)
+  //   .onUpdate(() => {
+  //     curr.camera().position.set(
+  //       cFrom.x,
+  //       cFrom.y,
+  //       cFrom.z
+  //     )
+  //     curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
+  //   })
+  //   .start()
   
   cFrom.rotationY = curr.camera().rotation.y
   cToAfter.rotationY -= -90 * Math.PI / 180
-  const zoomAtGlobe = new TWEEN.Tween(cFrom).to(cToAfter, 2000).onUpdate(() => {
+  const zoomAtGlobe = new TWEEN.Tween(cFrom).to(cToAfter, 3000).onUpdate(() => {
     curr.camera().rotation.y -= cFrom.rotationY
     curr.camera().position.set(
       cFrom.x,
       cFrom.y,
       cFrom.z
     )
-    curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
+    // curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
   }).onComplete(() => {
     // curr.controls().target = new THREE.Vector3(0, 0, 0)
-  })
+  }).start()
 
-  lookAtPoint.chain(zoomAtGlobe)
+  // lookAtPoint.chain(zoomAtGlobe)
   
 }
 
@@ -302,6 +302,7 @@ const Wrapper = styled.div`
 
   & > div > div > div > div {
     height: 100vh;
+    height: fill-available;
   }
 `
 export default World

@@ -16,7 +16,7 @@ const Layout: FC<T> = ({ children, className, style }) => {
 
 const Main = styled.main`
   min-height: 100vh;
-  min-height: -webkit-fill-available;
+  min-height: fill-available;
   overflow-x: hidden;
 
   &.page-transition {
