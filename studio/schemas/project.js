@@ -51,21 +51,14 @@ export default {
     },
 
     {
-      title: 'Location',
+      name: 'city',
+      title: 'City',
+      type: 'string'
+    },
+    {
+      title: 'Coordinates',
       name: 'location',
-      type: 'object',
-      fields: [
-        {
-          name: 'city',
-          title: 'City',
-          type: 'string'
-        },
-        {
-          title: 'Coordinates',
-          name: 'coords',
-          type: 'geopoint'
-        }
-      ]
+      type: 'geopoint'
     },
 
     {

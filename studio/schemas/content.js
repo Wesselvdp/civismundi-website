@@ -7,39 +7,15 @@ export default {
   icon,
   fields: [
     {
-      title: 'Home',
-      name: 'home',
-      type: 'object',
-      fields: [
-        {
-          name: 'intro',
-          title: 'intro',
-          type: 'text',
-          description: 'The animated intro text on the landing page'
-        }
-      ]
+      name: 'landingIntro',
+      title: 'Landing intro',
+      type: 'text',
+      description: 'The animated intro text on the landing page'
     },
     {
       title: 'About',
       name: 'about',
-      type: 'object',
-      fields: [
-        {
-          name: 'styledContentBlock',
-          title: 'Content',
-          type: 'styledContentBlock'
-        },
-        {
-          name: 'phone',
-          title: 'Phone',
-          type: 'string'
-        },
-        {
-          name: 'email',
-          title: 'Email',
-          type: 'string'
-        }
-      ]
+      type: 'aboutContent'
     }
   ]
 }

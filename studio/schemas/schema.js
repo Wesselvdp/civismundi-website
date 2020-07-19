@@ -10,6 +10,7 @@ import director from './director'
 import award from './award'
 import content from './content'
 import styledContentBlock from './contentTypes/styledContentBlock'
+import aboutContent from './contentTypes/aboutContent'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -17,6 +18,7 @@ export default createSchema({
   types: schemaTypes.concat([
     project,
     director,
+    aboutContent,
     styledContentBlock,
     content,
     award,
