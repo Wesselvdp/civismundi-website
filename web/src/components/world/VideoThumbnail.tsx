@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 import TransitionLink from 'gatsby-plugin-transition-link'
@@ -7,10 +7,24 @@ import { get } from 'lodash'
 import { TextAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
 
+export enum ThumbnailState {
+  OFF = 1,
+  VIDEO_IN = 2,
+  SUBTITLE_IN = 3,
+  TITLE_IN = 4,
+  C2A_IN = 5
+}
 const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
   const video = get(project, 'node.video.asset.url')
   const poster = get(project, 'node.poster.asset.url')
   const slug = get(project, 'node.slug.current')
+
+  const [state, setState] = useState(ThumbnailState.OFF)
+
+  useEffect(() => {
+    if (!project) setState(ThumbnailState.OFF)
+    else setState(ThumbnailState.VIDEO_IN)
+  }, [project])
 
   return (
     <TransitionLink
@@ -23,8 +37,13 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
       }}
       entry={{ delay: 0, length: 1, zIndex: 0 }}
     >
-      <CSSTransition in={project} appear={true} timeout={300} classNames="video">
-        <VideoBox ref={ref} style={position ? { left: position.x, top: position.y } : { opacity: 0 }}>
+      <CSSTransition
+        in={state >= ThumbnailState.VIDEO_IN}
+        timeout={{ enter: 100 }}
+        onEntered={() => setState(ThumbnailState.SUBTITLE_IN)}
+        classNames="video"
+      >
+        <VideoBox ref={ref} style={position ? { left: position.x, top: position.y } : { left: -1000, top: -1000 }}>
           {video && (
             <video id="videoBG" poster={poster} playsInline autoPlay muted loop>
               <source src={video} type="video/mp4" />
@@ -32,24 +51,23 @@ const VideoThumbnail = ({ project, moveToProject, position, ref }) => {
           )}
           <VideoContent>
             <TextAnim
-              inProp={project}
-              timeout={1000}
-              appear={true}
+              inProp={state >= ThumbnailState.SUBTITLE_IN}
+              timeout={{ enter: 200 }}
+              onEntered={() => setState(ThumbnailState.TITLE_IN)}
               tag="h5"
               className="subtitle"
               text="Video direction"
             />
             <TextAnim 
-              inProp={project}
-              timeout={1000}
-              appear={true}
+              inProp={state >= ThumbnailState.TITLE_IN}
+              timeout={{ enter: 200 }}
+              onEntered={() => setState(ThumbnailState.C2A_IN)}
               tag="h4"
               text={get(project, 'node.title', '')}
             />
             <TextAnim 
-              inProp={project}
-              timeout={1000}
-              appear={true}
+              inProp={state >= ThumbnailState.C2A_IN}
+              timeout={{ enter: 200 }}
               tag="p"
               text="VIEW PROJECT"
               className="heading"
