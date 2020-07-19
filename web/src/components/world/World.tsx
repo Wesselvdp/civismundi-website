@@ -37,7 +37,7 @@ const moveToProject = (curr, project) => {
   const cToAfter = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
 
   curr.camera().target = null
-  curr.camera().rotation.y = -90 * Math.PI / 180
+  // curr.camera().rotation.y = -90 * Math.PI / 180
   const lookAtPoint = new TWEEN.Tween(cFrom)
     .to(cTo, 2000)
     .onUpdate(() => {
@@ -298,6 +298,10 @@ const Wrapper = styled.div`
   &.introduction-complete {
     transition: opacity 0.5s cubic-bezier(0.05, 0.66, 0.25, 1);
     opacity: 1;
+  }
+
+  & > div > div > div > div {
+    height: 100vh;
   }
 `
 export default World
