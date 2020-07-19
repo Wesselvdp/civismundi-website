@@ -3,8 +3,8 @@ import React, { FC, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
-import { TransitionState } from 'gatsby-plugin-transition-link'
 import { get } from 'lodash'
+import {useSpring, animated as a} from 'react-spring'
 
 import World from './World'
 import VideoThumbnail from './VideoThumbnail'
@@ -33,16 +33,18 @@ const TUTORIAL_TEXT = [
   'Click on a project to view a project'
 ];
 
-const WorldContainer = () => {
+const WorldContainer = ({ transitionStatus }) => {
   const [state, setState] = useState<StateType>(State.INITIALIZING)
   const [showIntro, setShowIntro] = useState<boolean>(true)
   const [project, setProject] = useState<Project | null>(null)
   const [thumbnailPosition, setThumbnailPosition] = useState<ScreenCoordinates | null>(null)
   const [movingToProject, setMovingToProject] = useState(false)
 
-  useEffect(() => {
-    console.log('state', state);
-  }, [state])
+  const { opacity, transform } = useSpring({
+    opacity: transitionStatus !== 'exiting' ? 1 : 0,
+    transform: transitionStatus !== 'exiting' ? 'scale(1)' : 'scale(3)',
+    config: { mass: 5, tension: 40, friction: 25 }
+  })
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -75,91 +77,85 @@ const WorldContainer = () => {
   `)
 
   return (
-      <TransitionState>
-       {({ transitionStatus }) => {
-    
-        return (
-          <>
-          <Page className={`page-transition-${transitionStatus}`}>
-            <CSSTransition in={state >= State.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
-              <Wrapper>
-                {/* World component*/}
-                <World
-                  className={state > State.INTRODUCTION_COMPLETE ? 'introduction-complete' : ''}
-                  // page state
-                  state={state}
-                  setState={setState}
-                  // projects
-                  projects={data.allSanityProject.edges}
-                  project={project}
-                  setProject={setProject}
-                  // thumbnail
-                  setThumbnailPosition={setThumbnailPosition}
-                  movingToProject={movingToProject}
-                  // intro
-                  setShowIntro={setShowIntro}
-                />
-                {transitionStatus !== 'exiting' && (
-                  <>
-                    <TextAnim
-                      inProp={project}
-                      appear={true}
-                      timeout={1000}
-                      tag="h1"
-                      className="project-title"
-                      text={get(project, 'node.city', get(project, 'node.title', ''))}
-                      unmountOnExit
-                    />
-                    {/* project preview thumbnail */}
-                    <VideoThumbnail 
-                      position={thumbnailPosition} 
-                      project={project}
-                      moveToProject={() => setMovingToProject(true)}
-                    />
-                  </>
-                )}
-              </Wrapper>
-            </CSSTransition>
-        </Page>
-        <ContentContainer>
-          {/* introduction text */}
-          {showIntro && (
-            <TextAnim 
-              inProp={state === State.INTRODUCTION} 
-              onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
-              onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
-              onExited={() => setState(State.TUTORIAL)}
-              timeout={{ enter: 6000, exit: 1000 }}
-              unmountOnExit
-              tag="h1"
-              className="h2 intro"
-              text={INTRO_TEXT}
-              letterSpeedIn={0.01}
+    <a.div style={{ opacity, transform: transform.interpolate(t => t)}}>
+      <Page>
+        <CSSTransition in={state >= State.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
+          <Wrapper>
+            {/* World component*/}
+            <World
+              className={state > State.INTRODUCTION_COMPLETE ? 'introduction-complete' : ''}
+              // page state
+              state={state}
+              setState={setState}
+              // projects
+              projects={data.allSanityProject.edges}
+              project={project}
+              setProject={setProject}
+              // thumbnail
+              setThumbnailPosition={setThumbnailPosition}
+              movingToProject={movingToProject}
+              // intro
+              setShowIntro={setShowIntro}
             />
-          )}
-        </ContentContainer>
-        {transitionStatus !== 'exiting' && (
-          <FooterContainer>
-            <div className="footer--content">
-              <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
-                <>
-                  <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
-                    <img src="/grab-icon.svg" />
-                  </RotateAnim>
-                  {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
-                </>
-              </FadeAnim>
-              <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
-                <>
-                  <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
-                </>
-              </FadeAnim>
-            </div>
-          </FooterContainer>
-        )}
-      </>
-     )}}
-    </TransitionState>
+            {transitionStatus !== 'exiting' && (
+              <>
+                <TextAnim
+                  inProp={project}
+                  appear={true}
+                  timeout={1000}
+                  tag="h1"
+                  className="project-title"
+                  text={get(project, 'node.city', get(project, 'node.title', ''))}
+                  unmountOnExit
+                />
+                {/* project preview thumbnail */}
+                <VideoThumbnail 
+                  position={thumbnailPosition} 
+                  project={project}
+                  moveToProject={() => setMovingToProject(true)}
+                />
+              </>
+            )}
+          </Wrapper>
+        </CSSTransition>
+    </Page>
+    <ContentContainer>
+      {/* introduction text */}
+      {showIntro && (
+        <TextAnim 
+          inProp={state === State.INTRODUCTION} 
+          onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
+          onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
+          onExited={() => setState(State.TUTORIAL)}
+          timeout={{ enter: 6000, exit: 1000 }}
+          unmountOnExit
+          tag="h1"
+          className="h2 intro"
+          text={INTRO_TEXT}
+          letterSpeedIn={0.01}
+        />
+      )}
+    </ContentContainer>
+    {transitionStatus !== 'exiting' && (
+      <FooterContainer>
+        <div className="footer--content">
+          <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
+            <>
+              <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
+                <img src="/grab-icon.svg" />
+              </RotateAnim>
+              {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
+            </>
+          </FadeAnim>
+          <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+            <>
+              <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
+            </>
+          </FadeAnim>
+        </div>
+      </FooterContainer>
+    )}
+    </a.div>
   );
 }
 
@@ -271,6 +267,7 @@ const Page = styled.div`
 
     &-exiting {
       opacity: 0;
+      // transition: opacity 1s ease-in-out;
       transform: scale(3);
       transition: transform 2s ease-in-out, opacity 1s ease-in-out 0.5s;
     }

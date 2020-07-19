@@ -135,7 +135,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   
     const timer = setTimeout(() => { 
       setProject(labelClicked)
-    }, isMobile ? 1000: 2000);
+    }, 1000);
     return () => clearTimeout(timer)
   }, [labelClicked]);
 

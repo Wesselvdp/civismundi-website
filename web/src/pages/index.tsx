@@ -1,5 +1,6 @@
 import { graphql } from 'gatsby'
 import React from 'react'
+import { TransitionState } from 'gatsby-plugin-transition-link'
 
 import { Layout, SEO } from '@components/general'
 import { WorldContainer } from '@components/world'
@@ -15,8 +16,16 @@ type PageProps = {
 const IndexPage = ({ data }: PageProps) => {
   return (
     <Layout>
-      <SEO title="Home" />
-      <WorldContainer />
+      <TransitionState>
+        {({ transitionStatus }) => {
+          return (
+            <>
+              <SEO title="Home" />
+              <WorldContainer transitionStatus={transitionStatus} />
+            </>
+          )
+        }}
+      </TransitionState>
     </Layout>
   )
 }
