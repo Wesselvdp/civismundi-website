@@ -25,15 +25,15 @@ const ProjectCard = ({ data, forwardedRef, allViewport, id }) => {
     if (ref.current) ref.current.pause()
   }
 
-  useEffect(() => {
-    if (allViewport && allViewport.length) {
-      if (id === allViewport[Math.max(0, Math.floor(allViewport.length / 2))]) {
-        playVideo()
-      } else {
-        pauseVideo()
-      }
-    }
-  }, [allViewport])
+  // useEffect(() => {
+  //   if (allViewport && allViewport.length) {
+  //     if (id === allViewport[Math.max(0, Math.floor(allViewport.length / 2))]) {
+  //       playVideo()
+  //     } else {
+  //       pauseVideo()
+  //     }
+  //   }
+  // }, [allViewport])
 
   return (
     <Link to={`/projects/${slug.current}`} ref={forwardedRef}>
