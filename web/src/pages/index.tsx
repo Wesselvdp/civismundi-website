@@ -30,6 +30,7 @@ export const query = graphql`
             current
           }
           title
+          city
           location {
             lat
             lng
