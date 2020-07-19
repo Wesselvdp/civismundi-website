@@ -40,12 +40,6 @@ const WorldContainer = ({ transitionStatus }) => {
   const [thumbnailPosition, setThumbnailPosition] = useState<ScreenCoordinates | null>(null)
   const [movingToProject, setMovingToProject] = useState(false)
 
-  const { opacity, transform } = useSpring({
-    opacity: transitionStatus !== 'exiting' ? 1 : 0,
-    transform: transitionStatus !== 'exiting' ? 'scale(1)' : 'scale(3)',
-    config: { mass: 5, tension: 40, friction: 25 }
-  })
-
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -77,8 +71,8 @@ const WorldContainer = ({ transitionStatus }) => {
   `)
 
   return (
-    <a.div style={{ opacity, transform: transform.interpolate(t => t)}}>
-      <Page>
+    <>
+      <Page className={`page-transition-${transitionStatus}`}>
         <CSSTransition in={state >= State.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
           <Wrapper>
             {/* World component*/}
@@ -155,7 +149,7 @@ const WorldContainer = ({ transitionStatus }) => {
         </div>
       </FooterContainer>
     )}
-    </a.div>
+    </>
   );
 }
 
@@ -257,19 +251,16 @@ const Page = styled.div`
   position: relative;
   height: 100%;
   overflow: hidden;
-  will-change: transform;
+  will-change: opacity;
 
   &.page-transition {
     &-entered {
       opacity: 1;
-      transform: none;
     }
 
     &-exiting {
       opacity: 0;
-      // transition: opacity 1s ease-in-out;
-      transform: scale(3);
-      transition: transform 2s ease-in-out, opacity 1s ease-in-out 0.5s;
+      transition: opacity 2s ease-in;
     }
   }
 `
