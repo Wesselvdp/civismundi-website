@@ -237,13 +237,15 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
       })
 
 			videoRef.current.play();
-      const texture = new THREE.VideoTexture(videoRef.current, THREE.EquirectangularRefractionMapping, THREE.MirroredRepeatWrapping, THREE.MirroredRepeatWrapping);
-      const geometry = new THREE.SphereBufferGeometry( 101, 60, 40 )
-      
-      const material = new THREE.MeshBasicMaterial({ map: texture });
-      const video = new THREE.Mesh( geometry, material );
-      video.position.set(0, 0, 0)
+      const texture = new THREE.VideoTexture(videoRef.current, THREE.EquirectangularReflectionMapping);
+      const geometry = new THREE.CircleGeometry( 75, 60, 40 )
 
+      const material = new THREE.MeshBasicMaterial({ color: '0xffff00', map: texture });
+      const video = new THREE.Mesh( geometry, material );
+      video.position.set(0, 0, 100)
+      // video.lookAt(ref.current.camera())
+
+      console.log(ref.current.camera())
       video.material.transparent = true
       video.material.opacity = 0
 
