@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
+import TWEEN from '@tweenjs/tween.js'
 // import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
@@ -20,13 +21,51 @@ const scale = {
 }
 
 const moveToProject = (curr, project) => {
-  let coords = { 
-    lat: get(project, 'node.location.lat'),
-    lng: get(project, 'node.location.lng'),
-    alt: 0.05
+  if (isMobile) {
+    const coords = { 
+      lat: get(project, 'node.location.lat'),
+      lng: get(project, 'node.location.lng'),
+      alt: 0.05
+    }
+  
+    curr.pointOfView(coords, 1000)
+    return
   }
 
-  curr.pointOfView(coords, isMobile ? 1000 : 2000)
+  const cFrom = curr.camera().position
+  const cTo = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
+  const cToAfter = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
+
+  curr.camera().target = null
+  // curr.camera().rotation.y = -90 * Math.PI / 180
+  // const lookAtPoint = new TWEEN.Tween(cFrom)
+  //   .to(cTo, 2000)
+  //   .onUpdate(() => {
+  //     curr.camera().position.set(
+  //       cFrom.x,
+  //       cFrom.y,
+  //       cFrom.z
+  //     )
+  //     curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
+  //   })
+  //   .start()
+  
+  cFrom.rotationY = curr.camera().rotation.y
+  cToAfter.rotationY -= -90 * Math.PI / 180
+  const zoomAtGlobe = new TWEEN.Tween(cFrom).to(cToAfter, 3000).onUpdate(() => {
+    curr.camera().rotation.y -= cFrom.rotationY
+    curr.camera().position.set(
+      cFrom.x,
+      cFrom.y,
+      cFrom.z
+    )
+    // curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
+  }).onComplete(() => {
+    // curr.controls().target = new THREE.Vector3(0, 0, 0)
+  }).start()
+
+  // lookAtPoint.chain(zoomAtGlobe)
+  
 }
 
 const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro, className }) => {
@@ -259,6 +298,11 @@ const Wrapper = styled.div`
   &.introduction-complete {
     transition: opacity 0.5s cubic-bezier(0.05, 0.66, 0.25, 1);
     opacity: 1;
+  }
+
+  & > div > div > div > div {
+    height: 100vh;
+    height: fill-available;
   }
 `
 export default World

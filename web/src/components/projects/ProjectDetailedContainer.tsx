@@ -26,11 +26,6 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
 
-  const { opacity } = useSpring({
-    opacity: transitionStatus !== 'entering' ? 1 : 0,
-    config: { mass: 1, tension: 20, friction: 25 }
-  })
-
   useEffect(() => {
     if (transitionStatus === 'entered') setState(ProjectState.SUBTITLE_IN)
     if (typeof window !== 'undefined') {
@@ -43,7 +38,7 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
   }, [transitionStatus])
 
   return (
-    <a.div style={{ opacity }}>
+    <>
       <ModalWrapper className={videoOpen ? 'open' : ''}>
         <ModalVideo
           channel='vimeo'
@@ -137,7 +132,7 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
         projects={data.allSanityProject}
         perPage={2}
       />
-    </a.div>
+    </>
   )
 }
 

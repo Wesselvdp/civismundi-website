@@ -70,6 +70,11 @@ export default {
       }
     },
     {
+      name: 'vimeo',
+      title: 'vimeoUrl',
+      type: 'string'
+    },
+    {
       name: 'video',
       title: 'Video',
       type: 'file'
