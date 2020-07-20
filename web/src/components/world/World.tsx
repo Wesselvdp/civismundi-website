@@ -70,7 +70,9 @@ const moveToProject = (curr, project) => {
 
 const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
+
   const ref = useRef();
+  const videoRef = useRef()
 
   // globe
   const [loaded, setLoaded] = useState<boolean | null>(null)
@@ -93,6 +95,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   // custom scene objects
   const [clouds, setClouds] = useState(null);
   const [lightning, setLightning] = useState(null);
+  const [videoGlobe, setVideoGlobe] = useState(null);
 
   // labels
   const [labels, setLabels] = useState([])
@@ -134,6 +137,9 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
         0.05
       )
     )
+    if (videoGlobe) {
+      videoGlobe.material.opacity = 1;
+    }
   }, [project])
 
 
@@ -213,7 +219,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, []);
 
   const _init = (fullMode = true) => {
-    initialize(ref.current, fullMode).then(([_scene, _camera, _controls, _renderer, _clouds, _lightning]) => {
+    initialize(ref.current, fullMode).then(([_scene, _camera, _controls, _renderer, _clouds, _lightning, _video]) => {
       setScene(_scene)
       setCamera(_camera)
       setControls(_controls)
@@ -229,6 +235,20 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
         if (_lightning && _camera) _lightning.position.copy(_camera.position)
         if (!cameraChanged) setCameraChanged(true)
       })
+
+			videoRef.current.play();
+      const texture = new THREE.VideoTexture(videoRef.current);
+      const geometry = new THREE.SphereBufferGeometry( 105, 60, 40 )
+
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const video = new THREE.Mesh( geometry, material );
+      video.position.set(0, 0, 0)
+
+      video.material.transparent = true
+      video.material.opacity = 0
+
+      ref.current.scene().add(video);
+      setVideoGlobe(video)
     })
 
     setInitialized(true)
@@ -286,6 +306,10 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
             }}
             waitForGlobeReady={true}
           />
+
+          <video ref={videoRef} muted loop>
+            <source type="video/mp4" src="/stargazing.mp4" />
+          </video>
         </Wrapper>
      </React.Suspense>
     )
@@ -303,6 +327,10 @@ const Wrapper = styled.div`
   & > div > div > div > div {
     height: 100vh;
     height: fill-available;
+  }
+
+  video {
+    visibility: hidden;
   }
 `
 export default World

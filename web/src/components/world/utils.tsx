@@ -77,6 +77,22 @@ const initDirectionalLight = (curr: any) => {
   })
 }
 
+// const initVideoGlobe = (curr: any) => {
+//   const texture = new THREE.TextureLoader().load('/stargazing.mp4')
+//   const geometry = new THREE.SphereGeometry( 101, 32, 32 );
+//   const material = new THREE.MeshBasicMaterial({ color: 0xffff00, map: texture });
+//   const video = new THREE.Mesh( geometry, material );
+
+//   video.position.set(0, 0, 0)
+
+//   video.material.transparent = true
+//   video.material.opacity = 0
+
+//   curr.scene().add(video);
+
+//   return video;
+// }
+
 export const initialize = (curr: any, fullMode = false) => {
   const scene = curr.scene()
   const camera = curr.camera()
@@ -91,8 +107,9 @@ export const initialize = (curr: any, fullMode = false) => {
   if (isMobile) camera.fov = 75
 
   // custom objects
-  const clouds = fullMode && initClouds(curr) // todo; give back lightning
-  const lightning = fullMode && initDirectionalLight(curr) // todo; give back clouds 
+  const clouds = fullMode && initClouds(curr) 
+  const lightning = fullMode && initDirectionalLight(curr)
+  // const videoGlobe = fullMode && initVideoGlobe(curr)
 
   return Promise.all([
     scene,
@@ -100,7 +117,8 @@ export const initialize = (curr: any, fullMode = false) => {
     controls,
     renderer,
     clouds,
-    lightning
+    lightning,
+    // videoGlobe
   ]);
 }
 
