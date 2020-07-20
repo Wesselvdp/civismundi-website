@@ -256,6 +256,7 @@ const FooterContainer = styled.div`
 const Page = styled.div`
   position: relative;
   height: 100%;
+  max-height: 100vh;
   overflow: hidden;
   will-change: transform;
 
