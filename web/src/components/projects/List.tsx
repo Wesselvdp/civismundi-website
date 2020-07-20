@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 import { ProjectCard } from '@components/projects'
 import { Button } from '@components/general'
+import { FadeListItem } from '@components/animations'
+
 // import console = require('console');
 
 type T = {
@@ -15,10 +17,8 @@ type T = {
   onMore?: Function,
 }
 
-const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, director, blockId }) => {
-  const [projectsVisible, setProjectsVisible] = useState<Project[]>([])
-  const [projectsCount, setProjectsCount] = useState<number>(0)
-  const [inViewport, setInViewport] = useState([])
+const ProjectList: FC<T> = ({ title, projects, director, blockId }) => {
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
 
   useEffect(() => {
     const noNodes: Project[] = projects.edges.map(p => p.node)
@@ -33,14 +33,8 @@ const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, director, 
       ? filtered.filter(({ director: directors }) => directors.some(d => d.id === director))
       : filtered
 
-    // slice if limit is defined
-    const sliced: Project[] = perPage
-      ? filtered.slice(0, ((page || 0) + 1) * perPage)
-      : filtered
-
-    setProjectsCount(filtered.length)
-    setProjectsVisible(sliced)
-  }, [projects, page, perPage, director])
+    setFilteredProjects(filtered.concat(filtered))
+  }, [projects, director])
 
   return (
     <Container>
@@ -48,17 +42,14 @@ const ProjectList: FC<T> = ({ title, projects, page, perPage, onMore, director, 
         <h3>{title}</h3>
       </TitleContainer>
       <Grid>
-        {projectsVisible.map((p: Project) => (
+        {filteredProjects.map((p: Project) => (
           <GridItem key={p.id}>
-            <ProjectCard id={p.id} data={p} allViewport={inViewport} onLeaveViewport={() => setInViewport(inViewport.filter(n => n !== p.id))} onEnterViewport={() => setInViewport([...inViewport, p.id])} />
+            <FadeListItem>
+              <ProjectCard id={p.id} data={p} />
+            </FadeListItem>
           </GridItem>
         ))}
       </Grid>
-      {onMore && projectsVisible.length < projectsCount && (
-        <Button buttonStyle="outlined" onClick={onMore}>
-          SEE MORE
-        </Button>
-      )}
     </Container>
   )
 }
@@ -82,6 +73,8 @@ const Grid = styled.div`
   flex-flow: row wrap;
   padding: 30px 45px 50px;
   justify-content: center;
+  max-width: 100%;
+  overflow-y: hidden;
 
   @media ${breakpoints.phoneOnly} {
     padding: 2em 15px 2em;

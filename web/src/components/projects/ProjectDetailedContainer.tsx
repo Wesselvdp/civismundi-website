@@ -353,7 +353,8 @@ const FixedBackground = styled.div`
   left: 0;
   top: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  max-height: 100vh;
 
   .overlay {
     position: absolute;
