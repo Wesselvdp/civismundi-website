@@ -11,7 +11,6 @@ import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
 import TWEEN from '@tweenjs/tween.js'
-// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -33,26 +32,10 @@ const moveToProject = (curr, project) => {
   }
 
   const cFrom = curr.camera().position
-  const cTo = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
   const cToAfter = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
 
   curr.camera().target = null
-  // curr.camera().rotation.y = -90 * Math.PI / 180
-  // const lookAtPoint = new TWEEN.Tween(cFrom)
-  //   .to(cTo, 2000)
-  //   .onUpdate(() => {
-  //     curr.camera().position.set(
-  //       cFrom.x,
-  //       cFrom.y,
-  //       cFrom.z
-  //     )
-  //     curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
-  //   })
-  //   .start()
-  
-  cFrom.rotationY = curr.camera().rotation.y
-  cToAfter.rotationY -= -90 * Math.PI / 180
-  const zoomAtGlobe = new TWEEN.Tween(cFrom).to(cToAfter, 3000).onUpdate(() => {
+  new TWEEN.Tween(cFrom).to(cToAfter, 3000).onUpdate(() => {
     curr.camera().rotation.y -= cFrom.rotationY
     curr.camera().position.set(
       cFrom.x,
@@ -158,7 +141,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 
     // update label size
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
-    if (labelHovered) Object.assign(labelClicked.__threeObj.scale, scale.large)
+    if (labelClicked) Object.assign(labelClicked.__threeObj.scale, scale.large)
 
     // always go to page if not on mobile
     if (!isMobile) {
@@ -229,6 +212,8 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 
       _controls.addEventListener('start', () => {
         setProject(null)
+        onLabelHovered(null)
+        onLabelClicked(null)
       })
   
       _controls.addEventListener('change', () => {
