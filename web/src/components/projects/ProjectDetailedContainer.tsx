@@ -130,7 +130,7 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
         title="Other projects"
         blockId={id}
         projects={data.allSanityProject}
-        perPage={2}
+        limit={2}
       />
     </>
   )

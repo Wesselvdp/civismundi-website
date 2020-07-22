@@ -11,13 +11,11 @@ import { FadeListItem } from '@components/animations'
 type T = {
   title: string
   blockId?: string // We want to block a project id
-  projects: AllProject,
-  page?: number,
-  perPage?: number,
-  onMore?: Function,
+  projects: AllProject
+  limit?: number
 }
 
-const ProjectList: FC<T> = ({ title, projects, director, blockId }) => {
+const ProjectList: FC<T> = ({ title, projects, limit, director, blockId }) => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
 
   useEffect(() => {
@@ -33,7 +31,11 @@ const ProjectList: FC<T> = ({ title, projects, director, blockId }) => {
       ? filtered.filter(({ director: directors }) => directors.some(d => d.id === director))
       : filtered
 
-    setFilteredProjects(filtered.concat(filtered))
+    filtered = limit
+      ? filtered.slice(0, limit)
+      : filtered.concat(filtered) // TODO: remove when more projects
+
+    setFilteredProjects(filtered)
   }, [projects, director])
 
   return (
@@ -44,7 +46,7 @@ const ProjectList: FC<T> = ({ title, projects, director, blockId }) => {
       <Grid>
         {filteredProjects.map((p: Project) => (
           <GridItem key={p.id}>
-            <FadeListItem>
+            <FadeListItem visible={!!limit}>
               <ProjectCard id={p.id} data={p} />
             </FadeListItem>
           </GridItem>

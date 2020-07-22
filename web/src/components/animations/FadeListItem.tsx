@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 
-const FadeListItem = ({ children }) => {
+const FadeListItem = ({ children, visible }) => {
   const [isVisible, setVisible] = useState(false)
 
   const ref = useRef()
 
   useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => setVisible(entry.isIntersecting))
-    })
+    if (!visible) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => setVisible(entry.isIntersecting))
+      })
 
-    observer.observe(ref.current)
+      observer.observe(ref.current)
+    }
   }, [])
 
   return (
-    <ItemStyled ref={ref} className={`${isVisible ? 'is-visible' : ''}`}>
+    <ItemStyled ref={ref} className={`${visible || isVisible ? 'is-visible' : ''}`}>
       {children}
     </ItemStyled>
   )
