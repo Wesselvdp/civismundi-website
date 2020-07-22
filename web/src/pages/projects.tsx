@@ -2,17 +2,20 @@ import { graphql } from 'gatsby'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { uniqBy } from 'lodash'
+import { TransitionState } from 'gatsby-plugin-transition-link'
 
 import { Layout, SEO, BackgroundLines, Select, Button } from '@components/general'
 import { ProjectList } from '@components/projects'
 import { breakpoints } from '@utils/breakpoints'
 
 import localize from '@utils/localize'
+// import console = require('console');
 
 type PageProps = {
   data: {
     allSanityProject: AllProject
-  }
+  },
+  transitionStatus: string
 }
 
 const options = [
@@ -21,7 +24,7 @@ const options = [
 
 const perPage = 4
 
-const ProjectsPage = ({ data }: PageProps) => {
+const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
   const [page, setPage] = useState(0)
   const [director, setDirector] = useState('all')
   const [selectOptions, setSelectOptions] = useState(options)
@@ -43,6 +46,8 @@ const ProjectsPage = ({ data }: PageProps) => {
   useEffect(() => {
     setPage(0)
   }, [director])
+
+  
 
   return (
     <Layout>

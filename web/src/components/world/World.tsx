@@ -236,21 +236,21 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
         if (!cameraChanged) setCameraChanged(true)
       })
 
-			videoRef.current.play();
-      const texture = new THREE.VideoTexture(videoRef.current, THREE.EquirectangularReflectionMapping);
-      const geometry = new THREE.CircleGeometry( 75, 60, 40 )
+			// videoRef.current.play();
+      // const texture = new THREE.VideoTexture(videoRef.current, THREE.EquirectangularReflectionMapping);
+      // const geometry = new THREE.CircleGeometry( 75, 60, 40 )
 
-      const material = new THREE.MeshBasicMaterial({ color: '0xffff00', map: texture });
-      const video = new THREE.Mesh( geometry, material );
-      video.position.set(0, 0, 100)
-      // video.lookAt(ref.current.camera())
+      // const material = new THREE.MeshBasicMaterial({ color: '0xffff00', map: texture });
+      // const video = new THREE.Mesh( geometry, material );
+      // video.position.set(0, 0, 100)
+      // // video.lookAt(ref.current.camera())
 
-      console.log(ref.current.camera())
-      video.material.transparent = true
-      video.material.opacity = 0
+      // console.log(ref.current.camera())
+      // video.material.transparent = true
+      // video.material.opacity = 0
 
-      ref.current.scene().add(video);
-      setVideoGlobe(video)
+      // ref.current.scene().add(video);
+      // setVideoGlobe(video)
     })
 
     setInitialized(true)
@@ -307,6 +307,8 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
               alpha: true 
             }}
             waitForGlobeReady={true}
+            // height={600}
+            // width={1000}
           />
 
           <video ref={videoRef} muted loop>

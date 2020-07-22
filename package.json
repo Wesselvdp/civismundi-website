@@ -25,6 +25,7 @@
   "dependencies": {
     "@loadable/component": "^5.13.1",
     "babel-plugin-styled-components": "^1.10.7",
+    "framer-motion": "^2.1.0",
     "react-player": "^2.5.0",
     "styled-components": "^5.1.1"
   }

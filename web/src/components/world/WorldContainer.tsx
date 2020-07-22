@@ -92,63 +92,62 @@ const WorldContainer = ({ transitionStatus }) => {
               setShowIntro={setShowIntro}
             />
             {transitionStatus !== 'exiting' && (
-              <>
-                <TextAnim
-                  inProp={project}
-                  appear={true}
-                  timeout={1000}
-                  tag="h1"
-                  className="project-title"
-                  text={get(project, 'node.city', get(project, 'node.title', ''))}
-                  unmountOnExit
-                />
-                {/* project preview thumbnail */}
-                <VideoThumbnail 
-                  position={thumbnailPosition} 
-                  project={project}
-                  moveToProject={() => setMovingToProject(true)}
-                />
-              </>
+              <TextAnim
+                inProp={project}
+                appear={true}
+                timeout={1000}
+                tag="h1"
+                className="project-title"
+                text={get(project, 'node.city', get(project, 'node.title', ''))}
+                unmountOnExit
+              />
+            )}
+            {transitionStatus !== 'exiting' && (
+              <VideoThumbnail 
+                position={thumbnailPosition} 
+                project={project}
+                moveToProject={() => setMovingToProject(true)}
+              />
             )}
           </Wrapper>
         </CSSTransition>
-    </Page>
-    <ContentContainer>
-      {/* introduction text */}
-      {showIntro && (
-        <TextAnim 
-          inProp={state === State.INTRODUCTION} 
-          onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
-          onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
-          onExited={() => setState(State.TUTORIAL)}
-          timeout={{ enter: 6000, exit: 1000 }}
-          unmountOnExit
-          tag="h1"
-          className="h2 intro"
-          text={INTRO_TEXT}
-          letterSpeedIn={0.01}
-        />
+      <ContentContainer>
+        {/* introduction text */}
+        {showIntro && (
+          <TextAnim 
+            inProp={state === State.INTRODUCTION} 
+            onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
+            onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
+            onExited={() => setState(State.TUTORIAL)}
+            timeout={{ enter: 6000, exit: 1000 }}
+            unmountOnExit
+            tag="h1"
+            className="h2 intro"
+            text={INTRO_TEXT}
+            letterSpeedIn={0.01}
+          />
+        )}
+      </ContentContainer>
+      {transitionStatus !== 'exiting' && (
+        <FooterContainer>
+          <div className="footer--content">
+            <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
+              <>
+                <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
+                  <img src="/grab-icon.svg" />
+                </RotateAnim>
+                {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
+              </>
+            </FadeAnim>
+            <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+              <>
+                <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
+              </>
+            </FadeAnim>
+          </div>
+        </FooterContainer>
       )}
-    </ContentContainer>
-    {transitionStatus !== 'exiting' && (
-      <FooterContainer>
-        <div className="footer--content">
-          <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
-            <>
-              <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
-                <img src="/grab-icon.svg" />
-              </RotateAnim>
-              {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
-            </>
-          </FadeAnim>
-          <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
-            <>
-              <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
-            </>
-          </FadeAnim>
-        </div>
-      </FooterContainer>
-    )}
+      </Page>
     </>
   );
 }
@@ -158,6 +157,8 @@ export default WorldContainer
 const Wrapper = styled.div`
   transform: scale(0);
   opacity: 0;
+  position: relative;
+  max-height: 100vh;
 
   &.globe-enter {
     transform: scale(0);
@@ -222,7 +223,7 @@ const FooterContainer = styled.div`
   .footer--content {
     max-width: 400px;
     font-weight: 400;
-    padding: 25px;
+    padding-bottom: 15px;
 
     img {
       margin-bottom: 10px;
@@ -249,7 +250,8 @@ const FooterContainer = styled.div`
 
 const Page = styled.div`
   position: relative;
-  height: 100%;
+  height: 100vh;
+  height: fill-available;
   max-height: 100vh;
   overflow: hidden;
   will-change: opacity;
