@@ -108,18 +108,18 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     if (!project) {
       labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
       setCameraRotating(true)
-      setThumbnailPosition(null)
+      // setThumbnailPosition(null)
       return
     }
 
     setCameraRotating(false)
-    setThumbnailPosition(
-      ref.current.getScreenCoords(
-        get(project, 'node.location.lat'),
-        get(project, 'node.location.lng'),
-        0.05
-      )
-    )
+    // setThumbnailPosition(
+    //   ref.current.getScreenCoords(
+    //     get(project, 'node.location.lat'),
+    //     get(project, 'node.location.lng'),
+    //     0.05
+    //   )
+    // )
     if (videoGlobe) {
       videoGlobe.material.opacity = 1;
     }
@@ -295,10 +295,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
             // height={600}
             // width={1000}
           />
-
-          <video ref={videoRef} muted loop>
-            <source type="video/mp4" src="/stargazing.mp4" />
-          </video>
         </Wrapper>
      </React.Suspense>
     )
@@ -311,6 +307,11 @@ const Wrapper = styled.div`
   &.introduction-complete {
     transition: opacity 0.5s cubic-bezier(0.05, 0.66, 0.25, 1);
     opacity: 1;
+  }
+
+  &.project-active {
+    opacity: 0.7;
+    transition: opacity 0.5s ease-in-out;
   }
 
   & > div > div > div > div {

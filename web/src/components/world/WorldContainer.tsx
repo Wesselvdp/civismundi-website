@@ -77,7 +77,7 @@ const WorldContainer = ({ transitionStatus }) => {
           <Wrapper>
             {/* World component*/}
             <World
-              className={state > State.INTRODUCTION_COMPLETE ? 'introduction-complete' : ''}
+              className={`${project ? 'project-active' : ''} ${state > State.INTRODUCTION_COMPLETE ? 'introduction-complete' : ''}`}
               // page state
               state={state}
               setState={setState}
@@ -102,13 +102,13 @@ const WorldContainer = ({ transitionStatus }) => {
                 unmountOnExit
               />
             )}
-            {transitionStatus !== 'exiting' && (
-              <VideoThumbnail 
-                position={thumbnailPosition} 
-                project={project}
-                moveToProject={() => setMovingToProject(true)}
-              />
-            )}
+            {/* {transitionStatus !== 'exiting' && (
+              // <VideoThumbnail 
+              //   position={thumbnailPosition} 
+              //   project={project}
+              //   moveToProject={() => setMovingToProject(true)}
+              // />
+            )} */}
           </Wrapper>
         </CSSTransition>
       <ContentContainer>
@@ -147,6 +147,13 @@ const WorldContainer = ({ transitionStatus }) => {
           </div>
         </FooterContainer>
       )}
+      <VideoPreview className={project ? 'visible' : ''}>
+        {project && (
+          <video id="videoBG" poster={get(project, 'node.poster.asset.url')} playsInline autoPlay muted loop>
+            <source src={get(project, 'node.video.asset.url')} type="video/mp4" />
+          </video>
+        )}
+      </VideoPreview>
       </Page>
     </>
   );
@@ -190,6 +197,27 @@ const Wrapper = styled.div`
   }
 
   * { outline: 0 };
+`
+
+const VideoPreview = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+
+  video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  &.visible {
+    opacity: 1;
+  }
 `
 
 const ContentContainer = styled.div`

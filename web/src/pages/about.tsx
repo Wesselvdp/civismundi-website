@@ -1,13 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useSpring, animated } from 'react-spring'
 
 import { breakpoints } from '@utils/breakpoints'
 import { Layout, BackgroundLines, SEO } from '@components/general'
 
 const AboutPage = () => {
-  const [props, set] = useSpring(() => ({ xy: [0, 0], config: { mass: 10, tension: 100, friction: 140 } }))
-
   return (
     <Layout>
       <SEO title="About" />
