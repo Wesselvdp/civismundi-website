@@ -113,7 +113,7 @@ const WorldContainer = ({ transitionStatus }) => {
         </CSSTransition>
       <ContentContainer>
         {/* introduction text */}
-        {showIntro && (
+        {/* {showIntro && (
           <TextAnim 
             inProp={state === State.INTRODUCTION} 
             onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
@@ -126,24 +126,25 @@ const WorldContainer = ({ transitionStatus }) => {
             text={INTRO_TEXT}
             letterSpeedIn={0.01}
           />
-        )}
+        )} */}
       </ContentContainer>
       {transitionStatus !== 'exiting' && (
         <FooterContainer>
           <div className="footer--content">
             <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
               <>
-                <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
+                <p>{INTRO_TEXT}</p>
+                {/* <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
                   <img src="/grab-icon.svg" />
                 </RotateAnim>
-                {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)}
+                {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)} */}
               </>
             </FadeAnim>
-            <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
+            {/* <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
               <>
                 <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
               </>
-            </FadeAnim>
+            </FadeAnim> */}
           </div>
         </FooterContainer>
       )}
@@ -249,7 +250,7 @@ const FooterContainer = styled.div`
   justify-content: center;
 
   .footer--content {
-    max-width: 400px;
+    max-width: 750px;
     font-weight: 400;
     padding-bottom: 15px;
 
