@@ -21,6 +21,7 @@ const ButtonStyled = styled.div`
   opacity: 0.80;
   border-radius: 50%;
   border: 1px solid #707070;
+  z-index: 10000;
 
   img {
     position: absolute;
