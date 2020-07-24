@@ -241,7 +241,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     setShowIntro(fullMode)
   
     // animates globe in
-    const timer = setTimeout(() => setState(fullMode ? State.INTRODUCTION : State.TUTORIAL), 1000)
+    const timer = setTimeout(() => setState(State.TUTORIAL), 1000)
     return () => clearTimeout(timer)
   }
 
@@ -309,7 +309,7 @@ const Wrapper = styled.div`
   }
 
   &.project-active {
-    opacity: 0.7;
+    opacity: 0.4;
     transition: opacity 0.5s ease-in-out;
   }
 
