@@ -54,9 +54,9 @@ const initDirectionalLight = (curr: any) => {
   })
 }
 
-export const initialize = (curr: any, options: any = {}) => {
+export const initialize = (curr: any, options: any = { full: true }) => {
   THREE.DefaultLoadingManager.onLoad = function () {
-    options.onLoaded && setTimeout(options.onLoaded(), 500)
+    options.onLoaded && setTimeout(options.onLoaded(), 1000)
   };
 
   const scene = curr.scene()
@@ -72,8 +72,12 @@ export const initialize = (curr: any, options: any = {}) => {
   if (isMobile) camera.fov = 75
 
   // custom three objects
-  const clouds = initClouds(curr) 
-  const lightning = initDirectionalLight(curr)
+  let clouds;
+  let lightning;
+  if (options.full !== false) {
+    clouds = initClouds(curr) 
+    lightning = initDirectionalLight(curr)
+  }
 
   return Promise.all([
     scene,

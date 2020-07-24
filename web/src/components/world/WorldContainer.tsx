@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React, { FC, useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { get } from 'lodash'
-import {useSpring, animated as a} from 'react-spring'
 
 import World from './World'
-import VideoThumbnail from './VideoThumbnail'
-import { TextAnim, FadeAnim, RotateAnim } from '@components/animations'
+import { TextAnim, VerticalAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
 
 type ScreenCoordinates = { x: string, y: string }
@@ -64,7 +62,7 @@ const WorldContainer = ({ transitionStatus }) => {
   return (
     <>
       <Page className={`page-transition-${transitionStatus}`}>
-        <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setState(State.EXPLORE)} classNames="globe">
+        <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setTimeout(setState(State.EXPLORE), 1000)} classNames="globe">
           <Wrapper>
             {/* World component*/}
             <World
@@ -96,12 +94,17 @@ const WorldContainer = ({ transitionStatus }) => {
       {transitionStatus !== 'exiting' && (
         <FooterContainer>
           <div className="footer--content">
-            <TextAnim 
-              in={state > State.LOADING}
-              timeout={1000} 
-              tag="p"
-              text={INTRO_TEXT}
-            />
+            <>
+              <VerticalAnim in={state > State.LOADING} timeout={{ enter: 4000 }}>
+                <img src="/grab-icon.svg" />
+              </VerticalAnim>
+              <TextAnim 
+                in={state > State.LOADING}
+                timeout={1000}
+                tag="p"
+                text={INTRO_TEXT.toUpperCase()}
+              />
+            </>
           </div>
         </FooterContainer>
       )}
@@ -133,7 +136,7 @@ const Wrapper = styled.div`
   &.globe-enter-active {
     transform: scale(1);
     opacity: 1;
-    transition: all 1600ms ease-in;
+    transition: all 1600ms ease-in-out;
   }
 
   &.globe-enter-done {
@@ -212,8 +215,8 @@ const FooterContainer = styled.div`
     padding-bottom: 30px;
 
     img {
-      margin-bottom: 10px;
-      transform: rotate3d(0, 1, 0, -180);
+      margin-bottom: 20px;
+      opacity: 0.75;
     }
 
     p {

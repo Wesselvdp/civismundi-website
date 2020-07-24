@@ -95,8 +95,9 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   });
 
   useEffect(() => {
-    if (initialized || !ref.current) return
-    _init(true)
+    if (initialized || !ref.current) return;
+
+    _init()
   }, [loaded]);
 
   useEffect(() => {
@@ -106,7 +107,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, [movingToProject])
 
   useEffect(() => {
-    if (state === State.INITIALIZING && ref.current) _init()
+    if (state === State.INITIALIZING && ref.current) _init({ full: false })
     if (state > State.LOADING) controls.enabled = true
   }, [state])
 
@@ -204,10 +205,10 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     return () => window.removeEventListener('resize', updateSize)
   }, []);
 
-  const _init = () => {
+  const _init = (options = {}) => {
     initialize(ref.current, {
-      onLoaded: () => setState(State.LOADING),
-      onProgress: (loaded, total) => setProgress({ loaded, total })
+      ...options,
+      onLoaded: () => setState(State.LOADING)
     }).then(([
       _scene,
       _camera,
