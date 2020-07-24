@@ -5,5 +5,6 @@ import Logo from './Logo'
 import SEO from '../seo'
 import BackgroundLines from './BackgroundLines'
 import Select from './Select'
+import GlobeButton from './GlobeButton'
 
-export { Layout, Navigation, Button, Logo, SEO, BackgroundLines, Select }
+export { Layout, Navigation, Button, Logo, SEO, BackgroundLines, Select, GlobeButton }

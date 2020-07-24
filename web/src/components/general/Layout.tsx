@@ -1,15 +1,16 @@
 import React, { FC } from 'react'
 import styled from 'styled-components';
 
-import Navigation from './Navigation'
+import { Navigation, GlobeButton } from '.'
 
 type T = any
 
-const Layout: FC<T> = ({ children, className, style }) => {
+const Layout: FC<T> = ({ children, className, style, includeGlobe = true }) => {
   return (
     <>
       <Navigation />
       <Main style={style} className={className}>{children}</Main>
+      {includeGlobe && <GlobeButton />}
     </>
   )
 }

@@ -15,7 +15,7 @@ type PageProps = {
 
 const IndexPage = ({ data }: PageProps) => {
   return (
-    <Layout>
+    <Layout includeGlobe={false}>
       <TransitionState>
         {({ transitionStatus }) => {
           return (
