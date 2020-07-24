@@ -49,11 +49,10 @@ const moveToProject = (curr, project) => {
     .start()  
 }
 
-const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro, className }) => {
+const World = ({ state, setState, projects, project, setProject, movingToProject, setProgress, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
-  const videoRef = useRef()
 
   // globe
   const [loaded, setLoaded] = useState<boolean | null>(null)
@@ -76,7 +75,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   // custom scene objects
   const [clouds, setClouds] = useState(null);
   const [lightning, setLightning] = useState(null);
-  const [videoGlobe, setVideoGlobe] = useState(null);
 
   // labels
   const [labels, setLabels] = useState([])
@@ -108,38 +106,28 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, [movingToProject])
 
   useEffect(() => {
-    if (state === State.INITIALIZING && ref.current) _init(false)
-    if (state > State.INTRODUCTION) controls.enabled = true
+    if (state === State.INITIALIZING && ref.current) _init()
+    if (state > State.LOADING) controls.enabled = true
   }, [state])
 
   useEffect(() => {
     if (!initialized) return
-    if (state <= State.INTRODUCTION) return
+    if (state < State.EXPLORE) return
 
     if (!project) {
       labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
       setCameraRotating(true)
-      // setThumbnailPosition(null)
       return
     }
 
     setCameraRotating(false)
-    // setThumbnailPosition(
-    //   ref.current.getScreenCoords(
-    //     get(project, 'node.location.lat'),
-    //     get(project, 'node.location.lng'),
-    //     0.05
-    //   )
-    // )
-    if (videoGlobe) {
-      videoGlobe.material.opacity = 1;
-    }
   }, [project])
 
 
   useEffect(() => {
     if (isMobile) return
-    if (state <= State.INTRODUCTION) return
+    if (state < State.EXPLORE) return
+  
     setProject(labelHovered)
 
     // update label size
@@ -148,7 +136,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, [labelHovered])
 
   useEffect(() => {
-    if (state <= State.INTRODUCTION) return
+    if (state < State.EXPLORE) return
 
     // update label size
     labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
@@ -216,8 +204,19 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     return () => window.removeEventListener('resize', updateSize)
   }, []);
 
-  const _init = (fullMode = true) => {
-    initialize(ref.current, fullMode).then(([_scene, _camera, _controls, _renderer, _clouds, _lightning, _video]) => {
+  const _init = () => {
+    initialize(ref.current, {
+      onLoaded: () => setState(State.LOADING),
+      onProgress: (loaded, total) => setProgress({ loaded, total })
+    }).then(([
+      _scene,
+      _camera,
+      _controls,
+      _renderer,
+      _clouds,
+      _lightning, 
+      _video
+    ]) => {
       setScene(_scene)
       setCamera(_camera)
       setControls(_controls)
@@ -238,11 +237,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     })
 
     setInitialized(true)
-    setShowIntro(fullMode)
-  
-    // animates globe in
-    const timer = setTimeout(() => setState(State.TUTORIAL), 1000)
-    return () => clearTimeout(timer)
   }
 
   const onLabelUpdate = (obj, d) => {
@@ -291,8 +285,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
               alpha: true 
             }}
             waitForGlobeReady={true}
-            // height={600}
-            // width={1000}
           />
         </Wrapper>
      </React.Suspense>
@@ -301,12 +293,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 }
 
 const Wrapper = styled.div`
-  opacity: 0.6;
-
-  &.introduction-complete {
-    transition: opacity 0.5s cubic-bezier(0.05, 0.66, 0.25, 1);
-    opacity: 1;
-  }
+  opacity: 1;
 
   &.project-active {
     opacity: 0.4;

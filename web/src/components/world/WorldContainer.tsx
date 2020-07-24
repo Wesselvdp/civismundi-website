@@ -16,10 +16,7 @@ type ScreenCoordinates = { x: string, y: string }
 export enum State {
   INITIALIZING = 0,
   LOADING = 1,
-  INTRODUCTION = 2,
-  INTRODUCTION_COMPLETE = 3,
-  TUTORIAL = 4,
-  EXPLORE = 5
+  EXPLORE = 2
 }
 
 type StateType = State
@@ -28,17 +25,11 @@ const GLOBE_TRANSITION_LENGTH = 1600;
 
 const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
 
-const TUTORIAL_TEXT = [
-  'Grab and drag to navigate around the globe',
-  'Click on a project to view a project'
-];
-
 const WorldContainer = ({ transitionStatus }) => {
   const [state, setState] = useState<StateType>(State.INITIALIZING)
-  const [showIntro, setShowIntro] = useState<boolean>(true)
   const [project, setProject] = useState<Project | null>(null)
-  const [thumbnailPosition, setThumbnailPosition] = useState<ScreenCoordinates | null>(null)
-  const [movingToProject, setMovingToProject] = useState(false)
+
+  const [progress, setProgress] = useState({ loaded: 0, total: 1 })
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -73,11 +64,11 @@ const WorldContainer = ({ transitionStatus }) => {
   return (
     <>
       <Page className={`page-transition-${transitionStatus}`}>
-        <CSSTransition in={state >= State.LOADING} timeout={GLOBE_TRANSITION_LENGTH} classNames="globe">
+        <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setState(State.EXPLORE)} classNames="globe">
           <Wrapper>
             {/* World component*/}
             <World
-              className={`${project ? 'project-active' : ''} ${state > State.INTRODUCTION_COMPLETE ? 'introduction-complete' : ''}`}
+              className={`${project ? 'project-active' : ''}`}
               // page state
               state={state}
               setState={setState}
@@ -85,11 +76,8 @@ const WorldContainer = ({ transitionStatus }) => {
               projects={data.allSanityProject.edges}
               project={project}
               setProject={setProject}
-              // thumbnail
-              setThumbnailPosition={setThumbnailPosition}
-              movingToProject={movingToProject}
-              // intro
-              setShowIntro={setShowIntro}
+              // progress
+              setProgress={setProgress}
             />
             {transitionStatus !== 'exiting' && (
               <TextAnim
@@ -102,49 +90,18 @@ const WorldContainer = ({ transitionStatus }) => {
                 unmountOnExit
               />
             )}
-            {/* {transitionStatus !== 'exiting' && (
-              // <VideoThumbnail 
-              //   position={thumbnailPosition} 
-              //   project={project}
-              //   moveToProject={() => setMovingToProject(true)}
-              // />
-            )} */}
           </Wrapper>
         </CSSTransition>
-      <ContentContainer>
-        {/* introduction text */}
-        {/* {showIntro && (
-          <TextAnim 
-            inProp={state === State.INTRODUCTION} 
-            onEnter={() => setState(showIntro ? State.INTRODUCTION : State.TUTORIAL)}
-            onEntered={() => setState(State.INTRODUCTION_COMPLETE)}
-            onExited={() => setState(State.TUTORIAL)}
-            timeout={{ enter: 6000, exit: 1000 }}
-            unmountOnExit
-            tag="h1"
-            className="h2 intro"
-            text={INTRO_TEXT}
-            letterSpeedIn={0.01}
-          />
-        )} */}
-      </ContentContainer>
+      <ContentContainer />
       {transitionStatus !== 'exiting' && (
         <FooterContainer>
           <div className="footer--content">
-            <FadeAnim timeout={2500} in={state === State.TUTORIAL}>
-              <>
-                <p>{INTRO_TEXT}</p>
-                {/* <RotateAnim appear={true} timeout={1000} in={state === State.TUTORIAL} delay={500}>
-                  <img src="/grab-icon.svg" />
-                </RotateAnim>
-                {TUTORIAL_TEXT.map((text, i) => <p key={i}>{text}</p>)} */}
-              </>
-            </FadeAnim>
-            {/* <FadeAnim timeout={1000} in={state === State.LOADING || state === State.INTRODUCTION}>
-              <>
-                <p className="skip-intro" onClick={() => setState(State.INTRODUCTION_COMPLETE)}>SKIP INTRO</p>
-              </>
-            </FadeAnim> */}
+            <TextAnim 
+              in={state > State.LOADING}
+              timeout={1000} 
+              tag="p"
+              text={INTRO_TEXT}
+            />
           </div>
         </FooterContainer>
       )}
@@ -155,8 +112,8 @@ const WorldContainer = ({ transitionStatus }) => {
           </video>
         )}
       </VideoPreview>
-      </Page>
-    </>
+    </Page>
+  </>
   );
 }
 
@@ -176,7 +133,7 @@ const Wrapper = styled.div`
   &.globe-enter-active {
     transform: scale(1);
     opacity: 1;
-    transition: all 1600ms ease-in-out;
+    transition: all 1600ms ease-in;
   }
 
   &.globe-enter-done {
@@ -252,7 +209,7 @@ const FooterContainer = styled.div`
   .footer--content {
     max-width: 750px;
     font-weight: 400;
-    padding-bottom: 15px;
+    padding-bottom: 30px;
 
     img {
       margin-bottom: 10px;

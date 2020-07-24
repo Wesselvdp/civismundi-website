@@ -48,52 +48,17 @@ const initDirectionalLight = (curr: any) => {
         .children
         .find(obj3d => obj3d.type === 'DirectionalLight')
 
-      // // directionalLight.position.set(1, 0, 0)
       directionalLight.position.copy(curr.camera().position)
-      // curr.camera().add(directionalLight)
-      // console.log(curr.camera())
-      // console.log(directionalLight)
-      // console.log('camera position', curr.camera().position)
-      // if (directionalLight) {
-      //   directionalLight.position.copy(
-      //     curr.camera().position.x,
-      //     curr.camera().position.y,
-      //     curr.camera().position.z
-      //   )
-
-      //   curr.camera().add(directionalLight)
-      // }
-
-      
-      // const pointLight = new THREE.PointLight( 0xffffff );
-      // pointLight.position.set(1,1,2);
-      // curr.camera().add(pointLight)
-
-      // if (directionalLight) directionalLight.target = curr.camera()
-  
-      // if (directionalLight) directionalLight.target = curr.camera()
       resolve(directionalLight);
     })
   })
 }
 
-// const initVideoGlobe = (curr: any) => {
-//   const texture = new THREE.TextureLoader().load('/stargazing.mp4')
-//   const geometry = new THREE.SphereGeometry( 101, 32, 32 );
-//   const material = new THREE.MeshBasicMaterial({ color: 0xffff00, map: texture });
-//   const video = new THREE.Mesh( geometry, material );
+export const initialize = (curr: any, options: any = {}) => {
+  THREE.DefaultLoadingManager.onLoad = function () {
+    options.onLoaded && setTimeout(options.onLoaded(), 500)
+  };
 
-//   video.position.set(0, 0, 0)
-
-//   video.material.transparent = true
-//   video.material.opacity = 0
-
-//   curr.scene().add(video);
-
-//   return video;
-// }
-
-export const initialize = (curr: any, fullMode = false) => {
   const scene = curr.scene()
   const camera = curr.camera()
   const controls = curr.controls()
@@ -106,10 +71,9 @@ export const initialize = (curr: any, fullMode = false) => {
   controls.autoRotateSpeed = 0.3
   if (isMobile) camera.fov = 75
 
-  // custom objects
-  const clouds = fullMode && initClouds(curr) 
-  const lightning = fullMode && initDirectionalLight(curr)
-  // const videoGlobe = fullMode && initVideoGlobe(curr)
+  // custom three objects
+  const clouds = initClouds(curr) 
+  const lightning = initDirectionalLight(curr)
 
   return Promise.all([
     scene,
@@ -118,7 +82,6 @@ export const initialize = (curr: any, fullMode = false) => {
     renderer,
     clouds,
     lightning,
-    // videoGlobe
   ]);
 }
 
