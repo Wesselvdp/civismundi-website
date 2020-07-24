@@ -6,6 +6,7 @@ import { get } from 'lodash'
 import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
+import { useTriggerTransition } from 'gatsby-plugin-transition-link'
 
 import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
@@ -35,20 +36,17 @@ const moveToProject = (curr, project) => {
   const cToAfter = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
 
   curr.camera().target = null
-  new TWEEN.Tween(cFrom).to(cToAfter, 3000).onUpdate(() => {
-    curr.camera().rotation.y -= cFrom.rotationY
-    curr.camera().position.set(
-      cFrom.x,
-      cFrom.y,
-      cFrom.z
-    )
-    // curr.camera().lookAt(new THREE.Vector3(0, 0, 0))
-  }).onComplete(() => {
-    // curr.controls().target = new THREE.Vector3(0, 0, 0)
-  }).start()
-
-  // lookAtPoint.chain(zoomAtGlobe)
-  
+  new TWEEN.Tween(cFrom)
+    .to(cToAfter, 2000)
+    .onUpdate(() => {
+      curr.camera().rotation.y -= cFrom.rotationY
+      curr.camera().position.set(
+        cFrom.x,
+        cFrom.y,
+        cFrom.z
+      )
+    })
+    .start()  
 }
 
 const World = ({ state, setState, projects, project, setProject, movingToProject, setThumbnailPosition, setShowIntro, className }) => {
@@ -84,6 +82,19 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   const [labels, setLabels] = useState([])
   const [labelHovered, onLabelHovered] = useState(null)
   const [labelClicked, onLabelClicked] = useState(null)
+
+  const triggerTransition = useTriggerTransition({
+    exit: {
+      delay: 0,
+      length: 2,
+      zIndex: 1,
+    },
+    entry: {
+      delay: 0,
+      length: 1,
+      zIndex: 0
+    }
+  });
 
   useEffect(() => {
     if (initialized || !ref.current) return
@@ -146,7 +157,11 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     // always go to page if not on mobile
     if (!isMobile) {
       moveToProject(ref.current, labelClicked)
-      navigate(`/projects/${labelClicked.node.slug.current}`)
+      triggerTransition({
+        to: `/projects/${labelClicked.node.slug.current}`,
+      })
+
+      // navigate(`/projects/${labelClicked.node.slug.current}`)
       return
     }
 
@@ -220,22 +235,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
         if (_lightning && _camera) _lightning.position.copy(_camera.position)
         if (!cameraChanged) setCameraChanged(true)
       })
-
-			// videoRef.current.play();
-      // const texture = new THREE.VideoTexture(videoRef.current, THREE.EquirectangularReflectionMapping);
-      // const geometry = new THREE.CircleGeometry( 75, 60, 40 )
-
-      // const material = new THREE.MeshBasicMaterial({ color: '0xffff00', map: texture });
-      // const video = new THREE.Mesh( geometry, material );
-      // video.position.set(0, 0, 100)
-      // // video.lookAt(ref.current.camera())
-
-      // console.log(ref.current.camera())
-      // video.material.transparent = true
-      // video.material.opacity = 0
-
-      // ref.current.scene().add(video);
-      // setVideoGlobe(video)
     })
 
     setInitialized(true)

@@ -291,7 +291,7 @@ const Page = styled.div`
 
     &-exiting {
       opacity: 0;
-      transition: opacity 3s ease-in;
+      transition: opacity 2s ease-in;
     }
   }
 
