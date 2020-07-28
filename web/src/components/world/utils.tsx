@@ -21,6 +21,8 @@ const initClouds = (curr: any) => {
     10
   )
 
+  cloudMesh.name = 'Clouds'
+
   // add clouds to scene
   const scene = curr.scene()
   scene.add(cloudMesh)
@@ -75,7 +77,7 @@ export const initialize = (curr: any, options: any = { full: true }) => {
   let clouds;
   let lightning;
   if (options.full !== false) {
-    clouds = initClouds(curr) 
+    clouds = initClouds(curr)
     lightning = initDirectionalLight(curr)
   }
 

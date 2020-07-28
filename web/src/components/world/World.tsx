@@ -12,6 +12,8 @@ import * as THREE from 'three'
 import { initialize, labelObject } from './utils'
 import { State } from './WorldContainer'
 import TWEEN from '@tweenjs/tween.js'
+// import console = require('console');
+
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -20,33 +22,67 @@ const scale = {
   large: new THREE.Vector3(1.3, 1.3, 1.3)
 }
 
-const moveToProject = (curr, project) => {
-  if (isMobile) {
-    const coords = { 
-      lat: get(project, 'node.location.lat'),
-      lng: get(project, 'node.location.lng'),
-      alt: 0.05
-    }
+const projectCameraPositions = {
+  fuckthat: {x: -21.09517134023139, y: -13.842005393559838, z: 158.13052241620738, worldY: -25 },
+  columbus: {x: 27.14184364454964, y: -7.805917689107176, z: 157.41942896107605, worldY: -25 },
+  DelaMove: {x: 0.21709849267533315, y: -129.60871165915535, z: 124.37075872820836, worldY: -75 },
+  stargazing: {x: -157.3196871510831, y: -45.99100074437717, z: -83.3751610249093, worldY: -50 }
+}
+const moveToProject = (curr, project, labels) => {
+  if (!project) return
+
+  const scene = curr.scene()
+  const controls = curr.controls()
+  const camera = curr.camera()
+
+  const world = scene.children.find(obj => obj.type === 'Group')
+  const clouds = scene.children.find(obj => obj.name === 'Clouds')
+  const c1 = curr.getCoords(project.node.location.lat, project.node.location.lng, 0)
+
+  controls.minDistance = 60
+  controls.maxDistance = Infinity
+ 
+  const projectSlug = project.node.slug.current;
+  console.log(projectSlug)
+  const cameraToPosition = projectCameraPositions[projectSlug]
   
-    curr.pointOfView(coords, 1000)
-    return
-  }
+  // camera.position.setLength(150)
 
-  const cFrom = curr.camera().position
-  const cToAfter = curr.getCoords(get(project, 'node.location.lat'), get(project, 'node.location.lng'), 0.5)
-
-  curr.camera().target = null
-  new TWEEN.Tween(cFrom)
-    .to(cToAfter, 2000)
-    .onUpdate(() => {
-      curr.camera().rotation.y -= cFrom.rotationY
-      curr.camera().position.set(
-        cFrom.x,
-        cFrom.y,
-        cFrom.z
-      )
+  new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
+    .to({ x: c1.x, y: c1.y, z: c1.z}, 1500)
+    .onUpdate(d => {
+      controls.target.set(d.x, d.y, d.z)
     })
-    .start()  
+    .start()
+
+  if (cameraToPosition) {
+    new TWEEN.Tween({ x: camera.position.x, y: camera.position.y, z: camera.position.z })
+      .to(cameraToPosition, 1500)
+      .onUpdate(d => {
+        camera.position.set(d.x, d.y, d.z)
+      })
+      .start()
+  }
+  
+  new TWEEN.Tween({ x: world.position.x, y: world.position.y, z: world.position.z })
+    .to({ x: world.position.x, y: cameraToPosition ? cameraToPosition.worldY : -25, z: world.position.z }, 1500)
+    .onUpdate(d => {
+      world.position.set(d.x, d.y, d.z)
+      clouds.position.set(d.x, d.y, d.z)
+    })
+    .start()
+
+  // controls.target.set(c1.x, c1.y, c1.z)
+  // camera.position.set(-20.825139077658324, -31.61013438893567, 187.8923032231242)
+  // camera.position.setLength(150)
+  // world.translateY(-25)
+
+  console.log('controls', controls)
+  console.log('camera pos', camera.position)
+  console.log('c1 pos', c1)
+  // place
+  
+  // controls.target.set()
 }
 
 const World = ({ state, setState, projects, project, setProject, movingToProject, setProgress, className }) => {
@@ -145,10 +181,11 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 
     // always go to page if not on mobile
     if (!isMobile) {
-      moveToProject(ref.current, labelClicked)
-      triggerTransition({
-        to: `/projects/${labelClicked.node.slug.current}`,
-      })
+      setProject(labelClicked)
+      moveToProject(ref.current, labelClicked, labels)
+      // triggerTransition({
+      //   to: `/projects/${labelClicked.node.slug.current}`,
+      // })
 
       // navigate(`/projects/${labelClicked.node.slug.current}`)
       return
@@ -226,9 +263,14 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
       setLightning(_lightning)
 
       _controls.addEventListener('start', () => {
+        console.log('start', _camera.position)
         setProject(null)
         onLabelHovered(null)
         onLabelClicked(null)
+      })
+
+      _controls.addEventListener('end', () => {
+        console.log('end', _camera.position)
       })
   
       _controls.addEventListener('change', () => {
