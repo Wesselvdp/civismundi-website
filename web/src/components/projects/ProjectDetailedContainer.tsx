@@ -43,10 +43,6 @@ const ProjectDetailedContainer = ({ data }) => {
         <img className="modal-close" src="/close.png" onClick={() => openVideo(false)} /> 
       </ModalWrapper>
       <StyledMast>
-        <FixedBackground>
-          <div className="overlay" />
-          <BackgroundVideo video={get(video, 'asset.url')} poster={get(poster, 'asset.url')} />
-        </FixedBackground>
         <FadeAnim 
           timeout={1000}
           appear={true}

@@ -305,13 +305,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 }
 
 const Wrapper = styled.div`
-  opacity: 1;
-
-  &.project-active {
-    opacity: 0.4;
-    transition: opacity 0.5s ease-in-out;
-  }
-
   & > div > div > div > div {
     height: 100vh;
     height: fill-available;

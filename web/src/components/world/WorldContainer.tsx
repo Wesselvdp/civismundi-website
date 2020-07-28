@@ -62,9 +62,9 @@ const WorldContainer = ({ layout }) => {
   `)
 
   return (
-    <Page className={layout}>
+    <Page className={`${layout}`}>
       <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setTimeout(setState(State.EXPLORE), 1000)} classNames="globe">
-        <Wrapper>
+        <Wrapper className={`${layout=== 'project-detailed' || (layout === 'home' && project) ? 'project-active' : ''}`}>
           {/* World component*/}
           <World
             className={`${project ? 'project-active' : ''}`}
@@ -123,6 +123,8 @@ const Page = styled.div`
   right: 0;
   bottom: 0;
   overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
 
   &.other {
     z-index: -1;
@@ -131,14 +133,16 @@ const Page = styled.div`
 
   &.project-detailed {
     position: absolute;
+    opacity: 1;
   }
 `
 
 const Wrapper = styled.div`
-  transform: scale(0);
-  opacity: 0;
   position: relative;
   max-height: 100vh;
+  opacity: 0;
+  transform: scale(1);
+  will-change: opacity, transform;
 
   &.globe-enter {
     transform: scale(0);
@@ -154,6 +158,10 @@ const Wrapper = styled.div`
   &.globe-enter-done {
     transform: scale(1);
     opacity: 1;
+  }
+
+  &.project-active {
+    opacity: 0.4;
   }
 
   .project-title {
