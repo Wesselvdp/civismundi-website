@@ -37,8 +37,12 @@ const createLocalePage = (page, createPage) => {
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions
 
-  deletePage(page)
+  page.context.layout = 'home'
+  if (page.path.match('/about') || page.path.match('/projects')) {
+    page.context.layout = 'other'
+  }
 
+  deletePage(page)
   createLocalePage(page, createPage)
 }
 
@@ -87,7 +91,7 @@ const createCustomPages = async (graphql, createPage) => {
     const page = {
       path: `projects/${node.slug.current}`,
       component: require.resolve(`./src/templates/projectPage.tsx`),
-      context: { id: node.id, city: node.slug.current }
+      context: { id: node.id, city: node.slug.current, layout: 'project-detailed' }
     }
     // We want local pages
     createLocalePage(page, createPage)

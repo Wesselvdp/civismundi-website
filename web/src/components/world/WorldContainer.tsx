@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
@@ -23,12 +23,14 @@ const GLOBE_TRANSITION_LENGTH = 1600;
 
 const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
 
-const WorldContainer = ({ transitionStatus }) => {
+const WorldContainer = ({ layout }) => {
   const [state, setState] = useState<StateType>(State.INITIALIZING)
   const [project, setProject] = useState<Project | null>(null)
 
-  const [progress, setProgress] = useState({ loaded: 0, total: 1 })
-
+  useEffect(() => {
+    console.log('mounted world container')
+  }, [])
+  
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -60,54 +62,47 @@ const WorldContainer = ({ transitionStatus }) => {
   `)
 
   return (
-    <>
-      <Page className={`page-transition-${transitionStatus}`}>
-        <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setTimeout(setState(State.EXPLORE), 1000)} classNames="globe">
-          <Wrapper>
-            {/* World component*/}
-            <World
-              className={`${project ? 'project-active' : ''}`}
-              // page state
-              state={state}
-              setState={setState}
-              // projects
-              projects={data.allSanityProject.edges}
-              project={project}
-              setProject={setProject}
-              // progress
-              setProgress={setProgress}
+    <Page className={layout}>
+      <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setTimeout(setState(State.EXPLORE), 1000)} classNames="globe">
+        <Wrapper>
+          {/* World component*/}
+          <World
+            className={`${project ? 'project-active' : ''}`}
+            // page state
+            state={state}
+            setState={setState}
+            // projects
+            projects={data.allSanityProject.edges}
+            project={project}
+            setProject={setProject}
+            layout={layout}
+          />
+          <TextAnim
+            inProp={layout === 'home' && project}
+            appear={true}
+            timeout={1000}
+            tag="h1"
+            className="project-title"
+            text={get(project, 'node.city', get(project, 'node.title', ''))}
+            unmountOnExit
+          />
+        </Wrapper>
+      </CSSTransition>
+      <FooterContainer>
+        <div className="footer--content">
+          <>
+            <VerticalAnim in={layout === 'home' && state > State.LOADING} timeout={{ enter: 4000 }}>
+              <img src="/grab-icon.svg" />
+            </VerticalAnim>
+            <TextAnim 
+              in={layout === 'home' && state > State.LOADING}
+              timeout={1000}
+              tag="p"
+              text={INTRO_TEXT.toUpperCase()}
             />
-            {transitionStatus !== 'exiting' && (
-              <TextAnim
-                inProp={project}
-                appear={true}
-                timeout={1000}
-                tag="h1"
-                className="project-title"
-                text={get(project, 'node.city', get(project, 'node.title', ''))}
-                unmountOnExit
-              />
-            )}
-          </Wrapper>
-        </CSSTransition>
-      <ContentContainer />
-      {transitionStatus !== 'exiting' && (
-        <FooterContainer>
-          <div className="footer--content">
-            <>
-              <VerticalAnim in={state > State.LOADING} timeout={{ enter: 4000 }}>
-                <img src="/grab-icon.svg" />
-              </VerticalAnim>
-              <TextAnim 
-                in={state > State.LOADING}
-                timeout={1000}
-                tag="p"
-                text={INTRO_TEXT.toUpperCase()}
-              />
-            </>
-          </div>
-        </FooterContainer>
-      )}
+          </>
+        </div>
+      </FooterContainer>
       <VideoPreview className={project ? 'visible' : ''}>
         {project && (
           <video id="videoBG" poster={get(project, 'node.poster.asset.url')} playsInline autoPlay muted loop>
@@ -116,11 +111,28 @@ const WorldContainer = ({ transitionStatus }) => {
         )}
       </VideoPreview>
     </Page>
-  </>
   );
 }
 
 export default WorldContainer
+
+const Page = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+
+  &.other {
+    z-index: -1;
+    opacity: 0.4;
+  }
+
+  &.project-detailed {
+    position: absolute;
+  }
+`
 
 const Wrapper = styled.div`
   transform: scale(0);
@@ -181,25 +193,6 @@ const VideoPreview = styled.div`
   }
 `
 
-const ContentContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 900px;
-  max-width: 90%;
-  pointer-events: none;
-
-  @media ${breakpoints.phoneOnly} {
-    width: 100%;
-    padding: 0 15px;
-
-    .intro {
-      font-size: 26px;
-    }
-  }
-`
-
 const FooterContainer = styled.div`
   position: absolute;
   left: 50%;
@@ -233,42 +226,6 @@ const FooterContainer = styled.div`
 
     .skip-intro {
       cursor: pointer;
-    }
-  }
-`
-
-const Page = styled.div`
-  position: relative;
-  height: 100vh;
-  height: fill-available;
-  max-height: 100vh;
-  overflow: hidden;
-  will-change: opacity;
-
-  &.page-transition {
-    &-entered {
-      opacity: 1;
-    }
-
-    &-exiting {
-      opacity: 0;
-      transition: opacity 2s ease-in;
-    }
-  }
-
-  @media ${breakpoints.phoneOnly} {
-    will-change: opacity, transform;
-
-    &.page-transition {
-      &-entered {
-        transform: scale(1);
-      }
-
-      &-exiting {
-        opacity: 0;
-        transform: scale(3);
-        transition: transform 2s ease-in-out, opacity 1s ease-in-out 0.5s;
-      }
     }
   }
 `

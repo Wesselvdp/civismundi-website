@@ -11,7 +11,7 @@ export enum LineState {
   PARAGRAPH_IN = 4
 } 
 
-const BackgroundLines = ({ children, subtitle, title, content }) => {
+const BackgroundLines = ({ children, subtitle, title, content, contentTimeout }) => {
   const [state, setState] = useState(LineState.LOADING)
 
   useEffect(() => {
@@ -20,7 +20,6 @@ const BackgroundLines = ({ children, subtitle, title, content }) => {
 
   return (
     <Wrapper>
-      <img src="/lines-circle.svg" />
       <TextAnim
         inProp={state >= LineState.SUBTITLE_IN}
         timeout={{ enter: 300 }}
@@ -31,7 +30,7 @@ const BackgroundLines = ({ children, subtitle, title, content }) => {
       />
       <TextAnim
         inProp={state >= LineState.TITLE_IN}
-        timeout={{ enter: 300 }}
+        timeout={{ enter: contentTimeout || 300 }}
         onEntered={() => setState(LineState.PARAGRAPH_IN)}
         className="h2"
         tag="h1"

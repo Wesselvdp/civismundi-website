@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 
 import { graphql } from 'gatsby'
-import { TransitionState } from 'gatsby-plugin-transition-link'
 
 // Components
 import { ProjectDetailedContainer } from '@components/projects'
@@ -18,25 +17,11 @@ export enum ProjectState {
 const ProjectPageTemplate= ({ data }) => {
   const { title } = data.sanityProject
 
-  useLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0,1)
-    }
-  }, [])
-
   return (
-    <Layout>
-      <TransitionState>
-       {({ transitionStatus }) => {
-
-        return (
-          <>
-            <SEO title={`${title} | Projects`} />
-            <ProjectDetailedContainer data={data} transitionStatus={transitionStatus} />
-          </>
-        )}}
-      </TransitionState>
-    </Layout>
+    <>
+      <SEO title={`${title} | Projects`} />
+      <ProjectDetailedContainer data={data} />
+    </>
   )
 }
 

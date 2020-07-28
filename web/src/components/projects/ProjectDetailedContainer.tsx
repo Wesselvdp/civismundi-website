@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
 import { get } from 'lodash'
 import ModalVideo from 'react-modal-video'
-import { useSpring, animated as a } from 'react-spring'
 
 // Components
 import { BackgroundVideo, ProjectList } from '@components/projects'
 import { TextAnim, FadeAnim } from '@components/animations'
-import useWindowSize from '@hooks/useWindowSize'
 
 export enum ProjectState {
   LOADING = 1,
@@ -20,22 +18,16 @@ export enum ProjectState {
   VIDEO_BUTTON_IN = 5
 } 
 
-const ProjectDetailedContainer = ({ data, transitionStatus }) => {
+const ProjectDetailedContainer = ({ data }) => {
   const { title, id, video, poster, _rawOverview } = data.sanityProject
 
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
-    if (transitionStatus === 'entered') setState(ProjectState.SUBTITLE_IN)
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0,25)
-    }
+    setState(ProjectState.SUBTITLE_IN)
   }, [])
 
-  useEffect(() => {
-    if (transitionStatus === 'entered') setState(ProjectState.SUBTITLE_IN)
-  }, [transitionStatus])
 
   return (
     <>
@@ -58,7 +50,7 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
         <FadeAnim 
           timeout={1000}
           appear={true}
-          in={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+          in={state >= ProjectState.PARAGRAPH_IN}
         >
           <PlayButton className="mobile">
             <img src="/play.svg" onClick={() => openVideo(true)} />
@@ -92,7 +84,7 @@ const ProjectDetailedContainer = ({ data, transitionStatus }) => {
             <FadeAnim 
               timeout={1000}
               appear={true}
-              in={transitionStatus !== 'entering' && transitionStatus !== 'exiting' && transitionStatus !== 'exited'}
+              in={state >= ProjectState.PARAGRAPH_IN}
             >
               <PlayButton className="desktop">
                 <img src="/play.svg" onClick={() => openVideo(true)} />

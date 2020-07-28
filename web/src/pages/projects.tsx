@@ -50,7 +50,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
   
 
   return (
-    <Layout>
+    <>
       <SEO title="Projects" />
       <Page>
         <BackgroundLines
@@ -72,7 +72,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
           director={director}
         />
       </Page>
-    </Layout>
+    </>
   )
 }
 

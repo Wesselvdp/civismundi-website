@@ -45,8 +45,6 @@ const moveToProject = (curr, project, labels) => {
   const projectSlug = project.node.slug.current;
   console.log(projectSlug)
   const cameraToPosition = projectCameraPositions[projectSlug]
-  
-  // camera.position.setLength(150)
 
   new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
     .to({ x: c1.x, y: c1.y, z: c1.z}, 1500)
@@ -71,21 +69,9 @@ const moveToProject = (curr, project, labels) => {
       clouds.position.set(d.x, d.y, d.z)
     })
     .start()
-
-  // controls.target.set(c1.x, c1.y, c1.z)
-  // camera.position.set(-20.825139077658324, -31.61013438893567, 187.8923032231242)
-  // camera.position.setLength(150)
-  // world.translateY(-25)
-
-  console.log('controls', controls)
-  console.log('camera pos', camera.position)
-  console.log('c1 pos', c1)
-  // place
-  
-  // controls.target.set()
 }
 
-const World = ({ state, setState, projects, project, setProject, movingToProject, setProgress, className }) => {
+const World = ({ state, setState, projects, project, setProject, movingToProject, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
@@ -116,19 +102,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   const [labels, setLabels] = useState([])
   const [labelHovered, onLabelHovered] = useState(null)
   const [labelClicked, onLabelClicked] = useState(null)
-
-  const triggerTransition = useTriggerTransition({
-    exit: {
-      delay: 0,
-      length: 2,
-      zIndex: 1,
-    },
-    entry: {
-      delay: 0,
-      length: 1,
-      zIndex: 0
-    }
-  });
 
   useEffect(() => {
     if (initialized || !ref.current) return;
@@ -183,11 +156,7 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
     if (!isMobile) {
       setProject(labelClicked)
       moveToProject(ref.current, labelClicked, labels)
-      // triggerTransition({
-      //   to: `/projects/${labelClicked.node.slug.current}`,
-      // })
-
-      // navigate(`/projects/${labelClicked.node.slug.current}`)
+      navigate(`/projects/${labelClicked.node.slug.current}`)
       return
     }
 

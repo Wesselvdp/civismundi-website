@@ -2,17 +2,20 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
-import { Layout, BackgroundLines, SEO } from '@components/general'
+import { BackgroundLines, SEO } from '@components/general'
+
+const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
 
 const AboutPage = () => {
   return (
-    <Layout>
+    <>
       <SEO title="About" />
       <Page>
         <div>
           <BackgroundLines
             subtitle="About us"
-            title="Lorem ipsum dolor sit amet"
+            title={INTRO_TEXT}
+            contentTimeout={3000}
             content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
           />
           <ContactInfo>
@@ -29,7 +32,7 @@ const AboutPage = () => {
           </ContactInfo>
         </div>
       </Page>
-    </Layout>
+    </>
   )
 }
 

@@ -15,8 +15,9 @@ module.exports = {
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-tsconfig-paths`,
     'gatsby-plugin-loadable-components-ssr',
-    `gatsby-plugin-transition-link`,
+    // `gatsby-plugin-transition-link`,
     `gatsby-plugin-styled-components`,
+    `gatsby-plugin-layout`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -64,7 +65,7 @@ module.exports = {
         display: `minimal-ui`,
         icon: `src/media/favicon-32x32.png` // This path is relative to the root of the site.
       }
-    }
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
