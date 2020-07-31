@@ -8,13 +8,16 @@ import { get } from 'lodash'
 import World from './World'
 import { TextAnim, VerticalAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
-
-type ScreenCoordinates = { x: string, y: string }
+import usePrevious from '@hooks/usePrevious'
+// import console = require('console');
 
 export enum State {
   INITIALIZING = 0,
   LOADING = 1,
-  EXPLORE = 2
+  BACKGROUND = 2,
+  PROJECT_DETAILED = 3,
+  EXPLORE = 4,
+  PROJECT_HOVERED = 5,
 }
 
 type StateType = State
@@ -23,14 +26,38 @@ const GLOBE_TRANSITION_LENGTH = 1600;
 
 const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
 
-const WorldContainer = ({ layout }) => {
+const WorldContainer = ({ layout, location }) => {
   const [state, setState] = useState<StateType>(State.INITIALIZING)
+  const prevState = usePrevious(state)
+  const [skipAnimation, setSkipAnimation] = useState<boolean>(false)
   const [project, setProject] = useState<Project | null>(null)
 
   useEffect(() => {
-    console.log('mounted world container')
-  }, [])
-  
+    console.log('prevstate', prevState)
+    console.log('state=', state)
+  }, [state])
+
+  useEffect(() => {
+    if (state === State.INITIALIZING && layout === 'project-detailed') {
+      setSkipAnimation(true)
+      console.log('skip animation', skipAnimation)
+    }
+
+    if (state <= State.LOADING) return
+
+    switch (layout) {
+      case 'other': 
+        return setState(State.BACKGROUND)
+
+      case 'project-detailed':
+        return setState(State.PROJECT_DETAILED)
+
+      case 'home':
+      default:
+        return setState(State.EXPLORE)
+    }
+  }, [layout])
+
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -61,24 +88,41 @@ const WorldContainer = ({ layout }) => {
     }
   `)
 
+  const _initStateFromLayout = () => {
+    switch (layout) {
+      case 'other': 
+        return setState(State.BACKGROUND)
+
+      case 'project-detailed': {
+        return setState(State.PROJECT_DETAILED)
+      }
+
+      case 'home':
+      default:
+        return setState(State.EXPLORE)
+    }
+  }
+
   return (
-    <Page className={`${layout}`}>
-      <CSSTransition in={state >= State.LOADING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => setTimeout(setState(State.EXPLORE), 1000)} classNames="globe">
-        <Wrapper className={`${layout=== 'project-detailed' || (layout === 'home' && project) ? 'project-active' : ''}`}>
+    <Page className={layout}>
+      <CSSTransition in={state > State.INITIALIZING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => _initStateFromLayout()} classNames="globe">
+        <AnimatedWrapper
+          className={`${skipAnimation ? 'skip-animation' : ''}`}
+        >
           {/* World component*/}
           <World
-            className={`${project ? 'project-active' : ''}`}
-            // page state
+            className={`${state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'project-active' : ''}`}
             state={state}
+            prevState={prevState}
             setState={setState}
-            // projects
             projects={data.allSanityProject.edges}
             project={project}
             setProject={setProject}
             layout={layout}
+            location={location}
           />
           <TextAnim
-            inProp={layout === 'home' && project}
+            inProp={state === State.PROJECT_HOVERED}
             appear={true}
             timeout={1000}
             tag="h1"
@@ -86,16 +130,16 @@ const WorldContainer = ({ layout }) => {
             text={get(project, 'node.city', get(project, 'node.title', ''))}
             unmountOnExit
           />
-        </Wrapper>
+        </AnimatedWrapper>
       </CSSTransition>
       <FooterContainer>
         <div className="footer--content">
           <>
-            <VerticalAnim in={layout === 'home' && state > State.LOADING} timeout={{ enter: 4000 }}>
+            <VerticalAnim in={state === State.PROJECT_HOVERED || state === State.EXPLORE} timeout={{ enter: 4000 }}>
               <img src="/grab-icon.svg" />
             </VerticalAnim>
             <TextAnim 
-              in={layout === 'home' && state > State.LOADING}
+              in={state === State.PROJECT_HOVERED || state === State.EXPLORE}
               timeout={1000}
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
@@ -103,7 +147,7 @@ const WorldContainer = ({ layout }) => {
           </>
         </div>
       </FooterContainer>
-      <VideoPreview className={project ? 'visible' : ''}>
+      <VideoPreview className={state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'visible' : ''}>
         {project && (
           <video id="videoBG" poster={get(project, 'node.poster.asset.url')} playsInline autoPlay muted loop>
             <source src={get(project, 'node.video.asset.url')} type="video/mp4" />
@@ -137,7 +181,7 @@ const Page = styled.div`
   }
 `
 
-const Wrapper = styled.div`
+const AnimatedWrapper = styled.div`
   position: relative;
   max-height: 100vh;
   opacity: 0;
@@ -146,7 +190,7 @@ const Wrapper = styled.div`
 
   &.globe-enter {
     transform: scale(0);
-    opacity: 1;
+    opacity: 0;
   }
 
   &.globe-enter-active {
@@ -160,8 +204,10 @@ const Wrapper = styled.div`
     opacity: 1;
   }
 
-  &.project-active {
-    opacity: 0.4;
+  &.skip-animation {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    transition: none;
   }
 
   .project-title {

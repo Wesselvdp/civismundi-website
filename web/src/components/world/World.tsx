@@ -6,72 +6,15 @@ import { get } from 'lodash'
 import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import { useTriggerTransition } from 'gatsby-plugin-transition-link'
-
 import * as THREE from 'three'
-import { initialize, labelObject } from './utils'
-import { State } from './WorldContainer'
-import TWEEN from '@tweenjs/tween.js'
-// import console = require('console');
 
+import { initialize, moveToMarker, moveFromMarker, changeMarkerType, labelObject } from './utils'
+import { State } from './WorldContainer'
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
-const scale = {
-  default: new THREE.Vector3(1, 1, 1),
-  large: new THREE.Vector3(1.3, 1.3, 1.3)
-}
-
-const projectCameraPositions = {
-  fuckthat: {x: -21.09517134023139, y: -13.842005393559838, z: 158.13052241620738, worldY: -25 },
-  columbus: {x: 27.14184364454964, y: -7.805917689107176, z: 157.41942896107605, worldY: -25 },
-  DelaMove: {x: 0.21709849267533315, y: -129.60871165915535, z: 124.37075872820836, worldY: -75 },
-  stargazing: {x: -157.3196871510831, y: -45.99100074437717, z: -83.3751610249093, worldY: -50 }
-}
-const moveToProject = (curr, project, labels) => {
-  if (!project) return
-
-  const scene = curr.scene()
-  const controls = curr.controls()
-  const camera = curr.camera()
-
-  const world = scene.children.find(obj => obj.type === 'Group')
-  const clouds = scene.children.find(obj => obj.name === 'Clouds')
-  const c1 = curr.getCoords(project.node.location.lat, project.node.location.lng, 0)
-
-  controls.minDistance = 60
-  controls.maxDistance = Infinity
- 
-  const projectSlug = project.node.slug.current;
-  console.log(projectSlug)
-  const cameraToPosition = projectCameraPositions[projectSlug]
-
-  new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
-    .to({ x: c1.x, y: c1.y, z: c1.z}, 1500)
-    .onUpdate(d => {
-      controls.target.set(d.x, d.y, d.z)
-    })
-    .start()
-
-  if (cameraToPosition) {
-    new TWEEN.Tween({ x: camera.position.x, y: camera.position.y, z: camera.position.z })
-      .to(cameraToPosition, 1500)
-      .onUpdate(d => {
-        camera.position.set(d.x, d.y, d.z)
-      })
-      .start()
-  }
-  
-  new TWEEN.Tween({ x: world.position.x, y: world.position.y, z: world.position.z })
-    .to({ x: world.position.x, y: cameraToPosition ? cameraToPosition.worldY : -25, z: world.position.z }, 1500)
-    .onUpdate(d => {
-      world.position.set(d.x, d.y, d.z)
-      clouds.position.set(d.x, d.y, d.z)
-    })
-    .start()
-}
-
-const World = ({ state, setState, projects, project, setProject, movingToProject, className }) => {
+const World = ({ state, prevState, setState, projects, project, setProject, location, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
@@ -110,77 +53,81 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, [loaded]);
 
   useEffect(() => {
-    if (movingToProject) {
-      moveToProject(ref.current, project)
-    }
-  }, [movingToProject])
+    if (state === State.INITIALIZING && ref.current) return _init({ full: false })
 
-  useEffect(() => {
-    if (state === State.INITIALIZING && ref.current) _init({ full: false })
-    if (state > State.LOADING) controls.enabled = true
+    // Handle controls
+    if (controls) controls.enabled = state === State.EXPLORE || state === State.PROJECT_HOVERED
+
+    // Handle auto-rotation
+    setCameraRotating(state === State.EXPLORE || state === State.BACKGROUND)
+
+    // Handle markers
+    const MARKER_STATES = [State.EXPLORE, State.PROJECT_HOVERED]
+    if (MARKER_STATES.includes(state) && !MARKER_STATES.includes(prevState)) {
+      // Show markers
+      changeMarkerType(labels, 'default', { duration: !prevState ? 0 : 300 })
+    } else if (!MARKER_STATES.includes(state) && (!prevState || MARKER_STATES.includes(prevState))) {
+      // Hide markers
+      changeMarkerType(labels, 'hidden', { duration: 300 })
+    }
+  
+    // Set correct camera/globe position when on project detailed page
+    if (state === State.PROJECT_DETAILED) {
+      if (prevState === State.LOADING) {
+        // First find project by route
+        const projectSlug = get(location.pathname.split('/projects/'), '[1]')
+        const project = projects.find(project => get(project, 'node.slug.current', '').toLowerCase() === projectSlug)
+
+        // Move to marker immidiately without animation
+        if (project) {
+          setProject(project)
+          moveToMarker(ref.current, project, { duration: 0 })
+        }
+      } else {
+        moveToMarker(ref.current, project)
+        setTimeout(() => {
+          navigate(`/projects/${project.node.slug.current}`)
+        }, 1500)
+      }
+    }
+
+    // Handle from detailed to home
+    if (prevState !== state && prevState === State.PROJECT_DETAILED) {
+      moveFromMarker(ref.current, { duration: 1500 })
+    }
   }, [state])
 
   useEffect(() => {
-    if (!initialized) return
-    if (state < State.EXPLORE) return
-
-    if (!project) {
-      labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
-      setCameraRotating(true)
-      return
-    }
-
-    setCameraRotating(false)
-  }, [project])
-
-
-  useEffect(() => {
     if (isMobile) return
-    if (state < State.EXPLORE) return
-  
-    setProject(labelHovered)
+    if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
 
-    // update label size
-    labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
-    if (labelHovered) Object.assign(labelHovered.__threeObj.scale, scale.large)
+    if (labelHovered) {
+      setProject(labelHovered)
+      changeMarkerType([labelHovered], 'hover', { duration: 200 })
+      setState(State.PROJECT_HOVERED)
+    } 
+    else {
+      setProject(null)
+      changeMarkerType(labels, 'default', { duration: 200 })
+      setState(State.EXPLORE)
+    }
   }, [labelHovered])
 
   useEffect(() => {
-    if (state < State.EXPLORE) return
+    if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
 
-    // update label size
-    labels.forEach(label => Object.assign(label.__threeObj.scale, scale.default))
-    if (labelClicked) Object.assign(labelClicked.__threeObj.scale, scale.large)
-
-    // always go to page if not on mobile
-    if (!isMobile) {
-      setProject(labelClicked)
-      moveToProject(ref.current, labelClicked, labels)
+    if (labelClicked) {
+      if (!project || labelClicked.node.slug.current !== project.node.slug.current) {
+        setProject(labelClicked)
+      }
+      setState(State.PROJECT_DETAILED)
       navigate(`/projects/${labelClicked.node.slug.current}`)
-      return
     }
-
-    // if clicked on marker that's already active, go to page
-    if (project && project.node.slug.current === labelClicked.node.slug.current) {
-      moveToProject(ref.current, labelClicked)
-      navigate(`/projects/${project.node.slug.current}`)
-      return
-    }
-    
-    // mobile, new marker clicked
-    setProject(null)
-    moveToProject(ref.current, labelClicked)
-  
-    const timer = setTimeout(() => { 
-      setProject(labelClicked)
-    }, 1000);
-    return () => clearTimeout(timer)
   }, [labelClicked]);
 
 
   useEffect(() => {
-    if (!initialized) return
-    if (!cameraChanged) return
+    if (!camera || !cameraChanged) return
 
     // update labels rotation
     labels.forEach(label => {
@@ -193,23 +140,28 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
   }, [cameraChanged])
 
   useEffect(() => {
-    if (!initialized) return
-
-    controls.autoRotate = cameraRotating
+    if (controls) controls.autoRotate = cameraRotating
   }, [cameraRotating])
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      if (!initialized) return
+  const onLabelUpdate = (obj, d) => {
+    // this way we determine when ref.current is populated
+    if (!loaded) setLoaded(true)
+    if (!initialized) return
 
-      camera.aspect = window.innerWidth / window.innerHeight
-      renderer.setSize(window.innerWidth, window.innerHeight)
-      camera.updateProjectionMatrix()
+    Object.assign(
+      obj.position,
+      ref.current.getCoords(
+        get(d, 'node.location.lat', 0),
+        get(d, 'node.location.lng', 0),
+        0.05
+      )
+    )
+
+    // if new, add to labels
+    if (labels.length !== projects.length && !labels.some(label => label.__threeObj.uuid === d.__threeObj.uuid)) {
+      setLabels([...labels, d])
     }
-
-    window.addEventListener('resize', () => updateSize())
-    return () => window.removeEventListener('resize', updateSize)
-  }, []);
+  }
 
   const _init = (options = {}) => {
     initialize(ref.current, {
@@ -232,43 +184,18 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
       setLightning(_lightning)
 
       _controls.addEventListener('start', () => {
-        console.log('start', _camera.position)
         setProject(null)
         onLabelHovered(null)
         onLabelClicked(null)
-      })
-
-      _controls.addEventListener('end', () => {
-        console.log('end', _camera.position)
       })
   
       _controls.addEventListener('change', () => {
         if (_lightning && _camera) _lightning.position.copy(_camera.position)
         if (!cameraChanged) setCameraChanged(true)
       })
+
+      setInitialized(true)
     })
-
-    setInitialized(true)
-  }
-
-  const onLabelUpdate = (obj, d) => {
-    // this way we determine when ref.current is populated
-    if (!loaded) setLoaded(true)
-    if (!initialized) return
-
-    Object.assign(
-      obj.position,
-      ref.current.getCoords(
-        get(d, 'node.location.lat', 0),
-        get(d, 'node.location.lng', 0),
-        0.05
-      )
-    )
-
-    // if new, add to labels
-    if (labels.length !== projects.length && !labels.some(label => label.__threeObj.uuid === d.__threeObj.uuid)) {
-      setLabels([...labels, d])
-    }
   }
 
   return (
@@ -288,7 +215,6 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
             customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
             onCustomLayerHover={obj => onLabelHovered(obj)}
             onCustomLayerClick={obj => onLabelClicked(obj)}
-            onCustomLayerRightClick={obj => console.log(obj)}
             // settings
             animateIn={false}
             renderConfig={{
@@ -305,13 +231,11 @@ const World = ({ state, setState, projects, project, setProject, movingToProject
 }
 
 const Wrapper = styled.div`
-  & > div > div > div > div {
-    height: 100vh;
-    height: fill-available;
-  }
+  opacity: 1;
 
-  video {
-    visibility: hidden;
+  &.project-active {
+    opacity: 0.40;
   }
 `
+
 export default World

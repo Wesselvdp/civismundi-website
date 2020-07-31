@@ -6,15 +6,15 @@ import { WorldContainer } from '../components/world'
 
 type T = any
 
-const Layout: FC<T> = ({ children, pageContext }) => {
+const Layout: FC<T> = ({ children, pageContext, location }) => {
   return (
     <>
       <Navigation />
-      <WorldContainer layout={pageContext.layout} />
+      <WorldContainer location={location} layout={pageContext.layout} />
       <Main>
         {children}
       </Main>
-      {!pageContext.home && <GlobeButton />}
+      {pageContext.layout !== 'home' && <GlobeButton />}
     </>
   )
 }
