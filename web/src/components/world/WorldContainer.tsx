@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { get } from 'lodash'
+import { navigate } from 'gatsby'
 
 import World from './World'
 import { TextAnim, VerticalAnim, FadeAnim } from '@components/animations'
@@ -137,7 +138,15 @@ const WorldContainer = ({ layout, location }) => {
           <h2 className="subtitle">Video direction</h2>
           <h1>{get(project, 'node.city', get(project, 'node.title', ''))}</h1>
           <p>TRAVIS SCOTT • LOS ANGELES</p>
-          <Button buttonStyle="outlined">VIEW PROJECT</Button>
+          <Button 
+            buttonStyle="outlined"
+            onClick={() => { 
+              setState(State.PROJECT_DETAILED)
+              navigate(`/projects/${project.node.slug.current}`)
+            }}
+          >
+            VIEW PROJECT
+          </Button>
         </MobileContent>
       )}
       <FooterContainer>
@@ -247,6 +256,10 @@ const MobileContent = styled.div`
 
   @media ${breakpoints.phoneOnly} {
     display: initial;
+  }
+
+  button {
+    pointer-events: initial;
   }
 `
 
