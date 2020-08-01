@@ -111,7 +111,7 @@ const markerCameraPositions = {
   fuckthat: {x: -21.09517134023139, y: -13.842005393559838, z: 158.13052241620738, worldY: -40 },
   columbus: {x: 27.14184364454964, y: -7.805917689107176, z: 157.41942896107605, worldY: -40 },
   DelaMove: {x: 0.21709849267533315, y: -129.60871165915535, z: 124.37075872820836, worldY: -75 },
-  stargazing: {x: -157.3196871510831, y: -45.99100074437717, z: -83.3751610249093, worldY: -75 }
+  stargazing: {x: -157.3196871510831, y: -45.99100074437717, z: -83.3751610249093, worldY: -50 }
 }
 
 export const moveToMarker = (curr, marker, options = {}) => {
@@ -178,7 +178,7 @@ export const moveFromMarker = (curr, options = {}) => {
     .start()
   
   new TWEEN.Tween({ length: camera.position.sub(world.position).length() })
-    .to({ length: 150 })
+    .to({ length: 350 })
     .onUpdate(d => {
       camera.position.sub(world.position).setLength(d.length).add(world.position);
     })
