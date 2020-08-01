@@ -6,7 +6,6 @@ import { get } from 'lodash'
 import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import * as THREE from 'three'
 
 import { initialize, moveToMarker, moveFromMarker, changeMarkerType, labelObject } from './utils'
 import { State } from './WorldContainer'
@@ -55,6 +54,8 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   useEffect(() => {
     if (state === State.INITIALIZING && ref.current) return _init({ full: false })
 
+    if (state === State.PROJECT_HOVERED && !project) return setState(State.EXPLORE)
+  
     // Handle controls
     if (controls) controls.enabled = state === State.EXPLORE || state === State.PROJECT_HOVERED
   
@@ -109,10 +110,19 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   useEffect(() => {
     if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
 
-    if (labelClicked) {
-      if (!project || labelClicked.node.slug.current !== project.node.slug.current) {
+    if (isMobile && (!project || labelClicked.node.slug.current !== project.node.slug.current)) {
+      if (project) changeMarkerType([project], 'default', { duration: 200 })
+
+      if (labelClicked) {
         setProject(labelClicked)
+        setState(State.PROJECT_HOVERED)
+        changeMarkerType([labelClicked], 'hover', { duration: 200 })
       }
+      return
+    }
+
+    if (labelClicked) {
+      setProject(labelClicked)
       setState(State.PROJECT_DETAILED)
       navigate(`/projects/${labelClicked.node.slug.current}`)
     }
