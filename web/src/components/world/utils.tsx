@@ -237,7 +237,7 @@ export const moveFromMarker = (curr, options = {}) => {
     .start()
   
   new TWEEN.Tween({ length: camera.position.sub(world.position).length() })
-    .to({ length: 150 })
+    .to({ length: 350 })
     .onUpdate(d => {
       camera.position.sub(world.position).setLength(d.length).add(world.position);
     })

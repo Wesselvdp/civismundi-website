@@ -7,7 +7,7 @@ const Fade = ({
   timeout,
   ...props
 }) => (
-  <CSSTransition {...props} unmountOnExit timeout={timeout} classNames="fade">
+  <CSSTransition {...props} timeout={timeout} classNames="fade">
     <FadeWrapper timeout={timeout}>{children}</FadeWrapper>
   </CSSTransition>
 )

@@ -4,9 +4,11 @@ import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { get } from 'lodash'
+import { navigate } from 'gatsby'
 
 import World from './World'
-import { TextAnim, VerticalAnim } from '@components/animations'
+import { TextAnim, VerticalAnim, FadeAnim } from '@components/animations'
+import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 import usePrevious from '@hooks/usePrevious'
 // import console = require('console');
@@ -32,15 +34,14 @@ const WorldContainer = ({ layout, location }) => {
   const [skipAnimation, setSkipAnimation] = useState<boolean>(false)
   const [project, setProject] = useState<Project | null>(null)
 
-  useEffect(() => {
-    console.log('prevstate', prevState)
-    console.log('state=', state)
-  }, [state])
+  // useEffect(() => {
+  //   console.log('prevstate', prevState)
+  //   console.log('state=', state)
+  // }, [state])
 
   useEffect(() => {
     if (state === State.INITIALIZING && layout === 'project-detailed') {
       setSkipAnimation(true)
-      console.log('skip animation', skipAnimation)
     }
 
     if (state <= State.LOADING) return
@@ -132,6 +133,22 @@ const WorldContainer = ({ layout, location }) => {
           />
         </AnimatedWrapper>
       </CSSTransition>
+      {state === State.PROJECT_HOVERED && project && (
+        <MobileContent>
+          <h2 className="subtitle">Video direction</h2>
+          <h1>{get(project, 'node.city', get(project, 'node.title', ''))}</h1>
+          <p>TRAVIS SCOTT • LOS ANGELES</p>
+          <Button 
+            buttonStyle="outlined"
+            onClick={() => { 
+              setState(State.PROJECT_DETAILED)
+              navigate(`/projects/${project.node.slug.current}`)
+            }}
+          >
+            VIEW PROJECT
+          </Button>
+        </MobileContent>
+      )}
       <FooterContainer>
         <div className="footer--content">
           <>
@@ -220,10 +237,30 @@ const AnimatedWrapper = styled.div`
     @media ${breakpoints.phoneOnly} {
       padding-top: 100px;
       font-size: 18px;
+      display: none;
     }
   }
 
   * { outline: 0 };
+`
+
+const MobileContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  padding: 0 15px;
+  transform: translate(-50%, -50%);
+  display: none;
+  pointer-events: none;
+
+  @media ${breakpoints.phoneOnly} {
+    display: initial;
+  }
+
+  button {
+    pointer-events: initial;
+  }
 `
 
 const VideoPreview = styled.div`
