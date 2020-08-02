@@ -121,7 +121,8 @@ export const moveToMarker = (curr, marker, options = {}) => {
   const scene = curr.scene()
   const controls = curr.controls()
 
-  const coords = curr.getCoords(marker.node.location.lat, marker.node.location.lng, 0.05)
+  // converts (lat, lng) to world position
+  const coords = curr.getCoords(marker.node.location.lat, marker.node.location.lng, 0.20)
 
   // path/curve
   const curve = new THREE.CatmullRomCurve3( [
@@ -130,7 +131,7 @@ export const moveToMarker = (curr, marker, options = {}) => {
   ] );
 
   // geometry
-  const tubeGeometry = new THREE.TubeBufferGeometry( curve, 200, 2, 3, true);
+  const tubeGeometry = new THREE.TubeBufferGeometry( curve, 200, 2, 3, false);
   const material = new THREE.MeshLambertMaterial( { color: 0xff00ff } );
   const wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.3, wireframe: true, transparent: true } );
   const mesh = new THREE.Mesh( tubeGeometry, material );
@@ -139,10 +140,13 @@ export const moveToMarker = (curr, marker, options = {}) => {
   scene.add(mesh)
 
   // camera animation
+  const duration = 1500
   new TWEEN.Tween({ t: 0})
-    .to({ t: 1500 }, 1500)
+    .to({ t: duration }, duration)
     .onUpdate(d => {
-      tubeGeometry.parameters.path.getPointAt( d.t, position );
+      const t = d.t / duration
+
+      tubeGeometry.parameters.path.getPointAt( t, position );
       position.multiplyScalar( 1 );
 
       // interpolation
@@ -167,51 +171,15 @@ export const moveToMarker = (curr, marker, options = {}) => {
 
       // using arclength for stablization in look ahead
       tubeGeometry.parameters.path.getPointAt( ( t + 30 / tubeGeometry.parameters.path.getLength() ) % 1, lookAt );
-      lookAt.multiplyScalar( params.scale );
+      lookAt.multiplyScalar( 1 );
 
       // camera orientation 2 - up orientation via normal
-
-      if ( ! params.lookAhead ) lookAt.copy( position ).add( direction );
+      lookAt.copy( position ).add( direction );
+      controls.target.copy(lookAt)
       camera.matrix.lookAt( camera.position, lookAt, normal );
       camera.quaternion.setFromRotationMatrix( camera.matrix );
     })
     .start()
-
-  tubeGeometry.parameters.path.getPointAt( t, position );
-  position.multiplyScalar( params.scale );
-
-  // interpolation
-
-  var segments = tubeGeometry.tangents.length;
-  var pickt = t * segments;
-  var pick = Math.floor( pickt );
-  var pickNext = ( pick + 1 ) % segments;
-
-  binormal.subVectors( tubeGeometry.binormals[ pickNext ], tubeGeometry.binormals[ pick ] );
-  binormal.multiplyScalar( pickt - pick ).add( tubeGeometry.binormals[ pick ] );
-
-  tubeGeometry.parameters.path.getTangentAt( t, direction );
-  var offset = 15;
-
-  normal.copy( binormal ).cross( direction );
-
-  // we move on a offset on its binormal
-
-  position.add( normal.clone().multiplyScalar( offset ) );
-
-  splineCamera.position.copy( position );
-  cameraEye.position.copy( position );
-
-  // using arclength for stablization in look ahead
-
-  tubeGeometry.parameters.path.getPointAt( ( t + 30 / tubeGeometry.parameters.path.getLength() ) % 1, lookAt );
-  lookAt.multiplyScalar( params.scale );
-
-  // camera orientation 2 - up orientation via normal
-
-  if ( ! params.lookAhead ) lookAt.copy( position ).add( direction );
-  splineCamera.matrix.lookAt( splineCamera.position, lookAt, normal );
-  splineCamera.quaternion.setFromRotationMatrix( splineCamera.matrix );
 }
 
 
@@ -237,7 +205,7 @@ export const moveFromMarker = (curr, options = {}) => {
     .start()
   
   new TWEEN.Tween({ length: camera.position.sub(world.position).length() })
-    .to({ length: 150 })
+    .to({ length: 350 })
     .onUpdate(d => {
       camera.position.sub(world.position).setLength(d.length).add(world.position);
     })

@@ -6,7 +6,6 @@ import { get } from 'lodash'
 import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
-import * as THREE from 'three'
 
 import { initialize, moveToMarker, moveFromMarker, changeMarkerType, labelObject } from './utils'
 import { State } from './WorldContainer'
@@ -55,47 +54,42 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   useEffect(() => {
     if (state === State.INITIALIZING && ref.current) return _init({ full: false })
 
+    if (state === State.PROJECT_HOVERED && !project) return setState(State.EXPLORE)
+  
     // Handle controls
-    if (controls) controls.enabled = state === State.EXPLORE || state === State.PROJECT_HOVERED
-
+    if (controls) controls.enabled = true // state === State.EXPLORE || state === State.PROJECT_HOVERED
+  
     // Handle auto-rotation
     setCameraRotating(state === State.EXPLORE || state === State.BACKGROUND)
 
     // Handle markers
     const MARKER_STATES = [State.EXPLORE, State.PROJECT_HOVERED]
-    if (MARKER_STATES.includes(state) && !MARKER_STATES.includes(prevState)) {
-      // Show markers
+    if (MARKER_STATES.includes(state)) {
       changeMarkerType(labels, 'default', { duration: !prevState ? 0 : 300 })
-    } else if (!MARKER_STATES.includes(state) && (!prevState || MARKER_STATES.includes(prevState))) {
-      // Hide markers
+    } else if (!MARKER_STATES.includes(state)) {
       changeMarkerType(labels, 'hidden', { duration: 300 })
     }
   
     // Set correct camera/globe position when on project detailed page
     if (state === State.PROJECT_DETAILED) {
-      if (prevState === State.LOADING) {
+      if (!project) {
         // First find project by route
         const projectSlug = get(location.pathname.split('/projects/'), '[1]')
-        const project = projects.find(project => get(project, 'node.slug.current', '').toLowerCase() === projectSlug)
+        const p = projects.find(pj => get(pj, 'node.slug.current', '').toLowerCase() === projectSlug)
+        return setProject(p)
+      } 
 
-        // Move to marker immidiately without animation
-        if (project) {
-          setProject(project)
-          moveToMarker(ref.current, project, { duration: 0 })
-        }
-      } else {
-        moveToMarker(ref.current, project)
-        setTimeout(() => {
-          navigate(`/projects/${project.node.slug.current}`)
-        }, 1500)
-      }
+      moveToMarker(ref.current, project, { duration: prevState === State.LOADING ? 0 : 1500 })
+      setTimeout(() => {
+        navigate(`/projects/${project.node.slug.current}`)
+      }, 1500)
     }
 
     // Handle from detailed to home
     if (prevState !== state && prevState === State.PROJECT_DETAILED) {
       moveFromMarker(ref.current, { duration: 1500 })
     }
-  }, [state])
+  }, [state, project])
 
   useEffect(() => {
     if (isMobile) return
@@ -116,10 +110,20 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   useEffect(() => {
     if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
 
-    if (labelClicked) {
-      if (!project || labelClicked.node.slug.current !== project.node.slug.current) {
+    if (isMobile && (!project || labelClicked.node.slug.current !== project.node.slug.current)) {
+      if (project) changeMarkerType([project], 'default', { duration: 200 })
+
+      if (labelClicked) {
         setProject(labelClicked)
+        setState(State.PROJECT_HOVERED)
+        changeMarkerType([labelClicked], 'hover', { duration: 200 })
       }
+      return
+    }
+
+    if (labelClicked) {
+      setProject(labelClicked)
+      moveToMarker(ref.current, labelClicked)
       setState(State.PROJECT_DETAILED)
       navigate(`/projects/${labelClicked.node.slug.current}`)
     }

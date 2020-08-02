@@ -57,6 +57,9 @@ const ProjectList: FC<T> = ({ title, projects, limit, director, blockId }) => {
 }
 
 const Container = styled.div`
+  max-width: 1800px;
+  margin: 0 auto;
+
   h3 {
     line-height: 40px;
   }
