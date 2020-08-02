@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { isMobile } from 'react-device-detect'
 
+
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
     new THREE.SphereGeometry(102, 32, 32),
@@ -70,7 +71,7 @@ export const initialize = (curr: any, options: any = { full: true }) => {
   // control options
   controls.enableZoom = false
   controls.autoRotateSpeed = 0.3
-  if (isMobile) camera.fov = 75
+  if (isMobile) camera.position.z = 500
 
   // custom three objects
   let clouds;
@@ -178,7 +179,7 @@ export const moveFromMarker = (curr, options = {}) => {
     .start()
   
   new TWEEN.Tween({ length: camera.position.sub(world.position).length() })
-    .to({ length: 350 })
+    .to({ length: isMobile ? 500 : 350 })
     .onUpdate(d => {
       camera.position.sub(world.position).setLength(d.length).add(world.position);
     })
