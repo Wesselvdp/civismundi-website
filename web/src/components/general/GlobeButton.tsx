@@ -18,10 +18,10 @@ const ButtonStyled = styled.div`
   left: 30px;
   height: 50px;
   width: 50px;
-  opacity: 0.80;
   border-radius: 50%;
   border: 1px solid #707070;
   z-index: 10000;
+  background-color: #000;
 
   img {
     position: absolute;
@@ -30,6 +30,7 @@ const ButtonStyled = styled.div`
     transform: translate(-50%, -50%) scale(0.8);
     transform-origin: 50% 50%;
     transition: transform 0.25s ease-in-out;
+    opacity: 0.80;
   }
 
   &:hover img {

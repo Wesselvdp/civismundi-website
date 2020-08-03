@@ -114,9 +114,18 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       if (project) changeMarkerType([project], 'default', { duration: 200 })
 
       if (labelClicked) {
-        setProject(labelClicked)
-        setState(State.PROJECT_HOVERED)
+        ref.current.pointOfView({
+          lat: labelClicked.node.location.lat,
+          lng: labelClicked.node.location.lng,
+          alt: 0.05
+        }, 1000)
+
         changeMarkerType([labelClicked], 'hover', { duration: 200 })
+
+        setTimeout(() => {
+          setProject(labelClicked)
+          setState(State.PROJECT_HOVERED)
+        }, 1000)
       }
       return
     }
