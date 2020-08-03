@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 
+import { breakpoints } from '@utils/breakpoints'
+
 const GlobeButton = () => (
   <Link to="/">
     <ButtonStyled>
@@ -22,6 +24,11 @@ const ButtonStyled = styled.div`
   border: 1px solid #707070;
   z-index: 10000;
   background-color: #000;
+
+  @media ${breakpoints.phoneOnly} {
+    left: 10px;
+    bottom: 10px;
+  }
 
   img {
     position: absolute;

@@ -122,22 +122,13 @@ const WorldContainer = ({ layout, location }) => {
             layout={layout}
             location={location}
           />
-          <TextAnim
-            inProp={state === State.PROJECT_HOVERED}
-            appear={true}
-            timeout={1000}
-            tag="h1"
-            className="project-title"
-            text={get(project, 'node.city', get(project, 'node.title', ''))}
-            unmountOnExit
-          />
         </AnimatedWrapper>
       </CSSTransition>
       {state === State.PROJECT_HOVERED && project && (
         <MobileContent>
           <h2 className="subtitle">Video direction</h2>
           <h1>{get(project, 'node.city', get(project, 'node.title', ''))}</h1>
-          <p>TRAVIS SCOTT • LOS ANGELES</p>
+          <p>TRAVIS SCOTT <span>•</span> LOS ANGELES</p>
           <Button 
             buttonStyle="outlined"
             onClick={() => { 
@@ -251,15 +242,22 @@ const MobileContent = styled.div`
   width: 100%;
   padding: 0 15px;
   transform: translate(-50%, -50%);
-  display: none;
   pointer-events: none;
-
-  @media ${breakpoints.phoneOnly} {
-    display: initial;
-  }
 
   button {
     pointer-events: initial;
+    display: none;
+
+    @media ${breakpoints.phoneOnly} {
+      padding: 1em 2em;
+      font-size: 10px;
+      border-width: 0.5px;
+    }
+  }
+
+  p span {
+    margin: 0 3px;
+    display: inline-block;
   }
 `
 

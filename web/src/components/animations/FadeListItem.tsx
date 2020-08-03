@@ -10,7 +10,7 @@ const FadeListItem = ({ children, visible }) => {
     if (!visible) {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => setVisible(entry.isIntersecting))
-      })
+      }, { rootMargin: '75px' })
 
       observer.observe(ref.current)
     }
