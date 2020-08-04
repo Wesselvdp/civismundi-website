@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 import { BackgroundLines, SEO } from '@components/general'
 
-const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
+const TITLE = 'A collective of interdisciplinary creatives';
+const CONTENT = 'collaborative practice seeks to navigate the confluence of film, music, design and fashion'
 
 const AboutPage = () => {
   return (
@@ -14,9 +15,9 @@ const AboutPage = () => {
         <div>
           <BackgroundLines
             subtitle="About us"
-            title={INTRO_TEXT}
-            contentTimeout={3000}
-            content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
+            title={TITLE}
+            contentTimeout={1000}
+            content={CONTENT.toUpperCase()}
           />
           <ContactInfo>
             <div className="row">

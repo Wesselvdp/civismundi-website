@@ -72,6 +72,10 @@ const doPulsingTween = (obj, duration = 1000) => {
     .start()
 }
 
+export const displayPulses = (pulses, show) => {
+  pulses.forEach(pulse => pulse.__threeObj.visible = show)
+}
+
 const initPulsingLabels = (curr: any, projects: any[]) => {
   const duration = 1000
   const geometry = new THREE.CircleGeometry(isMobile ? 7 : 3.5, 25, 25)
@@ -90,7 +94,7 @@ const initPulsingLabels = (curr: any, projects: any[]) => {
       // Animate ring
       doPulsingTween(ring, duration)
 
-      labels.push(ring)
+      labels.push({ __threeObj: ring })
     }
   })
 

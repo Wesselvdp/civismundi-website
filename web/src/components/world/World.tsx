@@ -7,7 +7,7 @@ import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
 
-import { initialize, moveToMarker, moveFromMarker, changeMarkerType, labelObject } from './utils'
+import { initialize, moveToMarker, moveFromMarker, changeMarkerType, displayPulses, labelObject } from './utils'
 import { State } from './WorldContainer'
 // import console = require('console');
 
@@ -62,8 +62,10 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
     const MARKER_STATES = [State.EXPLORE, State.PROJECT_HOVERED]
     if (MARKER_STATES.includes(state)) {
       changeMarkerType(labels, 'default', { duration: !prevState ? 0 : 300 })
+      displayPulses(pulsingLabels, true)
     } else if (!MARKER_STATES.includes(state)) {
       changeMarkerType(labels, 'hidden', { duration: 300 })
+      displayPulses(pulsingLabels, false)
     }
   
     // Set correct camera/globe position when on project detailed page
@@ -138,12 +140,8 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
     if (!camera || !cameraChanged) return
 
     // update labels rotation
-    labels.forEach(label => {
+    [...labels, ...pulsingLabels].forEach(label => {
       label.__threeObj.quaternion.copy(camera.quaternion)
-    })
-
-    pulsingLabels.forEach(label => {
-      label.quaternion.copy(camera.quaternion)
     })
 
     // so that camera changed only triggers every 150ms
