@@ -252,6 +252,7 @@ const MobileContent = styled.div`
       padding: 1em 2em;
       font-size: 10px;
       border-width: 0.5px;
+      display: initial;
     }
   }
 
