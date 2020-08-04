@@ -32,16 +32,12 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 
   // controls
   const [controls, setControls] = useState(null)
-  
-  // renderer
-  const [renderer, setRenderer] = useState(null)
-
-  // custom scene objects
-  const [clouds, setClouds] = useState(null);
-  const [lightning, setLightning] = useState(null);
 
   // labels
   const [labels, setLabels] = useState([])
+  const [pulsingLabels, setPulsingLabels] = useState([])
+
+  // actions
   const [labelHovered, onLabelHovered] = useState(null)
   const [labelClicked, onLabelClicked] = useState(null)
 
@@ -146,6 +142,10 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       label.__threeObj.quaternion.copy(camera.quaternion)
     })
 
+    pulsingLabels.forEach(label => {
+      label.quaternion.copy(camera.quaternion)
+    })
+
     // so that camera changed only triggers every 150ms
     const timer = setTimeout(() => setCameraChanged(false), 150);
     return () => clearTimeout(timer)
@@ -176,7 +176,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   }
 
   const _init = (options = {}) => {
-    initialize(ref.current, {
+    initialize(ref.current, projects, {
       ...options,
       onLoaded: () => setState(State.LOADING)
     }).then(([
@@ -186,14 +186,12 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       _renderer,
       _clouds,
       _lightning, 
-      _video
+      _pulsingLabels,
     ]) => {
       setScene(_scene)
       setCamera(_camera)
       setControls(_controls)
-      setRenderer(_renderer)
-      setClouds(_clouds)
-      setLightning(_lightning)
+      setPulsingLabels(_pulsingLabels)
 
       _controls.addEventListener('start', () => {
         setProject(null)

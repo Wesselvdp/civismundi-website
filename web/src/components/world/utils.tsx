@@ -58,7 +58,46 @@ const initDirectionalLight = (curr: any) => {
   })
 }
 
-export const initialize = (curr: any, options: any = { full: true }) => {
+const doPulsingTween = (obj, duration = 1000) => {
+  console.log()
+  new TWEEN.Tween({ scale: 1, opacity: 1 })
+    .to({ scale: 2, opacity: 0 }, duration)
+    .onUpdate(d => {
+      obj.scale.set(d.scale, d.scale, d.scale)
+      obj.material.opacity = d.opacity
+    })
+    .onComplete(d => {
+      doPulsingTween(obj, duration)
+    })
+    .start()
+}
+
+const initPulsingLabels = (curr: any, projects: any[]) => {
+  const duration = 1000
+  const geometry = new THREE.CircleGeometry(isMobile ? 7 : 3.5, 25, 25)
+  geometry.vertices.splice(0, 1)
+  const material = new THREE.LineBasicMaterial({ color: 'white', transparent: true })
+  
+  const labels: any[] = []
+  projects.forEach(project => {
+    if (project.node.slug.current === 'columbus') {
+      // Create a ring
+      const position = curr.getCoords(project.node.location.lat, project.node.location.lng, 0.05)
+      const ring = new THREE.LineLoop(geometry, material)
+      ring.position.set(position.x, position.y, position.z)
+      curr.scene().add(ring)
+
+      // Animate ring
+      doPulsingTween(ring, duration)
+
+      labels.push(ring)
+    }
+  })
+
+  return new Promise((resolve, reject) => resolve(labels))
+}
+
+export const initialize = (curr: any, projects: any[], options: any = { full: true }) => {
   THREE.DefaultLoadingManager.onLoad = function () {
     options.onLoaded && setTimeout(options.onLoaded(), 1000)
   };
@@ -76,9 +115,11 @@ export const initialize = (curr: any, options: any = { full: true }) => {
   // custom three objects
   let clouds;
   let lightning;
+  let pulsingLabels;
   if (options.full !== false) {
     clouds = initClouds(curr)
     lightning = initDirectionalLight(curr)
+    pulsingLabels = initPulsingLabels(curr, projects)
   }
 
   return Promise.all([
@@ -88,6 +129,7 @@ export const initialize = (curr: any, options: any = { full: true }) => {
     renderer,
     clouds,
     lightning,
+    pulsingLabels
   ]);
 }
 
@@ -167,8 +209,6 @@ export const moveFromMarker = (curr, options = {}) => {
 
   controls.minDistance = 101
   controls.maxDistance = Infinity
-
-  // TODO: fix
   
   const duration = options.duration !== undefined ? options.duration : 1500
   new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
