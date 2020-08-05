@@ -220,28 +220,30 @@ export const moveFromMarker = (curr, options = {}) => {
   controls.minDistance = 101
   controls.maxDistance = Infinity
   
-  const duration = options.duration !== undefined ? options.duration : 1500
-  new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
-    .to({ x: 0, y: 0, z: 0}, duration)
-    .onUpdate(d => {
-      controls.target.set(d.x, d.y, d.z)
-    })
-    .start()
-  
-  new TWEEN.Tween({ length: camera.position.sub(world.position).length() })
-    .to({ length: isMobile ? 500 : 350 })
-    .onUpdate(d => {
-      camera.position.sub(world.position).setLength(d.length).add(world.position);
-    })
-    .start()
-
   new TWEEN.Tween({ x: world.position.x, y: world.position.y, z: world.position.z })
-    .to({ x: 0, y: 0, z: 0 }, duration)
-    .onUpdate(d => {
-      world.position.set(d.x, d.y, d.z)
-      clouds.position.set(d.x, d.y, d.z)
-    })
-    .start()
+  .to({ x: 0, y: 0, z: 0 }, 500)
+  .onUpdate(d => {
+    world.position.set(d.x, d.y, d.z)
+    clouds.position.set(d.x, d.y, d.z)
+  })
+  .start()
+
+  setTimeout(() => {
+    const duration = options.duration !== undefined ? options.duration : 1500
+    new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
+      .to({ x: 0, y: 0, z: 0}, duration)
+      .onUpdate(d => {
+        controls.target.set(d.x, d.y, d.z)
+      })
+      .start()
+
+    new TWEEN.Tween({ length: camera.position.length() })
+      .to({ length: isMobile ? 500 : 350 }, duration)
+      .onUpdate(d => {
+        camera.position.setLength(d.length);
+      })
+      .start()
+  }, 500)
 }
 
 const markerTypes = {
