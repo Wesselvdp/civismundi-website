@@ -65,7 +65,6 @@ const initDirectionalLight = (curr: any) => {
 }
 
 const doPulsingTween = (obj, duration = 1000) => {
-  console.log()
   new TWEEN.Tween({ scale: 1, opacity: 1 })
     .to({ scale: 2, opacity: 0 }, duration)
     .onUpdate(d => {

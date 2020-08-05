@@ -9,7 +9,7 @@ type T = any
 const Layout: FC<T> = ({ children, pageContext, location }) => {
   return (
     <>
-      <Navigation />
+      <Navigation location={location} />
       <WorldContainer location={location} layout={pageContext.layout} />
       <Main>
         {children}

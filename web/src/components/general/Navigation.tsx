@@ -8,14 +8,17 @@ import { Logo } from '@components/general'
 
 type T = any
 
-const Navigation: FC<T> = () => {
+const Navigation: FC<T> = ({ location }) => {
+  console.log('location', location)
+
   return (
     <Container>
       <Nav>
         {/* Left */}
         <div className="item item--left">
-          <Link to="/projects">
-            <span>{isMobile ? 'Work' : 'All projects'}</span>
+          <Link to="/projects" className={location.pathname === '/projects' ? 'active' : ''}>
+            <span className="desktop">All projects</span>
+            <span className="mobile">Work</span>
           </Link>
         </div>
 
@@ -26,7 +29,7 @@ const Navigation: FC<T> = () => {
 
         {/* Right */}
         <div className="item item--right">
-          <Link to="/about">
+          <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>
             <span>About</span>
           </Link>
         </div>
@@ -62,6 +65,25 @@ const Nav = styled.nav`
       flex: 0 0 auto;
     }
 
+    a {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        width: 0;
+        transform: translateX(-50%);
+        bottom: -3px;
+        height: 1px;
+        background-color: #fff;
+        transition: 0.25s ease-in-out;
+      }
+
+      &.active::before {
+        width: 100%;
+      }
+    }
     span {
       text-transform: uppercase;
       font-size: 14px;
@@ -83,6 +105,22 @@ const Nav = styled.nav`
 
   .item--center {
     flex: 1 1 auto;
+  }
+
+  .mobile {
+    display: none;
+
+    @media ${breakpoints.phoneOnly} {
+      display: initial;
+    }
+  }
+
+  .desktop {
+    display: initial;
+
+    @media ${breakpoints.phoneOnly} {
+      display: none;
+    }
   }
 `
 

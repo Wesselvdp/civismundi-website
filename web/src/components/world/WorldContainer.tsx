@@ -34,11 +34,6 @@ const WorldContainer = ({ layout, location }) => {
   const [skipAnimation, setSkipAnimation] = useState<boolean>(false)
   const [project, setProject] = useState<Project | null>(null)
 
-  // useEffect(() => {
-  //   console.log('prevstate', prevState)
-  //   console.log('state=', state)
-  // }, [state])
-
   useEffect(() => {
     if (state === State.INITIALIZING && layout === 'project-detailed') {
       setSkipAnimation(true)
