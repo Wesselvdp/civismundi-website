@@ -75,7 +75,7 @@ const Nav = styled.nav`
         width: 0;
         transform: translateX(-50%);
         bottom: -3px;
-        height: 1px;
+        height: 0.5px;
         background-color: #fff;
         transition: 0.25s ease-in-out;
       }
