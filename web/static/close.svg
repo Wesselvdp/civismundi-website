@@ -1,42 +1,16 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="357px" height="357px" viewBox="0 0 357 357" style="enable-background:new 0 0 357 357;" xml:space="preserve">
-<g>
-	<g id="close">
-		<polygon points="357,35.7 321.3,0 178.5,142.8 35.7,0 0,35.7 142.8,178.5 0,321.3 35.7,357 178.5,214.2 321.3,357 357,321.3 
-			214.2,178.5 		"/>
-	</g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="13.75" height="13.751" viewBox="0 0 13.75 13.751">
+  <g id="Group_358" data-name="Group 358" transform="translate(-261.316 -59.579)">
+    <g id="Stroke_5" data-name="Stroke 5" transform="translate(273.797 59.579) rotate(45)">
+      <g id="Group_330" data-name="Group 330">
+        <rect id="Rectangle_88" data-name="Rectangle 88" width="1.632" height="17.488" transform="translate(0.081 0.081)" fill="#fff"/>
+        <path id="Path_244" data-name="Path 244" d="M-179.732-1303.242h-1.8v-17.651h1.8Zm-1.632-.163h1.469v-17.324h-1.469Z" transform="translate(181.527 1320.893)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="Stroke_5-2" data-name="Stroke 5" transform="translate(275.066 72.061) rotate(135)">
+      <g id="Group_330-2" data-name="Group 330" transform="translate(0 0)">
+        <rect id="Rectangle_88-2" data-name="Rectangle 88" width="1.632" height="17.488" transform="translate(0.081 0.082)" fill="#fff"/>
+        <path id="Path_244-2" data-name="Path 244" d="M1.8,0H0V17.651H1.8ZM.163.163H1.632V17.487H.163Z" fill="#fff"/>
+      </g>
+    </g>
+  </g>
 </svg>

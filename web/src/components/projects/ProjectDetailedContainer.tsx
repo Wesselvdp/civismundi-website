@@ -40,7 +40,7 @@ const ProjectDetailedContainer = ({ data }) => {
           width={1000}
           height={1000}
         />
-        <img className="modal-close" src="/close.png" onClick={() => openVideo(false)} /> 
+        <img className="modal-close" src="/close.svg" onClick={() => openVideo(false)} /> 
       </ModalWrapper>
       <StyledMast>
         <FadeAnim 
@@ -146,18 +146,16 @@ const ModalWrapper = styled.div`
     position: absolute;
     top: 15px;
     right: 15px;
-    height: 75px;
-    width: 75px;
+    height: 40px;
     opacity: 0;
     color: #fff;
     transition: opacity 0.5s ease-in-out;
     cursor: pointer;
 
     @media ${breakpoints.phoneOnly} {
-      top: 5px;
-      right: 0px;
-      height: 50px;
-      width: 50px;
+      top: 10px;
+      right: 10px;
+      height: 25px;
     }
   }
 
@@ -185,8 +183,8 @@ const ModalWrapper = styled.div`
   }
 
   iframe {
-    height: 1200px;
-    width: 1200px;
+    height: 100%;
+    width: 100%;
     max-width: 90%;
     max-height: 90%;
   }
