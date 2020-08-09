@@ -15,9 +15,15 @@ const Logo: FC<T> = () => {
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.addEventListener('ended', () => setHideVideo(false));
+      ref.current.addEventListener('ended', () => setHideVideo(false))
+      ref.current.addEventListener('suspend', () => setHideVideo(false))
+      ref.current.addEventListener('error', () => setHideVideo(false))
 
-      return () => ref.current.removeEventListener('ended', setHideVideo)
+      return () => {
+        ref.current.removeEventListener('ended', setHideVideo)
+        ref.current.removeEventListener('suspend', setHideVideo)
+        ref.current.removeEventListener('error', setHideVideo)
+      }
     }
   }, [ref.current])
 
@@ -25,7 +31,7 @@ const Logo: FC<T> = () => {
     <Link to="/">
       <Container>
         <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
-        <video className={hideVideo ? 'hidden' : ''} ref={ref} autoPlay playsInline muted>
+        <video ref={ref} className={hideVideo ? 'hidden' : ''} autoPlay playsInline muted>
           <source src="/logo4.webm" type="video/webm" />
         </video>
       </Container>

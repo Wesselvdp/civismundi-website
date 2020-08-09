@@ -24,6 +24,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 
   // scene
   const [scene, setScene] = useState(null)
+  const [renderer, setRenderer] = useState(null)
 
   // camera
   const [camera, setCamera] = useState(null)
@@ -135,7 +136,6 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
     }
   }, [labelClicked]);
 
-
   useEffect(() => {
     if (!camera || !cameraChanged) return
 
@@ -152,6 +152,21 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   useEffect(() => {
     if (controls) controls.autoRotate = cameraRotating
   }, [cameraRotating])
+
+  useLayoutEffect(() => {
+    const updateCanvas = () => {
+      if (ref.current) {
+        ref.current.camera().aspect = window.innerWidth / window.innerHeight;
+        ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, window.innerWidth > 600 ? 350 : 500)
+        ref.current.camera().updateProjectionMatrix();
+    
+        ref.current.renderer().setSize( window.innerWidth, window.innerHeight );
+      }
+    }
+
+    window.addEventListener('resize', updateCanvas)
+    return () => window.removeEventListener('resize', updateCanvas);
+  }, [])
 
   const onLabelUpdate = (obj, d) => {
     // this way we determine when ref.current is populated
@@ -188,6 +203,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
     ]) => {
       setScene(_scene)
       setCamera(_camera)
+      setRenderer(_renderer)
       setControls(_controls)
       setPulsingLabels(_pulsingLabels)
 
@@ -211,7 +227,6 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       <React.Suspense fallback={<div />}>
         <Wrapper className={className}>
           <Globe
-            // ref
             ref={ref}
             // appearance
             globeImageUrl="/earth-blue-marble-alt.jpg"
