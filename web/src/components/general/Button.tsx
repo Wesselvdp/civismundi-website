@@ -1,6 +1,8 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
+import { breakpoints } from '@utils/breakpoints'
+
 type T = {
   href?: string
   className?: string
@@ -55,6 +57,10 @@ const Button = styled('button')<StyleProps>`
     color: #fff;
     background-color: transparent;
 
+    @media ${breakpoints.phoneOnly} {
+      font-size: 12px;
+    }
+  
     &:hover:not(.no-hover) {
       color: #000;
       background-color:  #fff;

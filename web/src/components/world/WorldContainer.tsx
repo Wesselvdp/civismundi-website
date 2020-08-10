@@ -213,20 +213,6 @@ const AnimatedWrapper = styled.div`
     transition: none;
   }
 
-  .project-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    white-space: nowrap;
-
-    @media ${breakpoints.phoneOnly} {
-      padding-top: 100px;
-      font-size: 18px;
-      display: none;
-    }
-  }
-
   * { outline: 0 };
 `
 
@@ -304,7 +290,8 @@ const FooterContainer = styled.div`
 
       &:not(.skip-intro) {
         @media ${breakpoints.phoneOnly} {
-          font-size: 12px;
+          font-size: 10px;
+          padding: 0 20px; 
         }
       }
     }

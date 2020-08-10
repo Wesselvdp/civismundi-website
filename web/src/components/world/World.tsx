@@ -75,24 +75,25 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   
     // Set correct camera/globe position when on project detailed page
     if (state === State.PROJECT_DETAILED) {
-      if (!project) {
-        // First find project by route
-        const projectSlug = get(location.pathname.split('/projects/'), '[1]')
-        const p = projects.find(pj => get(pj, 'node.slug.current', '').toLowerCase() === projectSlug)
-        return setProject(p)
-      } 
+      // First find project by route
+      const projectSlug = get(location.pathname.split('/projects/'), '[1]')
+      const p = projects.find(pj => get(pj, 'node.slug.current', '').toLowerCase() === projectSlug)
 
-      moveToMarker(ref.current, project, { duration: prevState === State.LOADING ? 0 : 1500 })
-      setTimeout(() => {
-        navigate(`/projects/${project.node.slug.current}`)
-      }, 1500)
+      if (p) {
+        setProject(p)
+        
+        moveToMarker(ref.current, p, { duration: prevState === State.LOADING || prevState === State.BACKGROUND ? 0 : 1500 })
+        setTimeout(() => {
+          navigate(`/projects/${p.node.slug.current}`)
+        }, 1500)
+      }
     }
 
     // Handle from detailed to home
     if (prevState !== state && prevState === State.PROJECT_DETAILED) {
       moveFromMarker(ref.current, { duration: 1500 })
     }
-  }, [state, project])
+  }, [state])
 
   useEffect(() => {
     if (isMobile) return
