@@ -2,6 +2,11 @@ $break-sm: 780px;
 $break-md: 1000px;
 $break-lg: 1200px;
 
+@mixin xs-phone-only {
+  @media (max-width: 360px) {
+    @content;
+  }
+}
 @mixin phone-only {
   @media (max-width: 599px) {
     @content;
