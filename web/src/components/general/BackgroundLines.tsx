@@ -53,8 +53,8 @@ const BackgroundLines = ({ children, subtitle, title, content, contentTimeout })
 export default BackgroundLines
 
 const Wrapper = styled.div`
-  padding: 3em 15px 4em;
-  margin: 4em auto;
+  padding: 3em 15px;
+  margin: 4em auto 0;
   position: relative;
   max-width: 1000px;
   
