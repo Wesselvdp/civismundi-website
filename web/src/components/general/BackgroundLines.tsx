@@ -85,7 +85,7 @@ const Wrapper = styled.div`
       margin-bottom: 10px;
 
       &.subtitle {
-        font-size: 18px;
+        line-height: 6px;
       }
     }
   }

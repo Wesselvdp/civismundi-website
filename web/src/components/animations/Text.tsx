@@ -61,7 +61,7 @@ const TextAnimation: FC<T> = ({
       <Wrapper>
         <Tag className={className} style={style}>
           {words.map((w) => (
-            <span style={{ display: 'inline-block' }}>
+            <span style={{ display: 'inline-block', margin: '0 2px 0 0' }}>
               {slice(letters, w.position, w.position + w.length).map((l, i) => (
                 <span className="letter" style={{ transitionDelay: `${(inProp ? letterSpeedIn : letterSpeedOut) * (w.position + i)}s`}}>{l}</span>
               ))}
@@ -79,6 +79,7 @@ const Wrapper = styled.div`
   user-select: none;
 
   .letter {
+    margin: 0;
     pointer-events: none;
     display: inline-block;
     will-change: transform;
