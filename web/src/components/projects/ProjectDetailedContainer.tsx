@@ -336,10 +336,16 @@ const Section = styled.section`
         text-transform: uppercase;
         margin-bottom: -14px;
         display: block;
+        color: rgb(255, 255, 255);
 
         @media ${breakpoints.phoneOnly} {
           font-size: 12px;
         }
+      }
+
+      p {
+        opacity: 1;
+        color: rgba(255, 255, 255, 0.85);
       }
     }
 
