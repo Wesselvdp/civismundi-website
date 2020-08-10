@@ -16,7 +16,7 @@ const Logo: FC<T> = () => {
       let timeout;
 
       ref.current.addEventListener('loadstart', () => { timeout = setTimeout(() => setHideVideo(true), 1000)})
-      ref.current.addEventListener('progress', () => { timeout && clearTimeout(timeout) })
+      ref.current.addEventListener('play', () => { timeout && clearTimeout(timeout) })
     }
   }, [ref.current])
 
@@ -24,7 +24,7 @@ const Logo: FC<T> = () => {
     <Link to="/">
       <Container>
         <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
-        <video ref={ref} className={hideVideo ? 'hidden' : ''} autoPlay playsInline muted>
+        <video ref={ref} className={hideVideo ? 'hidden' : ''} playsInline autoPlay muted>
           <source src="/logo4.webm" type="video/webm" />
         </video>
       </Container>
