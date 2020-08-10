@@ -126,8 +126,7 @@ const WorldContainer = ({ layout, location }) => {
           <p>TRAVIS SCOTT <span>•</span> LOS ANGELES</p>
           <Button 
             buttonStyle="outlined"
-            onClick={() => { 
-              setState(State.PROJECT_DETAILED)
+            onClick={() => {
               navigate(`/projects/${project.node.slug.current}`)
             }}
           >

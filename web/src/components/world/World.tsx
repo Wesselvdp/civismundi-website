@@ -79,13 +79,11 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       const projectSlug = get(location.pathname.split('/projects/'), '[1]')
       const p = projects.find(pj => get(pj, 'node.slug.current', '').toLowerCase() === projectSlug)
 
+      console.log('location', location)
+      console.log('project', p)
       if (p) {
         setProject(p)
-        
         moveToMarker(ref.current, p, { duration: prevState === State.LOADING || prevState === State.BACKGROUND ? 0 : 1500 })
-        setTimeout(() => {
-          navigate(`/projects/${p.node.slug.current}`)
-        }, 1500)
       }
     }
 
@@ -136,8 +134,8 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 
     if (labelClicked) {
       setProject(labelClicked)
-      setState(State.PROJECT_DETAILED)
       navigate(`/projects/${labelClicked.node.slug.current}`)
+      // setState(State.PROJECT_DETAILED)
     }
   }, [labelClicked]);
 
