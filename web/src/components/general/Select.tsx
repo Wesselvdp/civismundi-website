@@ -38,5 +38,5 @@ const StyledSelect = styled.select`
   background: transparent;
   text-transform: uppercase;
   color: #fff;
-  font-family: 'Druk Wide Bold';
+  font-family: 'Druk Wide Super';
 `

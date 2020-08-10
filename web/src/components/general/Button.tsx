@@ -50,7 +50,7 @@ const Button = styled('button')<StyleProps>`
     padding: 1em 4em;
     cursor: pointer;
     box-sizing: border-box;
-    font-family: 'Druk Wide Bold';
+    font-family: 'Druk Wide Super';
     border: 2px solid #fff;
     color: #fff;
     background-color: transparent;

@@ -317,7 +317,7 @@ const Section = styled.section`
 
       strong {
         font-weight: 700;
-        font-family: 'Druk Wide Bold';
+        font-family: 'Druk Wide Super';
         font-size: 14px;
         text-transform: uppercase;
         margin-bottom: -14px;
