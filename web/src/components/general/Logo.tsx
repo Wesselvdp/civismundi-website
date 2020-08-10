@@ -17,6 +17,7 @@ const Logo: FC<T> = () => {
 
       ref.current.addEventListener('loadstart', () => { timeout = setTimeout(() => setHideVideo(true), 1000)})
       ref.current.addEventListener('play', () => { timeout && clearTimeout(timeout) })
+      ref.current.addEventListener('ended', () => setHideVideo(true))
     }
   }, [ref.current])
 
