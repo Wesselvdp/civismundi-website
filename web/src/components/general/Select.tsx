@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { get } from 'lodash'
 
+import { breakpoints } from '@utils/breakpoints'
+
 const Select = ({ options, onChange, value }) => (
   <Container>
     <img src="/arrow-down.svg" />
@@ -39,4 +41,12 @@ const StyledSelect = styled.select`
   text-transform: uppercase;
   color: #fff;
   font-family: 'Druk Wide Super';
+
+  @media ${breakpoints.phoneOnly} {
+    font-size: 12px;
+
+    option {
+      font-size: 12px;
+    }
+  }
 `
