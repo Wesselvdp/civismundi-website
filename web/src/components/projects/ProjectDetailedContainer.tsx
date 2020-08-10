@@ -250,10 +250,13 @@ const Content = styled.div`
   }
 
   img.scroll {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
+    @media ${breakpoints.tabletLandscapeUp} {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
     cursor: pointer;
   }
 `
