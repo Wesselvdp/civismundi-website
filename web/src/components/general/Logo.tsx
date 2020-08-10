@@ -9,21 +9,21 @@ type T = any
 
 // const SPEED = 2.5;
 
+const events = [
+  'loadstart',
+  'progress',
+]
+
 const Logo: FC<T> = () => {
   const ref = useRef()
   const { hideVideo, setHideVideo } = useLogo()
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.addEventListener('ended', () => setHideVideo(false))
-      ref.current.addEventListener('suspend', () => setHideVideo(false))
-      ref.current.addEventListener('error', () => setHideVideo(false))
+      let timeout;
 
-      return () => {
-        ref.current.removeEventListener('ended', setHideVideo)
-        ref.current.removeEventListener('suspend', setHideVideo)
-        ref.current.removeEventListener('error', setHideVideo)
-      }
+      ref.current.addEventListener('loadstart', () => { timeout = setTimeout(() => setHideVideo(true), 1000)})
+      ref.current.addEventListener('progress', () => { timeout && clearTimeout(timeout) })
     }
   }, [ref.current])
 
