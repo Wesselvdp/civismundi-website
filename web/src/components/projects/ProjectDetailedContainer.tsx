@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
@@ -86,40 +87,45 @@ const ProjectDetailedContainer = ({ data }) => {
                 <img src="/play.svg" onClick={() => openVideo(true)} />
               </PlayButton>
             </FadeAnim>
+            <Link to="content" spy={false} smooth={true} offset={50} duration={1000}>
+              <img className="scroll" src="/scroll-down.svg" />
+            </Link>
           </div>
         </Content>
       </StyledMast>
 
       {/* Project content */}
-      <Section>
-        <div className="container">
-          <div className="row">
-            <div className="col meta">
-              <div>
-                <h5 className="subtitle">DIRECTED BY</h5>
-                <h5>NABIL ELDERKIN</h5>
+      <Element name="content">
+        <Section>
+          <div className="container">
+            <div className="row">
+              <div className="col meta">
+                <div>
+                  <h5 className="subtitle">DIRECTED BY</h5>
+                  <h5>NABIL ELDERKIN</h5>
+                </div>
+                <div>
+                  <h5 className="subtitle">LOCATION</h5>
+                  <h5>LOS ANGELES</h5>
+                </div>
+                <div>
+                  <h5 className="subtitle">AWARDS</h5>
+                  <h5>LOS ANGELES</h5>
+                </div>
               </div>
-              <div>
-                <h5 className="subtitle">LOCATION</h5>
-                <h5>LOS ANGELES</h5>
+              <div className="col content content--sanity">
+                <BlockContent blocks={_rawOverview} />
               </div>
-              <div>
-                <h5 className="subtitle">AWARDS</h5>
-                <h5>LOS ANGELES</h5>
-              </div>
-            </div>
-            <div className="col content content--sanity">
-              <BlockContent blocks={_rawOverview} />
             </div>
           </div>
-        </div>
-      </Section>
-      <ProjectList
-        title="Other projects"
-        blockId={id}
-        projects={data.allSanityProject}
-        limit={2}
-      />
+        </Section>
+        <ProjectList
+          title="Other projects"
+          blockId={id}
+          projects={data.allSanityProject}
+          limit={2}
+        />
+      </Element>
     </>
   )
 }
@@ -241,6 +247,14 @@ const Content = styled.div`
     p {
       max-width: 450px;
     }
+  }
+
+  img.scroll {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
   }
 `
 

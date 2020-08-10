@@ -43,6 +43,7 @@
     "react-in-viewport": "^1.0.0-alpha.14",
     "react-modal-video": "^1.2.5",
     "react-player": "^2.5.0",
+    "react-scroll": "^1.8.0",
     "react-spring": "^8.0.27",
     "react-three-fiber": "^4.0.19",
     "react-transition-group": "^4.4.1",
