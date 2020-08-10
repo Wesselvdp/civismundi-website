@@ -7,13 +7,6 @@ import useLogo from '@hooks/useLogo'
 
 type T = any
 
-// const SPEED = 2.5;
-
-const events = [
-  'loadstart',
-  'progress',
-]
-
 const Logo: FC<T> = () => {
   const ref = useRef()
   const { hideVideo, setHideVideo } = useLogo()

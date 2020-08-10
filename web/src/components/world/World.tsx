@@ -9,7 +9,7 @@ import styled from 'styled-components'
 
 import { initialize, moveToMarker, moveFromMarker, changeMarkerType, displayPulses, labelObject } from './utils'
 import { State } from './WorldContainer'
-// import console = require('console');
+import usePrevious from '@hooks/usePrevious'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -18,10 +18,14 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 
   const ref = useRef();
 
+  // window
+  const [windowWidth, setWindowWidth] = useState<number>(undefined)
+  const [windowWidthPrev, setWindowWidthPrev] = useState<number>(undefined)
+
   // globe
   const [loaded, setLoaded] = useState<boolean | null>(null)
   const [initialized, setInitialized] = useState<boolean | null>(null)
-
+  
   // scene
   const [scene, setScene] = useState(null)
   const [renderer, setRenderer] = useState(null)
@@ -154,8 +158,12 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   }, [cameraRotating])
 
   useLayoutEffect(() => {
+
     const updateCanvas = () => {
-      if (ref.current) {
+      setWindowWidthPrev(windowWidth)
+      setWindowWidth(window.innerWidth)
+
+      if (ref.current && windowWidth !== windowWidthPrev) {
         ref.current.camera().aspect = window.innerWidth / window.innerHeight;
         ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, window.innerWidth > 600 ? 350 : 500)
         ref.current.camera().updateProjectionMatrix();
@@ -164,9 +172,10 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       }
     }
 
+    updateCanvas()
     window.addEventListener('resize', updateCanvas)
     return () => window.removeEventListener('resize', updateCanvas);
-  }, [])
+  }, [windowWidth, windowWidthPrev, setWindowWidth, setWindowWidthPrev])
 
   const onLabelUpdate = (obj, d) => {
     // this way we determine when ref.current is populated
