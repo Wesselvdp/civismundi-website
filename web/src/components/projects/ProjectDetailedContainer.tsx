@@ -248,6 +248,12 @@ const Content = styled.div`
 
     cursor: pointer;
   }
+
+  .h2 {
+    @media ${breakpoints.phoneOnly} {
+      font-size: 44px;
+    }
+  }
 `
 
 const Section = styled.section`
