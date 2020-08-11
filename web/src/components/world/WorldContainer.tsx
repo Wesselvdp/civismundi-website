@@ -110,7 +110,7 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
           <AnimatedWrapper className={`${skipAnimation ? 'skip-animation' : ''}`}>
             {/* World component*/}
             <World
-              className={`${state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'project-active' : ''}`}
+              className={`${state === State.PROJECT_HOVERED ? 'project-hovered' : ''} ${state === State.PROJECT_DETAILED ? 'project-detailed' : ''}`}
               state={state}
               prevState={prevState}
               setState={setState}
@@ -156,8 +156,8 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
         </div>
       </FooterContainer>
       {project && (
-        <VideoPreview className={state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'visible' : ''}>
-          <video id="videoBG" poster={get(project, 'node.poster.asset.url')} playsInline autoPlay muted loop>
+        <VideoPreview className={`${state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'visible' : ''} ${state === State.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
+          <video id="videoBG" playsInline autoPlay muted loop>
             <source src={get(project, 'node.video.asset.url')} type="video/mp4" />
           </video>
         </VideoPreview>
@@ -257,6 +257,7 @@ const VideoPreview = styled.div`
   z-index: -1;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
 
   video {
     height: 100%;

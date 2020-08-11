@@ -240,7 +240,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
             // appearance
             globeImageUrl="/earth-blue-marble-alt.jpg"
             bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-            backgroundColor="#000"
+            backgroundColor="rgba(0,0,0,0)"
             // labels
             customLayerData={projects}
             customThreeObject={() => labelObject()}
@@ -265,8 +265,12 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 const Wrapper = styled.div`
   opacity: 1;
 
-  &.project-active {
+  &.project-hovered {
     opacity: 0.40;
+  }
+
+  &.project-detailed {
+    opacity: 1;
   }
 `
 
