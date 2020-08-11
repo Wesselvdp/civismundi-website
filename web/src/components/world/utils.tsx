@@ -109,7 +109,11 @@ const initPulsingLabels = (curr: any, projects: any[]) => {
 export const initialize = (curr: any, projects: any[], options: any = { full: true }) => {
   THREE.DefaultLoadingManager.onLoad = function () {
     options.onLoaded && setTimeout(options.onLoaded(), 1000)
-  };
+  }
+
+  THREE.DefaultLoadingManager.onProgress = function (url, loaded, total) {
+    options.onProgress && options.onProgress(Math.min(loaded / total * 100, 100))
+  }
 
   const scene = curr.scene()
   const camera = curr.camera()

@@ -13,7 +13,7 @@ import usePrevious from '@hooks/usePrevious'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
-const World = ({ state, prevState, setState, projects, project, setProject, location, className }) => {
+const World = ({ state, prevState, setState, projects, project, setProject, location, className, setProgress, setReady }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef();
@@ -79,11 +79,11 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       const projectSlug = get(location.pathname.split('/projects/'), '[1]')
       const p = projects.find(pj => get(pj, 'node.slug.current', '').toLowerCase() === projectSlug)
 
-      console.log('location', location)
       console.log('project', p)
+
       if (p) {
         setProject(p)
-        moveToMarker(ref.current, p, { duration: prevState === State.LOADING || prevState === State.BACKGROUND ? 0 : 1500 })
+        moveToMarker(ref.current, p, { duration: prevState === State.EXPLORE || prevState === State.PROJECT_HOVERED ? 1500 : 0 })
       }
     }
 
@@ -91,7 +91,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
     if (prevState !== state && prevState === State.PROJECT_DETAILED) {
       moveFromMarker(ref.current, { duration: 1500 })
     }
-  }, [state])
+  }, [state, location]) 
 
   useEffect(() => {
     if (isMobile) return
@@ -199,7 +199,8 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   const _init = (options = {}) => {
     initialize(ref.current, projects, {
       ...options,
-      onLoaded: () => setState(State.LOADING)
+      onLoaded: () => { setReady(true); setState(State.LOADING) },
+      onProgress: (progress) => { setProgress(progress) }
     }).then(([
       _scene,
       _camera,

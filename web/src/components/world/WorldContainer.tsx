@@ -5,6 +5,8 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { get } from 'lodash'
 import { navigate } from 'gatsby'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 import World from './World'
 import { TextAnim, VerticalAnim, FadeAnim } from '@components/animations'
@@ -28,7 +30,7 @@ const GLOBE_TRANSITION_LENGTH = 1600;
 
 const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
 
-const WorldContainer = ({ layout, location }) => {
+const WorldContainer = ({ layout, location, ready, setReady, progress, setProgress }) => {
   const [state, setState] = useState<StateType>(State.INITIALIZING)
   const prevState = usePrevious(state)
   const [skipAnimation, setSkipAnimation] = useState<boolean>(false)
@@ -53,6 +55,10 @@ const WorldContainer = ({ layout, location }) => {
         return setState(State.EXPLORE)
     }
   }, [layout])
+
+  useEffect(() => {
+    console.log('project changed', project)
+  }, [project])
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -101,43 +107,56 @@ const WorldContainer = ({ layout, location }) => {
 
   return (
     <Page className={layout}>
-      <CSSTransition in={state > State.INITIALIZING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => _initStateFromLayout()} classNames="globe">
-        <AnimatedWrapper
-          className={`${skipAnimation ? 'skip-animation' : ''}`}
-        >
-          {/* World component*/}
-          <World
-            className={`${state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'project-active' : ''}`}
-            state={state}
-            prevState={prevState}
-            setState={setState}
-            projects={data.allSanityProject.edges}
-            project={project}
-            setProject={setProject}
-            layout={layout}
-            location={location}
+      <>
+        <CSSTransition in={state > State.INITIALIZING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => _initStateFromLayout()} classNames="globe">
+          <AnimatedWrapper className={`${skipAnimation ? 'skip-animation' : ''}`}>
+            {/* World component*/}
+            <World
+              className={`${state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'project-active' : ''}`}
+              state={state}
+              prevState={prevState}
+              setState={setState}
+              projects={data.allSanityProject.edges}
+              project={project}
+              setProject={setProject}
+              layout={layout}
+              location={location}
+              setReady={setReady}
+              setProgress={setProgress}
+            />
+          </AnimatedWrapper>
+        </CSSTransition>
+        {state === State.PROJECT_HOVERED && project && (
+          <MobileContent>
+            <h2 className="subtitle">Video direction</h2>
+            <h1>{get(project, 'node.city', get(project, 'node.title', ''))}</h1>
+            <p>TRAVIS SCOTT <span>•</span> LOS ANGELES</p>
+            <Button 
+              buttonStyle="outlined"
+              onClick={() => {
+                navigate(`/projects/${project.node.slug.current}`)
+              }}
+            >
+              VIEW PROJECT
+            </Button>
+          </MobileContent>
+        )}
+      </>
+      {!ready && (
+        <Loader>
+          <CircularProgressbar strokeWidth={1} className="circle" value={progress} styles={buildStyles(
+          {
+            pathColor: `rgba(255, 255, 255, 1)`,
+            trailColor: 'rgba(255, 255, 255, 0)',
+          })}
           />
-        </AnimatedWrapper>
-      </CSSTransition>
-      {state === State.PROJECT_HOVERED && project && (
-        <MobileContent>
-          <h2 className="subtitle">Video direction</h2>
-          <h1>{get(project, 'node.city', get(project, 'node.title', ''))}</h1>
-          <p>TRAVIS SCOTT <span>•</span> LOS ANGELES</p>
-          <Button 
-            buttonStyle="outlined"
-            onClick={() => {
-              navigate(`/projects/${project.node.slug.current}`)
-            }}
-          >
-            VIEW PROJECT
-          </Button>
-        </MobileContent>
+          <img src="/cm-white.svg" />
+        </Loader>
       )}
       <FooterContainer>
         <div className="footer--content">
           <>
-            <VerticalAnim in={state === State.PROJECT_HOVERED || state === State.EXPLORE} timeout={{ enter: 4000 }}>
+            <VerticalAnim in={state === State.INITIALIZING || state === State.LOADING || state === State.PROJECT_HOVERED || state === State.EXPLORE} timeout={{ enter: 4000 }}>
               <img src="/grab-icon.svg" />
             </VerticalAnim>
             <TextAnim 
@@ -149,13 +168,13 @@ const WorldContainer = ({ layout, location }) => {
           </>
         </div>
       </FooterContainer>
-      <VideoPreview className={state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'visible' : ''}>
-        {project && (
+      {project && (
+        <VideoPreview className={state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'visible' : ''}>
           <video id="videoBG" poster={get(project, 'node.poster.asset.url')} playsInline autoPlay muted loop>
             <source src={get(project, 'node.video.asset.url')} type="video/mp4" />
           </video>
-        )}
-      </VideoPreview>
+        </VideoPreview>
+      )}
     </Page>
   );
 }
@@ -180,6 +199,33 @@ const Page = styled.div`
   &.project-detailed {
     position: absolute;
     opacity: 1;
+  }
+`
+
+const Loader = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000000;
+  background-color: #000;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 150px;
+    width: auto;
+  }
+
+  .circle {
+    height: 225px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `
 
