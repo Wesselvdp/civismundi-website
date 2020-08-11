@@ -5,8 +5,6 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { get } from 'lodash'
 import { navigate } from 'gatsby'
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 
 import World from './World'
 import { TextAnim, VerticalAnim, FadeAnim } from '@components/animations'
@@ -142,17 +140,6 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
           </MobileContent>
         )}
       </>
-      {!ready && (
-        <Loader>
-          <CircularProgressbar strokeWidth={1} className="circle" value={progress} styles={buildStyles(
-          {
-            pathColor: `rgba(255, 255, 255, 1)`,
-            trailColor: 'rgba(255, 255, 255, 0)',
-          })}
-          />
-          <img src="/cm-white.svg" />
-        </Loader>
-      )}
       <FooterContainer>
         <div className="footer--content">
           <>
@@ -199,33 +186,6 @@ const Page = styled.div`
   &.project-detailed {
     position: absolute;
     opacity: 1;
-  }
-`
-
-const Loader = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10000000;
-  background-color: #000;
-
-  img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 150px;
-    width: auto;
-  }
-
-  .circle {
-    height: 225px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 `
 
