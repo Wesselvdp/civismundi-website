@@ -4,8 +4,9 @@ import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } f
 import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
-import { get } from 'lodash'
 import ModalVideo from 'react-modal-video'
+
+import PlaySVG from '../../assets/play.svg'
 
 // Components
 import { BackgroundVideo, ProjectList } from '@components/projects'
@@ -44,15 +45,9 @@ const ProjectDetailedContainer = ({ data }) => {
         <img className="modal-close" src="/close.svg" onClick={() => openVideo(false)} /> 
       </ModalWrapper>
       <StyledMast>
-        <FadeAnim 
-          timeout={1000}
-          appear={true}
-          in={state >= ProjectState.PARAGRAPH_IN}
-        >
-          <PlayButton className="mobile">
-            <img src="/play.svg" onClick={() => openVideo(true)} />
-          </PlayButton>
-        </FadeAnim>
+        <PlayButton className="mobile">
+          <PlaySVG onClick={() => openVideo(true)} />
+        </PlayButton>
         <Content>
           <div className="inner">
             <TextAnim
@@ -78,15 +73,9 @@ const ProjectDetailedContainer = ({ data }) => {
               text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
               letterSpeedIn={0.01}
             />
-            <FadeAnim 
-              timeout={1000}
-              appear={true}
-              in={state >= ProjectState.PARAGRAPH_IN}
-            >
-              <PlayButton className="desktop">
-                <img src="/play.svg" onClick={() => openVideo(true)} />
-              </PlayButton>
-            </FadeAnim>
+            <PlayButton className="desktop">
+              <PlaySVG onClick={() => openVideo(true)} />
+            </PlayButton>
             <Link to="content" spy={false} smooth={true} offset={50} duration={1000}>
               <img className="scroll" src="/scroll-down.svg" />
             </Link>
@@ -219,7 +208,7 @@ const PlayButton = styled.div`
     }
   }
 
-  img:hover {
+  svg:hover {
     cursor: pointer;
   }
 `
