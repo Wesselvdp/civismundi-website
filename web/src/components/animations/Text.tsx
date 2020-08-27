@@ -12,7 +12,8 @@ type T = {
   inProp: any,
   timeout: number
   letterSpeedIn: number,
-  letterSpeedOut: number
+  letterSpeedOut: number,
+  singleLine: boolean
 }
 
 type WordObject = {
@@ -31,6 +32,7 @@ const TextAnimation: FC<T> = ({
   timeout,
   letterSpeedIn = 0.025,
   letterSpeedOut = 0.005,
+  singleLine = true,
   ...rest
 }) => {
   const [letters, setLetters] = useState<string[]>([])
@@ -38,23 +40,46 @@ const TextAnimation: FC<T> = ({
 
   useEffect(() => {
     if (text) {
-      const words = text.split(' ')
-      const letters = text.split('').filter(l => l !== '');
+      if (singleLine) {
+        const letters = text.split('')
+        setLetters(letters)
+      } else {
+        const words = text.split(' ')
+        const letters = text.split('').filter(l => l !== '')
+        
+        let letterPosition = 0;
+        const wordObjs = words.map(word => {
+          const obj = ({ position: letterPosition, length: word.length })
+          letterPosition += word.length + 1;
+  
+          return obj;
+        })
       
-      let letterPosition = 0;
-      const wordObjs = words.map(word => {
-        const obj = ({ position: letterPosition, length: word.length })
-        letterPosition += word.length + 1;
-
-        return obj;
-      })
-    
-      setWords(wordObjs)
-      setLetters(letters);
+        setWords(wordObjs)
+        setLetters(letters);
+      }
     }
   }, [text])
 
   if (!text) return null;
+  if (singleLine) {
+    return (
+      <CSSTransition in={inProp} timeout={timeout} classNames="text" {...rest}> 
+        <Wrapper>
+          <Tag className={className} style={style}>
+            {letters.map((l, i) => {
+              return l !== ' '
+                ? (
+                  <span className="letter" style={{ transitionDelay: `${(inProp ? letterSpeedIn : letterSpeedOut) * i}s`}}>{l}</span>
+                ) : (
+                  <span className="letter">&nbsp;</span>
+                )
+            })}
+          </Tag>
+        </Wrapper>
+      </CSSTransition>
+    )
+  }
 
   return (
     <CSSTransition in={inProp} timeout={timeout} classNames="text" {...rest}>

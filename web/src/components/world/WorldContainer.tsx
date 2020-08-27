@@ -33,6 +33,7 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
   const prevState = usePrevious(state)
   const [skipAnimation, setSkipAnimation] = useState<boolean>(false)
   const [project, setProject] = useState<Project | null>(null)
+  const [projectTitle, setProjectTitle] = useState('')
 
   useEffect(() => {
     if (state === State.INITIALIZING && layout === 'project-detailed') {
@@ -55,7 +56,7 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
   }, [layout])
 
   useEffect(() => {
-    console.log('project changed', project)
+    if (project) setProjectTitle(project.node.title)
   }, [project])
 
   // Projects
@@ -124,21 +125,36 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
             />
           </AnimatedWrapper>
         </CSSTransition>
-        {state === State.PROJECT_HOVERED && project && (
-          <MobileContent>
-            <h2 className="subtitle">Video direction</h2>
-            <h1>{get(project, 'node.city', get(project, 'node.title', ''))}</h1>
-            <p>TRAVIS SCOTT <span>•</span> LOS ANGELES</p>
-            <Button 
-              buttonStyle="outlined"
-              onClick={() => {
-                navigate(`/projects/${project.node.slug.current}`)
-              }}
-            >
-              VIEW PROJECT
-            </Button>
-          </MobileContent>
-        )}
+        <MobileContent>
+          <TextAnim
+            in={state === State.PROJECT_HOVERED}
+            tag="h2"
+            className="subtitle"
+            text="VIDEO DIRECTION"
+            timeout={2500}
+          />
+          <TextAnim
+            in={projectTitle && state === State.PROJECT_HOVERED}
+            tag="h1"
+            text={projectTitle}
+            timeout={2500}
+            appear
+          />
+          <TextAnim
+            in={state === State.PROJECT_HOVERED}
+            tag="p"
+            text="TRAVIS SCOTT • LOS ANGELES"
+            timeout={2500}
+          />
+          <Button 
+            buttonStyle="outlined"
+            onClick={() => {
+              navigate(`/projects/${project.node.slug.current}`)
+            }}
+          >
+            VIEW PROJECT
+          </Button>
+        </MobileContent>
       </>
       <FooterContainer>
         <div className="footer--content">

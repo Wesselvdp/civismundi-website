@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { isMobile } from 'react-device-detect'
-
+import { get } from 'lodash'
 
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
@@ -125,6 +125,7 @@ export const initialize = (curr: any, projects: any[], options: any = { full: tr
   controls.autoRotateSpeed = 0.3
   if (isMobile) camera.position.z = 500
 
+
   // custom three objects
   let clouds;
   let lightning;
@@ -164,10 +165,10 @@ export const labelObject = () => {
 }
 
 const markerCameraPositions = {
-  fuckthat: {x: -21.09517134023139, y: -13.842005393559838, z: 158.13052241620738, worldY: -40 },
-  columbus: {x: 27.14184364454964, y: -7.805917689107176, z: 157.41942896107605, worldY: -40 },
-  DelaMove: {x: 0.21709849267533315, y: -129.60871165915535, z: 124.37075872820836, worldY: -75 },
-  stargazing: {x: -157.3196871510831, y: -45.99100074437717, z: -83.3751610249093, worldY: -50 }
+  fuckthat: { x: -21.09517134023139, y: -13.842005393559838, z: 158.13052241620738, alt: 0.3 },
+  columbus: { x: 27.14184364454964, y: -7.805917689107176, z: 157.41942896107605, alt: 0.3 },
+  DelaMove: {x: 45.70879419942032, y: -146.37399972597706, z: 111.60101735510241, alt: 0.4 },
+  stargazing: { x: -157.3196871510831, y: -45.99100074437717, z: -83.3751610249093, alt: 0.3 }
 }
 
 export const moveToMarker = (curr, marker, options = {}) => {
@@ -179,13 +180,18 @@ export const moveToMarker = (curr, marker, options = {}) => {
 
   const world = scene.children.find(obj => obj.type === 'Group')
   const clouds = scene.children.find(obj => obj.name === 'Clouds')
-  const c1 = curr.getCoords(marker.node.location.lat, marker.node.location.lng, 0)
 
   controls.minDistance = 60
   controls.maxDistance = Infinity
  
   const projectSlug = marker.node.slug.current;
   const markerToPosition = markerCameraPositions[projectSlug] || {}
+
+  const c1 = curr.getCoords(
+    get(marker, 'node.location.lat', 0),
+    get(marker, 'node.location.lng', 0),
+    markerToPosition.alt
+  )
 
   const duration = options.duration !== undefined ? options.duration : 1500
   new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
@@ -202,13 +208,6 @@ export const moveToMarker = (curr, marker, options = {}) => {
     })
     .start()
   
-  new TWEEN.Tween({ x: world.position.x, y: world.position.y, z: world.position.z })
-    .to({ x: world.position.x, y: markerToPosition ? markerToPosition.worldY : -25, z: world.position.z }, duration)
-    .onUpdate(d => {
-      world.position.set(d.x, d.y, d.z)
-      clouds.position.set(d.x, d.y, d.z)
-    })
-    .start()
 }
 
 
@@ -222,31 +221,21 @@ export const moveFromMarker = (curr, options = {}) => {
 
   controls.minDistance = 101
   controls.maxDistance = Infinity
-  
-  new TWEEN.Tween({ x: world.position.x, y: world.position.y, z: world.position.z })
-  .to({ x: 0, y: 0, z: 0 }, 500)
-  .onUpdate(d => {
-    world.position.set(d.x, d.y, d.z)
-    clouds.position.set(d.x, d.y, d.z)
-  })
-  .start()
 
-  setTimeout(() => {
-    const duration = options.duration !== undefined ? options.duration : 1500
-    new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
-      .to({ x: 0, y: 0, z: 0}, duration)
-      .onUpdate(d => {
-        controls.target.set(d.x, d.y, d.z)
-      })
-      .start()
+  const duration = options.duration !== undefined ? options.duration : 1500
+  new TWEEN.Tween({ x: controls.target.x, y: controls.target.y, z: controls.target.z })
+    .to({ x: 0, y: 0, z: 0}, duration)
+    .onUpdate(d => {
+      controls.target.set(d.x, d.y, d.z)
+    })
+    .start()
 
-    new TWEEN.Tween({ length: camera.position.length() })
-      .to({ length: isMobile ? 500 : 350 }, duration)
-      .onUpdate(d => {
-        camera.position.setLength(d.length);
-      })
-      .start()
-  }, 500)
+  new TWEEN.Tween({ length: camera.position.length() })
+    .to({ length: isMobile ? 500 : 350 }, duration)
+    .onUpdate(d => {
+      camera.position.setLength(d.length);
+    })
+    .start()
 }
 
 const markerTypes = {

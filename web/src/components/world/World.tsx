@@ -77,9 +77,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
     if (state === State.PROJECT_DETAILED) {
       // First find project by route
       const projectSlug = get(location.pathname.split('/projects/'), '[1]')
-      const p = projects.find(pj => get(pj, 'node.slug.current', '').toLowerCase() === projectSlug)
-
-      console.log('project', p)
+      const p = projects.find(pj => get(pj, 'node.slug.current', '') === projectSlug)
 
       if (p) {
         setProject(p)
@@ -89,7 +87,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 
     // Handle from detailed to home
     if (prevState !== state && prevState === State.PROJECT_DETAILED) {
-      moveFromMarker(ref.current, { duration: 1500 })
+      moveFromMarker(ref.current, { duration: 1000 })
     }
   }, [state, location]) 
 

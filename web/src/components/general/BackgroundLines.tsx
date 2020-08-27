@@ -42,6 +42,7 @@ const BackgroundLines = ({ children, subtitle, title, content, contentTimeout })
         tag="p"
         text={content}
         letterSpeedIn={0.01}
+        singleLine={false}
       />
       <div class="children">
         {children}

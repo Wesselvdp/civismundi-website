@@ -72,6 +72,7 @@ const ProjectDetailedContainer = ({ data }) => {
               tag="p"
               text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
               letterSpeedIn={0.01}
+              singleLine={false}
             />
             <PlayButton className="desktop">
               <PlaySVG onClick={() => openVideo(true)} />
