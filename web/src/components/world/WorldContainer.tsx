@@ -146,14 +146,16 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
             text="TRAVIS SCOTT • LOS ANGELES"
             timeout={2500}
           />
-          <Button 
-            buttonStyle="outlined"
-            onClick={() => {
-              navigate(`/projects/${project.node.slug.current}`)
-            }}
-          >
-            VIEW PROJECT
-          </Button>
+          {state === State.PROJECT_HOVERED && project && (
+            <Button 
+              buttonStyle="outlined"
+              onClick={() => {
+                navigate(`/projects/${project.node.slug.current}`)
+              }}
+            >
+              VIEW PROJECT
+            </Button>
+          )}
         </MobileContent>
       </>
       <FooterContainer>
