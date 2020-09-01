@@ -7,7 +7,7 @@ import { get } from 'lodash'
 import { navigate } from 'gatsby'
 
 import World from './World'
-import { TextAnim, VerticalAnim, FadeAnim } from '@components/animations'
+import { TextAnim, TextImprov, VerticalAnim, FadeAnim } from '@components/animations'
 import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 import usePrevious from '@hooks/usePrevious'
@@ -126,25 +126,22 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
           </AnimatedWrapper>
         </CSSTransition>
         <MobileContent>
-          <TextAnim
+          <TextImprov
             in={state === State.PROJECT_HOVERED}
             tag="h2"
             className="subtitle"
             text="VIDEO DIRECTION"
-            timeout={2500}
           />
-          <TextAnim
+          <TextImprov
             in={projectTitle && state === State.PROJECT_HOVERED}
             tag="h1"
             text={projectTitle}
-            timeout={2500}
             appear
           />
-          <TextAnim
+          <TextImprov
             in={state === State.PROJECT_HOVERED}
             tag="p"
             text="TRAVIS SCOTT • LOS ANGELES"
-            timeout={2500}
           />
           {state === State.PROJECT_HOVERED && project && (
             <Button 
@@ -166,7 +163,6 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
             </VerticalAnim>
             <TextAnim 
               in={state === State.PROJECT_HOVERED || state === State.EXPLORE}
-              timeout={1000}
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
             />
