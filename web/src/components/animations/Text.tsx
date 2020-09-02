@@ -87,7 +87,7 @@ const Wrapper = styled.div`
     opacity: 0;
     transform-origin: center bottom;
     transform: scale(0);
-    transition: transform ${letterTransitionDuration}ms ease-in-out;
+    transition: transform ${letterTransitionDuration}ms ease;
   }
 
   &.text-enter, &.text-appear {
@@ -101,7 +101,7 @@ const Wrapper = styled.div`
     .letter {
       transform: none;
       opacity: 1;
-      transition: transform ${letterTransitionDuration}ms ease-in-out, opacity 0.25s ease-in-out;
+      transition: transform ${letterTransitionDuration}ms ease, opacity 0.25s ease;
     }
   }
 

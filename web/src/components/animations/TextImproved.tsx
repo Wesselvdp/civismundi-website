@@ -51,7 +51,7 @@ const Wrapper = styled.div`
     will-change: opacity, transform;
     opacity: 0;
     transform: scale(0);
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease;
     transform-origin: center bottom;
   }
 
@@ -66,7 +66,7 @@ const Wrapper = styled.div`
     .letter {
       transform: none;
       opacity: 1;
-      transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease;
     }
   }
 
