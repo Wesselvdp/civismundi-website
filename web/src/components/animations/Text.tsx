@@ -85,6 +85,7 @@ const Wrapper = styled.div`
     display: inline-block;
     will-change: transform;
     opacity: 0;
+    transform-origin: center bottom;
     transform: scale(0);
     transition: transform ${letterTransitionDuration}ms ease-in-out;
   }
@@ -92,7 +93,6 @@ const Wrapper = styled.div`
   &.text-enter, &.text-appear {
     .letter {
       transform: scale(0.2);
-      transform-origin: 50% 50%;
       opacity: 0;
     }
   }
@@ -121,7 +121,6 @@ const Wrapper = styled.div`
 
   &.text-exit-active {
     .letter {
-      transform-origin: 50% 50%;
       transform: scale(0);
     }
   }
