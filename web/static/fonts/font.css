@@ -1,13 +1,13 @@
 @font-face {
   font-family: 'Druk Wide Super';
   font-weight: 700;
-  src: url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.eot"); 
+  src: url('DrukTextWide-Super.eot'); 
   src:
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.eot?#iefix") format("embedded-opentype"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.woff2") format("woff2"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.woff") format("woff"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.ttf") format("truetype"), 
-    url("//db.onlinewebfonts.com/t/2206d6cc490084998d531e8c1b2cbb4a.svg#Druk Wide Bold") format("svg");
+    url('DrukTextWide-Super.eot') format('embedded-opentype'),
+    url('DrukTextWide-Super.woff2') format('woff2'), 
+    url('DrukTextWide-Super.woff') format('woff'),
+    url('DrukTextWide-Super.ttf') format('truetype'),
+    url('DrukTextWide-Super.svg') format('svg');
 }
 
 @font-face {
