@@ -9,7 +9,7 @@ const TextAnimation = ({
   className,
   tag: Tag,
   style,
-  durationIn = 0.50, // seconds
+  durationIn = 0.25, // seconds
   durationOut = 0.25, // seconds
   ...props
 }) => {
@@ -57,7 +57,7 @@ const Wrapper = styled.div`
   &.text-enter, &.text-appear {
     .letter {
       transform: scale(0.2);
-      transform-origin: 50% 50%;
+      transform-origin: center bottom;
       opacity: 0;
     }
   }
@@ -86,7 +86,7 @@ const Wrapper = styled.div`
 
   &.text-exit-active {
     .letter {
-      transform-origin: 50% 50%;
+      transform-origin: center bottom;
       transform: scale(0);
     }
   }
