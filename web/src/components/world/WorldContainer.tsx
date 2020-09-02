@@ -141,7 +141,7 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
           <TextImprov
             in={state === State.PROJECT_HOVERED}
             tag="p"
-            text="TRAVIS SCOTT • LOS ANGELES"
+            text="TRAVIS SCOTT  •  LOS ANGELES"
           />
           {state === State.PROJECT_HOVERED && project && (
             <Button 

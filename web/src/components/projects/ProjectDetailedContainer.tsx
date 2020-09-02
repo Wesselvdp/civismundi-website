@@ -27,7 +27,7 @@ const ProjectDetailedContainer = ({ data }) => {
   const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
-    setState(ProjectState.SUBTITLE_IN)
+    setTimeout(() => setState(ProjectState.SUBTITLE_IN), 1500)
   }, [])
 
 
@@ -46,7 +46,9 @@ const ProjectDetailedContainer = ({ data }) => {
       </ModalWrapper>
       <StyledMast>
         <PlayButton className="mobile">
-          <PlaySVG onClick={() => openVideo(true)} />
+          {state >= ProjectState.VIDEO_BUTTON_IN && (
+            <PlaySVG onClick={() => openVideo(true)} />
+          )}
         </PlayButton>
         <Content>
           <div className="inner">
@@ -69,13 +71,16 @@ const ProjectDetailedContainer = ({ data }) => {
             <TextAnim
               inProp={state >= ProjectState.PARAGRAPH_IN}
               timeout={{ enter: 300 }}
+              onEntered={() => setState(ProjectState.VIDEO_BUTTON_IN)}
               tag="p"
               text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
               letterSpeedIn={0.01}
               singleLine={false}
             />
             <PlayButton className="desktop">
-              <PlaySVG onClick={() => openVideo(true)} />
+              {state >= ProjectState.VIDEO_BUTTON_IN && (
+                <PlaySVG onClick={() => openVideo(true)} />
+              )}
             </PlayButton>
             <Link to="content" spy={false} smooth={true} offset={50} duration={1000}>
               <img className="scroll" src="/scroll-down.svg" />
@@ -188,6 +193,7 @@ const ModalWrapper = styled.div`
 
 const PlayButton = styled.div`
   z-index: 100;
+  min-height: 87px;
 
   &.mobile {
     position: absolute;
