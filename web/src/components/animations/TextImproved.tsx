@@ -52,12 +52,12 @@ const Wrapper = styled.div`
     opacity: 0;
     transform: scale(0);
     transition: all 0.3s ease-in-out;
+    transform-origin: center bottom;
   }
 
   &.text-enter, &.text-appear {
     .letter {
       transform: scale(0.2);
-      transform-origin: center bottom;
       opacity: 0;
     }
   }
@@ -86,7 +86,6 @@ const Wrapper = styled.div`
 
   &.text-exit-active {
     .letter {
-      transform-origin: center bottom;
       transform: scale(0);
     }
   }
