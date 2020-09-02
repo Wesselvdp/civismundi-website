@@ -27,7 +27,7 @@ const ProjectDetailedContainer = ({ data }) => {
   const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setState(ProjectState.SUBTITLE_IN), 1500)
+    setTimeout(() => setState(ProjectState.SUBTITLE_IN), 1000)
   }, [])
 
 
@@ -46,9 +46,7 @@ const ProjectDetailedContainer = ({ data }) => {
       </ModalWrapper>
       <StyledMast>
         <PlayButton className="mobile">
-          {state >= ProjectState.VIDEO_BUTTON_IN && (
-            <PlaySVG onClick={() => openVideo(true)} />
-          )}
+          <PlaySVG onClick={() => openVideo(true)} />
         </PlayButton>
         <Content>
           <div className="inner">
@@ -78,9 +76,7 @@ const ProjectDetailedContainer = ({ data }) => {
               singleLine={false}
             />
             <PlayButton className="desktop">
-              {state >= ProjectState.VIDEO_BUTTON_IN && (
-                <PlaySVG onClick={() => openVideo(true)} />
-              )}
+              <PlaySVG onClick={() => openVideo(true)} />
             </PlayButton>
             <Link to="content" spy={false} smooth={true} offset={50} duration={1000}>
               <img className="scroll" src="/scroll-down.svg" />
@@ -193,7 +189,6 @@ const ModalWrapper = styled.div`
 
 const PlayButton = styled.div`
   z-index: 100;
-  min-height: 87px;
 
   &.mobile {
     position: absolute;
