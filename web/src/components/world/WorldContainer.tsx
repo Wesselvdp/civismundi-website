@@ -111,7 +111,7 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
           <AnimatedWrapper className={`${skipAnimation ? 'skip-animation' : ''}`}>
             {/* World component*/}
             <World
-              className={`${state === State.PROJECT_HOVERED ? 'project-hovered' : ''} ${state === State.PROJECT_DETAILED ? 'project-detailed' : ''}`}
+              className={`${project && state === State.PROJECT_HOVERED ? 'project-hovered' : ''} ${state === State.PROJECT_DETAILED ? 'project-detailed' : ''}`}
               state={state}
               prevState={prevState}
               setState={setState}
@@ -127,19 +127,19 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
         </CSSTransition>
         <MobileContent>
           <TextImprov
-            in={state === State.PROJECT_HOVERED}
+            in={project && state === State.PROJECT_HOVERED}
             tag="h2"
             className="subtitle"
             text="VIDEO DIRECTION"
           />
           <TextImprov
-            in={projectTitle && state === State.PROJECT_HOVERED}
+            in={project && projectTitle && state === State.PROJECT_HOVERED}
             tag="h1"
             text={projectTitle}
             appear
           />
           <TextImprov
-            in={state === State.PROJECT_HOVERED}
+            in={project && state === State.PROJECT_HOVERED}
             tag="p"
             text="TRAVIS SCOTT  •  LOS ANGELES"
           />

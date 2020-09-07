@@ -152,6 +152,10 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
 
   useEffect(() => {
     if (controls) controls.autoRotate = cameraRotating
+
+    if (cameraRotating && state === State.PROJECT_HOVERED) {
+      setState(State.EXPLORE)
+    }
   }, [cameraRotating])
 
   useLayoutEffect(() => {
@@ -161,7 +165,6 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       setWindowWidth(window.innerWidth)
 
       if (ref.current && windowWidth !== windowWidthPrev) {
-        console.log('state', state)
         if (state !== State.PROJECT_DETAILED) {
           ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, isMobile() ? 500 : 350)
         }
