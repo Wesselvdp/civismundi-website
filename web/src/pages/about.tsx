@@ -1,36 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
-import { BackgroundLines, SEO } from '@components/general'
+import { Hero, SEO } from '@components/general'
+import { FadeAnim } from '@components/animations'
 
 const TITLE = 'A collective of interdisciplinary creatives';
 const CONTENT = 'collaborative practice seeks to navigate the confluence of film, music, design and fashion'
 
 const AboutPage = () => {
+  const [heroFinished, setHeroFinished] = useState(false)
+
   return (
     <>
       <SEO title="About" />
       <Page>
         <div>
-          <BackgroundLines
+          <Hero
             subtitle="About us"
             title={TITLE}
-            contentTimeout={1000}
             content={CONTENT.toUpperCase()}
+            timeout={{ subtitle: 200, title: 700, content: 1000 }}
+            onFinished={() => setHeroFinished(true) }
           />
-          <ContactInfo>
-            <div className="row">
-              <div className="col">
-                <h5 className="subtitle">E-MAIL</h5>
-                <h6>info@civismundi.com</h6>
+          <FadeAnim in={heroFinished} timeout={1000}>
+            <ContactInfo>
+              <div className="row">
+                <div className="col">
+                  <h5 className="subtitle">E-MAIL</h5>
+                  <h6>info@civismundi.com</h6>
+                </div>
+                <div className="col">
+                  <h5 className="subtitle">PHONE</h5>
+                  <h6>+370 495 385 30</h6>
+                </div>
               </div>
-              <div className="col">
-                <h5 className="subtitle">PHONE</h5>
-                <h6>+370 495 385 30</h6>
-              </div>
-            </div>
-          </ContactInfo>
+            </ContactInfo>
+          </FadeAnim>
         </div>
       </Page>
     </>

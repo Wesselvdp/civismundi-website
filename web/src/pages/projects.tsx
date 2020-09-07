@@ -2,14 +2,13 @@ import { graphql } from 'gatsby'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { uniqBy } from 'lodash'
-import { TransitionState } from 'gatsby-plugin-transition-link'
 
-import { Layout, SEO, BackgroundLines, Select, Button } from '@components/general'
+import { SEO, Hero, Select } from '@components/general'
 import { ProjectList } from '@components/projects'
+import { FadeAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
 
 import localize from '@utils/localize'
-// import console = require('console');
 
 type PageProps = {
   data: {
@@ -28,6 +27,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
   const [page, setPage] = useState(0)
   const [director, setDirector] = useState('all')
   const [selectOptions, setSelectOptions] = useState(options)
+  const [heroFinished, setHeroFinished] = useState(false)
 
   useEffect(() => {
     const directorsUnique = uniqBy(
@@ -53,23 +53,28 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
     <>
       <SEO title="Projects" />
       <Page>
-        <BackgroundLines
+        <Hero
           subtitle="Projects"
           title="Lorem ipsum dolor sit amet"
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
+          timeout={{ title: 500, content: 1000 }}
+          onFinished={() => setHeroFinished(true) }
         >
-          <Select
-            options={selectOptions}
-            value={director}
-            onChange={(value) => setDirector(value)}
-          />
-        </BackgroundLines>
+          <FadeAnim in={heroFinished} timeout={1000}>
+            <Select
+              options={selectOptions}
+              value={director}
+              onChange={(value) => setDirector(value)}
+            />
+          </FadeAnim>
+        </Hero>
         <ProjectList
           projects={data.allSanityProject}
           page={page}
           perPage={perPage}
           onMore={() => setPage(page + 1)}
           director={director}
+          show={heroFinished}
         />
       </Page>
     </>

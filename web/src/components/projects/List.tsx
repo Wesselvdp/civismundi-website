@@ -15,13 +15,13 @@ type T = {
   limit?: number
 }
 
-const ProjectList: FC<T> = ({ title, projects, limit, director, blockId }) => {
+const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = true }) => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
 
   useEffect(() => {
     const noNodes: Project[] = projects.edges.map(p => p.node)
 
-    // Filter if blocked is defined
+    // Filter if blockId is defined
     let filtered: Project[] = blockId
       ? noNodes.filter(({ id }) => id !== blockId)
       : noNodes
@@ -33,7 +33,7 @@ const ProjectList: FC<T> = ({ title, projects, limit, director, blockId }) => {
 
     filtered = limit
       ? filtered.slice(0, limit)
-      : filtered.concat(filtered) // TODO: remove when more projects
+      : filtered
 
     setFilteredProjects(filtered)
   }, [projects, director])
@@ -46,7 +46,7 @@ const ProjectList: FC<T> = ({ title, projects, limit, director, blockId }) => {
       <Grid>
         {filteredProjects.map((p: Project) => (
           <GridItem key={p.id}>
-            <FadeListItem visible={!!limit}>
+            <FadeListItem visible={show && !!limit}>
               <ProjectCard id={p.id} data={p} />
             </FadeListItem>
           </GridItem>

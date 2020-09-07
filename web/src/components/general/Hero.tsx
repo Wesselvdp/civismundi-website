@@ -11,7 +11,7 @@ export enum LineState {
   PARAGRAPH_IN = 4
 } 
 
-const BackgroundLines = ({ children, subtitle, title, content, contentTimeout }) => {
+const Hero = ({ children, subtitle, title, content, timeout = {}, onFinished = () => {} }) => {
   const [state, setState] = useState(LineState.LOADING)
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const BackgroundLines = ({ children, subtitle, title, content, contentTimeout })
     <Wrapper>
       <TextAnim
         inProp={state >= LineState.SUBTITLE_IN}
-        timeout={{ enter: 300 }}
+        timeout={{ enter: timeout.subtitle || 300 }}
         onEntered={() => setState(LineState.TITLE_IN)}
         className="subtitle"
         tag="h2"
@@ -30,7 +30,7 @@ const BackgroundLines = ({ children, subtitle, title, content, contentTimeout })
       />
       <TextAnim
         inProp={state >= LineState.TITLE_IN}
-        timeout={{ enter: contentTimeout || 300 }}
+        timeout={{ enter: timeout.title || 300 }}
         onEntered={() => setState(LineState.PARAGRAPH_IN)}
         className="h2"
         tag="h1"
@@ -38,7 +38,8 @@ const BackgroundLines = ({ children, subtitle, title, content, contentTimeout })
       />
       <TextAnim
         inProp={state >= LineState.PARAGRAPH_IN}
-        timeout={{ enter: 300 }}
+        timeout={{ enter: timeout.content || 300 }}
+        onEntered={() => onFinished()}
         tag="p"
         text={content}
         letterSpeedIn={0.01}
@@ -51,7 +52,7 @@ const BackgroundLines = ({ children, subtitle, title, content, contentTimeout })
   )
 }
 
-export default BackgroundLines
+export default Hero
 
 const Wrapper = styled.div`
   padding: 3em 15px;
