@@ -8,7 +8,6 @@ export const isMobile = () => {
     return window.innerWidth < 600
   }
 
-  console.log('window undefined')
   return mobile
 }
 

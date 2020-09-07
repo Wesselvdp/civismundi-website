@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { initialize, moveToMarker, moveFromMarker, changeMarkerType, displayPulses, labelObject, isMobile } from './utils'
 import { State } from './WorldContainer'
 import usePrevious from '@hooks/usePrevious'
+// import console = require('console');
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -160,8 +161,9 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       setWindowWidth(window.innerWidth)
 
       if (ref.current && windowWidth !== windowWidthPrev) {
+        console.log('state', state)
         if (state !== State.PROJECT_DETAILED) {
-          ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, isMobile() ? 350 : 500)
+          ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, isMobile() ? 500 : 350)
         }
 
         ref.current.camera().aspect = window.innerWidth / window.innerHeight;
