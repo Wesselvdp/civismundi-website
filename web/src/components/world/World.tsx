@@ -3,11 +3,10 @@
 import React, { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
-import { isMobile } from 'react-device-detect'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
 
-import { initialize, moveToMarker, moveFromMarker, changeMarkerType, displayPulses, labelObject } from './utils'
+import { initialize, moveToMarker, moveFromMarker, changeMarkerType, displayPulses, labelObject, isMobile } from './utils'
 import { State } from './WorldContainer'
 import usePrevious from '@hooks/usePrevious'
 
@@ -92,7 +91,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   }, [state, location]) 
 
   useEffect(() => {
-    if (isMobile) return
+    if (isMobile()) return
     if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
 
     if (labelHovered) {
@@ -110,7 +109,7 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
   useEffect(() => {
     if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
 
-    if (isMobile && (!project || labelClicked.node.slug.current !== project.node.slug.current)) {
+    if (isMobile() && (!project || labelClicked.node.slug.current !== project.node.slug.current)) {
       if (project) changeMarkerType([project], 'default', { duration: 200 })
 
       if (labelClicked) {
@@ -161,10 +160,12 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
       setWindowWidth(window.innerWidth)
 
       if (ref.current && windowWidth !== windowWidthPrev) {
+        if (state !== State.PROJECT_DETAILED) {
+          ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, isMobile() ? 350 : 500)
+        }
+
         ref.current.camera().aspect = window.innerWidth / window.innerHeight;
-        ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, window.innerWidth > 600 ? 350 : 500)
         ref.current.camera().updateProjectionMatrix();
-    
         ref.current.renderer().setSize( window.innerWidth, window.innerHeight );
       }
     }

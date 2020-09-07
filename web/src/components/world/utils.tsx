@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
-import { isMobile } from 'react-device-detect'
 import { get } from 'lodash'
+
+export const isMobile = () => window && window.innerWidth > 600
 
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
@@ -17,7 +18,7 @@ const initClouds = (curr: any) => {
   cloudMesh.renderOrder = 1
 
   const rotation = { x: 0.00003, y: 0.00012 }
-  if (isMobile) {
+  if (isMobile()) {
     rotation.x *= 1.2
     rotation.y *= 1.2
   }
@@ -83,7 +84,7 @@ export const displayPulses = (pulses, show) => {
 
 const initPulsingLabels = (curr: any, projects: any[]) => {
   const duration = 1000
-  const geometry = new THREE.CircleGeometry(isMobile ? 7 : 3.5, 25, 25)
+  const geometry = new THREE.CircleGeometry(isMobile() ? 7 : 3.5, 25, 25)
   geometry.vertices.splice(0, 1)
   const material = new THREE.LineBasicMaterial({ color: 'white', transparent: true })
   
@@ -123,7 +124,7 @@ export const initialize = (curr: any, projects: any[], options: any = { full: tr
   // control options
   controls.enableZoom = false
   controls.autoRotateSpeed = 0.3
-  if (isMobile) camera.position.z = 500
+  if (isMobile()) camera.position.z = 500
 
 
   // custom three objects
@@ -152,7 +153,7 @@ export const labelObject = () => {
 
   return (
     new THREE.Mesh(
-      new THREE.CircleGeometry(isMobile ? 7 : 3.5, 25, 25),
+      new THREE.CircleGeometry(isMobile() ? 7 : 3.5, 25, 25),
       [
         new THREE.MeshBasicMaterial({
           map: texture,
@@ -231,7 +232,7 @@ export const moveFromMarker = (curr, options = {}) => {
     .start()
 
   new TWEEN.Tween({ length: camera.position.length() })
-    .to({ length: isMobile ? 500 : 350 }, duration)
+    .to({ length: isMobile() ? 500 : 350 }, duration)
     .onUpdate(d => {
       camera.position.setLength(d.length);
     })
