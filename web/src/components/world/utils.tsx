@@ -1,8 +1,16 @@
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { get } from 'lodash'
+import { isMobile as mobile } from 'react-device-detect'
 
-export const isMobile = () => window && window.innerWidth > 600
+export const isMobile = () => {
+  if (typeof window !== 'undefined') {
+    return window.innerWidth < 600
+  }
+
+  console.log('window undefined')
+  return mobile
+}
 
 const initClouds = (curr: any) => {
   const cloudMesh = new THREE.Mesh(
@@ -124,6 +132,7 @@ export const initialize = (curr: any, projects: any[], options: any = { full: tr
   // control options
   controls.enableZoom = false
   controls.autoRotateSpeed = 0.3
+  console.log('mobile: ', isMobile())
   if (isMobile()) camera.position.z = 500
 
 
