@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import styled, { keyframes } from 'styled-components'
 
-import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
 import ModalVideo from 'react-modal-video'
@@ -45,9 +45,6 @@ const ProjectDetailedContainer = ({ data }) => {
         <img className="modal-close" src="/close.svg" onClick={() => openVideo(false)} /> 
       </ModalWrapper>
       <StyledMast>
-        <PlayButton className="mobile">
-          <PlaySVG onClick={() => openVideo(true)} />
-        </PlayButton>
         <Content>
           <div className="inner">
             <TextAnim
@@ -75,7 +72,7 @@ const ProjectDetailedContainer = ({ data }) => {
               letterSpeedIn={0.01}
               singleLine={false}
             />
-            <PlayButton className="desktop">
+            <PlayButton>
               <PlaySVG onClick={() => openVideo(true)} />
             </PlayButton>
             <Link to="content" spy={false} smooth={true} offset={50} duration={1000}>
@@ -187,31 +184,47 @@ const ModalWrapper = styled.div`
   }
 `
 
+const svgAnim = keyframes`
+  0% {
+    stroke-dashoffset: 400;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+`
+
 const PlayButton = styled.div`
   z-index: 100;
+  padding-top: 2em;
 
-  &.mobile {
+  @media ${breakpoints.tabletLandscapeDown} {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding-bottom: 114px;
-
-    @media ${breakpoints.tabletLandscapeUp} {
-      display: none;
-    }
   }
 
-  &.desktop {
-    padding-top: 2em;
-
-    @media ${breakpoints.phoneOnly} {
-      display: none;
+  svg {
+    &:hover {
+      cursor: pointer;
     }
-  }
 
-  svg:hover {
-    cursor: pointer;
+    circle {
+      stroke-dashoffset: 400;
+      opacity: 0;
+      animation: ${svgAnim} 3s forwards;
+      animation-delay: 2.5s;
+    }
+
+    path {
+      stroke-dashoffset: 400;
+      opacity: 0;
+      animation: ${svgAnim} 3s forwards;
+      animation-delay: 4s;
+    }
   }
 `
 
@@ -221,7 +234,6 @@ const Content = styled.div`
   justify-content: center;
   text-align: center;
   height: 100vh;
-  position: relative;
   z-index: 1;
 
   @media ${breakpoints.tabletLandscapeUp} {
@@ -231,7 +243,7 @@ const Content = styled.div`
   .inner {
     padding: 15px;
 
-    @media ${breakpoints.phoneOnly} {
+    @media ${breakpoints.tabletLandscapeDown} {
       padding: 15px 15px 8em;
     }
   
@@ -352,24 +364,5 @@ const Section = styled.section`
     h5 {
       margin-bottom: 0.5em;
     }
-  }
-`
-
-const FixedBackground = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  max-height: 100vh;
-
-  .overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    opacity: 0.45;
   }
 `

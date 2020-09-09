@@ -7,6 +7,7 @@ const size = {
 
 export const breakpoints = {
   phoneOnly: `(max-width: ${size.phone})`,
+  tabletLandscapeDown: `(max-width: ${size.tabletLandscape})`,
   tabletLandscapeUp: `(min-width: ${size.tabletLandscape})`,
   desktopUp: (`min-width: ${size.desktop}`),
   desktopLargeUp: `(min-width: ${size.desktopLarge})`
