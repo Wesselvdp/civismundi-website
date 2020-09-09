@@ -215,15 +215,15 @@ const PlayButton = styled.div`
     circle {
       stroke-dashoffset: 400;
       opacity: 0;
-      animation: ${svgAnim} 3s forwards;
-      animation-delay: 2.5s;
+      animation: ${svgAnim} 2s forwards;
+      animation-delay: 2s;
     }
 
     path {
       stroke-dashoffset: 400;
       opacity: 0;
       animation: ${svgAnim} 3s forwards;
-      animation-delay: 4s;
+      animation-delay: 2.75s;
     }
   }
 `
