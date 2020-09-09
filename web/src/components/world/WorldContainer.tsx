@@ -43,8 +43,10 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
     if (state <= State.LOADING) return
 
     switch (layout) {
-      case 'other': 
+      case 'other': {
+        setProject(null)
         return setState(State.BACKGROUND)
+      }
 
       case 'project-detailed':
         return setState(State.PROJECT_DETAILED)
