@@ -28,6 +28,10 @@
     {
       "name": "part:@sanity/desk-tool/structure",
       "path": "./src/deskStructure"
+    },
+    {
+      "implements": "part:@sanity/dashboard/config",
+      "path": "src/dashboardConfig"
     }
   ]
 }
