@@ -13,11 +13,15 @@
     "@sanity/default-layout",
     "@sanity/default-login",
     "@sanity/desk-tool",
-    "@sanity/google-maps-input"
+    "@sanity/google-maps-input",
+    "@sanity/dashboard",
+    "dashboard-widget-netlify"
   ],
   "env": {
     "development": {
-      "plugins": ["@sanity/vision"]
+      "plugins": [
+        "@sanity/vision"
+      ]
     }
   },
   "parts": [
@@ -31,7 +35,7 @@
     },
     {
       "implements": "part:@sanity/dashboard/config",
-      "path": "src/dashboardConfig"
+      "path": "./src/dashboardConfig"
     }
   ]
 }
