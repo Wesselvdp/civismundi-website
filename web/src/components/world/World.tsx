@@ -1,189 +1,55 @@
 // @ts-nocheck
 
-import React, { useEffect, useRef, useLayoutEffect, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import loadable from '@loadable/component'
 import { get } from 'lodash'
-import { navigate } from 'gatsby'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import * as THREE from 'three'
 
-import { initialize, moveToMarker, moveFromMarker, changeMarkerType, displayPulses, labelObject, isMobile } from './utils'
-import { State } from './WorldContainer'
-import usePrevious from '@hooks/usePrevious'
-// import console = require('console');
+import { initializeWorld } from '../../actions/initialize'
+import { addMarker, onMarkerHovered, onMarkerClicked, createPulsingMarkers } from '../../actions/marker'
+import { WorldVersion, WorldMode, MarkerType } from '../../actions'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
-const World = ({ state, prevState, setState, projects, project, setProject, location, className, setProgress, setReady }) => {
+const World = ({ data, markers, layout, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
-  const ref = useRef();
+  const ref = useRef()
+  const world = useSelector(state => state.world)
+  const [loading, setLoading] = useState<boolean>(false)
+  const dispatch = useDispatch()
 
-  // window
-  const [windowWidth, setWindowWidth] = useState<number>(undefined)
-  const [windowWidthPrev, setWindowWidthPrev] = useState<number>(undefined)
-
-  // globe
-  const [loaded, setLoaded] = useState<boolean | null>(null)
-  const [initialized, setInitialized] = useState<boolean | null>(null)
-  
-  // scene
-  const [scene, setScene] = useState(null)
-  const [renderer, setRenderer] = useState(null)
-
-  // camera
-  const [camera, setCamera] = useState(null)
-  const [cameraChanged, setCameraChanged] = useState(false)
-  const [cameraRotating, setCameraRotating] = useState(true)
-
-  // controls
-  const [controls, setControls] = useState(null)
-
-  // labels
-  const [labels, setLabels] = useState([])
-  const [pulsingLabels, setPulsingLabels] = useState([])
-
-  // actions
-  const [labelHovered, onLabelHovered] = useState(null)
-  const [labelClicked, onLabelClicked] = useState(null)
+  const [disableEvents, setDisableEvents] = useState(false)
 
   useEffect(() => {
-    if (initialized || !ref.current) return;
-
-    _init()
-  }, [loaded]);
+    if (loading) {
+      dispatch(initializeWorld(ref, data, location))
+    }
+  }, [loading])
 
   useEffect(() => {
-    if (state === State.INITIALIZING && ref.current) return _init({ full: false })
+    if (!world.ready) return
 
-    if (state === State.PROJECT_HOVERED && !project) return setState(State.EXPLORE)
-  
-    // Handle controls
-    if (controls) controls.enabled = state === State.EXPLORE || state === State.PROJECT_HOVERED
-  
-    // Handle auto-rotation
-    setCameraRotating(state === State.EXPLORE || state === State.BACKGROUND)
-
-    // Handle markers
-    const MARKER_STATES = [State.EXPLORE, State.PROJECT_HOVERED]
-    if (MARKER_STATES.includes(state)) {
-      changeMarkerType(labels, 'default', { duration: !prevState ? 0 : 300 })
-      displayPulses(pulsingLabels, true)
-    } else if (!MARKER_STATES.includes(state)) {
-      changeMarkerType(labels, 'hidden', { duration: 300 })
-      displayPulses(pulsingLabels, false)
-    }
-  
-    // Set correct camera/globe position when on project detailed page
-    if (state === State.PROJECT_DETAILED) {
-      // First find project by route
-      const projectSlug = get(location.pathname.split('/projects/'), '[1]')
-      const p = projects.find(pj => get(pj, 'node.slug.current', '') === projectSlug)
-
-      if (p) {
-        setProject(p)
-        moveToMarker(ref.current, p, { duration: prevState === State.EXPLORE || prevState === State.PROJECT_HOVERED ? 1500 : 0 })
-      }
-    }
-
-    // Handle from detailed to home
-    if (prevState !== state && prevState === State.PROJECT_DETAILED) {
-      moveFromMarker(ref.current, { duration: 1000 })
-    }
-  }, [state, location]) 
+    dispatch(createPulsingMarkers())
+  }, [world.ready])
 
   useEffect(() => {
-    if (isMobile()) return
-    if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
+    if (!world.ready) return
 
-    if (labelHovered) {
-      setProject(labelHovered)
-      changeMarkerType([labelHovered], 'hover', { duration: 200 })
-      setState(State.PROJECT_HOVERED)
-    } 
-    else {
-      setProject(null)
-      changeMarkerType(labels, 'default', { duration: 200 })
-      setState(State.EXPLORE)
-    }
-  }, [labelHovered])
+    if ([WorldMode.IN_BACKGROUND, WorldMode.PROJECT_DETAILED, WorldMode.PROJECTS_EXPLORE].includes(world.mode))
+      setDisableEvents(false)
+  }, [world.ready, world.mode])
 
-  useEffect(() => {
-    if (state !== State.EXPLORE && state !== State.PROJECT_HOVERED) return
-
-    if (isMobile() && (!project || labelClicked.node.slug.current !== project.node.slug.current)) {
-      if (project) changeMarkerType([project], 'default', { duration: 200 })
-
-      if (labelClicked) {
-        ref.current.pointOfView({
-          lat: labelClicked.node.location.lat,
-          lng: labelClicked.node.location.lng,
-          alt: 0.05
-        }, 1000)
-
-        changeMarkerType([labelClicked], 'hover', { duration: 200 })
-
-        setTimeout(() => {
-          setProject(labelClicked)
-          setState(State.PROJECT_HOVERED)
-        }, 1000)
-      }
-      return
-    }
-
-    if (labelClicked) {
-      setProject(labelClicked)
-      navigate(`/projects/${labelClicked.node.slug.current}`)
-      // setState(State.PROJECT_DETAILED)
-    }
-  }, [labelClicked]);
-
-  useEffect(() => {
-    if (!camera || !cameraChanged) return
-
-    // update labels rotation
-    [...labels, ...pulsingLabels].forEach(label => {
-      label.__threeObj.quaternion.copy(camera.quaternion)
-    })
-
-    // so that camera changed only triggers every 150ms
-    const timer = setTimeout(() => setCameraChanged(false), 150);
-    return () => clearTimeout(timer)
-  }, [cameraChanged])
-
-  useEffect(() => {
-    if (controls) controls.autoRotate = cameraRotating
-
-    if (cameraRotating && state === State.PROJECT_HOVERED) {
-      setState(State.EXPLORE)
-    }
-  }, [cameraRotating])
-
-  useLayoutEffect(() => {
-
-    const updateCanvas = () => {
-      setWindowWidthPrev(windowWidth)
-      setWindowWidth(window.innerWidth)
-
-      if (ref.current && windowWidth !== windowWidthPrev) {
-        if (state !== State.PROJECT_DETAILED) {
-          ref.current.camera().position.set(ref.current.camera().position.x, ref.current.camera().position.y, isMobile() ? 500 : 350)
-        }
-
-        ref.current.camera().aspect = window.innerWidth / window.innerHeight;
-        ref.current.camera().updateProjectionMatrix();
-        ref.current.renderer().setSize( window.innerWidth, window.innerHeight );
-      }
-    }
-
-    updateCanvas()
-    window.addEventListener('resize', updateCanvas)
-    return () => window.removeEventListener('resize', updateCanvas);
-  }, [windowWidth, windowWidthPrev, setWindowWidth, setWindowWidthPrev])
 
   const onLabelUpdate = (obj, d) => {
     // this way we determine when ref.current is populated
-    if (!loaded) setLoaded(true)
-    if (!initialized) return
+    if (!loading) {
+      setLoading(true)
+    }
+
+    if (!world.ready) return
 
     Object.assign(
       obj.position,
@@ -193,52 +59,51 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
         0.05
       )
     )
+  }
 
-    // if new, add to labels
-    if (labels.length !== projects.length && !labels.some(label => label.__threeObj.uuid === d.__threeObj.uuid)) {
-      setLabels([...labels, d])
+  const onHover = (obj) => {
+    if (disableEvents) return
+
+    if (world.version === WorldVersion.DESKTOP) {
+      dispatch(onMarkerHovered(obj))
     }
   }
 
-  const _init = (options = {}) => {
-    initialize(ref.current, projects, {
-      ...options,
-      onLoaded: () => { setReady(true); setState(State.LOADING) },
-      onProgress: (progress) => { setProgress(progress) }
-    }).then(([
-      _scene,
-      _camera,
-      _controls,
-      _renderer,
-      _clouds,
-      _lightning, 
-      _pulsingLabels,
-    ]) => {
-      setScene(_scene)
-      setCamera(_camera)
-      setRenderer(_renderer)
-      setControls(_controls)
-      setPulsingLabels(_pulsingLabels)
+  const onClick = (obj) => {
+    if (disableEvents) return
 
-      _controls.addEventListener('start', () => {
-        setProject(null)
-        onLabelHovered(null)
-        onLabelClicked(null)
-      })
-  
-      _controls.addEventListener('change', () => {
-        if (_lightning && _camera) _lightning.position.copy(_camera.position)
-        if (!cameraChanged) setCameraChanged(true)
-      })
-
-      setInitialized(true)
-    })
+    setDisableEvents(true)
+    dispatch(onMarkerClicked(obj))
   }
+
+  const labelObject = (obj, radius) => {
+    dispatch(addMarker(obj))
+
+    // load texture
+    const texture = new THREE.TextureLoader().load(`/marker-${obj.node._type}.svg`)
+    if (ref.current) {
+      texture.anisotropy = ref.current.renderer().getMaxAnisotropy()
+    }
+
+    // determine marker size
+    let baseRadius = obj.node._type === MarkerType.PROJECT ? 3.5 : 5
+    if (window.innerWidth < 600) baseRadius *= 2
+
+    // marker material
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      color: 0xffffff
+    })
+    material.map.minFilter = THREE.LinearFilter
+    return new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [material])
+  }
+
 
   return (
     !isSSR && (
       <React.Suspense fallback={<div />}>
-        <Wrapper className={className}>
+        <Wrapper className={world.mode}>
           <Globe
             ref={ref}
             // appearance
@@ -246,34 +111,36 @@ const World = ({ state, prevState, setState, projects, project, setProject, loca
             bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
             backgroundColor="rgba(0,0,0,0)"
             // labels
-            customLayerData={projects}
-            customThreeObject={() => labelObject()}
+            customLayerData={markers}
+            customThreeObject={(obj, globeRadius) => labelObject(obj, globeRadius)}
             customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-            onCustomLayerHover={obj => onLabelHovered(obj)}
-            onCustomLayerClick={obj => onLabelClicked(obj)}
+            onCustomLayerHover={obj => onHover(obj)}
+            onCustomLayerClick={obj => onClick(obj)}
             // settings
             animateIn={false}
             renderConfig={{
               sortObjects: false,
               antialias: true,
-              alpha: true 
+              alpha: true
             }}
             waitForGlobeReady={true}
           />
         </Wrapper>
-     </React.Suspense>
+    </React.Suspense>
     )
   )
 }
 
 const Wrapper = styled.div`
   opacity: 1;
+  transition: opacity 1.5s ease;
 
-  &.project-hovered {
+  &.${WorldMode.PROJECT_PREVIEW}, &.${WorldMode.AREA_PREVIEW} {
+    transition: opacity 0.25s ease;
     opacity: 0.40;
   }
 
-  &.project-detailed {
+  &.${WorldMode.PROJECT_DETAILED} {
     opacity: 1;
   }
 `

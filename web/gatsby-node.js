@@ -53,6 +53,10 @@ const createCustomPages = async (graphql, createPage) => {
       allSanityProject {
         edges {
           node {
+            location {
+              lat
+              lng
+            }
             title
             slug {
               current

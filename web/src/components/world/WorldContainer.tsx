@@ -1,79 +1,83 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group';
 import { get } from 'lodash'
-import { navigate } from 'gatsby'
+import { useDispatch } from 'react-redux'
 
 import World from './World'
-import { TextAnim, TextImprov, VerticalAnim, FadeAnim } from '@components/animations'
+import { TextAnim, TextImprov, VerticalAnim } from '@components/animations'
 import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
-import usePrevious from '@hooks/usePrevious'
-// import console = require('console');
 
-export enum State {
-  INITIALIZING = 0,
-  LOADING = 1,
-  BACKGROUND = 2,
-  PROJECT_DETAILED = 3,
-  EXPLORE = 4,
-  PROJECT_HOVERED = 5,
-}
+import { WorldMode } from '../../actions'
+import { setWorldMode } from '../../actions/mode'
+import ProjectSlider from './ProjectSlider'
 
-type StateType = State
+const INTRO_TEXT = `
+  A collective of interdisciplinary creatives whose collaborative
+  practice seeks to navigate the confluence of film, music, design and fashion`
 
-const GLOBE_TRANSITION_LENGTH = 1600;
-
-const INTRO_TEXT = 'A collective of interdisciplinary creatives whose collaborative practice seeks to navigate the confluence of film, music, design and fashion';
-
-const WorldContainer = ({ layout, location, ready, setReady, progress, setProgress }) => {
-  const [state, setState] = useState<StateType>(State.INITIALIZING)
-  const prevState = usePrevious(state)
-  const [skipAnimation, setSkipAnimation] = useState<boolean>(false)
-  const [project, setProject] = useState<Project | null>(null)
-  const [projectTitle, setProjectTitle] = useState('')
+const WorldContainer = ({ layout, location }) => {
+  const world = useSelector(state => state.world)
+  const [markers, setMarkers] = useState([])
+  const [showGrabIcon, setShowGrabIcon] = useState(false)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    if (state === State.INITIALIZING && layout === 'project-detailed') {
-      setSkipAnimation(true)
-    }
+    const projects = data.allSanityProject.edges.filter(p => p.node.locationGroup === null)
+    const areas = data.allSanityLocation.edges.filter(a => data.allSanityProject.edges.some(p => p.node.locationGroup._id === a.node._id))
 
-    if (state <= State.LOADING) return
-
-    switch (layout) {
-      case 'other': {
-        setProject(null)
-        return setState(State.BACKGROUND)
-      }
-
-      case 'project-detailed':
-        return setState(State.PROJECT_DETAILED)
-
-      case 'home':
-      default:
-        return setState(State.EXPLORE)
-    }
-  }, [layout])
+    setMarkers([...areas, ...projects])
+  }, [])
 
   useEffect(() => {
-    if (project) setProjectTitle(project.node.title)
-  }, [project])
+    if (world.mode === WorldMode.PROJECTS_EXPLORE|| world.mode === WorldMode.PROJECT_PREVIEW) {
+      if (!showGrabIcon) setTimeout(() => setShowGrabIcon(true), 2000)
+      else setShowGrabIcon(false)
+    }
+  }, [world.mode, world.ready])
+
 
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
-      allSanityProject {
+      allSanityLocation {
         edges {
           node {
-            slug {
-              current
-            }
+            _id
+            _type
             title
             location {
               lat
               lng
+            }
+          }
+        }
+      }
+      allSanityProject {
+        edges {
+          node {
+            _id
+            _type
+            slug {
+              current
+            }
+            title
+            featured
+            location {
+              lat
+              lng
+            }
+            locationGroup {
+              _id
+              title
+              location {
+                lat
+                lng
+              }
             }
             poster {
               asset {
@@ -91,66 +95,37 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
     }
   `)
 
-  const _initStateFromLayout = () => {
-    switch (layout) {
-      case 'other': 
-        return setState(State.BACKGROUND)
-
-      case 'project-detailed': {
-        return setState(State.PROJECT_DETAILED)
-      }
-
-      case 'home':
-      default:
-        return setState(State.EXPLORE)
-    }
-  }
-
   return (
     <Page className={layout}>
       <>
-        <CSSTransition in={state > State.INITIALIZING} timeout={{ enter: GLOBE_TRANSITION_LENGTH }} onEntered={() => _initStateFromLayout()} classNames="globe">
-          <AnimatedWrapper className={`${skipAnimation ? 'skip-animation' : ''}`}>
-            {/* World component*/}
-            <World
-              className={`${project && state === State.PROJECT_HOVERED ? 'project-hovered' : ''} ${state === State.PROJECT_DETAILED ? 'project-detailed' : ''}`}
-              state={state}
-              prevState={prevState}
-              setState={setState}
-              projects={data.allSanityProject.edges}
-              project={project}
-              setProject={setProject}
-              layout={layout}
-              location={location}
-              setReady={setReady}
-              setProgress={setProgress}
-            />
+        <CSSTransition in={world.ready} timeout={{ enter: 1600 }} classNames="globe">
+          <AnimatedWrapper className={world.skipInTransition ? 'skip-in-transition' : ''}>
+            <World location={location} data={data} markers={markers} />
           </AnimatedWrapper>
         </CSSTransition>
         <MobileContent>
           <TextImprov
-            in={project && state === State.PROJECT_HOVERED}
+            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
             tag="h2"
             className="subtitle"
             text="VIDEO DIRECTION"
           />
           <TextImprov
-            in={project && projectTitle && state === State.PROJECT_HOVERED}
+            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
             tag="h1"
-            text={projectTitle}
+            text={get(world, 'projectActive.node.title')}
             appear
           />
           <TextImprov
-            in={project && state === State.PROJECT_HOVERED}
+            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
             tag="p"
             text="TRAVIS SCOTT  •  LOS ANGELES"
           />
-          {state === State.PROJECT_HOVERED && project && (
-            <Button 
+          {(world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW) && (
+            <Button
+              className={world.mode}
               buttonStyle="outlined"
-              onClick={() => {
-                navigate(`/projects/${project.node.slug.current}`)
-              }}
+              onClick={() => dispatch(setWorldMode(WorldMode.PROJECT_DETAILED, { marker: world.projectActive, navigate: true }))}
             >
               VIEW PROJECT
             </Button>
@@ -160,23 +135,27 @@ const WorldContainer = ({ layout, location, ready, setReady, progress, setProgre
       <FooterContainer>
         <div className="footer--content">
           <>
-            <VerticalAnim in={state === State.INITIALIZING || state === State.LOADING || state === State.PROJECT_HOVERED || state === State.EXPLORE} timeout={{ enter: 4000 }}>
+            <VerticalAnim in={world.ready && showGrabIcon && (world.mode === 'explore' || world.mode === 'project_preview')} timeout={{ enter: 5000 }}>
               <img src="/grab-icon.svg" />
             </VerticalAnim>
-            <TextAnim 
-              in={state === State.PROJECT_HOVERED || state === State.EXPLORE}
+            <TextAnim
+              in={world.ready && (world.mode === 'explore' || world.mode === 'project_preview')}
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
             />
           </>
         </div>
       </FooterContainer>
-      {project && (
-        <VideoPreview className={`${state === State.PROJECT_HOVERED || state === State.PROJECT_DETAILED ? 'visible' : ''} ${state === State.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
-          <video id="videoBG" playsInline autoPlay muted loop>
-            <source src={get(project, 'node.video.asset.url')} type="video/mp4" />
+      {world.showPreviewVideo && (
+        <VideoPreview className={`${[WorldMode.PROJECT_PREVIEW, WorldMode.PROJECT_DETAILED, WorldMode.AREA_PREVIEW].includes(world.mode) ? 'visible' : ''} ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
+          <video key={get(world, 'projectActive.node.video.asset.url')} id="videoBG" playsInline autoPlay muted loop>
+            <source src={get(world, 'projectActive.node.video.asset.url')} type="video/mp4" />
           </video>
         </VideoPreview>
+      )}
+      <SliderWrapper>
+        <ProjectSlider projects={world.areaProjects.length ? world.areaProjects : world.projects} show={world.mode === WorldMode.AREA_PREVIEW} />
+      </SliderWrapper>
       )}
     </Page>
   );
@@ -228,7 +207,7 @@ const AnimatedWrapper = styled.div`
     opacity: 1;
   }
 
-  &.skip-animation {
+  &.skip-in-transition {
     transform: scale(1) !important;
     opacity: 1 !important;
     transition: none;
@@ -254,7 +233,16 @@ const MobileContent = styled.div`
       padding: 1em 2em;
       font-size: 10px;
       border-width: 0.5px;
+    }
+
+    &.${WorldMode.AREA_PREVIEW} {
       display: initial;
+    }
+
+    &.${WorldMode.PROJECT_PREVIEW} {
+      @media ${breakpoints.phoneOnly} {
+        display: initial;
+      }
     }
   }
 
@@ -313,7 +301,7 @@ const FooterContainer = styled.div`
       &:not(.skip-intro) {
         @media ${breakpoints.phoneOnly} {
           font-size: 10px;
-          padding: 0 20px; 
+          padding: 0 20px;
         }
       }
     }
@@ -322,4 +310,11 @@ const FooterContainer = styled.div`
       cursor: pointer;
     }
   }
+`
+
+const SliderWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 `
