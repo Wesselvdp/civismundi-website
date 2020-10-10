@@ -7,21 +7,27 @@ import { setWorldMode } from './mode'
 
 export const addMarker = (marker: any) => ({ type: ADD_MARKER, marker })
 
-export function onMarkerHovered(hovered: any) {
-  return function action(dispatch: any, getState: any) {
-    const w = getState().world
+export function updateMarkersQuaternion(world: any) {
+  const quaternion = world.ref.current.camera().quaternion
 
-    if (!w.markersVisible)
-      return
+  world.markers.forEach((marker: any) => {
+    marker.__threeObj.quaternion.copy(quaternion)
+
+    if (marker.pulsingRing) {
+      marker.pulsingRing.quaternion.copy(quaternion)
+    }
+  })
+}
+
+export function onMarkerHovered(hovered: any) {
+  return async function action(dispatch: any, getState: any) {
+    console.log('hovered')
+    const w = getState().world
 
     if (w.mode !== WorldMode.PROJECTS_EXPLORE && w.mode !== WorldMode.PROJECT_PREVIEW)
       return
 
     if (w.version === WorldVersion.DESKTOP) {
-      if (typeof document !== 'undefined') {
-        document.getElementsByTagName('body')[0].style.cursor = hovered ? 'pointer' : 'auto'
-      }
-
       if (hovered && hovered.node._type === MarkerType.PROJECT) {
         return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { marker: hovered }))
       } else if (hovered === null) {
@@ -33,6 +39,7 @@ export function onMarkerHovered(hovered: any) {
 
 export function onMarkerClicked(clicked: any) {
   return function action(dispatch: any, getState: any) {
+    console.log('clicked', clicked)
     const w = getState().world
 
     if (!w.markersVisible)
@@ -44,14 +51,13 @@ export function onMarkerClicked(clicked: any) {
       }
 
       if (clicked.node._type === MarkerType.AREA) {
-        // TODO: Set mode to area
-        return
+        return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { marker: clicked }))
       }
     }
 
     if (w.version === WorldVersion.MOBILE) {
       if (clicked.node._type === MarkerType.PROJECT) {
-        if (w.mode === WorldMode.PROJECT_PREVIEW && clicked.node._id !== w.activeMarker.node._id)
+        if (w.mode === WorldMode.PROJECT_PREVIEW && clicked.node._id !== w.project.node._id)
           return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
 
         if (w.mode === WorldMode.PROJECTS_EXPLORE)
@@ -59,8 +65,7 @@ export function onMarkerClicked(clicked: any) {
       }
 
       if (clicked.node._type === MarkerType.AREA) {
-        // TODO: Set mode to area
-        return
+        return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { marker: clicked }))
       }
     }
   }
@@ -69,8 +74,6 @@ export function onMarkerClicked(clicked: any) {
 export function toggleMarkers(show: boolean, duration = 750) {
   return function action(dispatch: any, getState: any) {
     const w = getState().world
-
-    console.log(`toggleMarkers(${show}). store = ${w.markerVisible})`)
 
     // No action needed
     if (w.markersVisible === show)

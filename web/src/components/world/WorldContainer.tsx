@@ -8,7 +8,7 @@ import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
 
 import World from './World'
-import { TextAnim, TextImprov, VerticalAnim, FadeAnim } from '@components/animations'
+import { TextAnim, TextImprov, VerticalAnim } from '@components/animations'
 import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 
@@ -38,6 +38,7 @@ const WorldContainer = ({ layout, location }) => {
       else setShowGrabIcon(false)
     }
   }, [world.mode, world.ready])
+
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -98,31 +99,31 @@ const WorldContainer = ({ layout, location }) => {
       <>
         <CSSTransition in={world.ready} timeout={{ enter: 1600 }} classNames="globe">
           <AnimatedWrapper className={world.skipInTransition ? 'skip-in-transition' : ''}>
-            <World layout={layout} location={location} data={data} markers={markers} />
+            <World location={location} data={data} markers={markers} />
           </AnimatedWrapper>
         </CSSTransition>
         <MobileContent>
           <TextImprov
-            in={world.mode === WorldMode.PROJECT_PREVIEW}
+            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
             tag="h2"
             className="subtitle"
             text="VIDEO DIRECTION"
           />
           <TextImprov
-            in={world.mode === WorldMode.PROJECT_PREVIEW}
+            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
             tag="h1"
-            text={get(world, 'activeMarker.node.title')}
+            text={get(world, 'projectActive.node.title')}
             appear
           />
           <TextImprov
-            in={world.mode === WorldMode.PROJECT_PREVIEW}
+            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
             tag="p"
             text="TRAVIS SCOTT  •  LOS ANGELES"
           />
-          {world.mode === WorldMode.PROJECT_PREVIEW && (
+          {world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW && (
             <Button
-              buttonStyle="outlined" 
-              onClick={() => dispatch(setWorldMode(WorldMode.PROJECT_DETAILED, { marker: world.activeMarker, navigate: true }))}
+              buttonStyle="outlined"
+              onClick={() => dispatch(setWorldMode(WorldMode.PROJECT_DETAILED, { marker: world.projectActive, navigate: true }))}
             >
               VIEW PROJECT
             </Button>
@@ -146,7 +147,7 @@ const WorldContainer = ({ layout, location }) => {
       {world.showPreviewVideo && (
         <VideoPreview className={`${[WorldMode.PROJECT_PREVIEW, WorldMode.PROJECT_DETAILED].includes(world.mode) ? 'visible' : ''} ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
           <video id="videoBG" playsInline autoPlay muted loop>
-            <source src={get(world, 'activeMarker.node.video.asset.url')} type="video/mp4" />
+            <source src={get(world, 'projectActive.node.video.asset.url')} type="video/mp4" />
           </video>
         </VideoPreview>
       )}

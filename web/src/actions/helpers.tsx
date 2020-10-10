@@ -11,6 +11,12 @@ export const getMarkerFromPath = (pathname: string, markers: any[]) => {
   )
 }
 
+export const getProjectsFromArea = (projects: any[], marker: any) => {
+  return projects.filter((p: any) =>
+    p.node.locationGroup && p.node.locationGroup._id === marker.node._id
+  )
+}
+
 export const updateLightningPosition = (world: any) => {
   const lightning = world.lightning
   const camera = world.ref.current.camera()
@@ -40,12 +46,6 @@ export const setCameraInitialPosition = (world: any, duration = 1500) => {
   const length = camera.position.length()
   const lengthTo = world.version === WorldVersion.MOBILE ? 500 : 350
 
-  // No action is needed
-  if (length == lengthTo) return 0
-
-  const controlsEnabled = controls.enabled
-
-  controls.enabled = false
   // Change target and camera position
   new TWEEN.Tween({ target: { ...target }, length })
     .to({ target: { ...targetTo }, length: lengthTo }, duration)
@@ -53,9 +53,6 @@ export const setCameraInitialPosition = (world: any, duration = 1500) => {
     .onUpdate((d: any) => {
       controls.target.set(d.target.x, d.target.y, d.target.z)
       camera.position.setLength(d.length)
-    })
-    .onComplete(() => {
-      controls.enabled = controlsEnabled
     })
     .start()
 

@@ -63,7 +63,7 @@ const Nav = styled.nav`
   .item {
     flex: 0 0 200px;
     margin-top: -10px;
-  
+
     @media ${breakpoints.phoneOnly} {
       flex: 0 0 auto;
     }
@@ -80,7 +80,6 @@ const Nav = styled.nav`
         bottom: -3px;
         height: 0.5px;
         background-color: #fff;
-        transition: 0.25s ease-in-out;
       }
 
       &.active::before {

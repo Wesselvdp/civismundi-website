@@ -13,5 +13,5 @@ export enum WorldVersion {
 
 export enum MarkerType {
   PROJECT = 'project',
-  AREA = 'area'
+  AREA = 'location'
 }

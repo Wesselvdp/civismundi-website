@@ -4,7 +4,11 @@ import { WorldVersion, WorldMode } from '.'
 import { SET_DATA, WORLD_INITIALIZE_START, WORLD_INITIALIZE_COMPLETE, SET_LIGHTNING, SET_VISIBILITY_MARKERS } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
 import { getWorldVersion, updateLightningPosition } from './helpers'
-import { toggleMarkers } from './marker'
+import { toggleMarkers, updateMarkersQuaternion } from './marker'
+
+let newFrame: any
+const FRAME_PER_SEC = 60
+const SEC_PER_FRAME = 1000 / FRAME_PER_SEC
 
 export function initializeWorld(ref: any, data: any, location: any, options: any = {}) {
   return async function action(dispatch: any, getState: any) {
@@ -38,16 +42,26 @@ export function initializeWorld(ref: any, data: any, location: any, options: any
 
     // event listeners
     getState().world.ref.current.controls().addEventListener('start', () => {
-      const w = getState().world
+      // const w = getState().world
 
-      if (w.mode === WorldMode.PROJECT_PREVIEW) {
-        setWorldMode(WorldMode.PROJECTS_EXPLORE)
-      }
+      // if (w.mode === WorldMode.PROJECT_PREVIEW || w.mode === WorldMode.AREA_PREVIEW) {
+      //   dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+      // }
     })
 
     getState().world.ref.current.controls().addEventListener('change', () => {
       const w = getState().world
+
       updateLightningPosition(w)
+
+      // Update marker quaternions every MARKER_SPF ms
+      if (!newFrame) {
+        updateMarkersQuaternion(w)
+
+        newFrame = setTimeout(() => {
+          newFrame = false
+        }, SEC_PER_FRAME)
+      }
     })
 
     // create additional THREE.js objects
@@ -79,7 +93,7 @@ function configureScene(world: any) {
 }
 
 function createLightning() {
-  return function action(dispatch: any, getState: any) {
+  return async function action(dispatch: any, getState: any) {
     const world = getState().world
 
     const material = world.ref.current.globeMaterial()
@@ -94,11 +108,18 @@ function createLightning() {
       }
     )
 
-    setTimeout(() => {
-      const lightning = world.ref.current.scene().children.find((obj3d: any) => obj3d.type === 'DirectionalLight')
-      lightning.position.copy(world.ref.current.camera().position)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const directionalLight = world.ref.current
+          .scene()
+          .children
+          .find((obj3d: any) => obj3d.type === 'DirectionalLight')
 
-      dispatch({ type: SET_LIGHTNING, lightning })
+        directionalLight.position.copy(world.ref.current.camera().position)
+
+        dispatch({ type: SET_LIGHTNING, lightning: directionalLight })
+        resolve(directionalLight);
+      })
     })
   }
 }

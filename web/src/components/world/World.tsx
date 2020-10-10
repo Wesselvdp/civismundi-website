@@ -9,7 +9,7 @@ import * as THREE from 'three'
 
 import { initializeWorld } from '../../actions/initialize'
 import { addMarker, onMarkerHovered, onMarkerClicked, createPulsingMarkers } from '../../actions/marker'
-import { WorldMode, MarkerType } from '../../actions'
+import { WorldVersion, WorldMode, MarkerType } from '../../actions'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -20,6 +20,8 @@ const World = ({ data, markers, layout, className }) => {
   const world = useSelector(state => state.world)
   const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
+
+  const [disableEvents, setDisableEvents] = useState(false)
 
   useEffect(() => {
     if (loading) {
@@ -32,6 +34,14 @@ const World = ({ data, markers, layout, className }) => {
 
     dispatch(createPulsingMarkers())
   }, [world.ready])
+
+  useEffect(() => {
+    if (!world.ready) return
+
+    if ([WorldMode.IN_BACKGROUND, WorldMode.PROJECT_DETAILED, WorldMode.PROJECTS_EXPLORE].includes(world.mode))
+      setDisableEvents(false)
+  }, [world.ready, world.mode])
+
 
   const onLabelUpdate = (obj, d) => {
     // this way we determine when ref.current is populated
@@ -49,6 +59,21 @@ const World = ({ data, markers, layout, className }) => {
         0.05
       )
     )
+  }
+
+  const onHover = (obj) => {
+    if (disableEvents) return
+
+    dispatch(onMarkerHovered(obj))
+  }
+
+  const onClick = (obj) => {
+    if (disableEvents) return
+
+    if (world.version === WorldVersion.DESKTOP) {
+      setDisableEvents(true)
+      dispatch(onMarkerClicked(obj))
+    }
   }
 
   const labelObject = (obj, radius) => {
@@ -89,8 +114,8 @@ const World = ({ data, markers, layout, className }) => {
             customLayerData={markers}
             customThreeObject={(obj, globeRadius) => labelObject(obj, globeRadius)}
             customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-            onCustomLayerHover={obj => dispatch(onMarkerHovered(obj))}
-            onCustomLayerClick={obj => dispatch(onMarkerClicked(obj))}
+            onCustomLayerHover={obj => onHover(obj)}
+            onCustomLayerClick={obj => onClick(obj)}
             // settings
             animateIn={false}
             renderConfig={{

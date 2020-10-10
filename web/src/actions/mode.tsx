@@ -5,14 +5,30 @@ import { WorldMode, WorldVersion } from '.'
 import {
   SET_SKIP_TRANSITION,
   SHOW_PREVIEW_VIDEO,
+  SHOW_PREVIEW_AREA,
   MODE_GO_PROJECT_PREVIEW,
   MODE_GO_PROJECT_DETAILED,
   MODE_GO_PROJECTS_EXPLORE,
-  MODE_GO_BACKGROUND
+  MODE_GO_BACKGROUND,
+  MODE_GO_AREA_PREVIEW
 } from './types'
 
 import { toggleMarkers } from './marker'
-import { setCameraInitialPosition, getMarkerFromPath, moveToMarker, moveMarkerToCenter} from './helpers'
+import {
+  getProjectsFromArea,
+  setCameraInitialPosition,
+  getMarkerFromPath,
+  moveToMarker,
+  moveMarkerToCenter
+} from './helpers'
+
+let timer;
+
+const setControlsFromMode = (controls: any, mode: WorldMode) => {
+  console.log('world mode', mode)
+  controls.enabled = [WorldMode.PROJECT_PREVIEW, WorldMode.PROJECTS_EXPLORE].includes(mode)
+  controls.autoRotate = [WorldMode.PROJECTS_EXPLORE, WorldMode.IN_BACKGROUND].includes(mode)
+}
 
 export function setWorldModeFromLocation(location: any = {}) {
   return function action(dispatch: any, getState: any) {
@@ -44,6 +60,9 @@ export function setWorldMode(mode: WorldMode, data: any = {}) {
       case WorldMode.PROJECT_PREVIEW:
         return dispatch(navigateProjectPreview(data))
 
+      case WorldMode.AREA_PREVIEW:
+        return dispatch(navigateAreaPreview(data))
+
       case WorldMode.PROJECT_DETAILED:
         return dispatch(navigateProjectDetailed(data))
 
@@ -57,22 +76,25 @@ export function setWorldMode(mode: WorldMode, data: any = {}) {
 }
 
 function navigateProjectsExplore(data: any = {}) {
-  return function action(dispatch: any, getState: any) {
+  return async function action(dispatch: any, getState: any) {
     const w = getState().world
 
     if (w.mode === WorldMode.PROJECTS_EXPLORE && !data.force)
       return
 
-    w.ref.current.controls().enabled = true
-    w.ref.current.controls().autoRotate = true
+    await dispatch({ type: MODE_GO_PROJECTS_EXPLORE })
 
-    // dispatch mode change
-    dispatch({ type: MODE_GO_PROJECTS_EXPLORE })
+    if (data.navigate)
+      navigate('/')
 
-    if (data.navigate) navigate('/')
+    let duration = 0
+    if (w.mode !== WorldMode.PROJECTS_EXPLORE && w.mode !== WorldMode.IN_BACKGROUND) {
+      duration = setCameraInitialPosition(w)
+    }
 
-    const duration = setCameraInitialPosition(w)
-    setTimeout(() => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECTS_EXPLORE)
       dispatch(toggleMarkers(true))
     }, Math.max(duration - 250, 0))
   }
@@ -85,19 +107,23 @@ function navigateBackground(data: any = {}) {
     if (w.mode === WorldMode.IN_BACKGROUND)
       return
 
-    w.ref.current.controls().enabled = false
-    w.ref.current.controls().autoRotate = true
+    await dispatch({ type: MODE_GO_BACKGROUND })
 
     if (data.navigate)
       navigate(data.navigate)
 
-    // dispatch mode change
-    await dispatch({ type: MODE_GO_BACKGROUND })
+    let duration = 0
+    if (w.mode !== WorldMode.PROJECTS_EXPLORE && w.mode !== WorldMode.IN_BACKGROUND) {
+      duration = setCameraInitialPosition(w)
+    }
 
-    const duration = setCameraInitialPosition(w)
-    setTimeout(() => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      setControlsFromMode(w.ref.current.controls(), WorldMode.IN_BACKGROUND)
       dispatch(toggleMarkers(false))
     }, Math.max(duration - 250, 0))
+
+    await dispatch({ type: MODE_GO_BACKGROUND })
   }
 }
 
@@ -107,10 +133,7 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     const w = getState().world
 
     if (data.skipInTransition)
-      await dispatch({ type: SET_SKIP_TRANSITION, payload: true })
-
-    w.ref.current.controls().enabled = false
-    w.ref.current.controls().autoRotate = false
+      dispatch({ type: SET_SKIP_TRANSITION, payload: true })
 
     // dispatch mode change
     await dispatch({ type: MODE_GO_PROJECT_DETAILED, marker: data.marker })
@@ -120,9 +143,24 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
       navigate(`/projects/${get(data, 'marker.node.slug.current')}`)
 
     const mDuration = dispatch(toggleMarkers(false))
-    setTimeout(() => {
+
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_DETAILED)
       moveToMarker(w, data.marker, !data.skipInTransition ? duration : 0)
     }, Math.max(mDuration - 250, 0))
+  }
+}
+
+function navigateAreaPreview(data: any = {}, duration = 1500) {
+  return async function action(dispatch: any, getState: any) {
+    const w = getState().world
+
+    const projects = getProjectsFromArea(w.projects, data.marker)
+    await dispatch({ type: MODE_GO_AREA_PREVIEW, marker: data.marker, projects })
+    dispatch(toggleMarkers(true))
+
+    moveMarkerToCenter(w, data.marker, 1000)
   }
 }
 
@@ -130,23 +168,12 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
   return async function action(dispatch: any, getState: any) {
     const w = getState().world
 
-    if (w.mode !== WorldMode.PROJECTS_EXPLORE)
-      return
-
-    w.ref.current.controls().enabled = true
-    w.ref.current.controls().autoRotate = false
-
     // dispatch mode change
+    setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_PREVIEW)
     await dispatch({ type: MODE_GO_PROJECT_PREVIEW, marker: data.marker })
     dispatch(toggleMarkers(true))
 
-    if (w.version === WorldVersion.MOBILE) {
-      const mDuration = moveMarkerToCenter(w, data.marker)
-      setTimeout(() => {
-        dispatch({ type: SHOW_PREVIEW_VIDEO, payload: true })
-      }, Math.max(mDuration - 250, 0))
-    } else {
-      dispatch({ type: SHOW_PREVIEW_VIDEO, payload: true })
-    }
+    if (w.version === WorldVersion.MOBILE)
+      moveMarkerToCenter(w, data.marker)
   }
 }

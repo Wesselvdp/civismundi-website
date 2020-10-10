@@ -12,7 +12,8 @@ import {
   MODE_GO_PROJECT_PREVIEW,
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_PROJECT_DETAILED,
-  MODE_GO_BACKGROUND
+  MODE_GO_BACKGROUND,
+  MODE_GO_AREA_PREVIEW
 } from '../actions/types'
 
 const initialState = {
@@ -23,11 +24,12 @@ const initialState = {
   skipInTransition: false,
   showPreviewVideo: false,
   projects: [],
+  projectActive: null,
   projectDetailed: null,
   areas: [],
+  areaProjects: [],
   markers: [],
   markersVisible: undefined,
-  activeMarker: null,
   cameraChanged: false,
   clouds: null,
   lightning: null
@@ -48,7 +50,17 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case MODE_GO_PROJECT_PREVIEW: {
-      return { ...state, activeMarker: action.marker, mode: WorldMode.PROJECT_PREVIEW }
+      return { ...state, projectActive: action.marker, showPreviewVideo: true, mode: WorldMode.PROJECT_PREVIEW }
+    }
+
+    case MODE_GO_AREA_PREVIEW: {
+      return {
+        ...state,
+        mode: WorldMode.AREA_PREVIEW,
+        showPreviewVideo: true,
+        areaProjects: action.projects,
+        projectActive: action.projects[0]
+      }
     }
 
     case MODE_GO_PROJECTS_EXPLORE: {
@@ -56,11 +68,11 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case MODE_GO_PROJECT_DETAILED: {
-      return { ...state, activeMarker: action.marker, mode: WorldMode.PROJECT_DETAILED }
+      return { ...state, projectActive: action.marker, showPreviewVideo: true, mode: WorldMode.PROJECT_DETAILED }
     }
 
     case MODE_GO_BACKGROUND: {
-      return { ...state, activeMarker: null, mode: WorldMode.IN_BACKGROUND }
+      return { ...state, projectActive: null, showPreviewVideo: false, mode: WorldMode.IN_BACKGROUND }
     }
 
     case SET_VISIBILITY_MARKERS: {
