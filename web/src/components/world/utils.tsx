@@ -94,7 +94,7 @@ const initPulsingLabels = (curr: any, projects: any[]) => {
   const geometry = new THREE.CircleGeometry(isMobile() ? 7 : 3.5, 25, 25)
   geometry.vertices.splice(0, 1)
   const material = new THREE.LineBasicMaterial({ color: 'white', transparent: true })
-  
+
   const labels: any[] = []
   projects.forEach(project => {
     if (project.node.slug.current === 'columbus') {

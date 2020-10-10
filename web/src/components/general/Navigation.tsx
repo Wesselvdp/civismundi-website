@@ -1,22 +1,25 @@
 import React, { FC } from 'react'
 import { Link } from 'gatsby'
-import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/general'
 
+import { WorldMode } from '../../actions'
+import { setWorldMode } from '../../actions/mode'
+
 type T = any
 
 const Navigation: FC<T> = ({ location }) => {
-  console.log('location', location)
+  const dispatch = useDispatch()
 
   return (
     <Container>
       <Nav>
         {/* Left */}
         <div className="item item--left">
-          <Link to="/projects" className={location.pathname === '/projects' ? 'active' : ''}>
+          <Link to="/projects" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/projects' ? 'active' : ''}>
             <span className="desktop">All projects</span>
             <span className="mobile">Work</span>
           </Link>
@@ -29,7 +32,7 @@ const Navigation: FC<T> = ({ location }) => {
 
         {/* Right */}
         <div className="item item--right">
-          <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>
+          <Link to="/about" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/about' ? 'active' : ''}>
             <span>About</span>
           </Link>
         </div>

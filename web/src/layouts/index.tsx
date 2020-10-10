@@ -9,30 +9,16 @@ import { WorldContainer } from '../components/world'
 type T = any
 
 const Layout: FC<T> = ({ children, pageContext, location }) => {
-  const [ready, setReady] = useState(false)
-  const [progress, setProgress] = useState(0)
-
   return (
     <>
-      <WorldContainer location={location} layout={pageContext.layout} ready={ready} setReady={setReady} progress={progress} setProgress={setProgress} />
-      {ready ? (
-        <>
-          <Navigation location={location} />
-          <Main>
-            {children}
-          </Main>
-        </>
-      ) : (
-        <Loader>
-          <CircularProgressbar strokeWidth={1} className="circle" value={progress} styles={buildStyles(
-          {
-            pathColor: `rgba(255, 255, 255, 1)`,
-            trailColor: 'rgba(255, 255, 255, 0)',
-          })}
-          />
-          <img src="/cm-white.svg" />
-        </Loader>
-      )}
+      <WorldContainer location={location} layout={pageContext.layout} />
+      <>
+        <Navigation location={location} />
+        <Main>
+          {children}
+        </Main>
+      </>
+
       {pageContext.layout !== 'home' && <GlobeButton />}
     </>
   )
