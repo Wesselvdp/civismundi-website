@@ -42,11 +42,11 @@ export function initializeWorld(ref: any, data: any, location: any, options: any
 
     // event listeners
     getState().world.ref.current.controls().addEventListener('start', () => {
-      // const w = getState().world
+      const w = getState().world
 
-      // if (w.mode === WorldMode.PROJECT_PREVIEW || w.mode === WorldMode.AREA_PREVIEW) {
-      //   dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
-      // }
+      if (w.mode === WorldMode.PROJECT_PREVIEW || w.mode === WorldMode.AREA_PREVIEW) {
+        dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+      }
     })
 
     getState().world.ref.current.controls().addEventListener('change', () => {

@@ -14,6 +14,7 @@ import { breakpoints } from '@utils/breakpoints'
 
 import { WorldMode } from '../../actions'
 import { setWorldMode } from '../../actions/mode'
+import ProjectSlider from './ProjectSlider'
 
 const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
@@ -120,8 +121,9 @@ const WorldContainer = ({ layout, location }) => {
             tag="p"
             text="TRAVIS SCOTT  •  LOS ANGELES"
           />
-          {world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW && (
+          {(world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW) && (
             <Button
+              className={world.mode}
               buttonStyle="outlined"
               onClick={() => dispatch(setWorldMode(WorldMode.PROJECT_DETAILED, { marker: world.projectActive, navigate: true }))}
             >
@@ -145,11 +147,15 @@ const WorldContainer = ({ layout, location }) => {
         </div>
       </FooterContainer>
       {world.showPreviewVideo && (
-        <VideoPreview className={`${[WorldMode.PROJECT_PREVIEW, WorldMode.PROJECT_DETAILED].includes(world.mode) ? 'visible' : ''} ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
-          <video id="videoBG" playsInline autoPlay muted loop>
+        <VideoPreview className={`${[WorldMode.PROJECT_PREVIEW, WorldMode.PROJECT_DETAILED, WorldMode.AREA_PREVIEW].includes(world.mode) ? 'visible' : ''} ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
+          <video key={get(world, 'projectActive.node.video.asset.url')} id="videoBG" playsInline autoPlay muted loop>
             <source src={get(world, 'projectActive.node.video.asset.url')} type="video/mp4" />
           </video>
         </VideoPreview>
+      )}
+      <SliderWrapper>
+        <ProjectSlider projects={world.areaProjects.length ? world.areaProjects : world.projects} show={world.mode === WorldMode.AREA_PREVIEW} />
+      </SliderWrapper>
       )}
     </Page>
   );
@@ -227,7 +233,16 @@ const MobileContent = styled.div`
       padding: 1em 2em;
       font-size: 10px;
       border-width: 0.5px;
+    }
+
+    &.${WorldMode.AREA_PREVIEW} {
       display: initial;
+    }
+
+    &.${WorldMode.PROJECT_PREVIEW} {
+      @media ${breakpoints.phoneOnly} {
+        display: initial;
+      }
     }
   }
 
@@ -286,7 +301,7 @@ const FooterContainer = styled.div`
       &:not(.skip-intro) {
         @media ${breakpoints.phoneOnly} {
           font-size: 10px;
-          padding: 0 20px; 
+          padding: 0 20px;
         }
       }
     }
@@ -295,4 +310,11 @@ const FooterContainer = styled.div`
       cursor: pointer;
     }
   }
+`
+
+const SliderWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 `

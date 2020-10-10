@@ -22,11 +22,11 @@ import {
   moveMarkerToCenter
 } from './helpers'
 
-let timer;
+let timer: any;
 
 const setControlsFromMode = (controls: any, mode: WorldMode) => {
   console.log('world mode', mode)
-  controls.enabled = [WorldMode.PROJECT_PREVIEW, WorldMode.PROJECTS_EXPLORE].includes(mode)
+  controls.enabled = [WorldMode.PROJECT_PREVIEW, WorldMode.AREA_PREVIEW, WorldMode.PROJECTS_EXPLORE].includes(mode)
   controls.autoRotate = [WorldMode.PROJECTS_EXPLORE, WorldMode.IN_BACKGROUND].includes(mode)
 }
 
@@ -82,8 +82,6 @@ function navigateProjectsExplore(data: any = {}) {
     if (w.mode === WorldMode.PROJECTS_EXPLORE && !data.force)
       return
 
-    await dispatch({ type: MODE_GO_PROJECTS_EXPLORE })
-
     if (data.navigate)
       navigate('/')
 
@@ -92,9 +90,11 @@ function navigateProjectsExplore(data: any = {}) {
       duration = setCameraInitialPosition(w)
     }
 
+    await dispatch({ type: MODE_GO_PROJECTS_EXPLORE })
+    setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECTS_EXPLORE)
+
     clearTimeout(timer)
     timer = setTimeout(() => {
-      setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECTS_EXPLORE)
       dispatch(toggleMarkers(true))
     }, Math.max(duration - 250, 0))
   }
@@ -107,6 +107,7 @@ function navigateBackground(data: any = {}) {
     if (w.mode === WorldMode.IN_BACKGROUND)
       return
 
+    setControlsFromMode(w.ref.current.controls(), WorldMode.IN_BACKGROUND)
     await dispatch({ type: MODE_GO_BACKGROUND })
 
     if (data.navigate)
@@ -119,7 +120,6 @@ function navigateBackground(data: any = {}) {
 
     clearTimeout(timer)
     timer = setTimeout(() => {
-      setControlsFromMode(w.ref.current.controls(), WorldMode.IN_BACKGROUND)
       dispatch(toggleMarkers(false))
     }, Math.max(duration - 250, 0))
 
@@ -156,6 +156,7 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
   return async function action(dispatch: any, getState: any) {
     const w = getState().world
 
+    setControlsFromMode(w.ref.current.controls(), WorldMode.AREA_PREVIEW)
     const projects = getProjectsFromArea(w.projects, data.marker)
     await dispatch({ type: MODE_GO_AREA_PREVIEW, marker: data.marker, projects })
     dispatch(toggleMarkers(true))

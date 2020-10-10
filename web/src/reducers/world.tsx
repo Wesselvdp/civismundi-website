@@ -13,7 +13,8 @@ import {
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_PROJECT_DETAILED,
   MODE_GO_BACKGROUND,
-  MODE_GO_AREA_PREVIEW
+  MODE_GO_AREA_PREVIEW,
+  SET_ACTIVE_PROJECT
 } from '../actions/types'
 
 const initialState = {
@@ -38,7 +39,7 @@ const initialState = {
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET_DATA: {
-      return { ...state, projects: action.projects, areas: action.areas }
+      return { ...state, projects: action.projects, areaProjects: action.projects, areas: action.areas }
     }
 
     case WORLD_INITIALIZE_START: {
@@ -90,6 +91,11 @@ const reducer = (state = initialState, action: any) => {
     case SHOW_PREVIEW_VIDEO: {
       return { ...state, showPreviewVideo: action.payload }
     }
+
+    case SET_ACTIVE_PROJECT: {
+      return { ...state, projectActive: action.project }
+    }
+
 
     case ADD_MARKER: {
       return { ...state, markers: [...state.markers, action.marker] }

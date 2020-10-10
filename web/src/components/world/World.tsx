@@ -64,16 +64,16 @@ const World = ({ data, markers, layout, className }) => {
   const onHover = (obj) => {
     if (disableEvents) return
 
-    dispatch(onMarkerHovered(obj))
+    if (world.version === WorldVersion.DESKTOP) {
+      dispatch(onMarkerHovered(obj))
+    }
   }
 
   const onClick = (obj) => {
     if (disableEvents) return
 
-    if (world.version === WorldVersion.DESKTOP) {
-      setDisableEvents(true)
-      dispatch(onMarkerClicked(obj))
-    }
+    setDisableEvents(true)
+    dispatch(onMarkerClicked(obj))
   }
 
   const labelObject = (obj, radius) => {
@@ -135,7 +135,7 @@ const Wrapper = styled.div`
   opacity: 1;
   transition: opacity 1.5s ease;
 
-  &.${WorldMode.PROJECT_PREVIEW}{
+  &.${WorldMode.PROJECT_PREVIEW}, &.${WorldMode.AREA_PREVIEW} {
     transition: opacity 0.25s ease;
     opacity: 0.40;
   }

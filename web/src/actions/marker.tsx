@@ -2,10 +2,20 @@ import TWEEN from '@tweenjs/tween.js'
 import * as THREE from 'three'
 
 import { MarkerType, WorldMode, WorldVersion } from '.'
-import { ADD_MARKER, SET_VISIBILITY_MARKERS } from './types'
+import { ADD_MARKER, SHOW_PREVIEW_VIDEO, SET_VISIBILITY_MARKERS, SET_ACTIVE_PROJECT } from './types'
 import { setWorldMode } from './mode'
 
 export const addMarker = (marker: any) => ({ type: ADD_MARKER, marker })
+
+export function setActiveProject(index: number) {
+  return async function action(dispatch: any, getState: any) {
+    const w = getState().world
+
+    if (w.areaProjects && w.areaProjects.length > index) {
+      dispatch({ type: SET_ACTIVE_PROJECT, project: w.areaProjects[index] })
+    }
+  }
+}
 
 export function updateMarkersQuaternion(world: any) {
   const quaternion = world.ref.current.camera().quaternion
