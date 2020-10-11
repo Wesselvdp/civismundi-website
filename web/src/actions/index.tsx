@@ -15,3 +15,9 @@ export enum MarkerType {
   PROJECT = 'project',
   AREA = 'location'
 }
+
+export enum MarkerSize {
+  DEFAULT = 1,
+  FOCUSED_PROJECT = 1.2,
+  FOCUSED_AREA = 1.2
+}

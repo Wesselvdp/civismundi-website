@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 
-import { WorldVersion, WorldMode } from '.'
+import { MarkerSize, WorldVersion, WorldMode } from '.'
 import { SET_DATA, WORLD_INITIALIZE_START, WORLD_INITIALIZE_COMPLETE, SET_LIGHTNING, SET_VISIBILITY_MARKERS } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
 import { getWorldVersion, updateLightningPosition } from './helpers'
-import { toggleMarkers, updateMarkersQuaternion } from './marker'
+import { toggleMarkers, updateMarkersQuaternion, changeMarkerSize } from './marker'
 
 let newFrame: any
 const FRAME_PER_SEC = 60
@@ -46,6 +46,8 @@ export function initializeWorld(ref: any, data: any, location: any, options: any
 
       if (w.mode === WorldMode.PROJECT_PREVIEW || w.mode === WorldMode.AREA_PREVIEW) {
         dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+        if (w.markerFocused)
+          changeMarkerSize(w.markerFocused, MarkerSize.DEFAULT)
       }
     })
 

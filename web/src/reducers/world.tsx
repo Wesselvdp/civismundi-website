@@ -14,7 +14,8 @@ import {
   MODE_GO_PROJECT_DETAILED,
   MODE_GO_BACKGROUND,
   MODE_GO_AREA_PREVIEW,
-  SET_ACTIVE_PROJECT
+  SET_ACTIVE_PROJECT,
+  SET_MARKER_FOCUSED
 } from '../actions/types'
 
 const initialState = {
@@ -31,6 +32,7 @@ const initialState = {
   areaProjects: [],
   markers: [],
   markersVisible: undefined,
+  markerFocused: null,
   cameraChanged: false,
   clouds: null,
   lightning: null
@@ -99,6 +101,10 @@ const reducer = (state = initialState, action: any) => {
 
     case ADD_MARKER: {
       return { ...state, markers: [...state.markers, action.marker] }
+    }
+
+    case SET_MARKER_FOCUSED: {
+      return { ...state, markerFocused: action.marker }
     }
 
     default:
