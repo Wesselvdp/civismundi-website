@@ -1,8 +1,8 @@
 import TWEEN from '@tweenjs/tween.js'
 import * as THREE from 'three'
 
-import { MarkerType, WorldMode, WorldVersion } from '.'
-import { ADD_MARKER, SHOW_PREVIEW_VIDEO, SET_VISIBILITY_MARKERS, SET_ACTIVE_PROJECT } from './types'
+import { MarkerSize, MarkerType, WorldMode, WorldVersion } from '.'
+import { ADD_MARKER, SET_MARKER_FOCUSED, SET_VISIBILITY_MARKERS, SET_ACTIVE_PROJECT } from './types'
 import { setWorldMode } from './mode'
 
 export const addMarker = (marker: any) => ({ type: ADD_MARKER, marker })
@@ -14,6 +14,41 @@ export function setActiveProject(index: number) {
     if (w.areaProjects && w.areaProjects.length > index) {
       dispatch({ type: SET_ACTIVE_PROJECT, project: w.areaProjects[index] })
     }
+  }
+}
+
+export const changeMarkerSize = (marker: any, scale: number, duration: number = 500) => {
+  if (!marker) return
+
+  const scaleFrom = marker.__threeObj.scale
+  if (scaleFrom.x === scale) return
+
+  if (marker.pulsingRing)
+    updatePulsingScale(marker, scale)
+
+  new TWEEN.Tween({ ...scaleFrom })
+    .to({ x: scale, y: scale, z: scale }, duration)
+    .onUpdate(d => {
+      marker.__threeObj.scale.set(d.x, d.y, d.z)
+    })
+    .easing(TWEEN.Easing.Cubic.InOut)
+    .start()
+}
+
+export function toggleFocusedMarker(focused: any) {
+  return function action(dispatch: any, getState: any) {
+    const w = getState().world
+    if (w.markerFocused)
+      changeMarkerSize(w.markerFocused, MarkerSize.DEFAULT)
+
+    if (focused) {
+      const newScale = focused.node._type === MarkerType.PROJECT ? MarkerSize.FOCUSED_PROJECT : MarkerSize.FOCUSED_AREA
+      const duration = focused.node._type === MarkerType.PROJECT ? 300 : 200
+
+      changeMarkerSize(focused, newScale, duration)
+    }
+
+    return dispatch({ type: SET_MARKER_FOCUSED, marker: focused })
   }
 }
 
@@ -36,6 +71,8 @@ export function onMarkerHovered(hovered: any) {
 
     if (w.mode !== WorldMode.PROJECTS_EXPLORE && w.mode !== WorldMode.PROJECT_PREVIEW)
       return
+
+    dispatch(toggleFocusedMarker(hovered))
 
     if (w.version === WorldVersion.DESKTOP) {
       if (hovered && hovered.node._type === MarkerType.PROJECT) {
@@ -67,14 +104,18 @@ export function onMarkerClicked(clicked: any) {
 
     if (w.version === WorldVersion.MOBILE) {
       if (clicked.node._type === MarkerType.PROJECT) {
-        if (w.mode === WorldMode.PROJECT_PREVIEW && clicked.node._id !== w.project.node._id)
-          return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+        if (w.mode === WorldMode.PROJECT_PREVIEW && clicked.node._id !== w.project.node._id) {
+            return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+        }
 
-        if (w.mode === WorldMode.PROJECTS_EXPLORE)
+        if (w.mode === WorldMode.PROJECTS_EXPLORE) {
+          dispatch(toggleFocusedMarker(clicked))
           return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { marker: clicked }))
+        }
       }
 
       if (clicked.node._type === MarkerType.AREA) {
+        dispatch(toggleFocusedMarker(clicked))
         return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { marker: clicked }))
       }
     }
@@ -146,15 +187,23 @@ export function createPulsingMarkers() {
 }
 
 // Pulsing TWEENS
-const createPulsingMarkerTween = (ring: any) => {
-  return new TWEEN.Tween({ scale: 1, opacity: 1 })
-    .to({ scale: 2, opacity: 0 }, 1000)
+const createPulsingMarkerTween = (ring: any, markerScale: number = 1) => {
+  return new TWEEN.Tween({ scale: markerScale, opacity: 1 })
+    .to({ scale: markerScale * 2, opacity: 0 }, 1000)
     .repeat(Infinity)
     .onUpdate(d => {
       ring.scale.set(d.scale, d.scale, d.scale)
       ring.material.opacity = d.opacity
     })
     .start()
+}
+
+const updatePulsingScale = (marker: any, scale: number = 1) => {
+  if (!marker.pulsingRing) return
+
+  marker.pulsingTween.stop()
+  const tween = createPulsingMarkerTween(marker.pulsingRing, scale)
+  marker.pulsingTween = tween
 }
 
 const pausePulsingMarkerTween = (marker: any) => {
