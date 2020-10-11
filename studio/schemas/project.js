@@ -21,6 +21,11 @@ export default {
       }
     },
     {
+      name: 'featured',
+      title: 'Is featured',
+      type: 'boolean'
+    },
+    {
       name: 'director',
       title: 'Directors',
       type: 'array',
@@ -60,7 +65,12 @@ export default {
       name: 'location',
       type: 'geopoint'
     },
-
+    {
+      name: 'locationGroup',
+      title: 'Location',
+      type: 'reference',
+      to: { type: 'location' }
+    }, 
     {
       name: 'poster',
       title: 'Poster Image',
