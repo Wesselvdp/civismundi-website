@@ -67,7 +67,7 @@ export const moveToMarker = (world: any, marker: any, duration = 1500) => {
   const positionTo = world.ref.current.getCoords(
     marker.node.location.lat > 0
       ? marker.node.location.lat - 20
-      : marker.node.location.lat + 20
+      : marker.node.location.lat + 20,
     marker.node.location.lng,
     0.4
   )
