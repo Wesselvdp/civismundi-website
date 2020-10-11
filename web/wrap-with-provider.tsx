@@ -10,6 +10,6 @@ const composeEnhancers =  (typeof window !== 'undefined' && window.__REDUX_DEVTO
 const combinedReducers = combineReducers({ ...reducers })
 export default ({ element }) => {
     const store = createStore(combinedReducers, composeEnhancers(applyMiddleware(thunk)))
- 
+
     return <Provider store={store}>{element}</Provider>
 }
