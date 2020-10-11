@@ -28,7 +28,7 @@ const WorldContainer = ({ layout, location }) => {
 
   useEffect(() => {
     const projects = data.allSanityProject.edges.filter(p => p.node.locationGroup === null)
-    const areas = data.allSanityLocation.edges.filter(a => data.allSanityProject.edges.some(p => p.node.locationGroup._id === a.node._id))
+    const areas = data.allSanityLocation.edges.filter(a => data.allSanityProject.edges.some(p => p.node.locationGroup && p.node.locationGroup._id === a.node._id))
 
     setMarkers([...areas, ...projects])
   }, [])
