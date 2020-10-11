@@ -110,8 +110,12 @@ export const query = graphql`
             }
           }
           director {
-            name,
+            name
             id
+          }
+          location {
+            lat
+            lng
           }
           title
           id

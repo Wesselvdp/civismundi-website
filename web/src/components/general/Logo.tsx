@@ -1,15 +1,20 @@
 import React, { FC, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import { useDispatch } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
+
+import { WorldMode } from '../../actions'
+import { setWorldMode } from '../../actions/mode'
 
 type T = any
 
 const Logo: FC<T> = () => {
   const ref = useRef()
   const { hideVideo, setHideVideo } = useLogo()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (ref.current) {
@@ -22,7 +27,7 @@ const Logo: FC<T> = () => {
   }, [ref.current])
 
   return (
-    <Link to="/">
+    <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
       <Container>
         <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
         <video ref={ref} className={hideVideo ? 'hidden' : ''} playsInline autoPlay muted>

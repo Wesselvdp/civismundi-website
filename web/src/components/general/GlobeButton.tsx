@@ -1,16 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import { useDispatch } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
+import { WorldMode } from '../../actions'
+import { setWorldMode } from '../../actions/mode'
 
-const GlobeButton = () => (
-  <Link to="/">
-    <ButtonStyled>
-      <img src="/globe-icon.svg" />
-    </ButtonStyled>
-  </Link>
-)
+const GlobeButton = () => {
+  const dispatch = useDispatch()
+
+  return (
+    <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
+      <ButtonStyled>
+        <img src="/globe-icon.svg" />
+      </ButtonStyled>
+    </Link>
+  )
+}
 
 export default GlobeButton
 

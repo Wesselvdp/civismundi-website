@@ -28,7 +28,7 @@ const VerticalWrapper = styled.div`
     &-enter-active, &-appear-active {
       opacity: 1;
       transform: none;
-      transition: all 250ms ease-out;
+      transition: all 1000ms ease-out;
     }
 
     &-enter-done, &-appear-done {
@@ -38,4 +38,3 @@ const VerticalWrapper = styled.div`
     }
   }
 `
-

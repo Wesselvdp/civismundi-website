@@ -5,6 +5,10 @@ export interface Project {
   title: string
   lat?: string
   lng?: string
+  location?: {
+    lat: number
+    lng: number
+  }
 }
 
 export interface AllProject {
