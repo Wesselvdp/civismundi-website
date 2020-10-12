@@ -169,7 +169,7 @@ export function setWorldMode(mode: WorldMode, data: any = {}) {
   }
 }
 
-export function setWorldModeFromLocation(location: any = {}) {
+export function setWorldModeFromLocation(location: any = {}, data: any = {}) {
   return function action(dispatch: any, getState: any) {
     if (!location.pathname) return
 
@@ -180,20 +180,19 @@ export function setWorldModeFromLocation(location: any = {}) {
       return dispatch(setWorldMode(WorldMode.IN_BACKGROUND))
 
     if (location.pathname.includes('/projects/')) {
-      console.log('MHHh')
-
       const marker = getMarkerFromPath(
         location.pathname,
         getState().world.projects
       )
 
-      console.log(marker)
-
       if (marker) {
         return dispatch(
           setWorldMode(WorldMode.PROJECT_DETAILED, {
             marker,
-            skipInTransition: true,
+            skipInTransition:
+              typeof data.skipTransition !== 'undefined'
+                ? data.skipTransition
+                : true,
           })
         )
       }

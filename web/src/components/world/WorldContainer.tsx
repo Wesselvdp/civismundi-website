@@ -18,7 +18,7 @@ import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 
 import { WorldMode, WorldVersion } from '../../actions'
-import { setWorldMode } from '../../actions/mode'
+import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
 import ProjectSlider from './ProjectSlider'
 
 const INTRO_TEXT = `
@@ -40,6 +40,12 @@ const WorldContainer = ({ layout, location }) => {
         (p) => p.node.locationGroup && p.node.locationGroup._id === a.node._id
       )
     )
+
+    if (typeof window !== 'undefined') {
+      window.onpopstate = () => {
+        dispatch(setWorldModeFromLocation(location, { skipTransition: false }))
+      }
+    }
 
     setMarkers([...areas, ...projects])
   }, [])
@@ -107,7 +113,6 @@ const WorldContainer = ({ layout, location }) => {
       }
     }
   `)
-
 
   return (
     <Page className={layout}>
