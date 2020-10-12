@@ -108,6 +108,7 @@ const WorldContainer = ({ layout, location }) => {
     }
   `)
 
+
   return (
     <Page className={layout}>
       <>
@@ -149,8 +150,12 @@ const WorldContainer = ({ layout, location }) => {
             tag="p"
             text="TRAVIS SCOTT  •  LOS ANGELES"
           />
-          {(world.mode === WorldMode.PROJECT_PREVIEW ||
-            world.mode === WorldMode.AREA_PREVIEW) && (
+          <FadeAnim
+            timeout={1000}
+            in={[WorldMode.PROJECT_PREVIEW, WorldMode.AREA_PREVIEW].includes(
+              world.mode
+            )}
+          >
             <Button
               className={world.mode}
               buttonStyle="outlined"
@@ -165,7 +170,7 @@ const WorldContainer = ({ layout, location }) => {
             >
               VIEW PROJECT
             </Button>
-          )}
+          </FadeAnim>
         </MobileContent>
       </>
       <FooterContainer>

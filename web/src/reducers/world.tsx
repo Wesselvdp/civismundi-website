@@ -16,9 +16,11 @@ import {
   MODE_GO_AREA_PREVIEW,
   SET_ACTIVE_PROJECT,
   SET_MARKER_FOCUSED,
+  SET_READY,
 } from '../actions/types'
 
 const initialState = {
+  initialized: false,
   ready: false,
   ref: { current: null },
   mode: WorldMode.PROJECTS_EXPLORE,
@@ -31,11 +33,11 @@ const initialState = {
   areas: [],
   areaProjects: [],
   markers: [],
-  markersVisible: undefined,
+  markersVisible: true,
   markerFocused: null,
   cameraChanged: false,
   clouds: null,
-  lightning: null
+  lightning: null,
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -49,7 +51,7 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case WORLD_INITIALIZE_COMPLETE: {
-      return { ...state, ready: true }
+      return { ...state, initialized: true }
     }
 
     case MODE_GO_PROJECT_PREVIEW: {
@@ -105,6 +107,10 @@ const reducer = (state = initialState, action: any) => {
 
     case SET_MARKER_FOCUSED: {
       return { ...state, markerFocused: action.marker }
+    }
+
+    case SET_READY: {
+      return { ...state, ready: true }
     }
 
     default:
