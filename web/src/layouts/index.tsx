@@ -43,7 +43,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
       </>
       {!world.ready && (
         <Loader className={!loading && 'hidden'}>
-          <img src="cm-white.svg" />
+          <img src="/cm-white.svg" />
           <div className="loader-circle"></div>
           <div className="loader-line-mask">
             <div className="loader-line"></div>
