@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {
+  Link,
+  Element,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller,
+} from 'react-scroll'
 import styled, { keyframes } from 'styled-components'
+import { useSelector } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
@@ -17,32 +25,37 @@ export enum ProjectState {
   SUBTITLE_IN = 2,
   TITLE_IN = 3,
   PARAGRAPH_IN = 4,
-  VIDEO_BUTTON_IN = 5
-} 
+  VIDEO_BUTTON_IN = 5,
+}
 
 const ProjectDetailedContainer = ({ data }) => {
   const { title, id, video, poster, _rawOverview } = data.sanityProject
-
+  const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setState(ProjectState.SUBTITLE_IN), 1000)
-  }, [])
-
+    if (world.ready) {
+      setState(ProjectState.SUBTITLE_IN)
+    }
+  }, [world.ready])
 
   return (
     <>
       <ModalWrapper className={videoOpen ? 'open' : ''}>
         <ModalVideo
-          channel='vimeo'
+          channel="vimeo"
           isOpen={videoOpen}
           videoId="397128195"
           onClose={() => openVideo(false)}
           width={1000}
           height={1000}
         />
-        <img className="modal-close" src="/close.svg" onClick={() => openVideo(false)} /> 
+        <img
+          className="modal-close"
+          src="/close.svg"
+          onClick={() => openVideo(false)}
+        />
       </ModalWrapper>
       <StyledMast>
         <Content>
@@ -72,10 +85,18 @@ const ProjectDetailedContainer = ({ data }) => {
               letterSpeedIn={0.01}
               singleLine={false}
             />
-            <PlayButton>
-              <PlaySVG onClick={() => openVideo(true)} />
-            </PlayButton>
-            <Link to="content" spy={false} smooth={true} offset={50} duration={1000}>
+            {world.ready && (
+              <PlayButton>
+                <PlaySVG onClick={() => openVideo(true)} />
+              </PlayButton>
+            )}
+            <Link
+              to="content"
+              spy={false}
+              smooth={true}
+              offset={50}
+              duration={1000}
+            >
               <img className="scroll" src="/scroll-down.svg" />
             </Link>
           </div>
@@ -112,6 +133,7 @@ const ProjectDetailedContainer = ({ data }) => {
           blockId={id}
           projects={data.allSanityProject}
           limit={2}
+          skipTransition
         />
       </Element>
     </>
@@ -166,7 +188,10 @@ const ModalWrapper = styled.div`
     padding-bottom: 0 !important;
   }
 
-  .modal-video, .modal-video-body, .modal-video-inner, .modal-video-movie-wrap {
+  .modal-video,
+  .modal-video-body,
+  .modal-video-inner,
+  .modal-video-movie-wrap {
     height: 100%;
     width: 100%;
     outline: 0;
@@ -277,7 +302,7 @@ const Section = styled.section`
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
- 
+
   @media ${breakpoints.phoneOnly} {
     padding: 2em 0;
   }
@@ -302,7 +327,7 @@ const Section = styled.section`
   .col {
     display: flex;
     text-align: left;
-  
+
     &.meta {
       flex: 0 0 300px;
       flex-wrap: wrap;

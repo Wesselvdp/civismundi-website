@@ -9,7 +9,7 @@ import { breakpoints } from '@utils/breakpoints'
 import { WorldMode } from '../../actions'
 import { setWorldMode } from '../../actions/mode'
 
-const ProjectCard = ({ data }) => {
+const ProjectCard = ({ data, skipTransition = false}) => {
   const { title, slug } = data
   const poster = get(data, 'poster.asset.url')
   const video = get(data, 'video.asset.url')
@@ -37,6 +37,7 @@ const ProjectCard = ({ data }) => {
           setWorldMode(WorldMode.PROJECT_DETAILED, {
             marker: { node: data },
             navigate: true,
+            skipInTransition: skipTransition,
           })
         )
       }

@@ -53,6 +53,10 @@ export const query = graphql`
           }
           title
           id
+          location {
+            lat
+            lng
+          }
           poster {
             asset {
               url

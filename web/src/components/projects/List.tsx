@@ -15,7 +15,7 @@ type T = {
   limit?: number
 }
 
-const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = true }) => {
+const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = true, skipTransition = false }) => {
   console.log('data in ProjectList', projects)
 
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
@@ -49,7 +49,7 @@ const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = 
         {filteredProjects.map((p: Project) => (
           <GridItem key={p.id}>
             <FadeListItem visible={show && !!limit}>
-              <ProjectCard id={p.id} data={p} />
+              <ProjectCard skipTransition={skipTransition} id={p.id} data={p} />
             </FadeListItem>
           </GridItem>
         ))}

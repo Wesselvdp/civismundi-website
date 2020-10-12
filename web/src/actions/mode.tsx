@@ -180,10 +180,14 @@ export function setWorldModeFromLocation(location: any = {}) {
       return dispatch(setWorldMode(WorldMode.IN_BACKGROUND))
 
     if (location.pathname.includes('/projects/')) {
+      console.log('MHHh')
+
       const marker = getMarkerFromPath(
         location.pathname,
-        getState().world.markers
+        getState().world.projects
       )
+
+      console.log(marker)
 
       if (marker) {
         return dispatch(
