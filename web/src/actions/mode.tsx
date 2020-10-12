@@ -176,7 +176,7 @@ export function setWorldModeFromLocation(location: any = {}) {
     if (location.pathname === '/')
       return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE, { force: true }))
 
-    if (location.pathname === '/projects' || location.pathnamme === '/about')
+    if (location.pathname === '/projects' || location.pathname === '/about')
       return dispatch(setWorldMode(WorldMode.IN_BACKGROUND))
 
     if (location.pathname.includes('/projects/')) {

@@ -187,6 +187,6 @@ export function initializeWorld(
 
     const endTime = new Date()
     const elapsed = endTime - startTime
-    console.log(`FINISHED INITIALIZING (after ${elapsed}ms)`)
+    console.log(`FINISHED INITIALIZING (after ${elapsed}ms)`, getState().world)
   }
 }
