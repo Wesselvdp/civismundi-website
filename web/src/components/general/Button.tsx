@@ -87,14 +87,14 @@ const Button = styled('button')<StyleProps>`
     ${({ buttonStyle, theme }) =>
       buttonStyle === 'outlined' &&
       `
-      border: 2px solid #fff
+      border: 1px solid #fff;
       color: #fff;
       background-color: transparent;
 
       &:hover:not(.no-hover) {
         color: #000;
         background-color: #fff;
-        border: 2px solid #000
+        border: 1px solid #000;
       }
   `}
 

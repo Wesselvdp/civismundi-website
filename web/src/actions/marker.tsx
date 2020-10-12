@@ -84,9 +84,6 @@ export function onMarkerHovered(hovered: any) {
     )
       return
 
-    if (typeof document !== 'undefined')
-      document.body.style.cursor = hovered ? 'pointer' : 'default'
-
     dispatch(toggleFocusedMarker(hovered))
 
     if (w.version === WorldVersion.DESKTOP) {

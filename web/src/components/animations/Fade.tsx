@@ -1,12 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group'
 
-const Fade = ({ 
-  children,
-  timeout,
-  ...props
-}) => (
+const Fade = ({ children, timeout, ...props }) => (
   <CSSTransition {...props} timeout={timeout} classNames="fade">
     <FadeWrapper timeout={timeout}>{children}</FadeWrapper>
   </CSSTransition>
@@ -18,16 +14,19 @@ const FadeWrapper = styled.div`
   opacity: 0;
 
   &.fade {
-    &-enter, &-appear {
+    &-enter,
+    &-appear {
       opacity: 0;
     }
 
-    &-enter-active, &-appear-active {
+    &-enter-active,
+    &-appear-active {
       opacity: 1;
-      transition: opacity ${props => props.timeout | 1000}ms ease-in-out;
+      transition: opacity ${(props) => props.timeout | 1000}ms ease-in-out;
     }
 
-    &-enter-done, &-appear-done {
+    &-enter-done,
+    &-appear-done {
       opacity: 1;
     }
 
@@ -37,8 +36,7 @@ const FadeWrapper = styled.div`
 
     &-exit-active {
       opacity: 0;
-      transition: opacity ${props => props.timeout | 1000}ms ease-in-out;
+      transition: opacity ${(props) => props.timeout | 1000}ms ease-in-out;
     }
   }
 `
-

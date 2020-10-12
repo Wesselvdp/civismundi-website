@@ -88,12 +88,18 @@ const World = ({ data, markers, layout, className }) => {
 
   const labelObject = (obj, radius) => {
     dispatch(addMarker(obj))
-    const group = new THREE.Group()
 
     // load texture
-    const texture = new THREE.TextureLoader().load(
-      `/marker-${obj.node._type}.svg`
-    )
+    let path = '/marker-project.svg'
+    if (obj.node._type === 'location') {
+      const projectCount = data.allSanityProject.edges.filter(
+        (p: any) =>
+          p.node.locationGroup && p.node.locationGroup._id === obj.node._id
+      ).length
+      path = `/area-marker/area-${projectCount}.svg`
+    }
+
+    const texture = new THREE.TextureLoader().load(path)
     if (ref.current) {
       texture.anisotropy = ref.current.renderer().getMaxAnisotropy()
     }
@@ -102,39 +108,15 @@ const World = ({ data, markers, layout, className }) => {
     let baseRadius = obj.node._type === MarkerType.PROJECT ? 3.5 : 5
     if (window.innerWidth < 600) baseRadius *= 2
 
-    // marker
     const material = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
       color: 0xffffff,
     })
     material.map.minFilter = THREE.LinearFilter
-    const mesh = new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [
+    return new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [
       material,
     ])
-    group.add(mesh)
-
-    // // for area, also include project counter
-    // if (obj.node._type === MarkerType.AREA) {
-    //   const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
-    //   const textGeo = new THREE.TextGeometry('test7', {
-    //     size: 50,
-    //     font: 'helvetiker',
-    //   })
-    //   textGeo.computeBoundingBox()
-
-    //   const textMesh = new THREE.Mesh(textGeo, [textMaterial])
-
-    //   textMesh.position.x = 0
-    //   textMesh.position.y = 0
-    //   textMesh.position.z = 0
-    //   textMesh.castShadow = true
-    //   textMesh.receiveShadow = true
-
-    //   group.add(textMesh)
-    // }
-
-    return group
   }
 
   return (

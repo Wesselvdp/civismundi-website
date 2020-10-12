@@ -34,15 +34,6 @@ const WorldContainer = ({ layout, location }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const projects = data.allSanityProject.edges.filter(
-      (p) => p.node.locationGroup === null
-    )
-    const areas = data.allSanityLocation.edges.filter((a) =>
-      data.allSanityProject.edges.some(
-        (p) => p.node.locationGroup && p.node.locationGroup._id === a.node._id
-      )
-    )
-
     // back button support
     if (typeof window !== 'undefined') {
       window.onpopstate = (e) => {
@@ -59,6 +50,14 @@ const WorldContainer = ({ layout, location }) => {
 
     window.addEventListener('resize', handleResize)
 
+    const projects = data.allSanityProject.edges.filter(
+      (p) => p.node.locationGroup === null
+    )
+    const areas = data.allSanityLocation.edges.filter((a) =>
+      data.allSanityProject.edges.some(
+        (p) => p.node.locationGroup && p.node.locationGroup._id === a.node._id
+      )
+    )
     setMarkers([...areas, ...projects])
   }, [])
 
@@ -177,9 +176,10 @@ const WorldContainer = ({ layout, location }) => {
           />
           <FadeAnim
             timeout={1000}
-            in={[WorldMode.PROJECT_PREVIEW, WorldMode.AREA_PREVIEW].includes(
-              world.mode
-            )}
+            in={
+              world.mode === WorldMode.PROJECT_PREVIEW ||
+              world.mode === WorldMode.AREA_PREVIEW
+            }
           >
             <Button
               className={world.mode}

@@ -43,12 +43,14 @@ const Container = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   overflow-scrolling: touch;
-  opacity: 0;
-  transition: opacity 0.5s ease;
   height: 140px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+
+  opacity: 0;
+  transform: translate(0, 100%);
+  transition: all 0.5s ease;
 
   @media ${breakpoints.phoneOnly} {
     height: 70px;
@@ -56,6 +58,7 @@ const Container = styled.div`
 
   &.show {
     opacity: 1;
+    transform: translate(0, 0);
   }
 `
 
