@@ -1,63 +1,70 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { get } from 'lodash'
-import styled from 'styled-components'
-import Swiper from 'swiper'
 import { useDispatch } from 'react-redux'
-
-import 'swiper/swiper.scss';
+import styled from 'styled-components'
 
 import { setActiveProject } from '../../actions/marker'
 
 const ProjectSlider = ({ projects, show }) => {
-  const swiper = useRef(null)
+  const [activeIndex, setActiveIndex] = useState(0)
   const dispatch = useDispatch()
 
-  useEffect(()=>{
-    swiper.current = new Swiper('.swiper-container', {
-      spaceBetween: 15,
-      centeredSlides: true,
-      slidesPerView: 'auto'
-    })
-
-  },[])
+  useEffect(() => {
+    if (projects.length > activeIndex) {
+      dispatch(setActiveProject(activeIndex))
+    }
+  }, [activeIndex])
 
   useEffect(() => {
-      swiper.current.slideTo(0)
-      swiper.current.update()
-  }, [projects, show])
+    setActiveIndex(0)
+  }, [projects])
 
-  const onClick = (i: number) => {
-    dispatch(setActiveProject(i))
-    swiper.current.slideTo(i)
-  }
   return (
-    <Wrapper className={show ? 'show' : ''}>
-      <div className="swiper-container">
-        <div className="swiper-wrapper">
-          {projects.map((p: any, i: number) => (
-            <div className="swiper-slide" onClick={() => onClick(i)}>
-              <Slide style={{ backgroundImage: `url(${get(p, 'node.poster.asset.url')}` }} />
-            </div>
-          ))}
-          <div className="swiper-slide empty"></div>
-        </div>
-      </div>
-    </Wrapper>
+    <Container className={show && 'show'}>
+      {projects &&
+        projects.map((p: any, i: any) => (
+          <Thumbnail
+            className={activeIndex === i && 'active'}
+            onClick={() => setActiveIndex(i)}
+            key={p.node._id}
+            style={{
+              backgroundImage: `url(${get(p, 'node.poster.asset.url')})`,
+            }}
+          />
+        ))}
+    </Container>
   )
 }
 
-const Slide = styled.div`
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-`
-
-const Wrapper = styled.div`
+const Container = styled.div`
+  white-space: nowrap;
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  overflow-scrolling: touch;
   opacity: 0;
+  transition: opacity 0.5s ease;
 
   &.show {
     opacity: 1;
+  }
+`
+
+const Thumbnail = styled.div`
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 120px;
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: 10px;
+  transform: translateY(30px);
+  transition: all 0.5s ease;
+
+  &.active {
+    height: 100px;
+    transform: translateY(20px);
   }
 `
 

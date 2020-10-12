@@ -15,7 +15,7 @@ import {
   MODE_GO_BACKGROUND,
   MODE_GO_AREA_PREVIEW,
   SET_ACTIVE_PROJECT,
-  SET_MARKER_FOCUSED
+  SET_MARKER_FOCUSED,
 } from '../actions/types'
 
 const initialState = {

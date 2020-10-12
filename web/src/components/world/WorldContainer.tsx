@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group'
 import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
 
@@ -21,25 +21,33 @@ const INTRO_TEXT = `
   practice seeks to navigate the confluence of film, music, design and fashion`
 
 const WorldContainer = ({ layout, location }) => {
-  const world = useSelector(state => state.world)
+  const world = useSelector((state) => state.world)
   const [markers, setMarkers] = useState([])
   const [showGrabIcon, setShowGrabIcon] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const projects = data.allSanityProject.edges.filter(p => p.node.locationGroup === null)
-    const areas = data.allSanityLocation.edges.filter(a => data.allSanityProject.edges.some(p => p.node.locationGroup && p.node.locationGroup._id === a.node._id))
+    const projects = data.allSanityProject.edges.filter(
+      (p) => p.node.locationGroup === null
+    )
+    const areas = data.allSanityLocation.edges.filter((a) =>
+      data.allSanityProject.edges.some(
+        (p) => p.node.locationGroup && p.node.locationGroup._id === a.node._id
+      )
+    )
 
     setMarkers([...areas, ...projects])
   }, [])
 
   useEffect(() => {
-    if (world.mode === WorldMode.PROJECTS_EXPLORE|| world.mode === WorldMode.PROJECT_PREVIEW) {
+    if (
+      world.mode === WorldMode.PROJECTS_EXPLORE ||
+      world.mode === WorldMode.PROJECT_PREVIEW
+    ) {
       if (!showGrabIcon) setTimeout(() => setShowGrabIcon(true), 2000)
       else setShowGrabIcon(false)
     }
   }, [world.mode, world.ready])
-
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -98,34 +106,57 @@ const WorldContainer = ({ layout, location }) => {
   return (
     <Page className={layout}>
       <>
-        <CSSTransition in={world.ready} timeout={{ enter: 1600 }} classNames="globe">
-          <AnimatedWrapper className={world.skipInTransition ? 'skip-in-transition' : ''}>
+        <CSSTransition
+          in={world.ready}
+          timeout={{ enter: 1600 }}
+          classNames="globe"
+        >
+          <AnimatedWrapper
+            className={world.skipInTransition ? 'skip-in-transition' : ''}
+          >
             <World location={location} data={data} markers={markers} />
           </AnimatedWrapper>
         </CSSTransition>
         <MobileContent>
           <TextImprov
-            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
+            in={
+              world.mode === WorldMode.PROJECT_PREVIEW ||
+              world.mode === WorldMode.AREA_PREVIEW
+            }
             tag="h2"
             className="subtitle"
             text="VIDEO DIRECTION"
           />
           <TextImprov
-            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
+            in={
+              world.mode === WorldMode.PROJECT_PREVIEW ||
+              world.mode === WorldMode.AREA_PREVIEW
+            }
             tag="h1"
             text={get(world, 'projectActive.node.title')}
             appear
           />
           <TextImprov
-            in={world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW}
+            in={
+              world.mode === WorldMode.PROJECT_PREVIEW ||
+              world.mode === WorldMode.AREA_PREVIEW
+            }
             tag="p"
             text="TRAVIS SCOTT  •  LOS ANGELES"
           />
-          {(world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.AREA_PREVIEW) && (
+          {(world.mode === WorldMode.PROJECT_PREVIEW ||
+            world.mode === WorldMode.AREA_PREVIEW) && (
             <Button
               className={world.mode}
               buttonStyle="outlined"
-              onClick={() => dispatch(setWorldMode(WorldMode.PROJECT_DETAILED, { marker: world.projectActive, navigate: true }))}
+              onClick={() =>
+                dispatch(
+                  setWorldMode(WorldMode.PROJECT_DETAILED, {
+                    marker: world.projectActive,
+                    navigate: true,
+                  })
+                )
+              }
             >
               VIEW PROJECT
             </Button>
@@ -135,11 +166,27 @@ const WorldContainer = ({ layout, location }) => {
       <FooterContainer>
         <div className="footer--content">
           <>
-            <VerticalAnim in={world.ready && showGrabIcon && (world.mode === 'explore' || world.mode === 'project_preview')} timeout={{ enter: 5000 }}>
+            <VerticalAnim
+              in={
+                world.ready &&
+                showGrabIcon &&
+                [
+                  WorldMode.PROJECTS_EXPLORE,
+                  WorldMode.PROJECT_PREVIEW,
+                ].includes(world.mode)
+              }
+              timeout={{ enter: 5000 }}
+            >
               <img src="/grab-icon.svg" />
             </VerticalAnim>
             <TextAnim
-              in={world.ready && (world.mode === 'explore' || world.mode === 'project_preview')}
+              in={
+                world.ready &&
+                [
+                  WorldMode.PROJECTS_EXPLORE,
+                  WorldMode.PROJECT_PREVIEW,
+                ].includes(world.mode)
+              }
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
             />
@@ -147,18 +194,42 @@ const WorldContainer = ({ layout, location }) => {
         </div>
       </FooterContainer>
       {world.showPreviewVideo && (
-        <VideoPreview className={`${[WorldMode.PROJECT_PREVIEW, WorldMode.PROJECT_DETAILED, WorldMode.AREA_PREVIEW].includes(world.mode) ? 'visible' : ''} ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}>
-          <video key={get(world, 'projectActive.node.video.asset.url')} id="videoBG" playsInline autoPlay muted loop>
-            <source src={get(world, 'projectActive.node.video.asset.url')} type="video/mp4" />
+        <VideoPreview
+          className={`${
+            [
+              WorldMode.PROJECT_PREVIEW,
+              WorldMode.PROJECT_DETAILED,
+              WorldMode.AREA_PREVIEW,
+            ].includes(world.mode)
+              ? 'visible'
+              : ''
+          } ${
+            world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''
+          }`}
+        >
+          <video
+            key={get(world, 'projectActive.node.video.asset.url')}
+            id="videoBG"
+            playsInline
+            autoPlay
+            muted
+            loop
+          >
+            <source
+              src={get(world, 'projectActive.node.video.asset.url')}
+              type="video/mp4"
+            />
           </video>
         </VideoPreview>
       )}
       <SliderWrapper>
-        <ProjectSlider projects={world.areaProjects.length ? world.areaProjects : world.projects} show={world.mode === WorldMode.AREA_PREVIEW} />
+        <ProjectSlider
+          projects={world.areaProjects}
+          show={world.mode === WorldMode.AREA_PREVIEW}
+        />
       </SliderWrapper>
-      )}
     </Page>
-  );
+  )
 }
 
 export default WorldContainer
@@ -213,7 +284,9 @@ const AnimatedWrapper = styled.div`
     transition: none;
   }
 
-  * { outline: 0 };
+  * {
+    outline: 0;
+  }
 `
 
 const MobileContent = styled.div`

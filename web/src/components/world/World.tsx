@@ -8,7 +8,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as THREE from 'three'
 
 import { initializeWorld } from '../../actions/initialize'
-import { addMarker, onMarkerHovered, onMarkerClicked, createPulsingMarkers } from '../../actions/marker'
+import {
+  addMarker,
+  onMarkerHovered,
+  onMarkerClicked,
+  createPulsingMarkers,
+} from '../../actions/marker'
 import { WorldVersion, WorldMode, MarkerType } from '../../actions'
 
 const Globe = loadable(() => import('react-globe.gl'))
@@ -17,7 +22,7 @@ const World = ({ data, markers, layout, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef()
-  const world = useSelector(state => state.world)
+  const world = useSelector((state) => state.world)
   const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
 
@@ -38,10 +43,15 @@ const World = ({ data, markers, layout, className }) => {
   useEffect(() => {
     if (!world.ready) return
 
-    if ([WorldMode.IN_BACKGROUND, WorldMode.PROJECT_DETAILED, WorldMode.PROJECTS_EXPLORE].includes(world.mode))
+    if (
+      [
+        WorldMode.IN_BACKGROUND,
+        WorldMode.PROJECT_DETAILED,
+        WorldMode.PROJECTS_EXPLORE,
+      ].includes(world.mode)
+    )
       setDisableEvents(false)
   }, [world.ready, world.mode])
-
 
   const onLabelUpdate = (obj, d) => {
     // this way we determine when ref.current is populated
@@ -78,9 +88,12 @@ const World = ({ data, markers, layout, className }) => {
 
   const labelObject = (obj, radius) => {
     dispatch(addMarker(obj))
+    const group = new THREE.Group()
 
     // load texture
-    const texture = new THREE.TextureLoader().load(`/marker-${obj.node._type}.svg`)
+    const texture = new THREE.TextureLoader().load(
+      `/marker-${obj.node._type}.svg`
+    )
     if (ref.current) {
       texture.anisotropy = ref.current.renderer().getMaxAnisotropy()
     }
@@ -89,16 +102,40 @@ const World = ({ data, markers, layout, className }) => {
     let baseRadius = obj.node._type === MarkerType.PROJECT ? 3.5 : 5
     if (window.innerWidth < 600) baseRadius *= 2
 
-    // marker material
+    // marker
     const material = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
-      color: 0xffffff
+      color: 0xffffff,
     })
     material.map.minFilter = THREE.LinearFilter
-    return new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [material])
-  }
+    const mesh = new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [
+      material,
+    ])
+    group.add(mesh)
 
+    // // for area, also include project counter
+    // if (obj.node._type === MarkerType.AREA) {
+    //   const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
+    //   const textGeo = new THREE.TextGeometry('test7', {
+    //     size: 50,
+    //     font: 'helvetiker',
+    //   })
+    //   textGeo.computeBoundingBox()
+
+    //   const textMesh = new THREE.Mesh(textGeo, [textMaterial])
+
+    //   textMesh.position.x = 0
+    //   textMesh.position.y = 0
+    //   textMesh.position.z = 0
+    //   textMesh.castShadow = true
+    //   textMesh.receiveShadow = true
+
+    //   group.add(textMesh)
+    // }
+
+    return group
+  }
 
   return (
     !isSSR && (
@@ -112,21 +149,23 @@ const World = ({ data, markers, layout, className }) => {
             backgroundColor="rgba(0,0,0,0)"
             // labels
             customLayerData={markers}
-            customThreeObject={(obj, globeRadius) => labelObject(obj, globeRadius)}
+            customThreeObject={(obj, globeRadius) =>
+              labelObject(obj, globeRadius)
+            }
             customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-            onCustomLayerHover={obj => onHover(obj)}
-            onCustomLayerClick={obj => onClick(obj)}
+            onCustomLayerHover={(obj) => onHover(obj)}
+            onCustomLayerClick={(obj) => onClick(obj)}
             // settings
             animateIn={false}
             renderConfig={{
               sortObjects: false,
               antialias: true,
-              alpha: true
+              alpha: true,
             }}
             waitForGlobeReady={true}
           />
         </Wrapper>
-    </React.Suspense>
+      </React.Suspense>
     )
   )
 }
@@ -137,7 +176,7 @@ const Wrapper = styled.div`
 
   &.${WorldMode.PROJECT_PREVIEW}, &.${WorldMode.AREA_PREVIEW} {
     transition: opacity 0.25s ease;
-    opacity: 0.40;
+    opacity: 0.4;
   }
 
   &.${WorldMode.PROJECT_DETAILED} {
