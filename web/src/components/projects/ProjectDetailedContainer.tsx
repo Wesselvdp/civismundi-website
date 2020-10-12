@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Link,
-  Element,
-  Events,
-  animateScroll as scroll,
-  scrollSpy,
-  scroller,
-} from 'react-scroll'
+import { Link, Element } from 'react-scroll'
 import styled, { keyframes } from 'styled-components'
 import { useSelector } from 'react-redux'
 
@@ -17,8 +10,8 @@ import ModalVideo from 'react-modal-video'
 import PlaySVG from '../../assets/play.svg'
 
 // Components
-import { BackgroundVideo, ProjectList } from '@components/projects'
-import { TextAnim, FadeAnim } from '@components/animations'
+import { ProjectList } from '@components/projects'
+import { TextAnim } from '@components/animations'
 
 export enum ProjectState {
   LOADING = 1,
@@ -36,7 +29,7 @@ const ProjectDetailedContainer = ({ data }) => {
 
   useEffect(() => {
     if (world.ready) {
-      setState(ProjectState.SUBTITLE_IN)
+      setTimeout(() => setState(ProjectState.SUBTITLE_IN), 1000)
     }
   }, [world.ready])
 

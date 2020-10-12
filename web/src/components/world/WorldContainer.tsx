@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
@@ -19,6 +19,8 @@ import { breakpoints } from '@utils/breakpoints'
 
 import { WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
+import { worldHandleResize } from '../../actions/initialize'
+
 import ProjectSlider from './ProjectSlider'
 
 const INTRO_TEXT = `
@@ -41,6 +43,7 @@ const WorldContainer = ({ layout, location }) => {
       )
     )
 
+    // back button support
     if (typeof window !== 'undefined') {
       window.onpopstate = (e) => {
         dispatch(
@@ -48,6 +51,13 @@ const WorldContainer = ({ layout, location }) => {
         )
       }
     }
+
+    // resize
+    function handleResize() {
+      dispatch(worldHandleResize())
+    }
+
+    window.addEventListener('resize', handleResize)
 
     setMarkers([...areas, ...projects])
   }, [])
@@ -61,6 +71,8 @@ const WorldContainer = ({ layout, location }) => {
       else setShowGrabIcon(false)
     }
   }, [world.mode, world.ready])
+
+  useLayoutEffect(() => {}, [])
 
   // Projects
   const data = useStaticQuery(graphql`

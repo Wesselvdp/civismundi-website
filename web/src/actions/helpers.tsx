@@ -70,7 +70,6 @@ export const setCameraInitialPosition = (world: any, duration = 1500) => {
 }
 
 export const moveToMarker = (world: any, marker: any, duration = 1500) => {
-  console.log(marker)
   const controls = world.ref.current.controls()
   const camera = world.ref.current.camera()
 

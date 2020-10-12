@@ -1,12 +1,12 @@
 import * as THREE from 'three'
+import { get } from 'lodash'
 
-import { MarkerSize, WorldVersion, WorldMode } from '.'
+import { MarkerType, MarkerSize, WorldVersion, WorldMode } from '.'
 import {
   SET_DATA,
   WORLD_INITIALIZE_START,
   WORLD_INITIALIZE_COMPLETE,
   SET_LIGHTNING,
-  SET_VISIBILITY_MARKERS,
 } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
 import { getWorldVersion, updateLightningPosition } from './helpers'
@@ -103,6 +103,29 @@ function createClouds() {
   }
 }
 
+export function worldHandleResize() {
+  return function action(dispatch: any, getState: any) {
+    const w = getState().world
+
+    if (w.ready) {
+      w.ref.current.camera().aspect = window.innerWidth / window.innerHeight
+      w.ref.current.camera().updateProjectionMatrix()
+      w.ref.current.renderer().setSize(window.innerWidth, window.innerHeight)
+
+      w.markers.forEach((marker: any) => {
+        Object.assign(
+          marker.__threeObj.position,
+          w.ref.current.getCoords(
+            get(marker, 'node.location.lat', 0),
+            get(marker, 'node.location.lng', 0),
+            get(marker, 'node._type') === MarkerType.PROJECT ? 0.05 : 0.08
+          )
+        )
+      })
+    }
+  }
+}
+
 export function initializeWorld(
   ref: any,
   data: any,
@@ -111,7 +134,6 @@ export function initializeWorld(
 ) {
   return async function action(dispatch: any, getState: any) {
     const startTime = new Date()
-    console.log(`STARTING INITIALIZING`, startTime.getTime())
     const world = getState().world
 
     if (!ref.current) return Promise.resolve()
@@ -134,7 +156,6 @@ export function initializeWorld(
     // initialize world
     const version = getWorldVersion()
     await dispatch({ type: WORLD_INITIALIZE_START, ref, version })
-    console.log(getState().world)
 
     // configure THREE.js scene
     configureScene(getState().world)
@@ -187,6 +208,5 @@ export function initializeWorld(
 
     const endTime = new Date()
     const elapsed = endTime - startTime
-    console.log(`FINISHED INITIALIZING (after ${elapsed}ms)`, getState().world)
   }
 }

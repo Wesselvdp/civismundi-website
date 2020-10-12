@@ -16,8 +16,6 @@ type T = {
 }
 
 const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = true, skipTransition = false }) => {
-  console.log('data in ProjectList', projects)
-
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
 
   useEffect(() => {
