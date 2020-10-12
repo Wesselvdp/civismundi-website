@@ -139,7 +139,13 @@ const WorldContainer = ({ layout, location }) => {
           <AnimatedWrapper
             className={world.skipInTransition ? 'skip-in-transition' : ''}
           >
-            <World location={location} data={data} markers={markers} />
+            <World
+              width={window.innerWidth}
+              height={window.innerHeight}
+              location={location}
+              data={data}
+              markers={markers}
+            />
           </AnimatedWrapper>
         </CSSTransition>
         <MobileContent>
