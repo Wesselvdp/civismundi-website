@@ -17,6 +17,7 @@ import {
   SET_ACTIVE_PROJECT,
   SET_MARKER_FOCUSED,
   SET_READY,
+  SET_SCREEN_COORDS,
 } from '../actions/types'
 
 const initialState = {
@@ -38,6 +39,7 @@ const initialState = {
   cameraChanged: false,
   clouds: null,
   lightning: null,
+  screenCoords: null,
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -113,6 +115,9 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, ready: true }
     }
 
+    case SET_SCREEN_COORDS: {
+      return { ...state, screenCoords: action.coords }
+    }
     default:
       return state
   }

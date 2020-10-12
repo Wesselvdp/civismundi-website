@@ -1,7 +1,7 @@
 import { navigate } from 'gatsby'
 import { get } from 'lodash'
 
-import { WorldMode, WorldVersion } from '.'
+import { MarkerType, WorldMode, WorldVersion } from '.'
 import {
   SET_SKIP_TRANSITION,
   SHOW_PREVIEW_VIDEO,
@@ -11,6 +11,7 @@ import {
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_BACKGROUND,
   MODE_GO_AREA_PREVIEW,
+  SET_SCREEN_COORDS,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -126,9 +127,18 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
       marker: data.marker,
       projects,
     })
-    dispatch(toggleMarkers(true))
+    await dispatch(toggleMarkers(true))
 
-    moveMarkerToCenter(w, data.marker, 1000)
+    moveMarkerToCenter(w, data.marker, 1500)
+
+    setTimeout(() => {
+      const screenPos = w.ref.current.getScreenCoords(
+        data.marker.node.location.lat,
+        data.marker.node.location.lng,
+        data.marker.node._type === MarkerType.PROJECT ? 0.05 : 0.08
+      )
+      dispatch({ type: SET_SCREEN_COORDS, coords: screenPos })
+    }, 1500)
   }
 }
 
@@ -147,6 +157,9 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
 
 export function setWorldMode(mode: WorldMode, data: any = {}) {
   return function action(dispatch: any, getState: any) {
+    if (mode != WorldMode.AREA_PREVIEW)
+      dispatch({ type: SET_SCREEN_COORDS, coords: null })
+
     switch (mode) {
       case WorldMode.PROJECTS_EXPLORE:
         return dispatch(navigateProjectsExplore(data))

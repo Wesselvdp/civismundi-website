@@ -7,6 +7,7 @@ import {
   SET_MARKER_FOCUSED,
   SET_VISIBILITY_MARKERS,
   SET_ACTIVE_PROJECT,
+  SET_FAKE_MARKER_COORDS,
 } from './types'
 import { setWorldMode } from './mode'
 

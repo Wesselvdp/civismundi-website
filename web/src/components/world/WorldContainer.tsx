@@ -271,11 +271,41 @@ const WorldContainer = ({ layout, location }) => {
           show={world.mode === WorldMode.AREA_PREVIEW}
         />
       </AreaContainer>
+      {world.mode === WorldMode.AREA_PREVIEW && (
+        <CloseMarker
+          onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}
+          className={world.screenCoords && 'show'}
+          x={get(world, 'screenCoords.x')}
+          y={get(world, 'screenCoords.y')}
+        >
+          <img src="/close-marker.svg" />
+        </CloseMarker>
+      )}
     </Page>
   )
 }
 
 export default WorldContainer
+
+const CloseMarker = styled.div`
+  position: fixed;
+  z-index: 0;
+  top: ${(props) => props.y}px;
+  left: ${(props) => props.x}px;
+  transform: translate(-50%, -47%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  cursor: pointer;
+
+  &.show {
+    opacity: 1;
+  }
+
+  img {
+    height: 54px;
+    width: 54px;
+  }
+`
 
 const Page = styled.div`
   position: fixed;
@@ -365,6 +395,10 @@ const MobileContent = styled.div`
   p span {
     margin: 0 3px;
     display: inline-block;
+  }
+
+  h1 {
+    line-height: 0.9em;
   }
 `
 
