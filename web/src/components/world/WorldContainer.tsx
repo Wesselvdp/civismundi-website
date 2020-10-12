@@ -42,8 +42,10 @@ const WorldContainer = ({ layout, location }) => {
     )
 
     if (typeof window !== 'undefined') {
-      window.onpopstate = () => {
-        dispatch(setWorldModeFromLocation(location, { skipTransition: false }))
+      window.onpopstate = (e) => {
+        dispatch(
+          setWorldModeFromLocation(e.target.location, { skipTransition: false })
+        )
       }
     }
 
