@@ -246,9 +246,11 @@ const Content = styled.div`
     @media ${breakpoints.tabletLandscapeDown} {
       padding: 15px 15px 8em;
     }
-  
+
     p {
       max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 

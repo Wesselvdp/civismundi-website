@@ -66,7 +66,7 @@ const World = ({ data, markers, layout, className }) => {
       ref.current.getCoords(
         get(d, 'node.location.lat', 0),
         get(d, 'node.location.lng', 0),
-        0.05
+        get(d, 'node._type') === MarkerType.PROJECT ? 0.05 : 0.08
       )
     )
   }

@@ -8,11 +8,16 @@ import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
 
 import World from './World'
-import { TextAnim, TextImprov, VerticalAnim } from '@components/animations'
+import {
+  TextAnim,
+  TextImprov,
+  FadeAnim,
+  VerticalAnim,
+} from '@components/animations'
 import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 
-import { WorldMode } from '../../actions'
+import { WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode } from '../../actions/mode'
 import ProjectSlider from './ProjectSlider'
 
@@ -222,12 +227,20 @@ const WorldContainer = ({ layout, location }) => {
           </video>
         </VideoPreview>
       )}
-      <SliderWrapper>
+      <AreaContainer>
+        {world.version === WorldVersion.MOBILE && (
+          <FadeAnim
+            in={world.mode === WorldMode.AREA_PREVIEW}
+            timeout={{ enter: 500, exit: 0 }}
+          >
+            <p>{world.areaProjects.length} PROJECTS</p>
+          </FadeAnim>
+        )}
         <ProjectSlider
           projects={world.areaProjects}
           show={world.mode === WorldMode.AREA_PREVIEW}
         />
-      </SliderWrapper>
+      </AreaContainer>
     </Page>
   )
 }
@@ -385,9 +398,13 @@ const FooterContainer = styled.div`
   }
 `
 
-const SliderWrapper = styled.div`
+const AreaContainer = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+
+  p {
+    margin-bottom: 0;
+  }
 `

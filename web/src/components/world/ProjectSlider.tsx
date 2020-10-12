@@ -3,6 +3,7 @@ import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
+import { breakpoints } from '@utils/breakpoints'
 import { setActiveProject } from '../../actions/marker'
 
 const ProjectSlider = ({ projects, show }) => {
@@ -39,11 +40,19 @@ const ProjectSlider = ({ projects, show }) => {
 const Container = styled.div`
   white-space: nowrap;
   position: relative;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
   overflow-scrolling: touch;
   opacity: 0;
   transition: opacity 0.5s ease;
+  height: 140px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  @media ${breakpoints.phoneOnly} {
+    height: 70px;
+  }
 
   &.show {
     opacity: 1;
@@ -51,20 +60,32 @@ const Container = styled.div`
 `
 
 const Thumbnail = styled.div`
-  background-position: center;
+  background-position: center bottom;
   background-size: cover;
   background-repeat: no-repeat;
-  height: 80px;
-  width: 120px;
   display: inline-block;
   margin-right: 10px;
   margin-left: 10px;
-  transform: translateY(30px);
+  margin-bottom: 20px;
+  height: 100px;
+  width: 160px;
   transition: all 0.5s ease;
 
+  @media ${breakpoints.phoneOnly} {
+    height: 80px;
+    width: 132px;
+    margin-bottom: 0;
+    margin-right: 7px;
+    margin-left: 7px;
+    transform: translateY(30px);
+  }
+
   &.active {
-    height: 100px;
-    transform: translateY(20px);
+    transform: translateY(-20px);
+
+    @media ${breakpoints.phoneOnly} {
+      transform: translateY(20px);
+    }
   }
 `
 
