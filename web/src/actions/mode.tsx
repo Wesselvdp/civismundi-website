@@ -10,7 +10,7 @@ import {
   MODE_GO_PROJECT_DETAILED,
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_BACKGROUND,
-  MODE_GO_AREA_PREVIEW
+  MODE_GO_AREA_PREVIEW,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -19,74 +19,37 @@ import {
   setCameraInitialPosition,
   getMarkerFromPath,
   moveToMarker,
-  moveMarkerToCenter
+  moveMarkerToCenter,
 } from './helpers'
 
-let timer: any;
+let timer: any
 
 const setControlsFromMode = (controls: any, mode: WorldMode) => {
-  console.log('world mode', mode)
-  controls.enabled = [WorldMode.PROJECT_PREVIEW, WorldMode.AREA_PREVIEW, WorldMode.PROJECTS_EXPLORE].includes(mode)
-  controls.autoRotate = [WorldMode.PROJECTS_EXPLORE, WorldMode.IN_BACKGROUND].includes(mode)
-}
+  controls.enabled = [
+    WorldMode.PROJECT_PREVIEW,
+    WorldMode.AREA_PREVIEW,
+    WorldMode.PROJECTS_EXPLORE,
+  ].includes(mode)
 
-export function setWorldModeFromLocation(location: any = {}) {
-  return function action(dispatch: any, getState: any) {
-    if (!location.pathname)
-      return;
-
-    if (location.pathname === '/')
-      return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE, { force: true }))
-
-    if (location.pathname === '/projects' || location.pathnamme === '/about')
-      return dispatch(setWorldMode(WorldMode.IN_BACKGROUND))
-
-    if (location.pathname.includes('/projects/')) {
-      const marker = getMarkerFromPath(location.pathname, getState().world.markers)
-
-      if (marker) {
-        return dispatch(setWorldMode(WorldMode.PROJECT_DETAILED, { marker, skipInTransition: true }))
-      }
-    }
-  }
-}
-
-export function setWorldMode(mode: WorldMode, data: any = {}) {
-  return function action(dispatch: any, getState: any) {
-    switch (mode) {
-      case WorldMode.PROJECTS_EXPLORE:
-        return dispatch(navigateProjectsExplore(data))
-
-      case WorldMode.PROJECT_PREVIEW:
-        return dispatch(navigateProjectPreview(data))
-
-      case WorldMode.AREA_PREVIEW:
-        return dispatch(navigateAreaPreview(data))
-
-      case WorldMode.PROJECT_DETAILED:
-        return dispatch(navigateProjectDetailed(data))
-
-      case WorldMode.IN_BACKGROUND:
-        return dispatch(navigateBackground(data))
-
-      default:
-        break
-    }
-  }
+  controls.autoRotate = [
+    WorldMode.PROJECTS_EXPLORE,
+    WorldMode.IN_BACKGROUND,
+  ].includes(mode)
 }
 
 function navigateProjectsExplore(data: any = {}) {
   return async function action(dispatch: any, getState: any) {
     const w = getState().world
 
-    if (w.mode === WorldMode.PROJECTS_EXPLORE && !data.force)
-      return
+    if (w.mode === WorldMode.PROJECTS_EXPLORE && !data.force) return
 
-    if (data.navigate)
-      navigate('/')
+    if (data.navigate) navigate('/')
 
     let duration = 0
-    if (w.mode !== WorldMode.PROJECTS_EXPLORE && w.mode !== WorldMode.IN_BACKGROUND) {
+    if (
+      w.mode !== WorldMode.PROJECTS_EXPLORE &&
+      w.mode !== WorldMode.IN_BACKGROUND
+    ) {
       duration = setCameraInitialPosition(w)
     }
 
@@ -104,17 +67,18 @@ function navigateBackground(data: any = {}) {
   return async function action(dispatch: any, getState: any) {
     const w = getState().world
 
-    if (w.mode === WorldMode.IN_BACKGROUND)
-      return
+    if (w.mode === WorldMode.IN_BACKGROUND) return
 
     setControlsFromMode(w.ref.current.controls(), WorldMode.IN_BACKGROUND)
     await dispatch({ type: MODE_GO_BACKGROUND })
 
-    if (data.navigate)
-      navigate(data.navigate)
+    if (data.navigate) navigate(data.navigate)
 
     let duration = 0
-    if (w.mode !== WorldMode.PROJECTS_EXPLORE && w.mode !== WorldMode.IN_BACKGROUND) {
+    if (
+      w.mode !== WorldMode.PROJECTS_EXPLORE &&
+      w.mode !== WorldMode.IN_BACKGROUND
+    ) {
       duration = setCameraInitialPosition(w)
     }
 
@@ -126,7 +90,6 @@ function navigateBackground(data: any = {}) {
     await dispatch({ type: MODE_GO_BACKGROUND })
   }
 }
-
 
 function navigateProjectDetailed(data: any = {}, duration = 1500) {
   return async function action(dispatch: any, getState: any) {
@@ -158,7 +121,11 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
 
     setControlsFromMode(w.ref.current.controls(), WorldMode.AREA_PREVIEW)
     const projects = getProjectsFromArea(w.projects, data.marker)
-    await dispatch({ type: MODE_GO_AREA_PREVIEW, marker: data.marker, projects })
+    await dispatch({
+      type: MODE_GO_AREA_PREVIEW,
+      marker: data.marker,
+      projects,
+    })
     dispatch(toggleMarkers(true))
 
     moveMarkerToCenter(w, data.marker, 1000)
@@ -174,7 +141,58 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
     await dispatch({ type: MODE_GO_PROJECT_PREVIEW, marker: data.marker })
     dispatch(toggleMarkers(true))
 
-    if (w.version === WorldVersion.MOBILE)
-      moveMarkerToCenter(w, data.marker)
+    if (w.version === WorldVersion.MOBILE) moveMarkerToCenter(w, data.marker)
+  }
+}
+
+export function setWorldMode(mode: WorldMode, data: any = {}) {
+  return function action(dispatch: any, getState: any) {
+    switch (mode) {
+      case WorldMode.PROJECTS_EXPLORE:
+        return dispatch(navigateProjectsExplore(data))
+
+      case WorldMode.PROJECT_PREVIEW:
+        return dispatch(navigateProjectPreview(data))
+
+      case WorldMode.AREA_PREVIEW:
+        return dispatch(navigateAreaPreview(data))
+
+      case WorldMode.PROJECT_DETAILED:
+        return dispatch(navigateProjectDetailed(data))
+
+      case WorldMode.IN_BACKGROUND:
+        return dispatch(navigateBackground(data))
+
+      default:
+        break
+    }
+  }
+}
+
+export function setWorldModeFromLocation(location: any = {}) {
+  return function action(dispatch: any, getState: any) {
+    if (!location.pathname) return
+
+    if (location.pathname === '/')
+      return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE, { force: true }))
+
+    if (location.pathname === '/projects' || location.pathnamme === '/about')
+      return dispatch(setWorldMode(WorldMode.IN_BACKGROUND))
+
+    if (location.pathname.includes('/projects/')) {
+      const marker = getMarkerFromPath(
+        location.pathname,
+        getState().world.markers
+      )
+
+      if (marker) {
+        return dispatch(
+          setWorldMode(WorldMode.PROJECT_DETAILED, {
+            marker,
+            skipInTransition: true,
+          })
+        )
+      }
+    }
   }
 }

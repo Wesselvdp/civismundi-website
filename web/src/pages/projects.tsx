@@ -47,7 +47,6 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
     setPage(0)
   }, [director])
 
-  
 
   return (
     <>
@@ -58,7 +57,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
           title="Lorem ipsum dolor sit amet"
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
           timeout={{ title: 500, content: 1000 }}
-          onFinished={() => setHeroFinished(true) }
+          onFinished={() => setHeroFinished(true)}
         >
           <FadeAnim in={heroFinished} timeout={1000}>
             <Select
@@ -68,14 +67,15 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
             />
           </FadeAnim>
         </Hero>
-        <ProjectList
-          projects={data.allSanityProject}
-          page={page}
-          perPage={perPage}
-          onMore={() => setPage(page + 1)}
-          director={director}
-          show={heroFinished}
-        />
+        {heroFinished && (
+          <ProjectList
+            projects={data.allSanityProject}
+            page={page}
+            perPage={perPage}
+            onMore={() => setPage(page + 1)}
+            director={director}
+          />
+        )}
       </Page>
     </>
   )

@@ -41,7 +41,7 @@ const TextAnimation: FC<T> = ({
     if (text) {
       const words = text.split(' ')
       const letters = text.split('').filter(l => l !== '')
-      
+
       let letterPosition = 0;
       const wordObjs = words.map(word => {
         const obj = ({ position: letterPosition, length: word.length })
@@ -49,7 +49,7 @@ const TextAnimation: FC<T> = ({
 
         return obj;
       })
-    
+
       setWords(wordObjs)
       setLetters(letters);
     }
@@ -62,12 +62,14 @@ const TextAnimation: FC<T> = ({
       <Wrapper>
         <Tag className={className} style={style}>
           {words.map((w) => (
-            <span style={{ display: 'inline-block' }}>
-              {slice(letters, w.position, w.position + w.length).map((l, i) => (
-                <span className="letter" style={{ transitionDelay: `${(inProp ? letterSpeedIn : letterSpeedOut) * (w.position + i)}s`}}>{l}</span>
-              ))}
+            <>
+              <span style={{ display: 'inline-block' }}>
+                {slice(letters, w.position, w.position + w.length).map((l, i) => (
+                  <span className="letter" style={{ transitionDelay: `${(inProp ? letterSpeedIn : letterSpeedOut) * (w.position + i)}s`}}>{l}</span>
+                ))}
+              </span>
               &nbsp;
-            </span>
+            </>
           ))}
         </Tag>
       </Wrapper>

@@ -6,9 +6,10 @@ import handleViewport from 'react-in-viewport'
 import { useDispatch } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
-import { wGoToProject } from '../../actions'
+import { WorldMode } from '../../actions'
+import { setWorldMode } from '../../actions/mode'
 
-const ProjectCard = ({ data, allViewport, id }) => {
+const ProjectCard = ({ data }) => {
   const { title, slug } = data
   const poster = get(data, 'poster.asset.url')
   const video = get(data, 'video.asset.url')
@@ -29,9 +30,24 @@ const ProjectCard = ({ data, allViewport, id }) => {
   }
 
   return (
-    <Card className="card" onClick={() => dispatch(wGoToProject({ node: data }, 1500))} onMouseEnter={() => playVideo()} onMouseLeave={() => pauseVideo()}>
+    <Card
+      className="card"
+      onClick={() =>
+        dispatch(
+          setWorldMode(WorldMode.PROJECT_DETAILED, {
+            marker: { node: data },
+            navigate: true,
+          })
+        )
+      }
+      onMouseEnter={() => playVideo()}
+      onMouseLeave={() => pauseVideo()}
+    >
       <Visual>
-        <div className={`poster ${hidePoster ? 'hide' : ''}`} style={{ backgroundImage: `url(${poster})` }}></div>
+        <div
+          className={`poster ${hidePoster ? 'hide' : ''}`}
+          style={{ backgroundImage: `url(${poster})` }}
+        ></div>
         <video ref={ref} muted loop>
           <source src={video} type="video/mp4" />
         </video>
@@ -63,7 +79,7 @@ const Content = styled.div`
   p {
     max-width: 75%;
     margin: 0;
-  
+
     @media ${breakpoints.phoneOnly} {
       max-width: none;
     }
@@ -73,8 +89,9 @@ const Visual = styled.div`
   margin-bottom: 1rem;
   position: relative;
   padding-top: 60%;
-  
-  .poster, video {
+
+  .poster,
+  video {
     position: absolute;
     height: 100%;
     width: 100%;

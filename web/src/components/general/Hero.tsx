@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
 import { TextAnim } from '@components/animations'
@@ -13,10 +14,13 @@ export enum LineState {
 
 const Hero = ({ children, subtitle, title, content, timeout = {}, onFinished = () => {} }) => {
   const [state, setState] = useState(LineState.LOADING)
+  const world = useSelector(state => state.world)
 
   useEffect(() => {
-    setState(LineState.SUBTITLE_IN)
-  }, [])
+    if (world.ready) {
+      setState(LineState.SUBTITLE_IN)
+    }
+  }, [world.ready])
 
   return (
     <Wrapper>
