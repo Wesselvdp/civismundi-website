@@ -278,16 +278,6 @@ const WorldContainer = ({ layout, location }) => {
           show={world.mode === WorldMode.AREA_PREVIEW}
         />
       </AreaContainer>
-      {world.mode === WorldMode.AREA_PREVIEW && (
-        <CloseMarker
-          onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}
-          className={world.screenCoords && 'show'}
-          x={get(world, 'screenCoords.x')}
-          y={get(world, 'screenCoords.y')}
-        >
-          <img src="/close-marker.svg" />
-        </CloseMarker>
-      )}
     </Page>
   )
 }
