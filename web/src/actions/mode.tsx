@@ -111,7 +111,11 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     clearTimeout(timer)
     timer = setTimeout(() => {
       setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_DETAILED)
-      moveToMarker(w, data.marker, !data.skipInTransition ? duration : 0)
+      moveToMarker(
+        w,
+        data.area || data.marker,
+        !data.skipInTransition ? duration : 0
+      )
     }, Math.max(mDuration - 250, 0))
   }
 }
@@ -199,9 +203,16 @@ export function setWorldModeFromLocation(location: any = {}, data: any = {}) {
       )
 
       if (marker) {
+        const area = marker.node.locationGroup
+          ? getState().world.areas.find(
+              (area: any) => area.node._id === marker.node.locationGroup._id
+            )
+          : null
+
         return dispatch(
           setWorldMode(WorldMode.PROJECT_DETAILED, {
             marker,
+            area,
             skipInTransition:
               typeof data.skipTransition !== 'undefined'
                 ? data.skipTransition

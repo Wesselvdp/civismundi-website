@@ -1,7 +1,7 @@
 import { get } from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
 
-import { WorldVersion } from '.'
+import { MarkerType, WorldVersion } from '.'
 
 export const getMarkerFromPath = (pathname: string, markers: any[]) => {
   const projectSlug = get(pathname.split('/'), '[2]')
@@ -75,17 +75,23 @@ export const moveToMarker = (world: any, marker: any, duration = 1500) => {
 
   const position = camera.position
   const positionTo = world.ref.current.getCoords(
-    marker.node.location.lat > 0
+    marker.node.location
       ? marker.node.location.lat - 20
-      : marker.node.location.lat + 20,
-    marker.node.location.lng,
+      : marker.node.locationGroup.lat - 20,
+    marker.node.location
+      ? marker.node.location.lng
+      : marker.node.locationGroup.lng,
     0.4
   )
 
   const target = controls.target
   const targetTo = world.ref.current.getCoords(
-    marker.node.location.lat,
-    marker.node.location.lng,
+    marker.node.location
+      ? marker.node.location.lat
+      : marker.node.locationGroup.lat,
+    marker.node.location
+      ? marker.node.location.lng
+      : marker.node.locationGroup.lng,
     0.2
   )
 

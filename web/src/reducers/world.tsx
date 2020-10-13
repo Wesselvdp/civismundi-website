@@ -32,6 +32,7 @@ const initialState = {
   projectActive: null,
   projectDetailed: null,
   areas: [],
+  areaActive: null,
   areaProjects: [],
   markers: [],
   markersVisible: true,
@@ -45,7 +46,12 @@ const initialState = {
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET_DATA: {
-      return { ...state, projects: action.projects, areaProjects: action.projects, areas: action.areas }
+      return {
+        ...state,
+        projects: action.projects,
+        areaProjects: action.projects,
+        areas: action.areas,
+      }
     }
 
     case WORLD_INITIALIZE_START: {
@@ -57,7 +63,12 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case MODE_GO_PROJECT_PREVIEW: {
-      return { ...state, projectActive: action.marker, showPreviewVideo: true, mode: WorldMode.PROJECT_PREVIEW }
+      return {
+        ...state,
+        projectActive: action.marker,
+        showPreviewVideo: true,
+        mode: WorldMode.PROJECT_PREVIEW,
+      }
     }
 
     case MODE_GO_AREA_PREVIEW: {
@@ -66,20 +77,35 @@ const reducer = (state = initialState, action: any) => {
         mode: WorldMode.AREA_PREVIEW,
         showPreviewVideo: true,
         areaProjects: action.projects,
-        projectActive: action.projects[0]
+        projectActive: action.projects[0],
+        areaActive: action.marker,
       }
     }
 
     case MODE_GO_PROJECTS_EXPLORE: {
-      return { ...state, showPreviewVideo: false, mode: WorldMode.PROJECTS_EXPLORE }
+      return {
+        ...state,
+        showPreviewVideo: false,
+        mode: WorldMode.PROJECTS_EXPLORE,
+      }
     }
 
     case MODE_GO_PROJECT_DETAILED: {
-      return { ...state, projectActive: action.marker, showPreviewVideo: true, mode: WorldMode.PROJECT_DETAILED }
+      return {
+        ...state,
+        projectActive: action.marker,
+        showPreviewVideo: true,
+        mode: WorldMode.PROJECT_DETAILED,
+      }
     }
 
     case MODE_GO_BACKGROUND: {
-      return { ...state, projectActive: null, showPreviewVideo: false, mode: WorldMode.IN_BACKGROUND }
+      return {
+        ...state,
+        projectActive: null,
+        showPreviewVideo: false,
+        mode: WorldMode.IN_BACKGROUND,
+      }
     }
 
     case SET_VISIBILITY_MARKERS: {
@@ -91,7 +117,7 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case SET_SKIP_TRANSITION: {
-      return { ...state, skipInTransition: action.payload}
+      return { ...state, skipInTransition: action.payload }
     }
 
     case SHOW_PREVIEW_VIDEO: {
@@ -101,7 +127,6 @@ const reducer = (state = initialState, action: any) => {
     case SET_ACTIVE_PROJECT: {
       return { ...state, projectActive: action.project }
     }
-
 
     case ADD_MARKER: {
       return { ...state, markers: [...state.markers, action.marker] }

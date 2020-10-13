@@ -63,7 +63,7 @@ const Container = styled.div`
 `
 
 const Thumbnail = styled.div`
-  background-position: center bottom;
+  background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   display: inline-block;

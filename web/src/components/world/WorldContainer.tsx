@@ -76,9 +76,9 @@ const WorldContainer = ({ layout, location }) => {
   useEffect(() => {
     if (world.projectActive) {
       setCity(
-        world.projectActive.node._type === 'project'
+        world.mode === WorldMode.PROJECTS_EXPLORE
           ? get(world, 'projectActive.node.city')
-          : get(world, 'projectActive.node.locationGroup.title')
+          : get(world, 'areaActive.node.title')
       )
     }
   }, [world.projectActive])
@@ -194,6 +194,7 @@ const WorldContainer = ({ layout, location }) => {
                 dispatch(
                   setWorldMode(WorldMode.PROJECT_DETAILED, {
                     marker: world.projectActive,
+                    area: WorldMode.AREA_PREVIEW ? world.areaActive : null,
                     navigate: true,
                   })
                 )
