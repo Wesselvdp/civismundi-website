@@ -31,6 +31,8 @@ const WorldContainer = ({ layout, location }) => {
   const world = useSelector((state) => state.world)
   const [markers, setMarkers] = useState([])
   const [showGrabIcon, setShowGrabIcon] = useState(false)
+  const [city, setCity] = useState('')
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -71,7 +73,15 @@ const WorldContainer = ({ layout, location }) => {
     }
   }, [world.mode, world.ready])
 
-  useLayoutEffect(() => {}, [])
+  useEffect(() => {
+    if (world.projectActive) {
+      setCity(
+        world.projectActive.node._type === 'project'
+          ? get(world, 'projectActive.node.city')
+          : get(world, 'projectActive.node.locationGroup.title')
+      )
+    }
+  }, [world.projectActive])
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -99,6 +109,7 @@ const WorldContainer = ({ layout, location }) => {
             }
             title
             featured
+            city
             location {
               lat
               lng
@@ -149,7 +160,8 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="h2"
             className="subtitle"
-            text="VIDEO DIRECTION"
+            text={city}
+            appear
           />
           <TextImprov
             in={
