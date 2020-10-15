@@ -53,7 +53,8 @@ const Container = styled.div`
   transition: all 0.5s ease;
 
   @media ${breakpoints.phoneOnly} {
-    height: 70px;
+    height: 105px;
+    display: block;
   }
 
   &.show {

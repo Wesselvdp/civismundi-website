@@ -17,8 +17,8 @@ import {
   SET_ACTIVE_PROJECT,
   SET_MARKER_FOCUSED,
   SET_READY,
-  SET_SCREEN_COORDS,
   SET_LAST_ACTIVE,
+  SET_VIDEO_URLS,
 } from '../actions/types'
 
 const initialState = {
@@ -42,7 +42,7 @@ const initialState = {
   cameraChanged: false,
   clouds: null,
   lightning: null,
-  screenCoords: null,
+  videos: [],
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -148,9 +148,10 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, ready: true }
     }
 
-    case SET_SCREEN_COORDS: {
-      return { ...state, screenCoords: action.coords }
+    case SET_VIDEO_URLS: {
+      return { ...state, videos: action.urls }
     }
+
     default:
       return state
   }

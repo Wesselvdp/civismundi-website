@@ -13,6 +13,7 @@ import {
   MODE_GO_AREA_PREVIEW,
   SET_SCREEN_COORDS,
   SET_LAST_ACTIVE,
+  SET_VIDEO_URLS,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -100,21 +101,23 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     if (data.skipInTransition)
       dispatch({ type: SET_SKIP_TRANSITION, payload: true })
 
+    if (data.area && !data.marker) {
+      data.marker = w.projects.find(
+        (project: any) =>
+          project.node.locationGroup &&
+          project.node.locationGroup._id === data.area.node._id
+      )
+    }
+
+    if (!data.marker) return
+    navigate(`/projects/${get(data, 'marker.node.slug.current')}`)
+
+    // update videos
+    const videoUrl = get(data, 'marker.node.video.asset.url')
+    videoUrl && (await dispatch({ type: SET_VIDEO_URLS, urls: [videoUrl] }))
+
     // dispatch mode change
     await dispatch({ type: MODE_GO_PROJECT_DETAILED, marker: data.marker })
-
-    // change url
-    if (data.navigate) {
-      if (data.area && !data.marker) {
-        data.marker = w.projects.find(
-          (project: any) =>
-            project.node.locationGroup && project.node.locationGroup._id === data.area.node._id
-        )
-      }
-
-      data.marker &&
-        navigate(`/projects/${get(data, 'marker.node.slug.current')}`)
-    }
 
     const mDuration = dispatch(toggleMarkers(false))
 
@@ -139,6 +142,12 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
     await dispatch({ type: SET_LAST_ACTIVE, marker: data.marker })
 
     const projects = getProjectsFromArea(w.projects, data.marker)
+
+    // update videos
+    const videoUrls = projects.map((p: any) => get(p, 'node.video.asset.url'))
+    videoUrls.length &&
+      (await dispatch({ type: SET_VIDEO_URLS, urls: videoUrls }))
+
     await dispatch({
       type: MODE_GO_AREA_PREVIEW,
       marker: data.marker,
@@ -146,6 +155,8 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
     })
 
     await dispatch(toggleMarkers(true))
+
+    if (w.version === WorldVersion.MOBILE) moveMarkerToCenter(w, data.marker)
   }
 }
 
@@ -156,9 +167,16 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
     // dispatch mode change
     setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_PREVIEW)
 
+    // update video
+    const videoUrl = get(data, 'marker.node.video.asset.url')
+    videoUrl && (await dispatch({ type: SET_VIDEO_URLS, urls: [videoUrl] }))
+
+    // last active, for smooth copy transitions
     await dispatch({ type: SET_LAST_ACTIVE, marker: data.marker })
 
+    // go to mode
     await dispatch({ type: MODE_GO_PROJECT_PREVIEW, marker: data.marker })
+
     dispatch(toggleMarkers(true))
 
     if (w.version === WorldVersion.MOBILE) moveMarkerToCenter(w, data.marker)

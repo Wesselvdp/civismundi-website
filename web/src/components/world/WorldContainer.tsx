@@ -22,6 +22,7 @@ import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
 import { worldHandleResize } from '../../actions/initialize'
 
 import ProjectSlider from './ProjectSlider'
+import VideoBackground from './VideoBackground'
 
 const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
@@ -130,6 +131,7 @@ const WorldContainer = ({ layout, location }) => {
   return (
     <Page className={layout}>
       <>
+        {/* Globe */}
         <CSSTransition
           in={world.ready}
           timeout={{ enter: 1600 }}
@@ -141,6 +143,8 @@ const WorldContainer = ({ layout, location }) => {
             <World location={location} data={data} markers={markers} />
           </AnimatedWrapper>
         </CSSTransition>
+
+        {/* Copy */}
         <MobileContent>
           <TextImprov
             in={
@@ -194,7 +198,10 @@ const WorldContainer = ({ layout, location }) => {
           {world.version === WorldVersion.MOBILE && (
             <FadeAnim
               timeout={1000}
-              in={world.mode === WorldMode.PROJECT_PREVIEW}
+              in={
+                world.mode === WorldMode.PROJECT_PREVIEW ||
+                world.mode === WorldMode.AREA_PREVIEW
+              }
             >
               <Button
                 className={world.mode}
@@ -217,30 +224,19 @@ const WorldContainer = ({ layout, location }) => {
           )}
         </MobileContent>
       </>
+      {/* Footer content */}
       <FooterContainer>
         <div className="footer--content">
           <>
-            {/* <VerticalAnim
-              in={
-                world.ready &&
-                showGrabIcon &&
-                [
-                  WorldMode.PROJECTS_EXPLORE,
-                  WorldMode.PROJECT_PREVIEW,
-                ].includes(world.mode)
-              }
-              timeout={{ enter: 5000 }}
-            >
-              <img src="/grab-icon.svg" />
-            </VerticalAnim> */}
             <TextAnim
               in={
                 world.ready &&
-                [
+                ([
                   WorldMode.PROJECTS_EXPLORE,
                   WorldMode.PROJECT_PREVIEW,
-                  WorldMode.AREA_PREVIEW,
-                ].includes(world.mode)
+                ].includes(world.mode) ||
+                  (world.mode === WorldMode.AREA_PREVIEW &&
+                    world.version === WorldVersion.DESKTOP))
               }
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
@@ -248,35 +244,11 @@ const WorldContainer = ({ layout, location }) => {
           </>
         </div>
       </FooterContainer>
-      {world.showPreviewVideo && (
-        <VideoPreview
-          className={`${
-            [
-              WorldMode.PROJECT_PREVIEW,
-              WorldMode.PROJECT_DETAILED,
-              WorldMode.AREA_PREVIEW,
-            ].includes(world.mode)
-              ? 'visible'
-              : ''
-          } ${
-            world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''
-          }`}
-        >
-          <video
-            key={get(world, 'projectActive.node.video.asset.url')}
-            id="videoBG"
-            playsInline
-            autoPlay
-            muted
-            loop
-          >
-            <source
-              src={get(world, 'projectActive.node.video.asset.url')}
-              type="video/mp4"
-            />
-          </video>
-        </VideoPreview>
-      )}
+
+      {/* Background video(s) */}
+      <VideoBackground />
+
+      {/* Area stuff (project slider) */}
       <AreaContainer>
         {world.version === WorldVersion.MOBILE && (
           <ProjectSlider
@@ -290,26 +262,6 @@ const WorldContainer = ({ layout, location }) => {
 }
 
 export default WorldContainer
-
-const CloseMarker = styled.div`
-  position: fixed;
-  z-index: 0;
-  top: ${(props) => props.y}px;
-  left: ${(props) => props.x}px;
-  transform: translate(-50%, -47%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  cursor: pointer;
-
-  &.show {
-    opacity: 1;
-  }
-
-  img {
-    height: 54px;
-    width: 54px;
-  }
-`
 
 const Page = styled.div`
   position: fixed;
@@ -401,31 +353,9 @@ const MobileContent = styled.div`
     display: inline-block;
   }
 
-  h1 {
-    line-height: 0.9em;
-  }
-`
-
-const VideoPreview = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  pointer-events: none;
-
-  video {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  &.visible {
-    opacity: 1;
-  }
+  // h1 {
+  //   line-height: 0.9em;
+  // }
 `
 
 const FooterContainer = styled.div`
