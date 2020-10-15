@@ -231,12 +231,11 @@ const WorldContainer = ({ layout, location }) => {
             <TextAnim
               in={
                 world.ready &&
-                ([
+                [
                   WorldMode.PROJECTS_EXPLORE,
                   WorldMode.PROJECT_PREVIEW,
-                ].includes(world.mode) ||
-                  (world.mode === WorldMode.AREA_PREVIEW &&
-                    world.version === WorldVersion.DESKTOP))
+                  WorldMode.AREA_PREVIEW,
+                ].includes(world.mode)
               }
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
@@ -249,14 +248,14 @@ const WorldContainer = ({ layout, location }) => {
       <VideoBackground />
 
       {/* Area stuff (project slider) */}
-      <AreaContainer>
+      {/* <AreaContainer>
         {world.version === WorldVersion.MOBILE && (
           <ProjectSlider
             projects={world.areaProjects}
-            show={world.mode === WorldMode.AREA_PREVIEW}
+            show={world.mode === WorldMode.PROJECT_DETAILED}
           />
         )}
-      </AreaContainer>
+      </AreaContainer> */}
     </Page>
   )
 }
