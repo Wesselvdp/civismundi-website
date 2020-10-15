@@ -91,13 +91,13 @@ export function onMarkerHovered(hovered: any) {
     if (w.version === WorldVersion.DESKTOP) {
       if (hovered && hovered.node._type === MarkerType.PROJECT) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_PREVIEW, { marker: hovered })
+          setWorldMode(WorldMode.PROJECT_PREVIEW, { project: hovered })
         )
       }
 
       if (hovered && hovered.node._type === MarkerType.AREA) {
         return dispatch(
-          setWorldMode(WorldMode.AREA_PREVIEW, { marker: hovered })
+          setWorldMode(WorldMode.AREA_PREVIEW, { area: hovered })
         )
       }
 
@@ -117,19 +117,13 @@ export function onMarkerClicked(clicked: any) {
     if (w.version === WorldVersion.DESKTOP) {
       if (clicked.node._type === MarkerType.PROJECT) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, {
-            marker: clicked,
-            navigate: true,
-          })
+          setWorldMode(WorldMode.PROJECT_DETAILED, { project: clicked })
         )
       }
 
       if (clicked.node._type === MarkerType.AREA) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, {
-            area: clicked,
-            navigate: true,
-          })
+          setWorldMode(WorldMode.PROJECT_DETAILED, { area: clicked })
         )
       }
     }
@@ -146,7 +140,7 @@ export function onMarkerClicked(clicked: any) {
         if (w.mode === WorldMode.PROJECTS_EXPLORE) {
           dispatch(toggleFocusedMarker(clicked))
           return dispatch(
-            setWorldMode(WorldMode.PROJECT_PREVIEW, { marker: clicked })
+            setWorldMode(WorldMode.PROJECT_PREVIEW, { project: clicked })
           )
         }
       }
@@ -154,7 +148,7 @@ export function onMarkerClicked(clicked: any) {
       if (clicked.node._type === MarkerType.AREA) {
         dispatch(toggleFocusedMarker(clicked))
         return dispatch(
-          setWorldMode(WorldMode.AREA_PREVIEW, { marker: clicked })
+          setWorldMode(WorldMode.AREA_PREVIEW, { area: clicked })
         )
       }
     }

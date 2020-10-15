@@ -8,13 +8,7 @@ import { WorldMode } from '../../actions'
 
 const VideoBackground = ({}) => {
   const world = useSelector((state: any) => state.world)
-
-  const [index, setIndex] = useState(0)
-  const [transitioning, setTransitioning] = useState(false)
-
   const videoRef = useRef(null)
-  const intervalRef = useRef(null)
-  const indexTimeout = useRef(null)
 
   useEffect(() => {
     if (
@@ -30,23 +24,8 @@ const VideoBackground = ({}) => {
     }
   }, [world.mode])
 
-  useEffect(() => {
-    clearInterval(intervalRef.current)
-    clearTimeout(indexTimeout.current)
-
-    if (world.videos && world.videos.length) {
-      intervalRef.current = setInterval(() => {
-        setTransitioning(true)
-
-        indexTimeout.current = setTimeout(() => {
-          setIndex((index: number) => (index + 1) % world.videos.length)
-          setTransitioning(false)
-        }, 1000)
-      }, 5000)
-    }
-  }, [world.videos])
-
-  if (!world.videos || !world.videos.length) return null
+  const { active } = world
+  if (!active.project && !active.area) return null
 
   return (
     <Wrapper
@@ -60,17 +39,17 @@ const VideoBackground = ({}) => {
           : ''
       } ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}
     >
-      <Transitioner className={transitioning ? 'hide' : ''}>
+      <Transitioner>
         <video
           ref={videoRef}
-          key={get(world.videos, `[${index}]`)}
+          key={active.project ? get(world, 'active.project.node.video.asset.url') :  get(world, 'active.areaProjects[0].node.video.asset.url')}
           id="videoBG"
           playsInline
           autoPlay
           muted
           loop
         >
-          <source src={get(world.videos, `[${index}]`)} type="video/mp4" />
+          <source src={active.project ? get(world, 'active.project.node.video.asset.url') :  get(world, 'active.areaProjects[0].node.video.asset.url')} type="video/mp4" />
         </video>
       </Transitioner>
     </Wrapper>

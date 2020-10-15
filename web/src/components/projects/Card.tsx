@@ -34,11 +34,7 @@ const ProjectCard = ({ data, skipTransition = false}) => {
       className="card"
       onClick={() =>
         dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, {
-            marker: { node: data },
-            navigate: true,
-            skipInTransition: skipTransition,
-          })
+          setWorldMode(WorldMode.PROJECT_DETAILED, { project: { node: data }, skipInTransition: skipTransition })
         )
       }
       onMouseEnter={() => playVideo()}

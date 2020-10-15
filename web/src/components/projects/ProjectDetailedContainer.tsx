@@ -29,7 +29,7 @@ export enum ProjectState {
 }
 
 const ProjectDetailedContainer = ({ data }) => {
-  const { title, id, locationGroup, _rawOverview } = data.sanityProject
+  const { title, id, _rawOverview } = data.sanityProject
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
@@ -97,36 +97,35 @@ const ProjectDetailedContainer = ({ data }) => {
             {world.ready && state >= ProjectState.VIDEO_BUTTON_IN && (
               <>
                 <div className="button-container">
-                  <PrevSVG
-                    onClick={() =>
-                      dispatch(
-                        setWorldMode(WorldMode.PROJECT_DETAILED, {
-                          marker: world.areaProjects[1],
-                          navigate: true,
-                        })
-                      )
-                    }
-                  />
+                  {world.active.area && (
+                    <PrevSVG
+                      onClick={() =>
+                        dispatch(
+                          setWorldMode(WorldMode.PROJECT_DETAILED, {
+                            marker: world.areaProjects[1],
+                            navigate: true,
+                          })
+                        )
+                      }
+                    />
+                  )}
                   <PlayButton>
                     <PlaySVG onClick={() => openVideo(true)} />
                   </PlayButton>
-                  <NextSVG
-                    onClick={() =>
-                      dispatch(
-                        setWorldMode(WorldMode.PROJECT_DETAILED, {
-                          marker: world.areaProjects[2],
-                          navigate: true,
-                        })
-                      )
-                    }
-                  />
+                  {world.active.area && (
+                    <NextSVG
+                      onClick={() =>
+                        dispatch(
+                          setWorldMode(WorldMode.PROJECT_DETAILED, { project: world.active.areaProjects[2] })
+                        )
+                      }
+                    />
+                  )}
                 </div>
                 <GlobeIcon
                   onClick={() =>
                     dispatch(
-                      setWorldMode(WorldMode.PROJECTS_EXPLORE, {
-                        navigate: true,
-                      })
+                      setWorldMode(WorldMode.PROJECTS_EXPLORE)
                     )
                   }
                 >
@@ -136,18 +135,14 @@ const ProjectDetailedContainer = ({ data }) => {
             )}
           </div>
         </Content>
-        <SliderWrapper>
-          <ProjectSlider
-            className="project-slider"
-            projects={world.areaProjects}
-            show={
-              locationGroup &&
-              world.areaProjects &&
-              state === ProjectState.SLIDER_IN
-            }
-            activeProject={data.sanityProject}
-          />
-        </SliderWrapper>
+        {world.active.area && (
+          <SliderWrapper>
+            <ProjectSlider
+              className="project-slider"
+              show={state === ProjectState.SLIDER_IN}
+            />
+          </SliderWrapper>
+        )}
       </StyledMast>
 
       {/* Project content */}
@@ -240,6 +235,7 @@ const Content = styled.div`
   align-items: flex-end;
   padding-bottom: 100px;
   justify-content: center;
+  min-height: 525px;
 
   .upper {
     padding: 0 15px;

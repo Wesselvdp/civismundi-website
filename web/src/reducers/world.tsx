@@ -5,21 +5,19 @@ import {
   WORLD_INITIALIZE_START,
   WORLD_INITIALIZE_COMPLETE,
   SET_LIGHTNING,
-  SHOW_PREVIEW_VIDEO,
   SET_SKIP_TRANSITION,
-  ADD_MARKER,
-  SET_VISIBILITY_MARKERS,
   MODE_GO_PROJECT_PREVIEW,
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_PROJECT_DETAILED,
   MODE_GO_BACKGROUND,
   MODE_GO_AREA_PREVIEW,
-  SET_ACTIVE_PROJECT,
+  ADD_MARKER,
   SET_MARKER_FOCUSED,
+  SET_VISIBILITY_MARKERS,
   SET_READY,
   SET_LAST_ACTIVE,
   SET_VIDEO_URLS,
-  SET_AREA_PROJECTS,
+  SET_ACTIVE,
 } from '../actions/types'
 
 const initialState = {
@@ -29,14 +27,10 @@ const initialState = {
   mode: WorldMode.PROJECTS_EXPLORE,
   version: WorldVersion.DESKTOP,
   skipInTransition: false,
-  showPreviewVideo: false,
   projects: [],
-  projectActive: null,
-  projectDetailed: null,
   areas: [],
-  areaActive: null,
-  lastActive: null, // can be project/area, used to make smooth exit animations for title on home
-  areaProjects: [],
+  active: {},
+  lastActive: {}, // can be project/area, used to make smooth exit animations for title on home
   markers: [],
   markersVisible: true,
   markerFocused: null,
@@ -46,17 +40,24 @@ const initialState = {
   videos: [],
 }
 
+// active object
+// - type: project/area
+// - area: null / area
+// - areaProjects: [project] || null
+// - project: project
+
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
+    // Data
     case SET_DATA: {
       return {
         ...state,
         projects: action.projects,
-        areaProjects: action.projects,
         areas: action.areas,
       }
     }
 
+    // Init
     case WORLD_INITIALIZE_START: {
       return { ...state, ref: action.ref, version: action.version }
     }
@@ -65,11 +66,10 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, initialized: true }
     }
 
+    // Modes
     case MODE_GO_PROJECT_PREVIEW: {
       return {
         ...state,
-        projectActive: action.marker,
-        showPreviewVideo: true,
         mode: WorldMode.PROJECT_PREVIEW,
       }
     }
@@ -78,20 +78,12 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         mode: WorldMode.AREA_PREVIEW,
-        showPreviewVideo: true,
-        areaProjects: action.projects,
-        areaActive: action.marker,
       }
-    }
-
-    case SET_LAST_ACTIVE: {
-      return { ...state, lastActive: action.marker }
     }
 
     case MODE_GO_PROJECTS_EXPLORE: {
       return {
         ...state,
-        showPreviewVideo: false,
         mode: WorldMode.PROJECTS_EXPLORE,
       }
     }
@@ -99,8 +91,6 @@ const reducer = (state = initialState, action: any) => {
     case MODE_GO_PROJECT_DETAILED: {
       return {
         ...state,
-        projectActive: action.marker,
-        showPreviewVideo: true,
         mode: WorldMode.PROJECT_DETAILED,
       }
     }
@@ -108,14 +98,30 @@ const reducer = (state = initialState, action: any) => {
     case MODE_GO_BACKGROUND: {
       return {
         ...state,
-        projectActive: null,
-        showPreviewVideo: false,
         mode: WorldMode.IN_BACKGROUND,
       }
     }
 
+    // Active
+    case SET_ACTIVE: {
+      return { ...state, active: action.active }
+    }
+
+    case SET_LAST_ACTIVE: {
+      return { ...state, lastActive: { ...state.active, lastShown: action.lastShown } }
+    }
+
+    // Markers
+    case ADD_MARKER: {
+      return { ...state, markers: [...state.markers, action.marker] }
+    }
+
     case SET_VISIBILITY_MARKERS: {
       return { ...state, markersVisible: action.payload }
+    }
+
+    case SET_MARKER_FOCUSED: {
+      return { ...state, markerFocused: action.marker }
     }
 
     case SET_LIGHTNING: {
@@ -126,35 +132,12 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, skipInTransition: action.payload }
     }
 
-    case SHOW_PREVIEW_VIDEO: {
-      return { ...state, showPreviewVideo: action.payload }
-    }
-
-    case SET_ACTIVE_PROJECT: {
-      return {
-        ...state,
-        projectActive: action.project,
-      }
-    }
-
-    case ADD_MARKER: {
-      return { ...state, markers: [...state.markers, action.marker] }
-    }
-
-    case SET_MARKER_FOCUSED: {
-      return { ...state, markerFocused: action.marker }
-    }
-
     case SET_READY: {
       return { ...state, ready: true }
     }
 
     case SET_VIDEO_URLS: {
       return { ...state, videos: action.urls }
-    }
-
-    case SET_AREA_PROJECTS: {
-      return { ...state, areaProjects: action.areaProjects }
     }
 
     default:
