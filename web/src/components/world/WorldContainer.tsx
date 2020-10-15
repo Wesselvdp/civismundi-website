@@ -17,7 +17,7 @@ import {
 import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 
-import { WorldMode, WorldVersion } from '../../actions'
+import { MarkerType, WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
 import { worldHandleResize } from '../../actions/initialize'
 
@@ -149,11 +149,14 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="h2"
             className="subtitle"
-            text={
-              world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.PROJECTS_EXPLORE
-                ? get(world, 'projectActive.node.city')
-                : get(world, 'areaActive.node.title')
-            }
+            text={get(
+              world,
+              `lastActive.node.${
+                get(world, 'lastActive.node._type') === MarkerType.PROJECT
+                  ? 'city'
+                  : 'title'
+              }`
+            )}
             appear
           />
           <TextImprov
@@ -162,7 +165,18 @@ const WorldContainer = ({ layout, location }) => {
               world.mode === WorldMode.AREA_PREVIEW
             }
             tag="h1"
-            text={get(world, 'projectActive.node.title')}
+            text={`${get(
+              world,
+              `lastActive.node.${
+                get(world, 'lastActive.node._type') === MarkerType.PROJECT
+                  ? 'title'
+                  : 'projectCount'
+              }`
+            )} ${
+              get(world, 'lastActive.node._type') === MarkerType.AREA
+                ? 'PROJECTS'
+                : ''
+            }`}
             appear
           />
           <TextImprov
@@ -171,31 +185,36 @@ const WorldContainer = ({ layout, location }) => {
               world.mode === WorldMode.AREA_PREVIEW
             }
             tag="p"
-            text="TRAVIS SCOTT  •  LOS ANGELES"
-          />
-          <FadeAnim
-            timeout={1000}
-            in={
-              world.mode === WorldMode.PROJECT_PREVIEW ||
-              world.mode === WorldMode.AREA_PREVIEW
+            text={
+              get(world, 'lastActive.node._type') === MarkerType.PROJECT
+                ? 'TRAVIS SCOTT'
+                : 'CLICK TO EXPLORE'
             }
-          >
-            <Button
-              className={world.mode}
-              buttonStyle="outlined"
-              onClick={() =>
-                dispatch(
-                  setWorldMode(WorldMode.PROJECT_DETAILED, {
-                    marker: world.projectActive,
-                    area: WorldMode.AREA_PREVIEW ? world.areaActive : null,
-                    navigate: true,
-                  })
-                )
-              }
+          />
+          {world.version === WorldVersion.MOBILE && (
+            <FadeAnim
+              timeout={1000}
+              in={world.mode === WorldMode.PROJECT_PREVIEW}
             >
-              VIEW PROJECT
-            </Button>
-          </FadeAnim>
+              <Button
+                className={world.mode}
+                buttonStyle="outlined"
+                onClick={() =>
+                  dispatch(
+                    setWorldMode(WorldMode.PROJECT_DETAILED, {
+                      marker: world.projectActive,
+                      area: WorldMode.AREA_PREVIEW ? world.areaActive : null,
+                      navigate: true,
+                    })
+                  )
+                }
+              >
+                {`VIEW PROJECT${
+                  world.mode === WorldMode.AREA_PREVIEW ? 'S' : ''
+                }`}
+              </Button>
+            </FadeAnim>
+          )}
         </MobileContent>
       </>
       <FooterContainer>
@@ -220,6 +239,7 @@ const WorldContainer = ({ layout, location }) => {
                 [
                   WorldMode.PROJECTS_EXPLORE,
                   WorldMode.PROJECT_PREVIEW,
+                  WorldMode.AREA_PREVIEW,
                 ].includes(world.mode)
               }
               tag="p"
@@ -259,17 +279,11 @@ const WorldContainer = ({ layout, location }) => {
       )}
       <AreaContainer>
         {world.version === WorldVersion.MOBILE && (
-          <FadeAnim
-            in={world.mode === WorldMode.AREA_PREVIEW}
-            timeout={{ enter: 500, exit: 0 }}
-          >
-            <p>{world.areaProjects.length} PROJECTS</p>
-          </FadeAnim>
+          <ProjectSlider
+            projects={world.areaProjects}
+            show={world.mode === WorldMode.AREA_PREVIEW}
+          />
         )}
-        <ProjectSlider
-          projects={world.areaProjects}
-          show={world.mode === WorldMode.AREA_PREVIEW}
-        />
       </AreaContainer>
     </Page>
   )

@@ -12,6 +12,7 @@ import {
   MODE_GO_BACKGROUND,
   MODE_GO_AREA_PREVIEW,
   SET_SCREEN_COORDS,
+  SET_LAST_ACTIVE,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -103,8 +104,17 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     await dispatch({ type: MODE_GO_PROJECT_DETAILED, marker: data.marker })
 
     // change url
-    if (data.navigate)
-      navigate(`/projects/${get(data, 'marker.node.slug.current')}`)
+    if (data.navigate) {
+      if (data.area && !data.marker) {
+        data.marker = w.projects.find(
+          (project: any) =>
+            project.node.locationGroup && project.node.locationGroup._id === data.area.node._id
+        )
+      }
+
+      data.marker &&
+        navigate(`/projects/${get(data, 'marker.node.slug.current')}`)
+    }
 
     const mDuration = dispatch(toggleMarkers(false))
 
@@ -125,24 +135,17 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
     const w = getState().world
 
     setControlsFromMode(w.ref.current.controls(), WorldMode.AREA_PREVIEW)
+
+    await dispatch({ type: SET_LAST_ACTIVE, marker: data.marker })
+
     const projects = getProjectsFromArea(w.projects, data.marker)
     await dispatch({
       type: MODE_GO_AREA_PREVIEW,
       marker: data.marker,
       projects,
     })
+
     await dispatch(toggleMarkers(true))
-
-    moveMarkerToCenter(w, data.marker, 1500)
-
-    setTimeout(() => {
-      const screenPos = w.ref.current.getScreenCoords(
-        data.marker.node.location.lat,
-        data.marker.node.location.lng,
-        data.marker.node._type === MarkerType.PROJECT ? 0.05 : 0.08
-      )
-      dispatch({ type: SET_SCREEN_COORDS, coords: screenPos })
-    }, 1500)
   }
 }
 
@@ -152,6 +155,9 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
 
     // dispatch mode change
     setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_PREVIEW)
+
+    await dispatch({ type: SET_LAST_ACTIVE, marker: data.marker })
+
     await dispatch({ type: MODE_GO_PROJECT_PREVIEW, marker: data.marker })
     dispatch(toggleMarkers(true))
 

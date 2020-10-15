@@ -18,6 +18,7 @@ import {
   SET_MARKER_FOCUSED,
   SET_READY,
   SET_SCREEN_COORDS,
+  SET_LAST_ACTIVE,
 } from '../actions/types'
 
 const initialState = {
@@ -33,6 +34,7 @@ const initialState = {
   projectDetailed: null,
   areas: [],
   areaActive: null,
+  lastActive: null, // can be project/area, used to make smooth exit animations for title on home
   areaProjects: [],
   markers: [],
   markersVisible: true,
@@ -77,9 +79,12 @@ const reducer = (state = initialState, action: any) => {
         mode: WorldMode.AREA_PREVIEW,
         showPreviewVideo: true,
         areaProjects: action.projects,
-        projectActive: action.projects[0],
         areaActive: action.marker,
       }
+    }
+
+    case SET_LAST_ACTIVE: {
+      return { ...state, lastActive: action.marker }
     }
 
     case MODE_GO_PROJECTS_EXPLORE: {
@@ -125,7 +130,10 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case SET_ACTIVE_PROJECT: {
-      return { ...state, projectActive: action.project }
+      return {
+        ...state,
+        projectActive: action.project,
+      }
     }
 
     case ADD_MARKER: {

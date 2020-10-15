@@ -81,7 +81,8 @@ export function onMarkerHovered(hovered: any) {
 
     if (
       w.mode !== WorldMode.PROJECTS_EXPLORE &&
-      w.mode !== WorldMode.PROJECT_PREVIEW
+      w.mode !== WorldMode.PROJECT_PREVIEW &&
+      w.mode !== WorldMode.AREA_PREVIEW
     )
       return
 
@@ -92,7 +93,15 @@ export function onMarkerHovered(hovered: any) {
         return dispatch(
           setWorldMode(WorldMode.PROJECT_PREVIEW, { marker: hovered })
         )
-      } else if (hovered === null) {
+      }
+
+      if (hovered && hovered.node._type === MarkerType.AREA) {
+        return dispatch(
+          setWorldMode(WorldMode.AREA_PREVIEW, { marker: hovered })
+        )
+      }
+
+      if (hovered === null) {
         return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
       }
     }
@@ -117,7 +126,10 @@ export function onMarkerClicked(clicked: any) {
 
       if (clicked.node._type === MarkerType.AREA) {
         return dispatch(
-          setWorldMode(WorldMode.AREA_PREVIEW, { marker: clicked })
+          setWorldMode(WorldMode.PROJECT_DETAILED, {
+            area: clicked,
+            navigate: true,
+          })
         )
       }
     }

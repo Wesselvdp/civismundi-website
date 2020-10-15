@@ -97,6 +97,8 @@ const World = ({ data, markers, layout, className }) => {
           p.node.locationGroup && p.node.locationGroup._id === obj.node._id
       ).length
       path = `/area-marker/area-${projectCount}.svg`
+
+      obj.node.projectCount = projectCount
     }
 
     const texture = new THREE.TextureLoader().load(path)
