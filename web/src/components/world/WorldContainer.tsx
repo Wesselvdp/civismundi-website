@@ -29,9 +29,8 @@ const INTRO_TEXT = `
 
 const WorldContainer = ({ layout, location }) => {
   const world = useSelector((state) => state.world)
-  const [markers, setMarkers] = useState([])
+  const [markers, setMarkers] = useState([]) // all markers (subset of Projects+Locations)
   const [showGrabIcon, setShowGrabIcon] = useState(false)
-  const [city, setCity] = useState('')
 
   const dispatch = useDispatch()
 
@@ -72,16 +71,6 @@ const WorldContainer = ({ layout, location }) => {
       else setShowGrabIcon(false)
     }
   }, [world.mode, world.ready])
-
-  useEffect(() => {
-    if (world.projectActive) {
-      setCity(
-        world.mode === WorldMode.PROJECTS_EXPLORE
-          ? get(world, 'projectActive.node.city')
-          : get(world, 'areaActive.node.title')
-      )
-    }
-  }, [world.projectActive])
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -160,7 +149,11 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="h2"
             className="subtitle"
-            text={city}
+            text={
+              world.mode === WorldMode.PROJECT_PREVIEW || world.mode === WorldMode.PROJECTS_EXPLORE
+                ? get(world, 'projectActive.node.city')
+                : get(world, 'areaActive.node.title')
+            }
             appear
           />
           <TextImprov
@@ -208,7 +201,7 @@ const WorldContainer = ({ layout, location }) => {
       <FooterContainer>
         <div className="footer--content">
           <>
-            <VerticalAnim
+            {/* <VerticalAnim
               in={
                 world.ready &&
                 showGrabIcon &&
@@ -220,7 +213,7 @@ const WorldContainer = ({ layout, location }) => {
               timeout={{ enter: 5000 }}
             >
               <img src="/grab-icon.svg" />
-            </VerticalAnim>
+            </VerticalAnim> */}
             <TextAnim
               in={
                 world.ready &&
