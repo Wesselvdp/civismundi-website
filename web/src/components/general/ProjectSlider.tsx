@@ -4,21 +4,24 @@ import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
-import { setActiveProject } from '../../actions/marker'
+import { setWorldMode } from '../../actions/mode'
+import { WorldMode } from '../../actions'
 
-const ProjectSlider = ({ projects, show }) => {
+const ProjectSlider = ({ projects, show, activeProject }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (projects.length > activeIndex) {
-      dispatch(setActiveProject(activeIndex))
-    }
-  }, [activeIndex])
+    let index =
+      projects &&
+      projects.findIndex((p: any) => p.node._id === activeProject._id)
 
-  useEffect(() => {
-    setActiveIndex(0)
-  }, [projects])
+    if (index < 0) {
+      index = 0
+    }
+
+    setActiveIndex(index)
+  }, [projects, activeProject])
 
   return (
     <Container className={show && 'show'}>
@@ -26,7 +29,13 @@ const ProjectSlider = ({ projects, show }) => {
         projects.map((p: any, i: any) => (
           <Thumbnail
             className={activeIndex === i && 'active'}
-            onClick={() => setActiveIndex(i)}
+            onClick={() =>
+              dispatch(
+                setWorldMode(WorldMode.PROJECT_DETAILED, {
+                  marker: projects[i],
+                })
+              )
+            }
             key={p.node._id}
             style={{
               backgroundImage: `url(${get(p, 'node.poster.asset.url')})`,
@@ -47,7 +56,6 @@ const Container = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: center;
-
   opacity: 0;
   transform: translate(0, 100%);
   transition: all 0.5s ease;
@@ -74,6 +82,7 @@ const Thumbnail = styled.div`
   height: 100px;
   width: 160px;
   transition: all 0.5s ease;
+  cursor: pointer;
 
   @media ${breakpoints.phoneOnly} {
     height: 80px;

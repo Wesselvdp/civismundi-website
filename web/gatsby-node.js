@@ -57,6 +57,10 @@ const createCustomPages = async (graphql, createPage) => {
               lat
               lng
             }
+            locationGroup {
+              _id
+              title
+            }
             title
             slug {
               current

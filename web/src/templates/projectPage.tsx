@@ -42,7 +42,11 @@ export const query = graphql`
           url
         }
       }
-      id
+      _id
+      locationGroup {
+        _id
+        title
+      }
       _rawOverview
     }
     allSanityProject {

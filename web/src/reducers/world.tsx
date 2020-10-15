@@ -19,6 +19,7 @@ import {
   SET_READY,
   SET_LAST_ACTIVE,
   SET_VIDEO_URLS,
+  SET_AREA_PROJECTS,
 } from '../actions/types'
 
 const initialState = {
@@ -150,6 +151,10 @@ const reducer = (state = initialState, action: any) => {
 
     case SET_VIDEO_URLS: {
       return { ...state, videos: action.urls }
+    }
+
+    case SET_AREA_PROJECTS: {
+      return { ...state, areaProjects: action.areaProjects }
     }
 
     default:

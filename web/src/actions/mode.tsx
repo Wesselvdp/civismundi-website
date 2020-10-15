@@ -14,6 +14,7 @@ import {
   SET_SCREEN_COORDS,
   SET_LAST_ACTIVE,
   SET_VIDEO_URLS,
+  SET_AREA_PROJECTS,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -111,6 +112,11 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
 
     if (!data.marker) return
     navigate(`/projects/${get(data, 'marker.node.slug.current')}`)
+
+    if (data.area) {
+      const projects = getProjectsFromArea(w.projects, data.area)
+      await dispatch({ type: SET_AREA_PROJECTS, areaProjects: projects })
+    }
 
     // update videos
     const videoUrl = get(data, 'marker.node.video.asset.url')

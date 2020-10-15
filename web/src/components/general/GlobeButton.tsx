@@ -11,7 +11,10 @@ const GlobeButton = () => {
   const dispatch = useDispatch()
 
   return (
-    <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
+    <Link
+      to="/"
+      onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}
+    >
       <ButtonStyled>
         <img src="/globe-icon.svg" />
       </ButtonStyled>
@@ -44,7 +47,7 @@ const ButtonStyled = styled.div`
     transform: translate(-50%, -50%) scale(0.8);
     transform-origin: 50% 50%;
     transition: transform 0.25s ease-in-out;
-    opacity: 0.80;
+    opacity: 0.8;
   }
 
   &:hover img {

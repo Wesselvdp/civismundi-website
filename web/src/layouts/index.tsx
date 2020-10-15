@@ -50,7 +50,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
           </div>
         </Loader>
       )}
-      {pageContext.layout !== 'home' && <GlobeButton />}
+      {pageContext.layout !== 'home' && pageContext.layout !== 'project-detailed' && <GlobeButton />}
     </>
   )
 }

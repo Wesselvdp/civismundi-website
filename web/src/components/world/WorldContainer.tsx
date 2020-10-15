@@ -21,7 +21,6 @@ import { MarkerType, WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
 import { worldHandleResize } from '../../actions/initialize'
 
-import ProjectSlider from './ProjectSlider'
 import VideoBackground from './VideoBackground'
 
 const INTRO_TEXT = `
@@ -202,6 +201,7 @@ const WorldContainer = ({ layout, location }) => {
                 world.mode === WorldMode.PROJECT_PREVIEW ||
                 world.mode === WorldMode.AREA_PREVIEW
               }
+              appear
             >
               <Button
                 className={world.mode}
@@ -210,7 +210,10 @@ const WorldContainer = ({ layout, location }) => {
                   dispatch(
                     setWorldMode(WorldMode.PROJECT_DETAILED, {
                       marker: world.projectActive,
-                      area: WorldMode.AREA_PREVIEW ? world.areaActive : null,
+                      area:
+                        world.mode === WorldMode.AREA_PREVIEW
+                          ? world.areaActive
+                          : null,
                       navigate: true,
                     })
                   )

@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { Link, Element } from 'react-scroll'
 import styled, { keyframes } from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
 import ModalVideo from 'react-modal-video'
 
 import PlaySVG from '../../assets/play.svg'
+import NextSVG from '../../assets/btn-next.svg'
+import PrevSVG from '../../assets/btn-prev.svg'
+import GlobeSVG from '../../assets/globe-icon.svg'
 
 // Components
 import { ProjectList } from '@components/projects'
 import { TextAnim } from '@components/animations'
+import { GlobeButton, ProjectSlider } from '@components/general'
+import { setWorldMode } from '../../actions/mode'
+import { WorldMode } from '../../actions'
 
 export enum ProjectState {
   LOADING = 1,
@@ -19,19 +25,29 @@ export enum ProjectState {
   TITLE_IN = 3,
   PARAGRAPH_IN = 4,
   VIDEO_BUTTON_IN = 5,
+  SLIDER_IN = 6,
 }
 
 const ProjectDetailedContainer = ({ data }) => {
-  const { title, id, video, poster, _rawOverview } = data.sanityProject
+  const { title, id, locationGroup, _rawOverview } = data.sanityProject
+  const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
     if (world.ready) {
-      setTimeout(() => setState(ProjectState.SUBTITLE_IN), 1000)
+      setState(ProjectState.SUBTITLE_IN)
     }
   }, [world.ready])
+
+  useEffect(() => {
+    if (state === ProjectState.VIDEO_BUTTON_IN) {
+      setTimeout(() => {
+        setState(ProjectState.SLIDER_IN)
+      }, 1500)
+    }
+  }, [state])
 
   return (
     <>
@@ -52,7 +68,7 @@ const ProjectDetailedContainer = ({ data }) => {
       </ModalWrapper>
       <StyledMast>
         <Content>
-          <div className="inner">
+          <div className="upper">
             <TextAnim
               inProp={state >= ProjectState.SUBTITLE_IN}
               timeout={{ enter: 300 }}
@@ -71,29 +87,67 @@ const ProjectDetailedContainer = ({ data }) => {
             />
             <TextAnim
               inProp={state >= ProjectState.PARAGRAPH_IN}
-              timeout={{ enter: 300 }}
+              timeout={{ enter: 600 }}
               onEntered={() => setState(ProjectState.VIDEO_BUTTON_IN)}
               tag="p"
               text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
               letterSpeedIn={0.01}
               singleLine={false}
             />
-            {world.ready && (
-              <PlayButton>
-                <PlaySVG onClick={() => openVideo(true)} />
-              </PlayButton>
+            {world.ready && state >= ProjectState.VIDEO_BUTTON_IN && (
+              <>
+                <div className="button-container">
+                  <PrevSVG
+                    onClick={() =>
+                      dispatch(
+                        setWorldMode(WorldMode.PROJECT_DETAILED, {
+                          marker: world.areaProjects[1],
+                          navigate: true,
+                        })
+                      )
+                    }
+                  />
+                  <PlayButton>
+                    <PlaySVG onClick={() => openVideo(true)} />
+                  </PlayButton>
+                  <NextSVG
+                    onClick={() =>
+                      dispatch(
+                        setWorldMode(WorldMode.PROJECT_DETAILED, {
+                          marker: world.areaProjects[2],
+                          navigate: true,
+                        })
+                      )
+                    }
+                  />
+                </div>
+                <GlobeIcon
+                  onClick={() =>
+                    dispatch(
+                      setWorldMode(WorldMode.PROJECTS_EXPLORE, {
+                        navigate: true,
+                      })
+                    )
+                  }
+                >
+                  <img src="/globe-icon.svg" />
+                </GlobeIcon>
+              </>
             )}
-            <Link
-              to="content"
-              spy={false}
-              smooth={true}
-              offset={50}
-              duration={1000}
-            >
-              <img className="scroll" src="/scroll-down.svg" />
-            </Link>
           </div>
         </Content>
+        <SliderWrapper>
+          <ProjectSlider
+            className="project-slider"
+            projects={world.areaProjects}
+            show={
+              locationGroup &&
+              world.areaProjects &&
+              state === ProjectState.SLIDER_IN
+            }
+            activeProject={data.sanityProject}
+          />
+        </SliderWrapper>
       </StyledMast>
 
       {/* Project content */}
@@ -135,8 +189,118 @@ const ProjectDetailedContainer = ({ data }) => {
 
 export default ProjectDetailedContainer
 
+const SliderWrapper = styled.div`
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+`
+
+const svgNavigators = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+
+const GlobeIcon = styled.div`
+  position: absolute;
+  bottom: -10px;
+  transform: translate(-50%, 100%);
+  left: 50%;
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  animation: ${svgNavigators} 1s forwards;
+  animation-delay: 1s;
+  cursor: pointer;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`
+
+const Content = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 40%;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 100px;
+  justify-content: center;
+
+  .upper {
+    padding: 0 15px;
+
+    @media ${breakpoints.tabletLandscapeDown} {
+      padding: 0 15px;
+    }
+
+    p {
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .button-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & > svg {
+        opacity: 0;
+        animation: ${svgNavigators} 1s forwards;
+        animation-delay: 1s;
+      }
+
+      & > svg:first-child {
+        margin-right: 24px;
+      }
+
+      & > svg:last-child {
+        margin-left: 24px;
+      }
+    }
+  }
+
+  img.scroll {
+    @media ${breakpoints.tabletLandscapeUp} {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    cursor: pointer;
+  }
+
+  .h2 {
+    @media ${breakpoints.phoneOnly} {
+      font-size: 44px;
+    }
+  }
+`
+
 const StyledMast = styled.div`
   position: relative;
+  height: 100vh;
 `
 
 const ModalWrapper = styled.div`
@@ -215,15 +379,6 @@ const svgAnim = keyframes`
 
 const PlayButton = styled.div`
   z-index: 100;
-  padding-top: 2em;
-
-  @media ${breakpoints.tabletLandscapeDown} {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding-bottom: 114px;
-  }
 
   svg {
     &:hover {
@@ -234,58 +389,13 @@ const PlayButton = styled.div`
       stroke-dashoffset: 400;
       opacity: 0;
       animation: ${svgAnim} 2s forwards;
-      animation-delay: 2s;
     }
 
     path {
       stroke-dashoffset: 400;
       opacity: 0;
       animation: ${svgAnim} 3s forwards;
-      animation-delay: 2.75s;
-    }
-  }
-`
-
-const Content = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  text-align: center;
-  height: 100vh;
-  z-index: 1;
-
-  @media ${breakpoints.tabletLandscapeUp} {
-    align-items: center;
-  }
-
-  .inner {
-    padding: 15px;
-
-    @media ${breakpoints.tabletLandscapeDown} {
-      padding: 15px 15px 8em;
-    }
-
-    p {
-      max-width: 450px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-
-  img.scroll {
-    @media ${breakpoints.tabletLandscapeUp} {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    cursor: pointer;
-  }
-
-  .h2 {
-    @media ${breakpoints.phoneOnly} {
-      font-size: 44px;
+      animation-delay: 0.75s;
     }
   }
 `
