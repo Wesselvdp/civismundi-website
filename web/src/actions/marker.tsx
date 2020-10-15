@@ -126,7 +126,7 @@ export function onMarkerClicked(clicked: any) {
 
       if (clicked.node._type === MarkerType.AREA) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, {
+          setWorldMode(WorldMode.PROJECT_DETAILED, { 
             area: clicked,
             navigate: true,
           })
