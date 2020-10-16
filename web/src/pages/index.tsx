@@ -13,9 +13,7 @@ type PageProps = {
 }
 
 const IndexPage = ({ data }: PageProps) => {
-  return (
-    <SEO title="Home" />
-  )
+  return <SEO title="Home" />
 }
 
 export const query = graphql`
@@ -23,14 +21,35 @@ export const query = graphql`
     allSanityProject {
       edges {
         node {
+          _id
+          _type
           slug {
             current
           }
           title
+          featured
           city
           location {
             lat
             lng
+          }
+          locationGroup {
+            _id
+            title
+            location {
+              lat
+              lng
+            }
+          }
+          poster {
+            asset {
+              url
+            }
+          }
+          video {
+            asset {
+              url
+            }
           }
         }
       }

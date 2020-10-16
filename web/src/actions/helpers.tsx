@@ -6,8 +6,7 @@ import { MarkerType, WorldVersion } from '.'
 export const getProjectFromSlug = (slug: string, projects: any[]) =>
   projects.find(
     (project: any) =>
-    project.node._type === 'project' &&
-    project.node.slug.current === slug
+      project.node._type === 'project' && project.node.slug.current === slug
   )
 
 export const getProjectsFromArea = (projects: any[], area: any) => {
@@ -27,7 +26,9 @@ export const updateLightningPosition = (world: any) => {
 }
 
 export const moveMarkerToCenter = (world: any, duration = 1000) => {
-  const coords = world.active.area ? world.active.area.node.location : world.active.project.node.location
+  const coords = world.active.area
+    ? world.active.area.node.location
+    : world.active.project.node.location
 
   world.ref.current.pointOfView(
     {
@@ -67,16 +68,17 @@ export const setCameraInitialPosition = (world: any, duration = 1500) => {
 export const moveToMarker = (world: any, duration = 1500) => {
   if (!world.active) return
 
-  console.log('world', world)
   const controls = world.ref.current.controls()
   const camera = world.ref.current.camera()
 
-  const coords = world.active.area ? world.active.area.node.location : world.active.project.node.location
+  const coords = world.active.area
+    ? world.active.area.node.location
+    : world.active.project.node.location
   const camPos = camera.position
   const camPosTo = world.ref.current.getCoords(coords.lat - 20, coords.lng, 0.4)
 
   const target = controls.target
-  const targetTo = world.ref.current.getCoords(coords.lat, coords.lng, 0.2)
+  const targetTo = world.ref.current.getCoords(coords.lat, coords.lng, 0.25)
 
   // Move camera to marker
   new TWEEN.Tween({ target: { ...target }, position: { ...camPos } })

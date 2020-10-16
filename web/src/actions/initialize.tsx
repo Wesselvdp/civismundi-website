@@ -27,7 +27,7 @@ function configureScene(world: any) {
   controls.enableZoom = false
 
   // orbit min/maxDistance
-  controls.minDistance = 10
+  controls.minDistance = 40
   controls.maxDistance = Infinity
 
   controls.autoRotateSpeed = 0.3
@@ -161,7 +161,9 @@ export function initializeWorld(
     configureScene(getState().world)
 
     // set world mode from location
-    dispatch(setWorldModeFromLocation(location))
+    dispatch(
+      setWorldModeFromLocation(location, { data: { state: { delay: 0 } } })
+    )
 
     // show/hide markers depending on location
     dispatch(toggleMarkers(false, 0))

@@ -96,9 +96,7 @@ export function onMarkerHovered(hovered: any) {
       }
 
       if (hovered && hovered.node._type === MarkerType.AREA) {
-        return dispatch(
-          setWorldMode(WorldMode.AREA_PREVIEW, { area: hovered })
-        )
+        return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { area: hovered }))
       }
 
       if (hovered === null) {
@@ -117,13 +115,19 @@ export function onMarkerClicked(clicked: any) {
     if (w.version === WorldVersion.DESKTOP) {
       if (clicked.node._type === MarkerType.PROJECT) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, { project: clicked })
+          setWorldMode(WorldMode.PROJECT_DETAILED, {
+            project: clicked,
+            state: { delay: 1500, doAnimation: true },
+          })
         )
       }
 
       if (clicked.node._type === MarkerType.AREA) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, { area: clicked })
+          setWorldMode(WorldMode.PROJECT_DETAILED, {
+            area: clicked,
+            state: { delay: 1500, doAnimation: true },
+          })
         )
       }
     }
@@ -147,9 +151,7 @@ export function onMarkerClicked(clicked: any) {
 
       if (clicked.node._type === MarkerType.AREA) {
         dispatch(toggleFocusedMarker(clicked))
-        return dispatch(
-          setWorldMode(WorldMode.AREA_PREVIEW, { area: clicked })
-        )
+        return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { area: clicked }))
       }
     }
   }

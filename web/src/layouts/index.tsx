@@ -5,7 +5,7 @@ import 'react-circular-progressbar/dist/styles.css'
 
 import { Navigation, GlobeButton } from '../components/general'
 import { WorldContainer } from '../components/world'
-import { SET_READY } from '../actions/types'
+import { SET_READY, SET_FADING } from '../actions/types'
 
 type T = any
 
@@ -22,6 +22,19 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   }, [])
 
   useEffect(() => {
+    let timer
+
+    if (world.fading) {
+      timer = setTimeout(
+        () => dispatch({ type: SET_FADING, fading: false }),
+        1000
+      )
+    }
+
+    return () => clearTimeout()
+  }, [world.fading])
+
+  useEffect(() => {
     if (world.initialized) {
       const elapsed = new Date().getTime() - startTime
 
@@ -36,10 +49,12 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
 
   return (
     <>
-      <WorldContainer location={location} layout={pageContext.layout} />
+      <WorldWrapper className={world.fading && 'fading'}>
+        <WorldContainer location={location} layout={pageContext.layout} />
+      </WorldWrapper>
       <>
         <Navigation location={location} />
-        <Main>{children}</Main>
+        <Main className={world.fading && 'fading'}>{children}</Main>
       </>
       {!world.ready && (
         <Loader className={!loading && 'hidden'}>
@@ -50,7 +65,8 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
           </div>
         </Loader>
       )}
-      {pageContext.layout !== 'home' && pageContext.layout !== 'project-detailed' && <GlobeButton />}
+      {pageContext.layout !== 'home' &&
+        pageContext.layout !== 'project-detailed' && <GlobeButton />}
     </>
   )
 }
@@ -128,18 +144,25 @@ const Loader = styled.div`
     height: 150px;
     width: auto;
   }
-
-  // .circle {
-  //   height: 225px;
-  //   position: absolute;
-  //   top: 50%;
-  //   left: 50%;
-  //   transform: translate(-50%, -50%);
-  // }
 `
 
 const Main = styled.main`
   overflow-x: hidden;
+  opacity: 1;
+  transition: opacity 1s ease;
+
+  &.fading {
+    opacity: 0;
+  }
+`
+
+const WorldWrapper = styled.div`
+  opacity: 1;
+  transition: opacity 1s ease;
+
+  &.fading {
+    opacity: 0;
+  }
 `
 
 export default Layout

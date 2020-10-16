@@ -153,7 +153,11 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="h2"
             className="subtitle"
-            text={lastActive && lastActive.lastShown === MarkerType.PROJECT ? get(world, 'lastActive.project.node.city') : get(world, 'lastActive.area.node.title')}
+            text={
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
+                ? get(world, 'lastActive.project.node.city')
+                : get(world, 'lastActive.area.node.title')
+            }
             appear
           />
           <TextImprov
@@ -162,7 +166,11 @@ const WorldContainer = ({ layout, location }) => {
               world.mode === WorldMode.AREA_PREVIEW
             }
             tag="h1"
-            text={lastActive && lastActive.lastShown === MarkerType.PROJECT ? get(world, 'lastActive.project.node.title') : `${get(world, 'lastActive.area.node.projectCount')} PROJECTS`}
+            text={
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
+                ? get(world, 'lastActive.project.node.title')
+                : `${get(world, 'lastActive.area.node.projectCount')} PROJECTS`
+            }
             appear
           />
           <TextImprov
@@ -171,7 +179,11 @@ const WorldContainer = ({ layout, location }) => {
               world.mode === WorldMode.AREA_PREVIEW
             }
             tag="p"
-            text={lastActive && lastActive.lastShown === MarkerType.PROJECT ? 'TRAVIS SCOTT' : 'CLICK TO EXPLORE'}
+            text={
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
+                ? 'TRAVIS SCOTT'
+                : 'CLICK TO EXPLORE'
+            }
           />
           {world.version === WorldVersion.MOBILE && (
             <FadeAnim
@@ -187,7 +199,12 @@ const WorldContainer = ({ layout, location }) => {
                 buttonStyle="outlined"
                 onClick={() =>
                   dispatch(
-                    setWorldMode(WorldMode.PROJECT_DETAILED, { project: world.mode === WorldMode.AREA_PREVIEW ? world.active.areaProjects[0] : world.active.project })
+                    setWorldMode(WorldMode.PROJECT_DETAILED, {
+                      project:
+                        world.mode === WorldMode.AREA_PREVIEW
+                          ? world.active.areaProjects[0]
+                          : world.active.project,
+                    })
                   )
                 }
               >

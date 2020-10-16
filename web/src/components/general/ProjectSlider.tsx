@@ -14,16 +14,22 @@ const ProjectSlider = ({ show }) => {
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
-    const { active } = w;
-    if (!active || !active.areaProjects || !active.area || !active.project) return
+    const { active } = w
+    if (!active || !active.areaProjects || !active.area || !active.project)
+      return
 
-    const index = Math.max(active.areaProjects.findIndex((p: any) => p.node._id === active.project.node._id), 0)
+    const index = Math.max(
+      active.areaProjects.findIndex(
+        (p: any) => p.node._id === active.project.node._id
+      ),
+      0
+    )
     setActiveIndex(index)
   }, [w.active])
 
   const { active } = w
-  console.log('active', active)
-  if (!active || !active.areaProjects || !active.area || !active.project) return null
+  if (!active || !active.areaProjects || !active.area || !active.project)
+    return null
 
   return (
     <Container className={show && 'show'}>
@@ -31,8 +37,12 @@ const ProjectSlider = ({ show }) => {
         <Thumbnail
           className={activeIndex === i && 'active'}
           onClick={() =>
+            activeIndex !== i &&
             dispatch(
-              setWorldMode(WorldMode.PROJECT_DETAILED, { project })
+              setWorldMode(WorldMode.PROJECT_DETAILED, {
+                project,
+                state: { withAnimation: false },
+              })
             )
           }
           key={project.node._id}

@@ -9,18 +9,15 @@ import {
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_BACKGROUND,
   MODE_GO_AREA_PREVIEW,
-  SET_SCREEN_COORDS,
   SET_LAST_ACTIVE,
   SET_VIDEO_URLS,
-  SET_AREA_PROJECTS,
-  SET_ACTIVE
+  SET_ACTIVE,
+  SET_FADING,
 } from './types'
 
 import { toggleMarkers } from './marker'
 import {
-  getProjectsFromArea,
   setCameraInitialPosition,
-  getMarkerFromPath,
   moveToMarker,
   moveMarkerToCenter,
   getProjectFromSlug,
@@ -98,15 +95,26 @@ function navigateBackground(data: any = {}) {
 function setActiveObjectFromProject(project: any) {
   return function action(dispatch: any, getState: any) {
     if (!project) return
+    if (project.node._type === 'location') {
+      return dispatch(setActiveObjectFromArea(project))
+    }
 
     const w = getState().world
 
     const active: any = { project }
 
-    if (project.node.locationGroup !== null) {
+    if (project.node.locationGroup) {
       // Set area, areaProjects
-      active.area = w.areas.find((area: any) => area.node._id === project.node.locationGroup._id)
-      active.areaProjects = w.projects.filter((proj: any) => proj.node.locationGroup && proj.node.locationGroup._id === active.area.node._id)
+      console.log('project', project)
+      active.area = w.areas.find((area: any) => {
+        console.log('area', area)
+        return area.node._id === project.node.locationGroup._id
+      })
+      active.areaProjects = w.projects.filter(
+        (proj: any) =>
+          proj.node.locationGroup &&
+          proj.node.locationGroup._id === active.area.node._id
+      )
     }
 
     return dispatch({ type: SET_ACTIVE, active })
@@ -120,7 +128,11 @@ function setActiveObjectFromArea(area: any) {
     const w = getState().world
 
     const active: any = { area }
-    active.areaProjects = w.projects.filter((proj: any) => proj.node.locationGroup && proj.node.locationGroup._id === active.area.node._id)
+    active.areaProjects = w.projects.filter(
+      (proj: any) =>
+        proj.node.locationGroup &&
+        proj.node.locationGroup._id === active.area.node._id
+    )
 
     return dispatch({ type: SET_ACTIVE, active })
   }
@@ -133,34 +145,57 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     if (!data.project && !data.area) return
 
     if (!data.project) {
-      data.project = w.projects.find((proj: any) => proj.node.locationGroup && proj.node.locationGroup._id === data.area.node._id)
+      data.project = w.projects.find(
+        (proj: any) =>
+          proj.node.locationGroup &&
+          proj.node.locationGroup._id === data.area.node._id
+      )
     }
 
     if (data.skipInTransition)
       dispatch({ type: SET_SKIP_TRANSITION, payload: true })
 
-    navigate(`/projects/${get(data, 'project.node.slug.current')}`)
+    const state = data.state || {}
+    if (!state.doAnimation) {
+      dispatch({ type: SET_FADING, fading: true })
+    }
 
-    // set active
-    await dispatch(setActiveObjectFromProject(data.project))
+    setTimeout(
+      async () => {
+        navigate(`/projects/${get(data, 'project.node.slug.current')}`, {
+          state,
+        })
 
-    // update videos
-    const videoUrl = get(data, 'project.node.video.asset.url')
-    videoUrl && (await dispatch({ type: SET_VIDEO_URLS, urls: [videoUrl] }))
+        // set active
+        await dispatch(setActiveObjectFromProject(data.project))
 
-    // dispatch mode change
-    await dispatch({ type: MODE_GO_PROJECT_DETAILED })
+        // update videos
+        const videoUrl = get(data, 'project.node.video.asset.url')
+        videoUrl && (await dispatch({ type: SET_VIDEO_URLS, urls: [videoUrl] }))
 
-    await dispatch({ type: SET_LAST_ACTIVE, lastShown: getState().world.lastActive.lastShown || MarkerType.PROJECT })
+        // dispatch mode change
+        await dispatch({ type: MODE_GO_PROJECT_DETAILED })
 
-    // toggle markers
-    const mDuration = dispatch(toggleMarkers(false))
+        await dispatch({
+          type: SET_LAST_ACTIVE,
+          lastShown:
+            getState().world.lastActive.lastShown || MarkerType.PROJECT,
+        })
 
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_DETAILED)
-      moveToMarker(getState().world, !data.skipInTransition ? duration : 0)
-    }, Math.max(mDuration - 250, 0))
+        // toggle markers
+        const mDuration = dispatch(toggleMarkers(false))
+
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          setControlsFromMode(
+            w.ref.current.controls(),
+            WorldMode.PROJECT_DETAILED
+          )
+          moveToMarker(getState().world, !data.skipInTransition ? duration : 0)
+        }, Math.max(mDuration - 250, 0))
+      },
+      state.doAnimation ? 0 : 750
+    )
   }
 }
 
@@ -168,7 +203,7 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
   return async function action(dispatch: any, getState: any) {
     if (!data.area) {
       console.log('AREA SHOULD BE PASSED')
-      return;
+      return
     }
 
     let w = getState().world
@@ -179,7 +214,9 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
     w = getState().world
 
     // update videos
-    const videoUrls = w.active.areaProjects.map((p: any) => get(p, 'node.video.asset.url'))
+    const videoUrls = w.active.areaProjects.map((p: any) =>
+      get(p, 'node.video.asset.url')
+    )
     videoUrls.length &&
       (await dispatch({ type: SET_VIDEO_URLS, urls: videoUrls }))
 
@@ -199,8 +236,8 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
 function navigateProjectPreview(data: any = {}, duration = 1500) {
   return async function action(dispatch: any, getState: any) {
     if (!data.project) {
-      console.log('PROJECT SHOULD BE SUPPLIED');
-      return;
+      console.log('PROJECT SHOULD BE SUPPLIED')
+      return
     }
 
     let w = getState().world
