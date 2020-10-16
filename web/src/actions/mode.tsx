@@ -12,7 +12,8 @@ import {
   SET_LAST_ACTIVE,
   SET_VIDEO_URLS,
   SET_ACTIVE,
-  SET_FADING,
+  SET_FADING_PAGE,
+  SET_FADING_VIDEO,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -157,7 +158,9 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
 
     const state = data.state || {}
     if (!state.doAnimation) {
-      dispatch({ type: SET_FADING, fading: true })
+      state.fadeVideo
+        ? dispatch({ type: SET_FADING_VIDEO, fading: true })
+        : dispatch({ type: SET_FADING_PAGE, fading: true })
     }
 
     setTimeout(

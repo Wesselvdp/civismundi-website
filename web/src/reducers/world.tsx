@@ -18,7 +18,8 @@ import {
   SET_LAST_ACTIVE,
   SET_VIDEO_URLS,
   SET_ACTIVE,
-  SET_FADING,
+  SET_FADING_PAGE,
+  SET_FADING_VIDEO,
 } from '../actions/types'
 
 const initialState = {
@@ -39,7 +40,8 @@ const initialState = {
   clouds: null,
   lightning: null,
   videos: [],
-  fading: false,
+  fadingPage: false,
+  fadingVideo: false,
 }
 
 // active object
@@ -142,8 +144,12 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, videos: action.urls }
     }
 
-    case SET_FADING: {
-      return { ...state, fading: action.fading }
+    case SET_FADING_PAGE: {
+      return { ...state, fadingPage: action.fading }
+    }
+
+    case SET_FADING_VIDEO: {
+      return { ...state, fadingVideo: action.fading }
     }
 
     default:

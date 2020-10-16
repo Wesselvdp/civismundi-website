@@ -41,7 +41,7 @@ const ProjectSlider = ({ show }) => {
             dispatch(
               setWorldMode(WorldMode.PROJECT_DETAILED, {
                 project,
-                state: { withAnimation: false },
+                state: { withAnimation: false, fadeVideo: true },
               })
             )
           }

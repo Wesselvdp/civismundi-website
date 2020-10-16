@@ -35,20 +35,29 @@ const ProjectDetailedContainer = ({ location, data }) => {
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
+  const [fading, setFading] = useState(true)
 
   useEffect(() => {
     let timer
 
-    if (world.ready && !world.fading) {
-      timer = setTimeout(() => {
-        setState(ProjectState.SUBTITLE_IN)
-      }, get(location, 'state.delay', 0))
+    if (world.ready && location.state) {
+      if (location.state.doAnimation) {
+        timer = setTimeout(() => {
+          setState(ProjectState.SUBTITLE_IN)
+        }, get(location, 'state.delay', 0))
+      } else {
+        setState(ProjectState.SLIDER_IN)
+      }
     }
 
     return () => {
       clearTimeout(timer)
     }
-  }, [world.ready, world.fading])
+  }, [world.ready, location])
+
+  useEffect(() => {
+    setFading(world.fadingPage || world.fadingVideo)
+  }, [world.fadingPage, world.fadingVideo])
 
   useEffect(() => {
     if (state === ProjectState.VIDEO_BUTTON_IN) {
@@ -58,8 +67,13 @@ const ProjectDetailedContainer = ({ location, data }) => {
     }
   }, [state])
 
+  const getProjectIndex = () =>
+    world.active.areaProjects.findIndex(
+      (p: any) => p.node._id === world.active.project.node._id
+    ) || 0
+
   const locState = location.state || {}
- 
+
   return (
     <>
       <ModalWrapper className={videoOpen ? 'open' : ''}>
@@ -77,48 +91,72 @@ const ProjectDetailedContainer = ({ location, data }) => {
           onClick={() => openVideo(false)}
         />
       </ModalWrapper>
-      <StyledMast className={locState.doAnimation ? 'instant' : 'fade-in'}>
+      <StyledMast>
         <Content>
           <div className="upper">
-            <TextAnim
-              in={!world.fading && state >= ProjectState.SUBTITLE_IN}
-              timeout={{ enter: 300 }}
-              onEntered={() => setState(ProjectState.TITLE_IN)}
-              className="subtitle"
-              tag="h2"
-              text="Video direction"
-            />
-            <TextAnim
-              in={!world.fading && state >= ProjectState.TITLE_IN}
-              timeout={{ enter: 300 }}
-              onEntered={() => setState(ProjectState.PARAGRAPH_IN)}
-              className="h2"
-              tag="h1"
-              text={title}
-            />
-            <TextAnim
-              in={!world.fading && state >= ProjectState.PARAGRAPH_IN}
-              timeout={{ enter: 600 }}
-              onEntered={() =>
-                locState.doAnimation && setState(ProjectState.VIDEO_BUTTON_IN)
-              }
-              tag="p"
-              text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
-              letterSpeedIn={0.01}
-              singleLine={false}
-            />
+            {locState.doAnimation ? (
+              <div className={`text-content ${fading && 'fading'}`}>
+                <TextAnim
+                  in={state >= ProjectState.SUBTITLE_IN}
+                  timeout={{ enter: 300 }}
+                  onEntered={() =>
+                    locState.doAnimation && setState(ProjectState.TITLE_IN)
+                  }
+                  className="subtitle"
+                  tag="h2"
+                  text="Video direction"
+                />
+                <TextAnim
+                  in={state >= ProjectState.TITLE_IN}
+                  timeout={{ enter: 300 }}
+                  onEntered={() =>
+                    locState.doAnimation && setState(ProjectState.PARAGRAPH_IN)
+                  }
+                  className="h2"
+                  tag="h1"
+                  text={title}
+                />
+                <TextAnim
+                  in={state >= ProjectState.PARAGRAPH_IN}
+                  timeout={{ enter: 600 }}
+                  onEntered={() =>
+                    locState.doAnimation &&
+                    setState(ProjectState.VIDEO_BUTTON_IN)
+                  }
+                  tag="p"
+                  text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
+                  letterSpeedIn={0.01}
+                  singleLine={false}
+                />
+              </div>
+            ) : (
+              <div className={`text-content ${fading && 'fading'}`}>
+                <h2 className="subtitle">Video direction</h2>
+                <h1 className="h2">{title}</h1>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                  do eiusmod tempor
+                </p>
+              </div>
+            )}
             {(!locState.doAnimation ||
               state >= ProjectState.VIDEO_BUTTON_IN) && (
               <>
                 <div className="button-container">
                   {world.active.area && (
                     <PrevSVG
+                      style={{
+                        visibility:
+                          getProjectIndex() > 0 ? 'visible' : 'hidden',
+                      }}
                       className={locState.doAnimation && 'with-anim'}
                       onClick={() =>
+                        !fading &&
                         dispatch(
                           setWorldMode(WorldMode.PROJECT_DETAILED, {
-                            marker: world.areaProjects[1],
-                            navigate: true,
+                            project:
+                              world.active.areaProjects[getProjectIndex() - 1],
+                            state: { fadeVideo: true },
                           })
                         )
                       }
@@ -133,11 +171,23 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   {world.active.area && (
                     <NextSVG
                       className={locState.doAnimation && 'with-anim'}
+                      style={{
+                        visibility:
+                          getProjectIndex() <
+                          world.active.areaProjects.length - 1
+                            ? 'visible'
+                            : 'hidden',
+                      }}
                       onClick={() =>
                         dispatch(
-                          setWorldMode(WorldMode.PROJECT_DETAILED, {
-                            project: world.active.areaProjects[2],
-                          })
+                          !fading &&
+                            setWorldMode(WorldMode.PROJECT_DETAILED, {
+                              project:
+                                world.active.areaProjects[
+                                  getProjectIndex() + 1
+                                ],
+                              state: { fadeVideo: true },
+                            })
                         )
                       }
                     />
@@ -146,6 +196,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 <GlobeIcon
                   className={locState.doAnimation && 'with-anim'}
                   onClick={() =>
+                    !fading &&
                     dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
                   }
                 >
@@ -212,6 +263,10 @@ const SliderWrapper = styled.div`
   right: 0;
   width: 100%;
   height: auto;
+
+  @media ${breakpoints.phoneOnly} {
+    bottom: 130px;
+  }
 `
 
 const svgNavigators = keyframes`
@@ -265,6 +320,15 @@ const Content = styled.div`
 
   .upper {
     padding: 0 15px;
+
+    .text-content {
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+
+      &.fading {
+        opacity: 0;
+      }
+    }
 
     @media ${breakpoints.tabletLandscapeDown} {
       padding: 0 15px;

@@ -204,6 +204,7 @@ const WorldContainer = ({ layout, location }) => {
                         world.mode === WorldMode.AREA_PREVIEW
                           ? world.active.areaProjects[0]
                           : world.active.project,
+                      state: { doAnimation: true, delay: 1500 },
                     })
                   )
                 }

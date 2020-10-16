@@ -5,7 +5,7 @@ import 'react-circular-progressbar/dist/styles.css'
 
 import { Navigation, GlobeButton } from '../components/general'
 import { WorldContainer } from '../components/world'
-import { SET_READY, SET_FADING } from '../actions/types'
+import { SET_READY, SET_FADING_PAGE } from '../actions/types'
 
 type T = any
 
@@ -24,15 +24,15 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   useEffect(() => {
     let timer
 
-    if (world.fading) {
+    if (world.fadingPage) {
       timer = setTimeout(
-        () => dispatch({ type: SET_FADING, fading: false }),
+        () => dispatch({ type: SET_FADING_PAGE, fading: false }),
         1000
       )
     }
 
     return () => clearTimeout()
-  }, [world.fading])
+  }, [world.fadingPage])
 
   useEffect(() => {
     if (world.initialized) {
@@ -49,12 +49,12 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
 
   return (
     <>
-      <WorldWrapper className={world.fading && 'fading'}>
+      <WorldWrapper className={world.fadingPage && 'fading'}>
         <WorldContainer location={location} layout={pageContext.layout} />
       </WorldWrapper>
       <>
         <Navigation location={location} />
-        <Main className={world.fading && 'fading'}>{children}</Main>
+        <Main className={world.fadingPage && 'fading'}>{children}</Main>
       </>
       {!world.ready && (
         <Loader className={!loading && 'hidden'}>
