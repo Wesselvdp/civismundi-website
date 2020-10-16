@@ -8,38 +8,18 @@ import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 
 const ProjectSlider = ({ show }) => {
-  const w = useSelector((state: any) => state.world)
+  const active = useSelector((state: any) => state.world.active || {})
   const dispatch = useDispatch()
 
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  useEffect(() => {
-    const { active } = w
-    if (!active || !active.areaProjects || !active.area || !active.project)
-      return
-
-    const index = active.areaProjects.findIndex(
-      (p: any) => p.node._id === active.project.node._id
-    )
-
-    console.log('index', index)
-
-    if (index >= 0) {
-      setActiveIndex(index)
-    }
-  }, [w.active])
-
-  const { active } = w
-  if (!active || !active.areaProjects || !active.area || !active.project)
-    return null
+  if (!active.project || !active.area) return null
 
   return (
     <Container className={show && 'show'}>
       {active.areaProjects.map((project: any, i: any) => (
         <Thumbnail
-          className={activeIndex === i && 'active'}
+          className={active.projectIndex === i && 'active'}
           onClick={() =>
-            activeIndex !== i &&
+            active.projectIndex !== i &&
             dispatch(
               setWorldMode(WorldMode.PROJECT_DETAILED, {
                 project,

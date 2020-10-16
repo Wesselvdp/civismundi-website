@@ -112,7 +112,10 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case SET_LAST_ACTIVE: {
-      return { ...state, lastActive: { ...state.active, lastShown: action.lastShown } }
+      return {
+        ...state,
+        lastActive: { ...state.active, lastShown: action.lastShown },
+      }
     }
 
     // Markers

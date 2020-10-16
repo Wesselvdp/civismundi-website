@@ -10,21 +10,20 @@ import { SET_FADING_VIDEO } from '../../actions/types'
 const VideoBackground = () => {
   const dispatch = useDispatch()
   const world = useSelector((state: any) => state.world)
+
   const videoRef = useRef(null)
+  const [videoUrl, setVideoUrl] = useState('')
 
   useEffect(() => {
-    if (
-      [
-        WorldMode.PROJECT_PREVIEW,
-        WorldMode.PROJECT_DETAILED,
-        WorldMode.AREA_PREVIEW,
-      ].includes(world.mode)
-    ) {
-      videoRef.current && videoRef.current.play()
-    } else {
-      videoRef.current && videoRef.current.pause()
+    const url = world.active.project
+      ? get(world, 'active.project.node.video.asset.url')
+      : get(world, 'active.areaProjects[0].node.video.asset.url')
+
+    if (url && url !== videoUrl) {
+      setVideoUrl(url)
+      setTimeout(() => videoRef.current && videoRef.current.play(), 100)
     }
-  }, [world.mode])
+  }, [world.active])
 
   useEffect(() => {
     let timer
@@ -59,25 +58,14 @@ const VideoBackground = () => {
       <Transitioner>
         <video
           ref={videoRef}
-          key={
-            active.project
-              ? get(world, 'active.project.node.video.asset.url')
-              : get(world, 'active.areaProjects[0].node.video.asset.url')
-          }
+          key={videoUrl}
           id="videoBG"
           playsInline
           autoPlay
           muted
           loop
         >
-          <source
-            src={
-              active.project
-                ? get(world, 'active.project.node.video.asset.url')
-                : get(world, 'active.areaProjects[0].node.video.asset.url')
-            }
-            type="video/mp4"
-          />
+          <source src={videoUrl} type="video/mp4" />
         </video>
       </Transitioner>
     </Wrapper>

@@ -106,15 +106,16 @@ function setActiveObjectFromProject(project: any) {
 
     if (project.node.locationGroup) {
       // Set area, areaProjects
-      console.log('project', project)
-      active.area = w.areas.find((area: any) => {
-        console.log('area', area)
-        return area.node._id === project.node.locationGroup._id
-      })
+      active.area = w.areas.find(
+        (area: any) => area.node._id === project.node.locationGroup._id
+      )
       active.areaProjects = w.projects.filter(
         (proj: any) =>
           proj.node.locationGroup &&
           proj.node.locationGroup._id === active.area.node._id
+      )
+      active.projectIndex = active.areaProjects.findIndex(
+        (proj: any) => proj.node._id === project.node._id
       )
     }
 
@@ -134,6 +135,7 @@ function setActiveObjectFromArea(area: any) {
         proj.node.locationGroup &&
         proj.node.locationGroup._id === active.area.node._id
     )
+    active.projectIndex = 0
 
     return dispatch({ type: SET_ACTIVE, active })
   }
