@@ -30,7 +30,7 @@ export enum ProjectState {
 }
 
 const ProjectDetailedContainer = ({ location, data }) => {
-  const { title, id, _rawOverview } = data.sanityProject
+  const { title, id, locationGroup, _rawOverview } = data.sanityProject
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
@@ -104,7 +104,12 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   }
                   className="subtitle"
                   tag="h2"
-                  text="Video direction"
+                  text={
+                    world.active.project &&
+                    world.active.project.node.locationGroup
+                      ? get(world, 'active.project.node.locationGroup.title')
+                      : get(world, 'active.project.node.city')
+                  }
                 />
                 <TextAnim
                   in={state >= ProjectState.TITLE_IN}
@@ -114,7 +119,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   }
                   className="h2"
                   tag="h1"
-                  text={title}
+                  text={get(world, 'active.project.node.title')}
                 />
                 <TextAnim
                   in={state >= ProjectState.PARAGRAPH_IN}
@@ -131,8 +136,15 @@ const ProjectDetailedContainer = ({ location, data }) => {
               </div>
             ) : (
               <div className={`text-content ${fading && 'fading'}`}>
-                <h2 className="subtitle">Video direction</h2>
-                <h1 className="h2">{title}</h1>
+                <h2 className="subtitle">
+                  {world.active.project &&
+                  world.active.project.node.locationGroup
+                    ? get(world, 'active.project.node.locationGroup.title')
+                    : get(world, 'active.project.node.city')}
+                </h2>
+                <h1 className="h2">
+                  {get(world, 'active.project.node.title')}
+                </h1>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
                   do eiusmod tempor
