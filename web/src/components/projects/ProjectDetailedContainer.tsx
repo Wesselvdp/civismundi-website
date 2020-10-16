@@ -59,7 +59,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
   }, [state])
 
   const locState = location.state || {}
-
+ 
   return (
     <>
       <ModalWrapper className={videoOpen ? 'open' : ''}>
