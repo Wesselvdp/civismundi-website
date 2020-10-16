@@ -127,6 +127,7 @@ const WorldContainer = ({ layout, location }) => {
     }
   `)
 
+  const { lastActive } = world
   return (
     <Page className={layout}>
       <>
@@ -152,14 +153,11 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="h2"
             className="subtitle"
-            text={get(
-              world,
-              `lastActive.node.${
-                get(world, 'lastActive.node._type') === MarkerType.PROJECT
-                  ? 'city'
-                  : 'title'
-              }`
-            )}
+            text={
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
+                ? get(world, 'lastActive.project.node.city')
+                : get(world, 'lastActive.area.node.title')
+            }
             appear
           />
           <TextImprov
@@ -168,18 +166,11 @@ const WorldContainer = ({ layout, location }) => {
               world.mode === WorldMode.AREA_PREVIEW
             }
             tag="h1"
-            text={`${get(
-              world,
-              `lastActive.node.${
-                get(world, 'lastActive.node._type') === MarkerType.PROJECT
-                  ? 'title'
-                  : 'projectCount'
-              }`
-            )} ${
-              get(world, 'lastActive.node._type') === MarkerType.AREA
-                ? 'PROJECTS'
-                : ''
-            }`}
+            text={
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
+                ? get(world, 'lastActive.project.node.title')
+                : `${get(world, 'lastActive.area.node.projectCount')} PROJECTS`
+            }
             appear
           />
           <TextImprov
@@ -189,7 +180,7 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="p"
             text={
-              get(world, 'lastActive.node._type') === MarkerType.PROJECT
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
                 ? 'TRAVIS SCOTT'
                 : 'CLICK TO EXPLORE'
             }
@@ -209,12 +200,10 @@ const WorldContainer = ({ layout, location }) => {
                 onClick={() =>
                   dispatch(
                     setWorldMode(WorldMode.PROJECT_DETAILED, {
-                      marker: world.projectActive,
-                      area:
+                      project:
                         world.mode === WorldMode.AREA_PREVIEW
-                          ? world.areaActive
-                          : null,
-                      navigate: true,
+                          ? world.active.areaProjects[0]
+                          : world.active.project,
                     })
                   )
                 }

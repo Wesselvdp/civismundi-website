@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, Element } from 'react-scroll'
 import styled, { keyframes } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
+import { get } from 'lodash'
 
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
@@ -14,7 +15,7 @@ import GlobeSVG from '../../assets/globe-icon.svg'
 
 // Components
 import { ProjectList } from '@components/projects'
-import { TextAnim } from '@components/animations'
+import { TextAnim, TextImprov } from '@components/animations'
 import { GlobeButton, ProjectSlider } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
@@ -28,18 +29,30 @@ export enum ProjectState {
   SLIDER_IN = 6,
 }
 
-const ProjectDetailedContainer = ({ data }) => {
-  const { title, id, locationGroup, _rawOverview } = data.sanityProject
+const ProjectDetailedContainer = ({ location, data }) => {
+  const { title, id, _rawOverview } = data.sanityProject
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
 
   useEffect(() => {
-    if (world.ready) {
-      setState(ProjectState.SUBTITLE_IN)
+    let timer
+
+    if (world.ready && !world.fading && location) {
+      const { state } = location
+
+      if (state.doAnimation) {
+        timer = setTimeout(() => {
+          setState(ProjectState.SUBTITLE_IN)
+        }, get(location, 'state.delay', 0))
+      }
     }
-  }, [world.ready])
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [world.ready, world.fading])
 
   useEffect(() => {
     if (state === ProjectState.VIDEO_BUTTON_IN) {
@@ -66,68 +79,109 @@ const ProjectDetailedContainer = ({ data }) => {
           onClick={() => openVideo(false)}
         />
       </ModalWrapper>
-      <StyledMast>
+      <StyledMast
+        className={location.state.doAnimation ? 'instant' : 'fade-in'}
+      >
         <Content>
           <div className="upper">
-            <TextAnim
-              inProp={state >= ProjectState.SUBTITLE_IN}
+            <TextImprov
+              in={
+                !world.fading &&
+                (!location.state.doAnimation ||
+                  state >= ProjectState.SUBTITLE_IN)
+              }
               timeout={{ enter: 300 }}
-              onEntered={() => setState(ProjectState.TITLE_IN)}
+              onEntered={() =>
+                location.state.doAnimation && setState(ProjectState.TITLE_IN)
+              }
               className="subtitle"
               tag="h2"
               text="Video direction"
             />
-            <TextAnim
-              inProp={state >= ProjectState.TITLE_IN}
+            <TextImprov
+              in={
+                !world.fading &&
+                (!location.state.doAnimation || state >= ProjectState.TITLE_IN)
+              }
               timeout={{ enter: 300 }}
-              onEntered={() => setState(ProjectState.PARAGRAPH_IN)}
+              onEntered={() =>
+                location.state.doAnimation &&
+                setState(ProjectState.PARAGRAPH_IN)
+              }
               className="h2"
               tag="h1"
               text={title}
             />
             <TextAnim
-              inProp={state >= ProjectState.PARAGRAPH_IN}
+              in={
+                !world.fading &&
+                (!location.state.doAnimation ||
+                  state >= ProjectState.PARAGRAPH_IN)
+              }
               timeout={{ enter: 600 }}
-              onEntered={() => setState(ProjectState.VIDEO_BUTTON_IN)}
+              onEntered={() =>
+                location.state.doAnimation &&
+                setState(ProjectState.VIDEO_BUTTON_IN)
+              }
               tag="p"
               text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
               letterSpeedIn={0.01}
               singleLine={false}
             />
-            {world.ready && state >= ProjectState.VIDEO_BUTTON_IN && (
+            {(!location.state.doAnimation ||
+              state >= ProjectState.VIDEO_BUTTON_IN) && (
               <>
                 <div className="button-container">
-                  <PrevSVG
-                    onClick={() =>
-                      dispatch(
-                        setWorldMode(WorldMode.PROJECT_DETAILED, {
-                          marker: world.areaProjects[1],
-                          navigate: true,
-                        })
-                      )
-                    }
-                  />
+                  {world.active.area && (
+                    <PrevSVG
+                      className={
+                        location.state &&
+                        location.state.doAnimation &&
+                        'with-anim'
+                      }
+                      onClick={() =>
+                        dispatch(
+                          setWorldMode(WorldMode.PROJECT_DETAILED, {
+                            marker: world.areaProjects[1],
+                            navigate: true,
+                          })
+                        )
+                      }
+                    />
+                  )}
                   <PlayButton>
-                    <PlaySVG onClick={() => openVideo(true)} />
+                    <PlaySVG
+                      className={
+                        location.state &&
+                        location.state.doAnimation &&
+                        'with-anim'
+                      }
+                      onClick={() => openVideo(true)}
+                    />
                   </PlayButton>
-                  <NextSVG
-                    onClick={() =>
-                      dispatch(
-                        setWorldMode(WorldMode.PROJECT_DETAILED, {
-                          marker: world.areaProjects[2],
-                          navigate: true,
-                        })
-                      )
-                    }
-                  />
+                  {world.active.area && (
+                    <NextSVG
+                      className={
+                        location.state &&
+                        location.state.doAnimation &&
+                        'with-anim'
+                      }
+                      onClick={() =>
+                        dispatch(
+                          setWorldMode(WorldMode.PROJECT_DETAILED, {
+                            project: world.active.areaProjects[2],
+                          })
+                        )
+                      }
+                    />
+                  )}
                 </div>
                 <GlobeIcon
+                  className={
+                    location.state && location.state.doAnimation && 'with-anim'
+                  }
                   onClick={() =>
-                    dispatch(
-                      setWorldMode(WorldMode.PROJECTS_EXPLORE, {
-                        navigate: true,
-                      })
-                    )
+                    dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
                   }
                 >
                   <img src="/globe-icon.svg" />
@@ -136,18 +190,16 @@ const ProjectDetailedContainer = ({ data }) => {
             )}
           </div>
         </Content>
-        <SliderWrapper>
-          <ProjectSlider
-            className="project-slider"
-            projects={world.areaProjects}
-            show={
-              locationGroup &&
-              world.areaProjects &&
-              state === ProjectState.SLIDER_IN
-            }
-            activeProject={data.sanityProject}
-          />
-        </SliderWrapper>
+        {world.active.area && (
+          <SliderWrapper>
+            <ProjectSlider
+              className="project-slider"
+              show={
+                !location.state.doAnimation || state === ProjectState.SLIDER_IN
+              }
+            />
+          </SliderWrapper>
+        )}
       </StyledMast>
 
       {/* Project content */}
@@ -181,6 +233,7 @@ const ProjectDetailedContainer = ({ data }) => {
           projects={data.allSanityProject}
           limit={2}
           skipTransition
+          doAnimation={false}
         />
       </Element>
     </>
@@ -216,9 +269,14 @@ const GlobeIcon = styled.div`
   width: 56px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  opacity: 0;
-  animation: ${svgNavigators} 1s forwards;
-  animation-delay: 1s;
+  opacity: 1;
+
+  &.with-anim {
+    opacity: 0;
+    animation: ${svgNavigators} 1s forwards;
+    animation-delay: 1s;
+  }
+
   cursor: pointer;
 
   img {
@@ -240,6 +298,7 @@ const Content = styled.div`
   align-items: flex-end;
   padding-bottom: 100px;
   justify-content: center;
+  min-height: 525px;
 
   .upper {
     padding: 0 15px;
@@ -265,6 +324,10 @@ const Content = styled.div`
       align-items: center;
 
       & > svg {
+        cursor: pointer;
+      }
+
+      & > svg.with-anim {
         opacity: 0;
         animation: ${svgNavigators} 1s forwards;
         animation-delay: 1s;
@@ -301,6 +364,7 @@ const Content = styled.div`
 const StyledMast = styled.div`
   position: relative;
   height: 100vh;
+  opacity: 1;
 `
 
 const ModalWrapper = styled.div`
@@ -385,17 +449,25 @@ const PlayButton = styled.div`
       cursor: pointer;
     }
 
-    circle {
-      stroke-dashoffset: 400;
-      opacity: 0;
-      animation: ${svgAnim} 2s forwards;
+    circle,
+    path {
+      stroke-dashoffset: 0;
+      opacity: 1;
     }
 
-    path {
-      stroke-dashoffset: 400;
-      opacity: 0;
-      animation: ${svgAnim} 3s forwards;
-      animation-delay: 0.75s;
+    &.with-anim {
+      circle {
+        stroke-dashoffset: 400;
+        opacity: 0;
+        animation: ${svgAnim} 2s forwards;
+      }
+
+      path {
+        stroke-dashoffset: 400;
+        opacity: 0;
+        animation: ${svgAnim} 3s forwards;
+        animation-delay: 0.75s;
+      }
     }
   }
 `

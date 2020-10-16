@@ -1,47 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import { get } from 'lodash'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 
-const ProjectSlider = ({ projects, show, activeProject }) => {
-  const [activeIndex, setActiveIndex] = useState(0)
+const ProjectSlider = ({ show }) => {
+  const w = useSelector((state: any) => state.world)
   const dispatch = useDispatch()
 
+  const [activeIndex, setActiveIndex] = useState(0)
+
   useEffect(() => {
-    let index =
-      projects &&
-      projects.findIndex((p: any) => p.node._id === activeProject._id)
+    const { active } = w
+    if (!active || !active.areaProjects || !active.area || !active.project)
+      return
 
-    if (index < 0) {
-      index = 0
-    }
-
+    const index = Math.max(
+      active.areaProjects.findIndex(
+        (p: any) => p.node._id === active.project.node._id
+      ),
+      0
+    )
     setActiveIndex(index)
-  }, [projects, activeProject])
+  }, [w.active])
+
+  const { active } = w
+  if (!active || !active.areaProjects || !active.area || !active.project)
+    return null
 
   return (
     <Container className={show && 'show'}>
-      {projects &&
-        projects.map((p: any, i: any) => (
-          <Thumbnail
-            className={activeIndex === i && 'active'}
-            onClick={() =>
-              dispatch(
-                setWorldMode(WorldMode.PROJECT_DETAILED, {
-                  marker: projects[i],
-                })
-              )
-            }
-            key={p.node._id}
-            style={{
-              backgroundImage: `url(${get(p, 'node.poster.asset.url')})`,
-            }}
-          />
-        ))}
+      {active.areaProjects.map((project: any, i: any) => (
+        <Thumbnail
+          className={activeIndex === i && 'active'}
+          onClick={() =>
+            activeIndex !== i &&
+            dispatch(
+              setWorldMode(WorldMode.PROJECT_DETAILED, {
+                project,
+                state: { withAnimation: false },
+              })
+            )
+          }
+          key={project.node._id}
+          style={{
+            backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
+          }}
+        />
+      ))}
     </Container>
   )
 }

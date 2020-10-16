@@ -13,13 +13,11 @@ import localize from '@utils/localize'
 type PageProps = {
   data: {
     allSanityProject: AllProject
-  },
+  }
   transitionStatus: string
 }
 
-const options = [
-  { title: 'All directors', value: 'all' }
-]
+const options = [{ title: 'All directors', value: 'all' }]
 
 const perPage = 4
 
@@ -30,15 +28,18 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
   const [heroFinished, setHeroFinished] = useState(false)
 
   useEffect(() => {
+    console.log(data)
     const directorsUnique = uniqBy(
-      [].concat(...data.allSanityProject.edges.map(
-        p => p.node.director.map(
-          director => ({ 
+      [].concat(
+        ...data.allSanityProject.edges.map((p) =>
+          p.node.director.map((director) => ({
             title: director.name,
-            value: director.id 
-          })
+            value: director.id,
+          }))
         )
-      )), director => director.value)
+      ),
+      (director) => director.value
+    )
 
     setSelectOptions([...options, ...directorsUnique])
   }, [])
@@ -46,7 +47,6 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
   useEffect(() => {
     setPage(0)
   }, [director])
-
 
   return (
     <>
@@ -96,8 +96,30 @@ export const query = graphql`
     allSanityProject {
       edges {
         node {
+          _id
+          _type
+          id
           slug {
             current
+          }
+          director {
+            name
+            id
+          }
+          title
+          featured
+          city
+          location {
+            lat
+            lng
+          }
+          locationGroup {
+            _id
+            title
+            location {
+              lat
+              lng
+            }
           }
           poster {
             asset {
@@ -109,16 +131,6 @@ export const query = graphql`
               url
             }
           }
-          director {
-            name
-            id
-          }
-          location {
-            lat
-            lng
-          }
-          title
-          id
         }
       }
     }

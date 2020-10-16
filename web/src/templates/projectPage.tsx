@@ -14,13 +14,13 @@ export enum ProjectState {
   VIDEO_BUTTON_IN = 5
 } 
 
-const ProjectPageTemplate= ({ data }) => {
+const ProjectPageTemplate= ({ location, data }) => {
   const { title } = data.sanityProject
 
   return (
     <>
       <SEO title={`${title} | Projects`} />
-      <ProjectDetailedContainer data={data} />
+      <ProjectDetailedContainer data={data} location={location} />
     </>
   )
 }
@@ -52,14 +52,25 @@ export const query = graphql`
     allSanityProject {
       edges {
         node {
+          _id
+          _type
           slug {
             current
           }
           title
-          id
+          featured
+          city
           location {
             lat
             lng
+          }
+          locationGroup {
+            _id
+            title
+            location {
+              lat
+              lng
+            }
           }
           poster {
             asset {

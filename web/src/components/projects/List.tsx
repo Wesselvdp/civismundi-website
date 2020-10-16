@@ -15,11 +15,20 @@ type T = {
   limit?: number
 }
 
-const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = true, skipTransition = false }) => {
+const ProjectList: FC<T> = ({
+  title,
+  projects,
+  limit,
+  director,
+  blockId,
+  show = true,
+  skipTransition = false,
+  doAnimation = true,
+}) => {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([])
 
   useEffect(() => {
-    const noNodes: Project[] = projects.edges.map(p => p.node)
+    const noNodes: Project[] = projects.edges.map((p) => p.node)
 
     // Filter if blockId is defined
     let filtered: Project[] = blockId
@@ -27,13 +36,14 @@ const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = 
       : noNodes
 
     // Filter on director
-    filtered = director && director !== 'all'
-      ? filtered.filter(({ director: directors }) => directors.some(d => d.id === director))
-      : filtered
+    filtered =
+      director && director !== 'all'
+        ? filtered.filter(({ director: directors }) =>
+            directors.some((d) => d.id === director)
+          )
+        : filtered
 
-    filtered = limit
-      ? filtered.slice(0, limit)
-      : filtered
+    filtered = limit ? filtered.slice(0, limit) : filtered
 
     setFilteredProjects(filtered)
   }, [projects, director])
@@ -47,7 +57,12 @@ const ProjectList: FC<T> = ({ title, projects, limit, director, blockId, show = 
         {filteredProjects.map((p: Project) => (
           <GridItem key={p.id}>
             <FadeListItem visible={show && !!limit}>
-              <ProjectCard skipTransition={skipTransition} id={p.id} data={p} />
+              <ProjectCard
+                doAnimation={doAnimation}
+                skipTransition={skipTransition}
+                id={p.id}
+                data={p}
+              />
             </FadeListItem>
           </GridItem>
         ))}
@@ -87,7 +102,7 @@ const Grid = styled.div`
 `
 const GridItem = styled.div`
   padding: 15px;
-  
+
   @media ${breakpoints.tabletLandscapeUp} {
     max-width: 50%;
   }
