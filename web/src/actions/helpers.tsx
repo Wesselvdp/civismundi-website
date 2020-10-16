@@ -25,6 +25,19 @@ export const updateLightningPosition = (world: any) => {
   }
 }
 
+export const calculateCameraZ = () => {
+  let aspect = window.innerWidth / window.innerHeight
+  if (aspect < 1) aspect = window.innerHeight / window.innerWidth
+  aspect = Math.min(aspect, 2)
+
+  // magic
+  const base = 350
+  const multiplier = 0.4
+  const z = base + aspect * multiplier * base - multiplier * base
+
+  return z
+}
+
 export const moveMarkerToCenter = (world: any, duration = 1000) => {
   const coords = world.active.area
     ? world.active.area.node.location

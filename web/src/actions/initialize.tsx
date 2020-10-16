@@ -9,7 +9,7 @@ import {
   SET_LIGHTNING,
 } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
-import { getWorldVersion, updateLightningPosition } from './helpers'
+import { getWorldVersion, updateLightningPosition, calculateCameraZ } from './helpers'
 import {
   toggleMarkers,
   updateMarkersQuaternion,
@@ -34,7 +34,7 @@ function configureScene(world: any) {
 
   // set camera height according to version
   if (world.version === WorldVersion.MOBILE) {
-    world.ref.current.camera().position.z = 500
+    world.ref.current.camera().position.z = calculateCameraZ()
   }
 }
 
