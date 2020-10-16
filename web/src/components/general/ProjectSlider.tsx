@@ -18,13 +18,15 @@ const ProjectSlider = ({ show }) => {
     if (!active || !active.areaProjects || !active.area || !active.project)
       return
 
-    const index = Math.max(
-      active.areaProjects.findIndex(
-        (p: any) => p.node._id === active.project.node._id
-      ),
-      0
+    const index = active.areaProjects.findIndex(
+      (p: any) => p.node._id === active.project.node._id
     )
-    setActiveIndex(index)
+
+    console.log('index', index)
+
+    if (index >= 0) {
+      setActiveIndex(index)
+    }
   }, [w.active])
 
   const { active } = w

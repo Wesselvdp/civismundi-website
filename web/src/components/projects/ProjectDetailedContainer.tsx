@@ -316,7 +316,6 @@ const Content = styled.div`
   align-items: flex-end;
   padding-bottom: 100px;
   justify-content: center;
-  min-height: 525px;
 
   .upper {
     padding: 0 15px;

@@ -27,10 +27,24 @@ const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
   practice seeks to navigate the confluence of film, music, design and fashion`
 
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0])
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight])
+    }
+    window.addEventListener('resize', updateSize)
+    updateSize()
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
+  return size
+}
+
 const WorldContainer = ({ layout, location }) => {
   const world = useSelector((state) => state.world)
   const [markers, setMarkers] = useState([]) // all markers (subset of Projects+Locations)
   const [showGrabIcon, setShowGrabIcon] = useState(false)
+  const [width, height] = useWindowSize()
 
   const dispatch = useDispatch()
 
@@ -44,13 +58,6 @@ const WorldContainer = ({ layout, location }) => {
       }
     }
 
-    // resize
-    function handleResize() {
-      dispatch(worldHandleResize())
-    }
-
-    window.addEventListener('resize', handleResize)
-
     const projects = data.allSanityProject.edges.filter(
       (p) => p.node.locationGroup === null
     )
@@ -61,6 +68,10 @@ const WorldContainer = ({ layout, location }) => {
     )
     setMarkers([...areas, ...projects])
   }, [])
+
+  useEffect(() => {
+    dispatch(worldHandleResize())
+  }, [width])
 
   useEffect(() => {
     if (
