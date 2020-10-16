@@ -39,14 +39,10 @@ const ProjectDetailedContainer = ({ location, data }) => {
   useEffect(() => {
     let timer
 
-    if (world.ready && !world.fading && location) {
-      const { state } = location
-
-      if (state.doAnimation) {
-        timer = setTimeout(() => {
-          setState(ProjectState.SUBTITLE_IN)
-        }, get(location, 'state.delay', 0))
-      }
+    if (world.ready && !world.fading) {
+      timer = setTimeout(() => {
+        setState(ProjectState.SUBTITLE_IN)
+      }, get(location, 'state.delay', 0))
     }
 
     return () => {
@@ -61,6 +57,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
       }, 1500)
     }
   }, [state])
+
+  const locState = location.state || {}
 
   return (
     <>
@@ -79,66 +77,43 @@ const ProjectDetailedContainer = ({ location, data }) => {
           onClick={() => openVideo(false)}
         />
       </ModalWrapper>
-      <StyledMast
-        className={location.state.doAnimation ? 'instant' : 'fade-in'}
-      >
+      <StyledMast className={locState.doAnimation ? 'instant' : 'fade-in'}>
         <Content>
           <div className="upper">
-            <TextImprov
-              in={
-                !world.fading &&
-                (!location.state.doAnimation ||
-                  state >= ProjectState.SUBTITLE_IN)
-              }
+            <TextAnim
+              in={!world.fading && state >= ProjectState.SUBTITLE_IN}
               timeout={{ enter: 300 }}
-              onEntered={() =>
-                location.state.doAnimation && setState(ProjectState.TITLE_IN)
-              }
+              onEntered={() => setState(ProjectState.TITLE_IN)}
               className="subtitle"
               tag="h2"
               text="Video direction"
             />
-            <TextImprov
-              in={
-                !world.fading &&
-                (!location.state.doAnimation || state >= ProjectState.TITLE_IN)
-              }
+            <TextAnim
+              in={!world.fading && state >= ProjectState.TITLE_IN}
               timeout={{ enter: 300 }}
-              onEntered={() =>
-                location.state.doAnimation &&
-                setState(ProjectState.PARAGRAPH_IN)
-              }
+              onEntered={() => setState(ProjectState.PARAGRAPH_IN)}
               className="h2"
               tag="h1"
               text={title}
             />
             <TextAnim
-              in={
-                !world.fading &&
-                (!location.state.doAnimation ||
-                  state >= ProjectState.PARAGRAPH_IN)
-              }
+              in={!world.fading && state >= ProjectState.PARAGRAPH_IN}
               timeout={{ enter: 600 }}
               onEntered={() =>
-                location.state.doAnimation &&
-                setState(ProjectState.VIDEO_BUTTON_IN)
+                locState.doAnimation && setState(ProjectState.VIDEO_BUTTON_IN)
               }
               tag="p"
               text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
               letterSpeedIn={0.01}
               singleLine={false}
             />
-            {(!location.state.doAnimation ||
+            {(!locState.doAnimation ||
               state >= ProjectState.VIDEO_BUTTON_IN) && (
               <>
                 <div className="button-container">
                   {world.active.area && (
                     <PrevSVG
-                      className={
-                        location.state &&
-                        location.state.doAnimation &&
-                        'with-anim'
-                      }
+                      className={locState.doAnimation && 'with-anim'}
                       onClick={() =>
                         dispatch(
                           setWorldMode(WorldMode.PROJECT_DETAILED, {
@@ -151,21 +126,13 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )}
                   <PlayButton>
                     <PlaySVG
-                      className={
-                        location.state &&
-                        location.state.doAnimation &&
-                        'with-anim'
-                      }
+                      className={locState.doAnimation && 'with-anim'}
                       onClick={() => openVideo(true)}
                     />
                   </PlayButton>
                   {world.active.area && (
                     <NextSVG
-                      className={
-                        location.state &&
-                        location.state.doAnimation &&
-                        'with-anim'
-                      }
+                      className={locState.doAnimation && 'with-anim'}
                       onClick={() =>
                         dispatch(
                           setWorldMode(WorldMode.PROJECT_DETAILED, {
@@ -177,9 +144,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )}
                 </div>
                 <GlobeIcon
-                  className={
-                    location.state && location.state.doAnimation && 'with-anim'
-                  }
+                  className={locState.doAnimation && 'with-anim'}
                   onClick={() =>
                     dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
                   }
@@ -194,9 +159,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
           <SliderWrapper>
             <ProjectSlider
               className="project-slider"
-              show={
-                !location.state.doAnimation || state === ProjectState.SLIDER_IN
-              }
+              show={!locState.doAnimation || state === ProjectState.SLIDER_IN}
             />
           </SliderWrapper>
         )}
