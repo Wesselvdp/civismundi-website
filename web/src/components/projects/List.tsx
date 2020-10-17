@@ -51,7 +51,7 @@ const ProjectList: FC<T> = ({
 
   return (
     <Container>
-      <TitleContainer>
+      <TitleContainer> 
         <h3>{title}</h3>
       </TitleContainer>
       <Grid>
