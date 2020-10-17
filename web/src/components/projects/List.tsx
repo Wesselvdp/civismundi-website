@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { shuffle } from 'lodash'
 
 import { breakpoints } from '@utils/breakpoints'
 import { ProjectCard } from '@components/projects'
@@ -32,7 +33,7 @@ const ProjectList: FC<T> = ({
 
     // Filter if blockId is defined
     let filtered: Project[] = blockId
-      ? noNodes.filter(({ id }) => id !== blockId)
+      ? noNodes.filter(({ id, _id }) => id !== blockId && _id !== blockId)
       : noNodes
 
     // Filter on director
@@ -43,10 +44,10 @@ const ProjectList: FC<T> = ({
           )
         : filtered
 
-    filtered = limit ? filtered.slice(0, limit) : filtered
+    filtered = limit ? shuffle(filtered).slice(0, limit) : filtered
 
     setFilteredProjects(filtered)
-  }, [projects, director])
+  }, [projects, director, blockId])
 
   return (
     <Container>

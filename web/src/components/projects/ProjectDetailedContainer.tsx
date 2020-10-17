@@ -161,7 +161,9 @@ const ProjectDetailedContainer = ({ location, data }) => {
                         visibility:
                           getProjectIndex() > 0 ? 'visible' : 'hidden',
                       }}
-                      className={locState.doAnimation && 'with-anim'}
+                      className={`anim-scale ${
+                        locState.doAnimation && 'with-anim'
+                      }`}
                       onClick={() =>
                         !fading &&
                         dispatch(
@@ -176,13 +178,17 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )}
                   <PlayButton>
                     <PlaySVG
-                      className={locState.doAnimation && 'with-anim'}
+                      className={`anim-scale ${
+                        locState.doAnimation && 'with-anim'
+                      }`}
                       onClick={() => openVideo(true)}
                     />
                   </PlayButton>
                   {world.active.area && (
                     <NextSVG
-                      className={locState.doAnimation && 'with-anim'}
+                      className={`anim-scale ${
+                        locState.doAnimation && 'with-anim'
+                      }`}
                       style={{
                         visibility:
                           getProjectIndex() <
@@ -206,7 +212,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )}
                 </div>
                 <GlobeIcon
-                  className={locState.doAnimation && 'with-anim'}
+                  className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
                   onClick={() =>
                     !fading &&
                     dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
@@ -301,6 +307,14 @@ const GlobeIcon = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.5);
   opacity: 1;
 
+  &.anim-scale {
+    transform: translate(-50%, 100%) scale(1) !important;
+
+    &:hover {
+      transform: translate(-50%, 100%) scale(1.1) !important;
+    }
+  }
+
   &.with-anim {
     opacity: 0;
     animation: ${svgNavigators} 1s forwards;
@@ -329,6 +343,14 @@ const Content = styled.div`
   padding-bottom: 100px;
   justify-content: center;
 
+  .anim-scale {
+    transform: scale(1);
+    transition: 0.25s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
   .upper {
     padding: 0 15px;
 
