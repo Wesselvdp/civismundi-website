@@ -7,6 +7,7 @@ import {
   WORLD_INITIALIZE_START,
   WORLD_INITIALIZE_COMPLETE,
   SET_LIGHTNING,
+  WORLD_LOADING_COMPLETE
 } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
 import { getWorldVersion, updateLightningPosition, calculateCameraZ } from './helpers'
@@ -133,7 +134,6 @@ export function initializeWorld(
   options: any = {}
 ) {
   return async function action(dispatch: any, getState: any) {
-    const startTime = new Date()
     const world = getState().world
 
     if (!ref.current) return Promise.resolve()
@@ -144,6 +144,11 @@ export function initializeWorld(
       }
 
       return Promise.resolve()
+    }
+
+    THREE.DefaultLoadingManager.onLoad = function () {
+      console.log('loaded')
+      dispatch({ type: WORLD_LOADING_COMPLETE })
     }
 
     // store sanity data
@@ -208,7 +213,6 @@ export function initializeWorld(
 
     setTimeout(dispatch(toggleMarkers(location.pathname === '/')), 2000)
 
-    const endTime = new Date()
-    const elapsed = endTime - startTime
+    console.log('initialized')
   }
 }

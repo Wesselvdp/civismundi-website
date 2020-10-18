@@ -20,11 +20,13 @@ import {
   SET_ACTIVE,
   SET_FADING_PAGE,
   SET_FADING_VIDEO,
+  WORLD_LOADING_COMPLETE
 } from '../actions/types'
 
 const initialState = {
-  initialized: false,
-  ready: false,
+  initialized: false, // initializing of store
+  loaded: false, // loading of threejs scene
+  ready: false, // if both loaded & initialized
   ref: { current: null },
   mode: WorldMode.PROJECTS_EXPLORE,
   version: WorldVersion.DESKTOP,
@@ -68,6 +70,10 @@ const reducer = (state = initialState, action: any) => {
 
     case WORLD_INITIALIZE_COMPLETE: {
       return { ...state, initialized: true }
+    }
+
+    case WORLD_LOADING_COMPLETE: {
+      return { ...state, loaded: true }
     }
 
     // Modes

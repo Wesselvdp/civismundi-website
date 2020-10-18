@@ -35,7 +35,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   }, [world.fadingPage])
 
   useEffect(() => {
-    if (world.initialized) {
+    if (world.initialized && world.loaded) {
       const elapsed = new Date().getTime() - startTime
 
       setTimeout(() => {
@@ -45,7 +45,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
         }, 1000)
       }, Math.max(MIN_LOADING_TIME - elapsed, 0))
     }
-  }, [world.initialized])
+  }, [world.initialized, world.loaded])
 
   return (
     <>
