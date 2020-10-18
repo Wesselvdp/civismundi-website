@@ -20,7 +20,8 @@ import {
   SET_ACTIVE,
   SET_FADING_PAGE,
   SET_FADING_VIDEO,
-  WORLD_LOADING_COMPLETE
+  WORLD_LOADING_COMPLETE,
+  SET_SLIDER_SCROLL,
 } from '../actions/types'
 
 const initialState = {
@@ -44,13 +45,8 @@ const initialState = {
   videos: [],
   fadingPage: false,
   fadingVideo: false,
+  sliderScroll: 0,
 }
-
-// active object
-// - type: project/area
-// - area: null / area
-// - areaProjects: [project] || null
-// - project: project
 
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
@@ -159,6 +155,10 @@ const reducer = (state = initialState, action: any) => {
 
     case SET_FADING_VIDEO: {
       return { ...state, fadingVideo: action.fading }
+    }
+
+    case SET_SLIDER_SCROLL: {
+      return { ...state, sliderScroll: action.scroll }
     }
 
     default:

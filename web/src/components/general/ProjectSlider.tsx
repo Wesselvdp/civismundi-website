@@ -1,38 +1,60 @@
-import React, { useEffect, useState } from 'react'
-import { get } from 'lodash'
+import React, { useEffect, useState, useRef } from 'react'
+import { get, debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
+import { SET_SLIDER_SCROLL } from '../../actions/types'
 
-const ProjectSlider = ({ show }) => {
+const ProjectSlider = ({ show, location }) => {
   const active = useSelector((state: any) => state.world.active || {})
+  const scroll = useSelector((state: any) => state.world.sliderScroll)
+  const fading = useSelector(
+    (state: any) => state.world.fadingVideo || state.world.fadingPage
+  )
   const dispatch = useDispatch()
+  const ref = useRef(null)
 
-  if (!active.project || !active.area) return null
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollLeft = scroll
+
+      ref.current.addEventListener(
+        'scroll',
+        debounce(() => {
+          dispatch({ type: SET_SLIDER_SCROLL, scroll: ref.current.scrollLeft })
+        }, 250)
+      )
+    }
+  }, [])
 
   return (
-    <Container className={show && 'show'}>
-      {active.areaProjects.map((project: any, i: any) => (
-        <Thumbnail
-          className={active.projectIndex === i && 'active'}
-          onClick={() =>
-            active.projectIndex !== i &&
-            dispatch(
-              setWorldMode(WorldMode.PROJECT_DETAILED, {
-                project,
-                state: { withAnimation: false, fadeVideo: true },
-              })
-            )
-          }
-          key={project.node._id}
-          style={{
-            backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
-          }}
-        />
-      ))}
+    <Container ref={ref} className={show && !fading && 'show'}>
+      {active.areaProjects &&
+        active.areaProjects.map((project: any, i: any) => (
+          <Thumbnail
+            className={active.projectIndex === i && 'active'}
+            onClick={() =>
+              active.projectIndex !== i &&
+              dispatch(
+                setWorldMode(WorldMode.PROJECT_DETAILED, {
+                  project,
+                  state: {
+                    withAnimation: false,
+                    fadeVideo: true,
+                    keepSliderScroll: true,
+                  },
+                })
+              )
+            }
+            key={project.node._id}
+            style={{
+              backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
+            }}
+          />
+        ))}
     </Container>
   )
 }

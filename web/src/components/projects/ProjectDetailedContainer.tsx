@@ -11,12 +11,11 @@ import ModalVideo from 'react-modal-video'
 import PlaySVG from '../../assets/play.svg'
 import NextSVG from '../../assets/btn-next.svg'
 import PrevSVG from '../../assets/btn-prev.svg'
-import GlobeSVG from '../../assets/globe-icon.svg'
 
 // Components
 import { ProjectList } from '@components/projects'
-import { TextAnim, TextImprov } from '@components/animations'
-import { GlobeButton, ProjectSlider } from '@components/general'
+import { TextAnim } from '@components/animations'
+import { ProjectSlider } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 
@@ -170,7 +169,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                           setWorldMode(WorldMode.PROJECT_DETAILED, {
                             project:
                               world.active.areaProjects[getProjectIndex() - 1],
-                            state: { fadeVideo: true },
+                            state: { fadeVideo: true, keepSliderScroll: true },
                           })
                         )
                       }
@@ -204,7 +203,10 @@ const ProjectDetailedContainer = ({ location, data }) => {
                                 world.active.areaProjects[
                                   getProjectIndex() + 1
                                 ],
-                              state: { fadeVideo: true },
+                              state: {
+                                fadeVideo: true,
+                                keepSliderScroll: true,
+                              },
                             })
                         )
                       }
@@ -212,7 +214,9 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )}
                 </div>
                 <GlobeIcon
-                  className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+                  className={`anim-scale ${
+                    locState.doAnimation && 'with-anim'
+                  }`}
                   onClick={() =>
                     !fading &&
                     dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
@@ -224,14 +228,12 @@ const ProjectDetailedContainer = ({ location, data }) => {
             )}
           </div>
         </Content>
-        {world.active.area && (
-          <SliderWrapper>
-            <ProjectSlider
-              className="project-slider"
-              show={!locState.doAnimation || state === ProjectState.SLIDER_IN}
-            />
-          </SliderWrapper>
-        )}
+        <SliderWrapper>
+          <ProjectSlider
+            className="project-slider"
+            show={!locState.doAnimation || state === ProjectState.SLIDER_IN}
+          />
+        </SliderWrapper>
       </StyledMast>
 
       {/* Project content */}

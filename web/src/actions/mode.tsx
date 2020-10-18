@@ -14,6 +14,7 @@ import {
   SET_ACTIVE,
   SET_FADING_PAGE,
   SET_FADING_VIDEO,
+  SET_SLIDER_SCROLL,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -164,6 +165,9 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
         ? dispatch({ type: SET_FADING_VIDEO, fading: true })
         : dispatch({ type: SET_FADING_PAGE, fading: true })
     }
+
+    if (!state.keepSliderScroll)
+      dispatch({ type: SET_SLIDER_SCROLL, scroll: 0 })
 
     setTimeout(
       async () => {
