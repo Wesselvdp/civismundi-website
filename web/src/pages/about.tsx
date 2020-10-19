@@ -6,7 +6,7 @@ import { Hero, SEO } from '@components/general'
 import { FadeAnim } from '@components/animations'
 
 const TITLE = 'A collective of interdisciplinary creatives';
-const CONTENT = 'collaborative practice seeks to navigate the confluence of film, music, design and fashion'
+const CONTENT = 'whose collaborative practice seeks to navigate the confluence of film, music, design and fashion'
 
 const AboutPage = () => {
   const [heroFinished, setHeroFinished] = useState(false)

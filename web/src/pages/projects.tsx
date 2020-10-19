@@ -58,15 +58,14 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
           timeout={{ title: 500, content: 1000 }}
           onFinished={() => setHeroFinished(true)}
-        >
-          <FadeAnim in={heroFinished} timeout={1000}>
+        />
+          {/* <FadeAnim in={heroFinished} timeout={1000}>
             <Select
               options={selectOptions}
               value={director}
               onChange={(value) => setDirector(value)}
             />
-          </FadeAnim>
-        </Hero>
+  </FadeAnim> */}
         {heroFinished && (
           <ProjectList
             projects={data.allSanityProject}
