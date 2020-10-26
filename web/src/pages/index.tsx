@@ -29,6 +29,7 @@ export const query = graphql`
           title
           featured
           city
+          clients
           location {
             lat
             lng

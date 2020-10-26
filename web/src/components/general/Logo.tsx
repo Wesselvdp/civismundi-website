@@ -31,7 +31,7 @@ const Logo: FC<T> = () => {
       <Container>
         <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
         <video ref={ref} className={hideVideo ? 'hidden' : ''} playsInline autoPlay muted>
-          <source src="/logo.mov" type="video/quicktime" />
+          <source src="/cm-logo-3-1.mov" type="video/quicktime" />
           <source src="/logo4.webm" type="video/webm" />
         </video>
       </Container>

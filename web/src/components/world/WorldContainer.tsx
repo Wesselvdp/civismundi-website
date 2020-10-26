@@ -83,6 +83,14 @@ const WorldContainer = ({ layout, location }) => {
     }
   }, [world.mode, world.ready])
 
+  const stringifyClients = () => {
+    const clients = get(world, 'lastActive.project.node.clients', [])
+
+    let string = '';
+    clients.forEach((client: string, i: number) => { string += `${client.toUpperCase()}  ${i !== clients.length - 1 ? '•  ' : ''}` })
+
+    return string
+  }
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -110,6 +118,7 @@ const WorldContainer = ({ layout, location }) => {
             title
             featured
             city
+            clients
             location {
               lat
               lng
@@ -192,7 +201,7 @@ const WorldContainer = ({ layout, location }) => {
             tag="p"
             text={
               lastActive && lastActive.lastShown === MarkerType.PROJECT
-                ? 'TRAVIS SCOTT'
+                ? stringifyClients(world, 'lastActive.project.node.clients', [])
                 : 'CLICK TO EXPLORE'
             }
           />

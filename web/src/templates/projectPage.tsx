@@ -37,6 +37,7 @@ export const query = graphql`
           url
         }
       }
+      clients
       poster {
         asset {
           url
@@ -60,6 +61,7 @@ export const query = graphql`
           title
           featured
           city
+          clients
           location {
             lat
             lng
