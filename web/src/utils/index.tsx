@@ -11,7 +11,7 @@ export const stringifyArray = (
   let str = ''
   array.forEach((obj: any, i: number) => {
     let value = key ? get(obj, key) : obj
-    if (options.uppercase) value = value.toUpperCase()
+    if (value && options.uppercase) value = value.toUpperCase()
 
     if (value) str += `${value} ${i !== array.length - 1 ? character : ''}`
   })
