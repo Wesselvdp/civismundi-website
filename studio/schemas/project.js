@@ -37,6 +37,12 @@ export default {
       ]
     },
     {
+      name: 'clients',
+      title: 'Clients',
+      type: 'array',
+      of: [{ type: 'string' }]
+    },
+    {
       name: 'awards',
       title: 'Awards & Festivals',
       type: 'array',
@@ -70,7 +76,7 @@ export default {
       title: 'Location',
       type: 'reference',
       to: { type: 'location' }
-    }, 
+    },
     {
       name: 'poster',
       title: 'Poster Image',
@@ -88,7 +94,13 @@ export default {
       name: 'video',
       title: 'Video',
       type: 'file'
-    }
+    },
+    { // custom ordering
+      name: "order",
+      title: "Order",
+      type: "number",
+      hidden: true,
+    },
   ],
   preview: {
     select: {

@@ -66,6 +66,7 @@ const createCustomPages = async (graphql, createPage) => {
               current
             }
             id
+            order
           }
         }
       }

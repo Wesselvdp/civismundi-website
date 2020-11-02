@@ -216,11 +216,21 @@ export function initializeWorld(
     const raycaster = new THREE.Raycaster() // create once
     const mouse = new THREE.Vector2() // create once
     function onDocumentMouseDown(event: any) {
-      // support mobile touches
-      if (event.clientX === undefined) event.clientX = event.targetTouches[0].clientX
-      if (event.clientY === undefined) event.clientY = event.targetTouches[0].clientY
-
       const w = getState().world
+
+      if (
+        w.mode !== WorldMode.AREA_PREVIEW &&
+        w.mode !== WorldMode.PROJECTS_EXPLORE &&
+        w.mode !== WorldMode.PROJECT_PREVIEW
+      )
+        return
+
+      // support mobile touches
+      if (event.clientX === undefined)
+        event.clientX = event.targetTouches[0].clientX
+      if (event.clientY === undefined)
+        event.clientY = event.targetTouches[0].clientY
+
       mouse.x =
         (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
         1
@@ -247,6 +257,13 @@ export function initializeWorld(
       // event.preventDefault()
 
       const w = getState().world
+      if (
+        w.mode !== WorldMode.AREA_PREVIEW &&
+        w.mode !== WorldMode.PROJECTS_EXPLORE &&
+        w.mode !== WorldMode.PROJECT_PREVIEW
+      )
+        return
+
       mouse.x =
         (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
         1

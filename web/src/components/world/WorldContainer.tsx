@@ -86,8 +86,12 @@ const WorldContainer = ({ layout, location }) => {
   const stringifyClients = () => {
     const clients = get(world, 'lastActive.project.node.clients', [])
 
-    let string = '';
-    clients.forEach((client: string, i: number) => { string += `${client.toUpperCase()}  ${i !== clients.length - 1 ? '•  ' : ''}` })
+    let string = ''
+    clients.forEach((client: string, i: number) => {
+      string += `${client.toUpperCase()}  ${
+        i !== clients.length - 1 ? '•  ' : ''
+      }`
+    })
 
     return string
   }
@@ -107,11 +111,12 @@ const WorldContainer = ({ layout, location }) => {
           }
         }
       }
-      allSanityProject {
+      allSanityProject(sort: { fields: order, order: ASC }) {
         edges {
           node {
             _id
             _type
+            order
             slug {
               current
             }

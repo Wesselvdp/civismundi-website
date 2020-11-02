@@ -96,7 +96,8 @@ const World = ({ data, markers, layout, className }) => {
         (p: any) =>
           p.node.locationGroup && p.node.locationGroup._id === obj.node._id
       ).length
-      path = `/area-marker/area-${projectCount}.svg`
+      // path = `/area-marker/area-${projectCount}.svg`
+      path = '/marker-big.svg'
 
       obj.node.projectCount = projectCount
     }

@@ -15,7 +15,8 @@
     "@sanity/desk-tool",
     "@sanity/google-maps-input",
     "@sanity/dashboard",
-    "dashboard-widget-netlify"
+    "dashboard-widget-netlify",
+    "order-documents"
   ],
   "env": {
     "development": {

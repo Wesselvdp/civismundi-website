@@ -51,9 +51,10 @@ export const query = graphql`
       vimeo
       _rawOverview
     }
-    allSanityProject {
+    allSanityProject(sort: { fields: order, order: ASC }) {
       edges {
         node {
+          order
           _id
           _type
           slug {
