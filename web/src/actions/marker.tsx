@@ -8,6 +8,7 @@ import {
   SET_VISIBILITY_MARKERS,
   SET_ACTIVE_PROJECT,
   SET_FAKE_MARKER_COORDS,
+  SET_HOVERED,
 } from './types'
 import { setWorldMode } from './mode'
 
@@ -87,7 +88,7 @@ export function onMarkerHovered(hovered: any) {
       return
 
     dispatch(toggleFocusedMarker(hovered))
-
+    dispatch({ type: SET_HOVERED, hovered: hovered ? hovered.node._id : null })
     if (w.version === WorldVersion.DESKTOP) {
       if (hovered && hovered.node._type === MarkerType.PROJECT) {
         return dispatch(

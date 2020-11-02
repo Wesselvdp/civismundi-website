@@ -216,8 +216,6 @@ export function initializeWorld(
     const raycaster = new THREE.Raycaster() // create once
     const mouse = new THREE.Vector2() // create once
     function onDocumentMouseDown(event: any) {
-      event.preventDefault()
-
       // support mobile touches
       if (event.clientX === undefined) event.clientX = event.targetTouches[0].clientX
       if (event.clientY === undefined) event.clientY = event.targetTouches[0].clientY
@@ -246,7 +244,7 @@ export function initializeWorld(
     }
 
     function onMouseMove(event: any) {
-      event.preventDefault()
+      // event.preventDefault()
 
       const w = getState().world
       mouse.x =
@@ -267,15 +265,19 @@ export function initializeWorld(
         intersects.length &&
         intersects[0].object.__globeObjType === 'custom'
       ) {
+        if (w.hovered === intersects[0].object.__data.node._id) return
+
+        console.log('onMarkerHovered', intersects[0].object.__data)
         dispatch(onMarkerHovered(intersects[0].object.__data))
-      } else {
+      } else if (w.hovered) {
+        console.log('onMarkerHovered null')
         dispatch(onMarkerHovered(null))
       }
     }
 
     document.addEventListener('mousedown', onDocumentMouseDown, false)
     document.addEventListener('touchstart', onDocumentMouseDown, false)
-    // window.addEventListener('mousemove', onMouseMove, false)
+    window.addEventListener('mousemove', onMouseMove, false)
 
     // create additional THREE.js objects
     await Promise.all([dispatch(createLightning()), dispatch(createClouds())])

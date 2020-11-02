@@ -22,6 +22,7 @@ import {
   SET_FADING_VIDEO,
   WORLD_LOADING_COMPLETE,
   SET_SLIDER_SCROLL,
+  SET_HOVERED,
 } from '../actions/types'
 
 const initialState = {
@@ -35,6 +36,7 @@ const initialState = {
   projects: [],
   areas: [],
   active: {},
+  hovered: null,
   lastActive: {}, // can be project/area, used to make smooth exit animations for title on home
   markers: [],
   markersVisible: true,
@@ -70,6 +72,10 @@ const reducer = (state = initialState, action: any) => {
 
     case WORLD_LOADING_COMPLETE: {
       return { ...state, loaded: true }
+    }
+
+    case SET_HOVERED: {
+      return { ...state, hovered: action.hovered }
     }
 
     // Modes
