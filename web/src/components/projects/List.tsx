@@ -103,6 +103,7 @@ const Grid = styled.div`
 `
 const GridItem = styled.div`
   padding: 15px;
+  width: 100%;
 
   @media ${breakpoints.tabletLandscapeUp} {
     max-width: 50%;

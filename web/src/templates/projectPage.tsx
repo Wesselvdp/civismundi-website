@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React from 'react'
 
 import { graphql } from 'gatsby'
 
 // Components
 import { ProjectDetailedContainer } from '@components/projects'
-import { Layout, SEO } from '@components/general'
+import { SEO } from '@components/general'
 
 export enum ProjectState {
   LOADING = 1,
   SUBTITLE_IN = 2,
   TITLE_IN = 3,
   PARAGRAPH_IN = 4,
-  VIDEO_BUTTON_IN = 5
-} 
+  VIDEO_BUTTON_IN = 5,
+}
 
-const ProjectPageTemplate= ({ location, data }) => {
+const ProjectPageTemplate = ({ location, data }) => {
   const { title } = data.sanityProject
 
   return (
@@ -28,26 +28,26 @@ const ProjectPageTemplate= ({ location, data }) => {
 export const query = graphql`
   query singleProject($id: String!) {
     sanityProject(id: { eq: $id }) {
-      title
-      slug {
-        current
-      }
-      video {
-        asset {
-          url
-        }
-      }
-      clients
-      poster {
-        asset {
-          url
-        }
-      }
       _id
+      title
+      clients
+      director {
+        name
+      }
+      city
+      awards {
+        name
+        image {
+          asset {
+            url
+          }
+        }
+      }
       locationGroup {
         _id
         title
       }
+      city
       _rawOverview
     }
     allSanityProject {

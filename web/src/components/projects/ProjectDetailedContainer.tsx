@@ -18,6 +18,7 @@ import { TextAnim } from '@components/animations'
 import { ProjectSlider } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
+import { stringifyArray } from '../../utils'
 
 export enum ProjectState {
   LOADING = 1,
@@ -29,7 +30,15 @@ export enum ProjectState {
 }
 
 const ProjectDetailedContainer = ({ location, data }) => {
-  const { title, id, locationGroup, _rawOverview } = data.sanityProject
+  const {
+    id,
+    city,
+    locationGroup,
+    clients,
+    director,
+    awards,
+    _rawOverview,
+  } = data.sanityProject
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
@@ -145,8 +154,11 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   {get(world, 'active.project.node.title')}
                 </h1>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor
+                  {stringifyArray(
+                    get(world, 'active.project.node.clients'),
+                    '',
+                    '  •  '
+                  )}
                 </p>
               </div>
             )}
@@ -244,16 +256,26 @@ const ProjectDetailedContainer = ({ location, data }) => {
               <div className="col meta">
                 <div>
                   <h5 className="subtitle">DIRECTED BY</h5>
-                  <h5>NABIL ELDERKIN</h5>
+                  <h5>{stringifyArray(director, 'name', ', ')}</h5>
                 </div>
                 <div>
                   <h5 className="subtitle">LOCATION</h5>
-                  <h5>LOS ANGELES</h5>
+                  <h5>{locationGroup ? locationGroup.title : city}</h5>
                 </div>
-                <div>
-                  <h5 className="subtitle">AWARDS</h5>
-                  <h5>LOS ANGELES</h5>
-                </div>
+                {awards && awards.length ? (
+                  <div>
+                    <h5 className="subtitle">AWARDS</h5>
+                    {awards
+                      .filter((award: any) => award && award.image)
+                      .map((award: any) => (
+                        <img
+                          className="award-img"
+                          key={award.name}
+                          src={award.image.asset.url}
+                        />
+                      ))}
+                  </div>
+                ) : null}
               </div>
               <div className="col content content--sanity">
                 <BlockContent blocks={_rawOverview} />
@@ -568,6 +590,13 @@ const Section = styled.section`
     &.meta {
       flex: 0 0 300px;
       flex-wrap: wrap;
+
+      .award-img {
+        height: 75px;
+        width: auto;
+        display: block;
+        margin-bottom: 10px;
+      }
 
       @media ${breakpoints.phoneOnly} {
         flex-basis: 100%;

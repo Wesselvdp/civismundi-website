@@ -73,6 +73,8 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
             perPage={perPage}
             onMore={() => setPage(page + 1)}
             director={director}
+            doAnimation={false}
+            skipTransition={true}
           />
         )}
       </Page>
