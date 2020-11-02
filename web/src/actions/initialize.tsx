@@ -7,14 +7,20 @@ import {
   WORLD_INITIALIZE_START,
   WORLD_INITIALIZE_COMPLETE,
   SET_LIGHTNING,
-  WORLD_LOADING_COMPLETE
+  WORLD_LOADING_COMPLETE,
 } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
-import { getWorldVersion, updateLightningPosition, calculateCameraZ } from './helpers'
+import {
+  getWorldVersion,
+  updateLightningPosition,
+  calculateCameraZ,
+} from './helpers'
 import {
   toggleMarkers,
   updateMarkersQuaternion,
   changeMarkerSize,
+  onMarkerClicked,
+  onMarkerHovered,
 } from './marker'
 
 let newFrame: any
@@ -205,6 +211,66 @@ export function initializeWorld(
           }, SEC_PER_FRAME)
         }
       })
+
+    // Custom click
+    const raycaster = new THREE.Raycaster() // create once
+    const mouse = new THREE.Vector2() // create once
+    function onDocumentMouseDown(event: any) {
+      event.preventDefault()
+
+      const w = getState().world
+      mouse.x =
+        (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
+        1
+      mouse.y =
+        -(event.clientY / w.ref.current.renderer().domElement.clientHeight) *
+          2 +
+        1
+
+      raycaster.setFromCamera(mouse, w.ref.current.camera())
+
+      const intersects = raycaster.intersectObjects(
+        w.ref.current.scene().children,
+        true
+      )
+      if (
+        intersects.length &&
+        intersects[0].object.__globeObjType === 'custom'
+      ) {
+        dispatch(onMarkerClicked(intersects[0].object.__data))
+      }
+    }
+
+    function onMouseMove(event: any) {
+      event.preventDefault()
+
+      const w = getState().world
+      mouse.x =
+        (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
+        1
+      mouse.y =
+        -(event.clientY / w.ref.current.renderer().domElement.clientHeight) *
+          2 +
+        1
+
+      raycaster.setFromCamera(mouse, w.ref.current.camera())
+
+      const intersects = raycaster.intersectObjects(
+        w.ref.current.scene().children,
+        true
+      )
+      if (
+        intersects.length &&
+        intersects[0].object.__globeObjType === 'custom'
+      ) {
+        dispatch(onMarkerHovered(intersects[0].object.__data))
+      } else {
+        dispatch(onMarkerHovered(null))
+      }
+    }
+
+    document.addEventListener('mousedown', onDocumentMouseDown, false)
+    // window.addEventListener('mousemove', onMouseMove, false)
 
     // create additional THREE.js objects
     await Promise.all([dispatch(createLightning()), dispatch(createClouds())])

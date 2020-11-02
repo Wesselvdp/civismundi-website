@@ -71,7 +71,7 @@ const WorldContainer = ({ layout, location }) => {
 
   useEffect(() => {
     dispatch(worldHandleResize())
-  }, [width])
+  }, [width, height])
 
   useEffect(() => {
     if (
