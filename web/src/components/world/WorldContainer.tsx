@@ -183,7 +183,7 @@ const WorldContainer = ({ layout, location }) => {
             text={
               lastActive && lastActive.lastShown === MarkerType.PROJECT
                 ? get(world, 'lastActive.project.node.title')
-                : `${get(world, 'lastActive.area.node.projectCount')} PROJECTS`
+                : get(world, 'lastActive.areaProjects[0].node.title')
             }
             appear
           />
@@ -194,12 +194,16 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="p"
             className="lighter"
-            text={stringifyArray(
-              get(world, 'lastActive.project.node.clients'),
-              '',
-              ' • ',
-              { uppercase: true }
-            )}
+            text={
+              lastActive && lastActive.lastShown === MarkerType.PROJECT
+                ? stringifyArray(
+                    get(world, 'lastActive.project.node.clients'),
+                    '',
+                    ' • ',
+                    { uppercase: true }
+                  )
+                : 'EXPLORE PROJECTS'
+            }
             letterSpeedIn={0.01}
             singleLine={false}
             appear

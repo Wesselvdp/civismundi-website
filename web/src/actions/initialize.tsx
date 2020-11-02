@@ -40,6 +40,7 @@ function configureScene(world: any) {
   controls.autoRotateSpeed = 0.3
 
   // set camera height according to version
+  world.ref.current.camera().position.z = 320
   if (world.version === WorldVersion.MOBILE) {
     world.ref.current.camera().position.z = calculateCameraZ()
   }
@@ -294,7 +295,7 @@ export function initializeWorld(
 
     document.addEventListener('mousedown', onDocumentMouseDown, false)
     document.addEventListener('touchstart', onDocumentMouseDown, false)
-    window.addEventListener('mousemove', onMouseMove, false)
+    // window.addEventListener('mousemove', onMouseMove, false)
 
     // create additional THREE.js objects
     await Promise.all([dispatch(createLightning()), dispatch(createClouds())])

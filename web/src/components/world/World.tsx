@@ -138,7 +138,7 @@ const World = ({ data, markers, layout, className }) => {
               labelObject(obj, globeRadius)
             }
             customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-            // onCustomLayerHover={(obj) => onHover(obj)}
+            onCustomLayerHover={(obj) => onHover(obj)}
             // onCustomLayerClick={(obj) => onClick(obj)}
             // settings
             animateIn={false}
