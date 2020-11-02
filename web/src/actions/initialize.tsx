@@ -218,6 +218,10 @@ export function initializeWorld(
     function onDocumentMouseDown(event: any) {
       event.preventDefault()
 
+      // support mobile touches
+      if (event.clientX === undefined) event.clientX = event.targetTouches[0].clientX
+      if (event.clientY === undefined) event.clientY = event.targetTouches[0].clientY
+
       const w = getState().world
       mouse.x =
         (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
@@ -270,6 +274,7 @@ export function initializeWorld(
     }
 
     document.addEventListener('mousedown', onDocumentMouseDown, false)
+    document.addEventListener('touchstart', onDocumentMouseDown, false)
     // window.addEventListener('mousemove', onMouseMove, false)
 
     // create additional THREE.js objects
