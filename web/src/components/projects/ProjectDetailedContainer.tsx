@@ -140,7 +140,11 @@ const ProjectDetailedContainer = ({ location, data }) => {
                     setState(ProjectState.VIDEO_BUTTON_IN)
                   }
                   tag="p"
-                  text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
+                  text={stringifyArray(
+                    get(world, 'active.project.node.clients'),
+                    '',
+                    '  •  '
+                  )}
                   letterSpeedIn={0.01}
                   singleLine={false}
                 />

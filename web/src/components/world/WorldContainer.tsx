@@ -16,6 +16,7 @@ import {
 } from '@components/animations'
 import { Button } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
+import { stringifyArray } from '../../utils'
 
 import { MarkerType, WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
@@ -83,18 +84,6 @@ const WorldContainer = ({ layout, location }) => {
     }
   }, [world.mode, world.ready])
 
-  const stringifyClients = () => {
-    const clients = get(world, 'lastActive.project.node.clients', [])
-
-    let string = ''
-    clients.forEach((client: string, i: number) => {
-      string += `${client.toUpperCase()}  ${
-        i !== clients.length - 1 ? '•  ' : ''
-      }`
-    })
-
-    return string
-  }
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -198,17 +187,22 @@ const WorldContainer = ({ layout, location }) => {
             }
             appear
           />
-          <TextImprov
+          <TextAnim
             in={
               world.mode === WorldMode.PROJECT_PREVIEW ||
               world.mode === WorldMode.AREA_PREVIEW
             }
             tag="p"
-            text={
-              lastActive && lastActive.lastShown === MarkerType.PROJECT
-                ? stringifyClients(world, 'lastActive.project.node.clients', [])
-                : 'CLICK TO EXPLORE'
-            }
+            className="lighter"
+            text={stringifyArray(
+              get(world, 'lastActive.project.node.clients'),
+              '',
+              ' • ',
+              { uppercase: true }
+            )}
+            letterSpeedIn={0.01}
+            singleLine={false}
+            appear
           />
           {world.version === WorldVersion.MOBILE && (
             <FadeAnim
@@ -363,6 +357,16 @@ const MobileContent = styled.div`
         display: initial;
       }
     }
+  }
+
+  .lighter {
+    opacity: 0.9;
+  }
+
+  p {
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   p span {
