@@ -11,3 +11,13 @@ export const stringifyArray = (array: any[], key: string, character = ', ') => {
 
   return str
 }
+
+export const getVideoId = (url: string) => {
+  if (url.includes('vimeo')) {
+    return get(url.split('.com/'), '[1]', url)
+  }
+
+  if (url.includes('youtube')) {
+    return get(url.split('?v='), '[1]', url)
+  }
+}

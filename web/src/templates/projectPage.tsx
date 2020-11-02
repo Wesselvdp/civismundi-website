@@ -48,6 +48,7 @@ export const query = graphql`
         title
       }
       city
+      vimeo
       _rawOverview
     }
     allSanityProject {

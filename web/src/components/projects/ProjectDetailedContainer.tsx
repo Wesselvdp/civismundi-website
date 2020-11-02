@@ -18,7 +18,7 @@ import { TextAnim } from '@components/animations'
 import { ProjectSlider } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
-import { stringifyArray } from '../../utils'
+import { getVideoId, stringifyArray } from '../../utils'
 
 export enum ProjectState {
   LOADING = 1,
@@ -35,6 +35,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
     city,
     locationGroup,
     clients,
+    vimeo,
     director,
     awards,
     _rawOverview,
@@ -84,21 +85,23 @@ const ProjectDetailedContainer = ({ location, data }) => {
 
   return (
     <>
-      <ModalWrapper className={videoOpen ? 'open' : ''}>
-        <ModalVideo
-          channel="vimeo"
-          isOpen={videoOpen}
-          videoId="397128195"
-          onClose={() => openVideo(false)}
-          width={1000}
-          height={1000}
-        />
-        <img
-          className="modal-close"
-          src="/close.svg"
-          onClick={() => openVideo(false)}
-        />
-      </ModalWrapper>
+      {vimeo && (
+        <ModalWrapper className={videoOpen ? 'open' : ''}>
+          <ModalVideo
+            channel={vimeo.includes('vimeo') ? 'vimeo' : 'youtube'}
+            isOpen={videoOpen}
+            videoId={getVideoId(vimeo)}
+            onClose={() => openVideo(false)}
+            width={1000}
+            height={1000}
+          />
+          <img
+            className="modal-close"
+            src="/close.svg"
+            onClick={() => openVideo(false)}
+          />
+        </ModalWrapper>
+      )}
       <StyledMast>
         <Content>
           <div className="upper">
@@ -187,14 +190,16 @@ const ProjectDetailedContainer = ({ location, data }) => {
                       }
                     />
                   )}
-                  <PlayButton>
-                    <PlaySVG
-                      className={`anim-scale ${
-                        locState.doAnimation && 'with-anim'
-                      }`}
-                      onClick={() => openVideo(true)}
-                    />
-                  </PlayButton>
+                  {vimeo && (
+                    <PlayButton>
+                      <PlaySVG
+                        className={`anim-scale ${
+                          locState.doAnimation && 'with-anim'
+                        }`}
+                        onClick={() => openVideo(true)}
+                      />
+                    </PlayButton>
+                  )}
                   {world.active.area && (
                     <NextSVG
                       className={`anim-scale ${
