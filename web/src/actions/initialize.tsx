@@ -69,7 +69,7 @@ function createLightning() {
           .children.find((obj3d: any) => obj3d.type === 'DirectionalLight')
 
         directionalLight.position.copy(world.ref.current.camera().position)
-
+        directionalLight.intensity = 0.4
         dispatch({ type: SET_LIGHTNING, lightning: directionalLight })
         resolve(directionalLight)
       })
