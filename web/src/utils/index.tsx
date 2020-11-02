@@ -4,7 +4,7 @@ export const stringifyArray = (
   array: any[],
   key: string,
   character = ', ',
-  options: any
+  options: any = {}
 ) => {
   if (!array || !array.length) return
 
