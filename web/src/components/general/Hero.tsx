@@ -12,7 +12,7 @@ export enum LineState {
   PARAGRAPH_IN = 4
 } 
 
-const Hero = ({ children, subtitle, title, content, timeout = {}, onFinished = () => {} }) => {
+const Hero = ({ children, className, subtitle, title, content, timeout = {}, onFinished = () => {} }) => {
   const [state, setState] = useState(LineState.LOADING)
   const world = useSelector(state => state.world)
 
@@ -23,7 +23,7 @@ const Hero = ({ children, subtitle, title, content, timeout = {}, onFinished = (
   }, [world.ready])
 
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       <TextAnim
         inProp={state >= LineState.SUBTITLE_IN}
         timeout={{ enter: timeout.subtitle || 300 }}
@@ -63,7 +63,11 @@ const Wrapper = styled.div`
   margin: 4em auto 0;
   position: relative;
   max-width: 1000px;
-  
+
+  &.rm-padding-bottom {
+    padding-bottom: 0;
+  }
+
   @media ${breakpoints.phoneOnly} {
     margin: 3em auto;
   }

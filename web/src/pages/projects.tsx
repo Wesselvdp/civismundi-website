@@ -58,6 +58,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
           content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
           timeout={{ title: 500, content: 1000 }}
           onFinished={() => setHeroFinished(true)}
+          className="rm-padding-bottom"
         />
           {/* <FadeAnim in={heroFinished} timeout={1000}>
             <Select
