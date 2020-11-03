@@ -75,7 +75,7 @@ const Container = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   overflow-scrolling: touch;
-  height: 140px;
+  height: 161px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -112,8 +112,8 @@ const Thumbnail = styled.div`
   margin-right: 10px;
   margin-left: 10px;
   margin-bottom: 20px;
-  height: 100px;
-  width: 160px;
+  height: 115px;
+  width: 184px;
   transition: all 0.5s ease;
   cursor: pointer;
   display: flex;
@@ -121,7 +121,6 @@ const Thumbnail = styled.div`
   justify-content: center;
   padding: 5px;
   overflow: hidden;
-  opacity: 0.9;
   position: relative;
 
   @media ${breakpoints.phoneOnly} {
