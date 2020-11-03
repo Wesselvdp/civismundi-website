@@ -40,7 +40,7 @@ function configureScene(world: any) {
   controls.autoRotateSpeed = 0.3
 
   // set camera height according to version
-  world.ref.current.camera().position.z = 320
+  world.ref.current.camera().position.z = 350
   if (world.version === WorldVersion.MOBILE) {
     world.ref.current.camera().position.z = calculateCameraZ()
   }

@@ -23,6 +23,7 @@ import {
   WORLD_LOADING_COMPLETE,
   SET_SLIDER_SCROLL,
   SET_HOVERED,
+  SET_ACTIVE_PROJECT_INDEX,
 } from '../actions/types'
 
 const initialState = {
@@ -114,6 +115,12 @@ const reducer = (state = initialState, action: any) => {
       }
     }
 
+    case SET_ACTIVE_PROJECT_INDEX: {
+      return {
+        ...state,
+        active: { ...state.active, projectIndex: action.index || 0 },
+      }
+    }
     // Active
     case SET_ACTIVE: {
       return { ...state, active: action.active }

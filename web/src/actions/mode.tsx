@@ -15,6 +15,7 @@ import {
   SET_FADING_PAGE,
   SET_FADING_VIDEO,
   SET_SLIDER_SCROLL,
+  SET_ACTIVE_PROJECT_INDEX,
 } from './types'
 
 import { toggleMarkers } from './marker'
@@ -91,6 +92,24 @@ function navigateBackground(data: any = {}) {
     }, Math.max(duration - 250, 0))
 
     await dispatch({ type: MODE_GO_BACKGROUND })
+  }
+}
+
+export function incrementActiveProjectIndex() {
+  return async function action(dispatch: any, getState: any) {
+    const w = getState().world
+    const { active } = w
+
+    if (!active.areaProjects) return
+
+    const newIndex =
+      ((active.projectIndex || 0) + 1) % active.areaProjects.length
+
+    await dispatch({ type: SET_FADING_VIDEO, fading: true })
+    setTimeout(async () => {
+      await dispatch({ type: SET_ACTIVE_PROJECT_INDEX, index: newIndex })
+      dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA })
+    }, 1000)
   }
 }
 

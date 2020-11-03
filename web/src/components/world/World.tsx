@@ -104,7 +104,9 @@ const World = ({ data, markers, layout, className }) => {
 
     const texture = new THREE.TextureLoader().load(path)
     if (ref.current) {
-      texture.anisotropy = ref.current.renderer().getMaxAnisotropy()
+      texture.anisotropy = ref.current
+        .renderer()
+        .capabilities.getMaxAnisotropy()
     }
 
     // determine marker size

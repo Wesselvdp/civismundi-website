@@ -13,23 +13,40 @@ const TextAnimation = ({
   durationOut = 0.25, // seconds
   ...props
 }) => {
+  const [textReady, setTextReady] = useState('')
   const [speed, setSpeed] = useState({ in: 10, out: 20 })
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
+    setReady(false)
+    setTextReady(text)
+
     if (text) {
       setSpeed({ in: text.length / durationIn, out: text.length / durationOut })
     }
   }, [text])
 
-  if (!text) return null
+  useEffect(() => {
+    setTimeout(() => setReady(text && speed.in === text.length / durationIn), 0)
+  }, [speed])
+
+  if (!ready) return null
 
   return (
     <CSSTransition classNames="text" {...props}>
       <Wrapper>
         <Tag className={className} style={style}>
-          {text.split('').map((letter: string, i: number) => {
+          {textReady.split('').map((letter: string, i: number) => {
             return (
-              <span className="letter" style={{width: letter === ' ' ? '0.25em' : 'auto', transitionDelay: props.in ? `${i / speed.in}s` : `${i / speed.out}s`}}>
+              <span
+                className="letter"
+                style={{
+                  width: letter === ' ' ? '0.25em' : 'auto',
+                  transitionDelay: props.in
+                    ? `${i / speed.in}s`
+                    : `${i / speed.out}s`,
+                }}
+              >
                 {letter}
               </span>
             )
@@ -55,14 +72,16 @@ const Wrapper = styled.div`
     transform-origin: center bottom;
   }
 
-  &.text-enter, &.text-appear {
+  &.text-enter,
+  &.text-appear {
     .letter {
       transform: scale(0.2);
       opacity: 0;
     }
   }
 
-  &.text-enter-active, &.text-appear-active {
+  &.text-enter-active,
+  &.text-appear-active {
     .letter {
       transform: none;
       opacity: 1;
@@ -70,7 +89,8 @@ const Wrapper = styled.div`
     }
   }
 
-  &.text-enter-done, &.text-appear-done {
+  &.text-enter-done,
+  &.text-appear-done {
     .letter {
       transform: none;
       opacity: 1;

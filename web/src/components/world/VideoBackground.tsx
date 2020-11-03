@@ -5,28 +5,30 @@ import { get } from 'lodash'
 import styled from 'styled-components'
 
 import { WorldMode } from '../../actions'
+import { incrementActiveProjectIndex } from '../../actions/mode'
 import { SET_FADING_VIDEO } from '../../actions/types'
 
 const VideoBackground = () => {
   const dispatch = useDispatch()
+
   const world = useSelector((state: any) => state.world)
+  const active = useSelector((state: any) => state.world && state.world.active)
 
   const videoRef = useRef(null)
   const [videoUrl, setVideoUrl] = useState('')
 
   useEffect(() => {
-    const url = world.active.project
-      ? get(world, 'active.project.node.video.asset.url')
-      : get(world, 'active.areaProjects[0].node.video.asset.url')
+    const url = active.project
+      ? get(active, 'project.node.video.asset.url')
+      : get(active, `areaProjects[${active.projectIndex}].node.video.asset.url`)
 
     if (url && url !== videoUrl) {
       setVideoUrl(url)
-      setTimeout(() => videoRef.current && videoRef.current.play(), 100)
     }
-  }, [world.active])
+  }, [active.project, active.projectIndex])
 
   useEffect(() => {
-    let timer
+    let timer: any
 
     if (world.fadingVideo) {
       timer = setTimeout(
@@ -35,11 +37,14 @@ const VideoBackground = () => {
       )
     }
 
-    return () => clearTimeout()
+    return () => clearTimeout(timer)
   }, [world.fadingVideo])
 
-  const { active } = world
-  if (!active.project && !active.area) return null
+  const onVideoEnded = () => {
+    active.project
+      ? videoRef.current.play()
+      : dispatch(incrementActiveProjectIndex())
+  }
 
   return (
     <Wrapper
@@ -63,7 +68,7 @@ const VideoBackground = () => {
           playsInline
           autoPlay
           muted
-          loop
+          onEnded={() => onVideoEnded()}
         >
           <source src={videoUrl} type="video/mp4" />
         </video>

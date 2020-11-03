@@ -162,8 +162,9 @@ const WorldContainer = ({ layout, location }) => {
         <MobileContent>
           <TextImprov
             in={
-              world.mode === WorldMode.PROJECT_PREVIEW ||
-              world.mode === WorldMode.AREA_PREVIEW
+              (world.mode === WorldMode.PROJECT_PREVIEW ||
+                world.mode === WorldMode.AREA_PREVIEW) &&
+              !world.fadingVideo
             }
             tag="h2"
             className="subtitle"
@@ -176,21 +177,30 @@ const WorldContainer = ({ layout, location }) => {
           />
           <TextImprov
             in={
-              world.mode === WorldMode.PROJECT_PREVIEW ||
-              world.mode === WorldMode.AREA_PREVIEW
+              (world.mode === WorldMode.PROJECT_PREVIEW ||
+                world.mode === WorldMode.AREA_PREVIEW) &&
+              !world.fadingVideo
             }
             tag="h1"
             text={
               lastActive && lastActive.lastShown === MarkerType.PROJECT
                 ? get(world, 'lastActive.project.node.title')
-                : get(world, 'lastActive.areaProjects[0].node.title')
+                : get(
+                    world,
+                    `lastActive.areaProjects[${get(
+                      world,
+                      'lastActive.projectIndex',
+                      0
+                    )}].node.title`
+                  )
             }
             appear
           />
-          <TextAnim
+          <TextImprov
             in={
-              world.mode === WorldMode.PROJECT_PREVIEW ||
-              world.mode === WorldMode.AREA_PREVIEW
+              (world.mode === WorldMode.PROJECT_PREVIEW ||
+                world.mode === WorldMode.AREA_PREVIEW) &&
+              !world.fadingVideo
             }
             tag="p"
             className="lighter"
