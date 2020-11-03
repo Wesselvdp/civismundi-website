@@ -21,6 +21,20 @@ const VideoBackground = () => {
   const [videoUrl, setVideoUrl] = useState('')
 
   useEffect(() => {
+    if (world.mode !== WorldMode.AREA_PREVIEW) {
+      videoRef.current.currentTime = 0
+      if (videoTimer.current) clearTimeout(videoTimer.current)
+    }
+
+    if (
+      world.mode === WorldMode.AREA_PREVIEW ||
+      world.mode === WorldMode.PROJECT_PREVIEW
+    ) {
+      videoRef.current.play()
+    }
+  }, [world.mode])
+
+  useEffect(() => {
     const url = active.project
       ? get(active, 'project.node.video.asset.url')
       : get(active, `areaProjects[${active.projectIndex}].node.video.asset.url`)
@@ -58,9 +72,11 @@ const VideoBackground = () => {
   }
 
   const onVideoPlay = () => {
-    if (!active.project) {
+    if (world.mode === WorldMode.AREA_PREVIEW) {
       videoTimer.current = setTimeout(() => {
-        videoRef.current.pause()
+        if (world.mode === WorldMode.AREA_PREVIEW) {
+          videoRef.current.pause()
+        }
       }, VIDEO_MAX_DURATION)
     }
   }

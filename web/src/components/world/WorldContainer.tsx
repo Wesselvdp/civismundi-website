@@ -290,6 +290,7 @@ const WorldContainer = ({ layout, location }) => {
           className="project-slider"
           show={world.mode === WorldMode.AREA_PREVIEW}
           showOnFade
+          withProgressBar
         />
       </AreaContainer>
     </Page>

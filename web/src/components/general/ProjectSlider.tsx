@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { get, debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { SET_SLIDER_SCROLL } from '../../actions/types'
 
-const ProjectSlider = ({ show, location, showOnFade }) => {
+const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
+  const world = useSelector((state: any) => state.world)
   const active = useSelector((state: any) => state.world.active || {})
   const scroll = useSelector((state: any) => state.world.sliderScroll)
   const fading = useSelector(
@@ -54,7 +55,14 @@ const ProjectSlider = ({ show, location, showOnFade }) => {
               backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
             }}
           >
-            <span>{get(project, 'node.title')}</span>
+            {withProgressBar && (
+              <div
+                className={`progress-bar ${
+                  active.projectIndex === i && show && 'active'
+                }`}
+              ></div>
+            )}
+            <span>{get(project, 'node.title', '').toUpperCase()}</span>
           </Thumbnail>
         ))}
     </Container>
@@ -86,6 +94,16 @@ const Container = styled.div`
   }
 `
 
+const fill = keyframes`
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
+`
+
 const Thumbnail = styled.div`
   background-position: center;
   background-size: cover;
@@ -104,6 +122,7 @@ const Thumbnail = styled.div`
   padding: 5px;
   overflow: hidden;
   opacity: 0.9;
+  position: relative;
 
   @media ${breakpoints.phoneOnly} {
     height: 80px;
@@ -127,6 +146,20 @@ const Thumbnail = styled.div`
     white-space: pre-wrap;
     transform: translateY(0);
     transition: all 0.25s ease-in-out;
+  }
+
+  .progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    opacity: 1;
+
+    &.active {
+      animation: ${fill} 4s linear forwards;
+    }
   }
 
   &:hover span {
