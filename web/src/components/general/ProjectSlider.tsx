@@ -62,7 +62,9 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
                 }`}
               ></div>
             )}
-            <span>{get(project, 'node.title', '').toUpperCase()}</span>
+            <div className="content">
+              <span>{get(project, 'node.title', '').toUpperCase()}</span>
+            </div>
           </Thumbnail>
         ))}
     </Container>
@@ -84,7 +86,7 @@ const Container = styled.div`
   transition: all 0.5s ease;
 
   @media ${breakpoints.phoneOnly} {
-    height: 105px;
+    height: 150px;
     display: block;
   }
 
@@ -116,11 +118,6 @@ const Thumbnail = styled.div`
   width: 184px;
   transition: all 0.5s ease;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  overflow: hidden;
   position: relative;
 
   @media ${breakpoints.phoneOnly} {
@@ -140,13 +137,6 @@ const Thumbnail = styled.div`
     }
   }
 
-  span {
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    transform: translateY(0);
-    transition: all 0.25s ease-in-out;
-  }
-
   .progress-bar {
     position: absolute;
     top: 0;
@@ -159,6 +149,20 @@ const Thumbnail = styled.div`
     &.active {
       animation: ${fill} 4s linear forwards;
     }
+  }
+
+  .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    overflow: hidden;
+    white-space: pre-wrap;
   }
 
   &:hover span {

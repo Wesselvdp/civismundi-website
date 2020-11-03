@@ -103,8 +103,124 @@ const ProjectDetailedContainer = ({ location, data }) => {
         </ModalWrapper>
       )}
       <StyledMast>
+        {(!locState.doAnimation || state >= ProjectState.VIDEO_BUTTON_IN) && (
+          <ButtonContainer className="button-container">
+            {world.active.area && (
+              <PrevSVG
+                style={{
+                  visibility: getProjectIndex() > 0 ? 'visible' : 'hidden',
+                }}
+                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+                onClick={() =>
+                  !fading &&
+                  dispatch(
+                    setWorldMode(WorldMode.PROJECT_DETAILED, {
+                      project: world.active.areaProjects[getProjectIndex() - 1],
+                      state: { fadeVideo: true, keepSliderScroll: true },
+                    })
+                  )
+                }
+              />
+            )}
+            {vimeo && (
+              <PlayButton>
+                <PlaySVG
+                  className={`anim-scale ${
+                    locState.doAnimation && 'with-anim'
+                  }`}
+                  onClick={() => openVideo(true)}
+                />
+              </PlayButton>
+            )}
+            {world.active.area && (
+              <NextSVG
+                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+                style={{
+                  visibility:
+                    getProjectIndex() < world.active.areaProjects.length - 1
+                      ? 'visible'
+                      : 'hidden',
+                }}
+                onClick={() =>
+                  dispatch(
+                    !fading &&
+                      setWorldMode(WorldMode.PROJECT_DETAILED, {
+                        project:
+                          world.active.areaProjects[getProjectIndex() + 1],
+                        state: {
+                          fadeVideo: true,
+                          keepSliderScroll: true,
+                        },
+                      })
+                  )
+                }
+              />
+            )}
+          </ButtonContainer>
+        )}
         <Content>
           <div className="upper">
+            {(!locState.doAnimation ||
+              state >= ProjectState.VIDEO_BUTTON_IN) && (
+              <ButtonContainer className="button-container">
+                {world.active.area && (
+                  <PrevSVG
+                    style={{
+                      visibility: getProjectIndex() > 0 ? 'visible' : 'hidden',
+                    }}
+                    className={`anim-scale ${
+                      locState.doAnimation && 'with-anim'
+                    }`}
+                    onClick={() =>
+                      !fading &&
+                      dispatch(
+                        setWorldMode(WorldMode.PROJECT_DETAILED, {
+                          project:
+                            world.active.areaProjects[getProjectIndex() - 1],
+                          state: { fadeVideo: true, keepSliderScroll: true },
+                        })
+                      )
+                    }
+                  />
+                )}
+                {vimeo && (
+                  <PlayButton>
+                    <PlaySVG
+                      className={`anim-scale ${
+                        locState.doAnimation && 'with-anim'
+                      }`}
+                      onClick={() => openVideo(true)}
+                    />
+                  </PlayButton>
+                )}
+                {world.active.area && (
+                  <NextSVG
+                    className={`anim-scale ${
+                      locState.doAnimation && 'with-anim'
+                    }`}
+                    style={{
+                      visibility:
+                        getProjectIndex() < world.active.areaProjects.length - 1
+                          ? 'visible'
+                          : 'hidden',
+                    }}
+                    onClick={() =>
+                      dispatch(
+                        !fading &&
+                          setWorldMode(WorldMode.PROJECT_DETAILED, {
+                            project:
+                              world.active.areaProjects[getProjectIndex() + 1],
+                            state: {
+                              fadeVideo: true,
+                              keepSliderScroll: true,
+                            },
+                          })
+                      )
+                    }
+                  />
+                )}
+              </ButtonContainer>
+            )}
             {locState.doAnimation ? (
               <div className={`text-content ${fading && 'fading'}`}>
                 <TextAnim
@@ -168,84 +284,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )}
                 </p>
               </div>
-            )}
-            {(!locState.doAnimation ||
-              state >= ProjectState.VIDEO_BUTTON_IN) && (
-              <>
-                <div className="button-container">
-                  {world.active.area && (
-                    <PrevSVG
-                      style={{
-                        visibility:
-                          getProjectIndex() > 0 ? 'visible' : 'hidden',
-                      }}
-                      className={`anim-scale ${
-                        locState.doAnimation && 'with-anim'
-                      }`}
-                      onClick={() =>
-                        !fading &&
-                        dispatch(
-                          setWorldMode(WorldMode.PROJECT_DETAILED, {
-                            project:
-                              world.active.areaProjects[getProjectIndex() - 1],
-                            state: { fadeVideo: true, keepSliderScroll: true },
-                          })
-                        )
-                      }
-                    />
-                  )}
-                  {vimeo && (
-                    <PlayButton>
-                      <PlaySVG
-                        className={`anim-scale ${
-                          locState.doAnimation && 'with-anim'
-                        }`}
-                        onClick={() => openVideo(true)}
-                      />
-                    </PlayButton>
-                  )}
-                  {world.active.area && (
-                    <NextSVG
-                      className={`anim-scale ${
-                        locState.doAnimation && 'with-anim'
-                      }`}
-                      style={{
-                        visibility:
-                          getProjectIndex() <
-                          world.active.areaProjects.length - 1
-                            ? 'visible'
-                            : 'hidden',
-                      }}
-                      onClick={() =>
-                        dispatch(
-                          !fading &&
-                            setWorldMode(WorldMode.PROJECT_DETAILED, {
-                              project:
-                                world.active.areaProjects[
-                                  getProjectIndex() + 1
-                                ],
-                              state: {
-                                fadeVideo: true,
-                                keepSliderScroll: true,
-                              },
-                            })
-                        )
-                      }
-                    />
-                  )}
-                </div>
-                <GlobeIcon
-                  className={`anim-scale ${
-                    locState.doAnimation && 'with-anim'
-                  }`}
-                  onClick={() =>
-                    !fading &&
-                    dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
-                  }
-                >
-                  <img src="/globe-icon.svg" />
-                </GlobeIcon>
-              </>
             )}
           </div>
         </Content>
@@ -376,14 +414,19 @@ const Content = styled.div`
   padding-bottom: 100px;
   justify-content: center;
 
-  .anim-scale {
-    transform: scale(1);
-    transition: 0.25s ease;
+  @media ${breakpoints.tabletLandscapeUp} {
+    transform: translateY(50px);
+    padding-top: 50px;
+    top: 50%;
+    bottom: 20%;
+  }
 
-    &:hover {
-      transform: scale(1.1);
+  .button-container {
+    @media ${breakpoints.tabletLandscapeUp} {
+      display: none;
     }
   }
+
   .upper {
     padding: 0 15px;
 
@@ -404,35 +447,6 @@ const Content = styled.div`
       max-width: 450px;
       margin-left: auto;
       margin-right: auto;
-    }
-
-    .button-container {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      & > svg {
-        cursor: pointer;
-      }
-
-      & > svg.with-anim {
-        opacity: 0;
-        animation: ${svgNavigators} 1s forwards;
-        animation-delay: 1s;
-      }
-
-      & > svg:first-child {
-        margin-right: 24px;
-      }
-
-      & > svg:last-child {
-        margin-left: 24px;
-      }
     }
   }
 
@@ -458,6 +472,62 @@ const StyledMast = styled.div`
   position: relative;
   height: 100vh;
   opacity: 1;
+
+  & > .button-container {
+    @media ${breakpoints.tabletLandscapeDown} {
+      display: none;
+    }
+  }
+`
+
+const ButtonContainer = styled.div`
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .anim-scale {
+    transform: scale(1);
+    transition: 0.25s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  @media ${breakpoints.tabletLandscapeUp} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    width: 100%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    justify-content: space-between;
+    padding: 0 90px;
+  }
+
+  & > svg {
+    cursor: pointer;
+  }
+
+  & > svg.with-anim {
+    opacity: 0;
+    animation: ${svgNavigators} 1s forwards;
+    animation-delay: 1s;
+  }
+
+  & > svg:first-child {
+    margin-right: 24px;
+  }
+
+  & > svg:last-child {
+    margin-left: 24px;
+  }
 `
 
 const ModalWrapper = styled.div`
