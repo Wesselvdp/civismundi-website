@@ -8,6 +8,8 @@ import { WorldMode } from '../../actions'
 import { incrementActiveProjectIndex } from '../../actions/mode'
 import { SET_FADING_VIDEO } from '../../actions/types'
 
+const VIDEO_MAX_DURATION = 4000
+
 const VideoBackground = () => {
   const dispatch = useDispatch()
 
@@ -15,6 +17,7 @@ const VideoBackground = () => {
   const active = useSelector((state: any) => state.world && state.world.active)
 
   const videoRef = useRef(null)
+  const videoTimer = useRef(null)
   const [videoUrl, setVideoUrl] = useState('')
 
   useEffect(() => {
@@ -40,10 +43,26 @@ const VideoBackground = () => {
     return () => clearTimeout(timer)
   }, [world.fadingVideo])
 
-  const onVideoEnded = () => {
+  const onVideoPaused = () => {
     active.project
       ? videoRef.current.play()
       : dispatch(incrementActiveProjectIndex())
+  }
+
+  const onVideoEnded = () => {
+    if (videoTimer.current) clearTimeout(videoTimer.current)
+
+    active.project
+      ? videoRef.current.play()
+      : dispatch(incrementActiveProjectIndex())
+  }
+
+  const onVideoPlay = () => {
+    if (!active.project) {
+      videoTimer.current = setTimeout(() => {
+        videoRef.current.pause()
+      }, VIDEO_MAX_DURATION)
+    }
   }
 
   return (
@@ -69,6 +88,8 @@ const VideoBackground = () => {
           autoPlay
           muted
           onEnded={() => onVideoEnded()}
+          onPlay={() => onVideoPlay()}
+          onPause={() => onVideoPaused()}
         >
           <source src={videoUrl} type="video/mp4" />
         </video>

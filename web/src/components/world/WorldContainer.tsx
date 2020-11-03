@@ -212,7 +212,19 @@ const WorldContainer = ({ layout, location }) => {
                     ' • ',
                     { uppercase: true }
                   )
-                : 'EXPLORE PROJECTS'
+                : stringifyArray(
+                    get(
+                      world,
+                      `lastActive.areaProjects[${get(
+                        world,
+                        'lastActive.projectIndex',
+                        0
+                      )}].node.clients`,
+                      '',
+                      ' • ',
+                      { uppercase: true }
+                    )
+                  )
             }
             letterSpeedIn={0.01}
             singleLine={false}

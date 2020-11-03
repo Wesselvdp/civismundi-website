@@ -53,7 +53,9 @@ const ProjectSlider = ({ show, location, showOnFade }) => {
             style={{
               backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
             }}
-          />
+          >
+            <span>{get(project, 'node.title')}</span>
+          </Thumbnail>
         ))}
     </Container>
   )
@@ -96,6 +98,12 @@ const Thumbnail = styled.div`
   width: 160px;
   transition: all 0.5s ease;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  overflow: hidden;
+  opacity: 0.9;
 
   @media ${breakpoints.phoneOnly} {
     height: 80px;
@@ -112,6 +120,17 @@ const Thumbnail = styled.div`
     @media ${breakpoints.phoneOnly} {
       transform: translateY(20px);
     }
+  }
+
+  span {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    transform: translateY(0);
+    transition: all 0.25s ease-in-out;
+  }
+
+  &:hover span {
+    transform: translateY(-5px);
   }
 `
 
