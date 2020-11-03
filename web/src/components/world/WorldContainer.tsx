@@ -14,7 +14,7 @@ import {
   FadeAnim,
   VerticalAnim,
 } from '@components/animations'
-import { Button } from '@components/general'
+import { Button, ProjectSlider } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 import { stringifyArray } from '../../utils'
 
@@ -260,7 +260,6 @@ const WorldContainer = ({ layout, location }) => {
                 [
                   WorldMode.PROJECTS_EXPLORE,
                   WorldMode.PROJECT_PREVIEW,
-                  WorldMode.AREA_PREVIEW,
                 ].includes(world.mode)
               }
               tag="p"
@@ -274,14 +273,13 @@ const WorldContainer = ({ layout, location }) => {
       <VideoBackground />
 
       {/* Area stuff (project slider) */}
-      {/* <AreaContainer>
-        {world.version === WorldVersion.MOBILE && (
-          <ProjectSlider
-            projects={world.areaProjects}
-            show={world.mode === WorldMode.PROJECT_DETAILED}
-          />
-        )}
-      </AreaContainer> */}
+      <AreaContainer>
+        <ProjectSlider
+          className="project-slider"
+          show={world.mode === WorldMode.AREA_PREVIEW}
+          showOnFade
+        />
+      </AreaContainer>
     </Page>
   )
 }

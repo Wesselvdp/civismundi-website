@@ -8,7 +8,7 @@ import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { SET_SLIDER_SCROLL } from '../../actions/types'
 
-const ProjectSlider = ({ show, location }) => {
+const ProjectSlider = ({ show, location, showOnFade }) => {
   const active = useSelector((state: any) => state.world.active || {})
   const scroll = useSelector((state: any) => state.world.sliderScroll)
   const fading = useSelector(
@@ -31,7 +31,7 @@ const ProjectSlider = ({ show, location }) => {
   }, [])
 
   return (
-    <Container ref={ref} className={show && !fading && 'show'}>
+    <Container ref={ref} className={show && (showOnFade || !fading) && 'show'}>
       {active.areaProjects &&
         active.areaProjects.map((project: any, i: any) => (
           <Thumbnail
