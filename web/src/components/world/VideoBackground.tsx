@@ -32,6 +32,14 @@ const VideoBackground = () => {
     ) {
       videoRef.current.play()
     }
+
+    if (world.mode === WorldMode.AREA_PREVIEW) {
+      videoTimer.current = setTimeout(() => {
+        if (world.mode === WorldMode.AREA_PREVIEW) {
+          videoRef.current.pause()
+        }
+      }, VIDEO_MAX_DURATION)
+    }
   }, [world.mode])
 
   useEffect(() => {
@@ -71,16 +79,6 @@ const VideoBackground = () => {
       : dispatch(incrementActiveProjectIndex())
   }
 
-  const onVideoPlay = () => {
-    if (world.mode === WorldMode.AREA_PREVIEW) {
-      videoTimer.current = setTimeout(() => {
-        if (world.mode === WorldMode.AREA_PREVIEW) {
-          videoRef.current.pause()
-        }
-      }, VIDEO_MAX_DURATION)
-    }
-  }
-
   return (
     <Wrapper
       className={`${
@@ -104,7 +102,6 @@ const VideoBackground = () => {
           autoPlay
           muted
           onEnded={() => onVideoEnded()}
-          onPlay={() => onVideoPlay()}
           onPause={() => onVideoPaused()}
         >
           <source src={videoUrl} type="video/mp4" />
