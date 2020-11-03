@@ -40,7 +40,7 @@ const VideoBackground = () => {
         }
       }, VIDEO_MAX_DURATION)
     }
-  }, [world.mode])
+  }, [world.mode, active.projectIndex])
 
   useEffect(() => {
     const url = active.project
