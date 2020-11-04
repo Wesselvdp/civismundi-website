@@ -92,7 +92,7 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
               ></div>
             )}
             <div className="content">
-              <span>{get(project, 'node.title', '').toUpperCase().replaceAll('{BR}', '')}</span>
+              <span>{get(project, 'node.title', '').toUpperCase().split('{BR}').joint('')}</span>
             </div>
           </Thumbnail>
         ))}
