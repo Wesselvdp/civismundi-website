@@ -2,11 +2,15 @@ import React, { useEffect, useState, useRef } from 'react'
 import { get, debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
+import TWEEN from '@tweenjs/tween.js'
 
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { SET_SLIDER_SCROLL } from '../../actions/types'
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
   const world = useSelector((state: any) => state.world)
@@ -17,19 +21,44 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
   )
   const dispatch = useDispatch()
   const ref = useRef(null)
+  const [thumbnailWidth, setThumbnailWidth] = useState(0)
+
+  // useEffect(() => {
+  //   if (ref.current) {
+  //     ref.current.scrollLeft = scroll
+
+  //     ref.current.addEventListener(
+  //       'scroll',
+  //       debounce(() => {
+  //         dispatch({ type: SET_SLIDER_SCROLL, scroll: ref.current.scrollLeft })
+  //       }, 250)
+  //     )
+  //   }
+  // }, [])
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollLeft = scroll
-
-      ref.current.addEventListener(
-        'scroll',
-        debounce(() => {
-          dispatch({ type: SET_SLIDER_SCROLL, scroll: ref.current.scrollLeft })
-        }, 250)
-      )
+    const child = get(ref, 'current.childNodes[0]')
+    let tWidth = 0
+    if (child) {
+      const style = child.currentStyle || window.getComputedStyle(child)
+      const width = child.offsetWidth
+      const margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
+      const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+      tWidth = width + margin - padding
     }
-  }, [])
+
+    const center = ref.current.clientWidth / 2
+    const thumbnailCenter = active.projectIndex * tWidth + 0.5 * tWidth
+    const newScroll = Math.max(0, Math.min(ref.current.scrollWidth, thumbnailCenter - center))
+    const curScroll = ref.current.scrollLeft
+
+    new TWEEN.Tween({ scroll: curScroll })
+      .to({ scroll: newScroll }, 500)
+      .onUpdate((d) => {
+        if (ref.current) ref.current.scrollLeft = d.scroll
+      })
+      .start()
+  }, [active.areaProjects, active.projectIndex])
 
   return (
     <Container ref={ref} className={show && (showOnFade || !fading) && 'show'}>
@@ -63,7 +92,7 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
               ></div>
             )}
             <div className="content">
-              <span>{get(project, 'node.title', '').toUpperCase()}</span>
+              <span>{get(project, 'node.title', '').toUpperCase().replaceAll('{BR}', '')}</span>
             </div>
           </Thumbnail>
         ))}
@@ -86,8 +115,8 @@ const Container = styled.div`
   transition: all 0.5s ease;
 
   @media ${breakpoints.phoneOnly} {
-    height: 150px;
     display: block;
+    height: 150px;
   }
 
   &.show {
@@ -165,6 +194,10 @@ const Thumbnail = styled.div`
     white-space: pre-wrap;
   }
 
+  span {
+    transition: 0.25s ease;
+    transform: translateY(0);
+  }
   &:hover span {
     transform: translateY(-5px);
   }
