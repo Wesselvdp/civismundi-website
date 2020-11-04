@@ -274,7 +274,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                     : get(world, 'active.project.node.city')}
                 </h2>
                 <h1 className="h2">
-                  {get(world, 'active.project.node.title')}
+                  {get(world, 'active.project.node.title', '').replaceAll('{br}', '')}
                 </h1>
                 <p>
                   {stringifyArray(

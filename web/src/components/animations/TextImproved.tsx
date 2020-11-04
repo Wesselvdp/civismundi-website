@@ -12,6 +12,7 @@ const TextAnimation = ({
   style = {},
   durationIn = 0.25, // seconds
   durationOut = 0.25, // seconds
+  allowCustomBreaks,
   ...props
 }) => {
   const [words, setWords] = useState([])
@@ -50,7 +51,12 @@ const TextAnimation = ({
     <CSSTransition classNames="text" {...props}>
       <Wrapper>
         <Tag className={className} style={style}>
-          {words.map((word: any) => word !== '{br}' ? (
+          {words.map((word: any) => {
+            if (word.value.toLowerCase() === '{br}') {
+              return allowCustomBreaks ? <br /> : null;
+            }
+
+            return (
               <>
                 <span style={{ display: 'inline-block' }}>
                   {word.value && word.value.split('').map((letter: string, i: number) => (
@@ -68,8 +74,8 @@ const TextAnimation = ({
                 </span>
                 <span>{' '}</span>
               </>
-            ) : <br />
-          )}
+            )
+        })}
         </Tag>
       </Wrapper>
     </CSSTransition>

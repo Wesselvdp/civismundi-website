@@ -180,6 +180,7 @@ const WorldContainer = ({ layout, location }) => {
               !world.fadingVideo
             }
             tag="h1"
+            allowCustomBreaks
             text={
               lastActive && lastActive.lastShown === MarkerType.PROJECT
                 ? get(world, 'lastActive.project.node.title')
