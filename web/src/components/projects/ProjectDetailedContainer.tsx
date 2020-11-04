@@ -14,7 +14,7 @@ import PrevSVG from '../../assets/btn-prev.svg'
 
 // Components
 import { ProjectList } from '@components/projects'
-import { TextAnim } from '@components/animations'
+import { TextImprov } from '@components/animations'
 import { ProjectSlider } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
@@ -116,10 +116,9 @@ const ProjectDetailedContainer = ({ location, data }) => {
       <StyledMast>
         {(!locState.doAnimation || state >= ProjectState.VIDEO_BUTTON_IN) && (
           <ButtonContainer className="button-container">
-            {world.active.area && (
               <PrevSVG
                 style={{
-                  visibility: getProjectIndex() > 0 ? 'visible' : 'hidden',
+                  visibility: world.active.area && getProjectIndex() > 0 ? 'visible' : 'hidden',
                 }}
                 className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
                 onClick={() =>
@@ -132,41 +131,36 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   )
                 }
               />
-            )}
-            {vimeo && (
-              <PlayButton>
-                <PlaySVG
-                  className={`anim-scale ${
-                    locState.doAnimation && 'with-anim'
-                  }`}
-                  onClick={() => openVideo(true)}
-                />
-              </PlayButton>
-            )}
-            {world.active.area && (
-              <NextSVG
-                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
-                style={{
-                  visibility:
-                    getProjectIndex() < world.active.areaProjects.length - 1
-                      ? 'visible'
-                      : 'hidden',
-                }}
-                onClick={() =>
-                  dispatch(
-                    !fading &&
-                      setWorldMode(WorldMode.PROJECT_DETAILED, {
-                        project:
-                          world.active.areaProjects[getProjectIndex() + 1],
-                        state: {
-                          fadeVideo: true,
-                          keepSliderScroll: true,
-                        },
-                      })
-                  )
-                }
+            <PlayButton style={{ visibility: vimeo ? 'visible' : 'hidden' }}>
+              <PlaySVG
+                className={`anim-scale ${
+                  locState.doAnimation && 'with-anim'
+                }`}
+                onClick={() => openVideo(true)}
               />
-            )}
+            </PlayButton>
+            <NextSVG
+              className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+              style={{
+                visibility:
+                world.active.area && getProjectIndex() < world.active.areaProjects.length - 1
+                    ? 'visible'
+                    : 'hidden',
+              }}
+              onClick={() =>
+                dispatch(
+                  !fading &&
+                    setWorldMode(WorldMode.PROJECT_DETAILED, {
+                      project:
+                        world.active.areaProjects[getProjectIndex() + 1],
+                      state: {
+                        fadeVideo: true,
+                        keepSliderScroll: true,
+                      },
+                    })
+                )
+              }
+            />
           </ButtonContainer>
         )}
         <Content>
@@ -174,67 +168,63 @@ const ProjectDetailedContainer = ({ location, data }) => {
             {(!locState.doAnimation ||
               state >= ProjectState.VIDEO_BUTTON_IN) && (
               <ButtonContainer className="button-container">
-                {world.active.area && (
-                  <PrevSVG
-                    style={{
-                      visibility: getProjectIndex() > 0 ? 'visible' : 'hidden',
-                    }}
+                <PrevSVG
+                  style={{
+                    visibility: world.active.area && getProjectIndex() > 0 ? 'visible' : 'hidden',
+                  }}
+                  className={`anim-scale ${
+                    locState.doAnimation && 'with-anim'
+                  }`}
+                  onClick={() =>
+                    !fading &&
+                    dispatch(
+                      setWorldMode(WorldMode.PROJECT_DETAILED, {
+                        project:
+                          world.active.areaProjects[getProjectIndex() - 1],
+                        state: { fadeVideo: true, keepSliderScroll: true },
+                      })
+                    )
+                  }
+                />
+                <PlayButton style={{
+                  visibility: vimeo ? 'visible' : 'hidden',
+                }}>
+                  <PlaySVG
                     className={`anim-scale ${
                       locState.doAnimation && 'with-anim'
                     }`}
-                    onClick={() =>
+                    onClick={() => openVideo(true)}
+                  />
+                </PlayButton>
+                <NextSVG
+                  className={`anim-scale ${
+                    locState.doAnimation && 'with-anim'
+                  }`}
+                  style={{
+                    visibility:
+                    world.active.area && getProjectIndex() < world.active.areaProjects.length - 1
+                        ? 'visible'
+                        : 'hidden',
+                  }}
+                  onClick={() =>
+                    dispatch(
                       !fading &&
-                      dispatch(
                         setWorldMode(WorldMode.PROJECT_DETAILED, {
                           project:
-                            world.active.areaProjects[getProjectIndex() - 1],
-                          state: { fadeVideo: true, keepSliderScroll: true },
+                            world.active.areaProjects[getProjectIndex() + 1],
+                          state: {
+                            fadeVideo: true,
+                            keepSliderScroll: true,
+                          },
                         })
-                      )
-                    }
-                  />
-                )}
-                {vimeo && (
-                  <PlayButton>
-                    <PlaySVG
-                      className={`anim-scale ${
-                        locState.doAnimation && 'with-anim'
-                      }`}
-                      onClick={() => openVideo(true)}
-                    />
-                  </PlayButton>
-                )}
-                {world.active.area && (
-                  <NextSVG
-                    className={`anim-scale ${
-                      locState.doAnimation && 'with-anim'
-                    }`}
-                    style={{
-                      visibility:
-                        getProjectIndex() < world.active.areaProjects.length - 1
-                          ? 'visible'
-                          : 'hidden',
-                    }}
-                    onClick={() =>
-                      dispatch(
-                        !fading &&
-                          setWorldMode(WorldMode.PROJECT_DETAILED, {
-                            project:
-                              world.active.areaProjects[getProjectIndex() + 1],
-                            state: {
-                              fadeVideo: true,
-                              keepSliderScroll: true,
-                            },
-                          })
-                      )
-                    }
-                  />
-                )}
+                    )
+                  }
+                />
               </ButtonContainer>
             )}
             {locState.doAnimation ? (
               <div className={`text-content ${fading && 'fading'}`}>
-                <TextAnim
+                <TextImprov
                   in={state >= ProjectState.SUBTITLE_IN}
                   timeout={{ enter: 300 }}
                   onEntered={() =>
@@ -249,7 +239,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                       : get(world, 'active.project.node.city')
                   }
                 />
-                <TextAnim
+                <TextImprov
                   in={state >= ProjectState.TITLE_IN}
                   timeout={{ enter: 300 }}
                   onEntered={() =>
@@ -259,7 +249,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   tag="h1"
                   text={get(world, 'active.project.node.title')}
                 />
-                <TextAnim
+                <TextImprov
                   in={state >= ProjectState.PARAGRAPH_IN}
                   timeout={{ enter: 600 }}
                   onEntered={() =>
@@ -270,10 +260,9 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   text={stringifyArray(
                     get(world, 'active.project.node.clients'),
                     '',
-                    '  •  '
+                    '  •  ',
+                    { uppercase: true }
                   )}
-                  letterSpeedIn={0.01}
-                  singleLine={false}
                 />
               </div>
             ) : (
@@ -431,6 +420,8 @@ const Content = styled.div`
     padding-top: 50px;
     top: 50%;
     bottom: 20%;
+    padding-bottom: 0;
+    align-items: flex-start;
   }
 
   .button-container {

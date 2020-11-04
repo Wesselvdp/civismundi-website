@@ -9,10 +9,8 @@ import { useDispatch } from 'react-redux'
 
 import World from './World'
 import {
-  TextAnim,
   TextImprov,
   FadeAnim,
-  VerticalAnim,
 } from '@components/animations'
 import { Button, ProjectSlider } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
@@ -266,7 +264,7 @@ const WorldContainer = ({ layout, location }) => {
       <FooterContainer>
         <div className="footer--content">
           <>
-            <TextAnim
+            <TextImprov
               in={
                 world.ready &&
                 [
@@ -392,11 +390,6 @@ const MobileContent = styled.div`
     max-width: 750px;
     margin-left: auto;
     margin-right: auto;
-  }
-
-  p span {
-    margin: 0 3px;
-    display: inline-block;
   }
 
   // h1 {

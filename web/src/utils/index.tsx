@@ -1,4 +1,5 @@
 import { get } from 'lodash'
+// import console = require('console');
 
 export const stringifyArray = (
   array: any[],
@@ -9,13 +10,15 @@ export const stringifyArray = (
   if (!array || !array.length) return
 
   let str = ''
+  console.log('array', array)
   array.forEach((obj: any, i: number) => {
     let value = key ? get(obj, key) : obj
     if (value && options.uppercase) value = value.toUpperCase()
 
-    if (value) str += `${value} ${i !== array.length - 1 ? character : ''}`
+    if (value) str += `${value}${i !== array.length - 1 ? character : ''}`
   })
 
+  console.log('string', str)
   return str
 }
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
-import { TextAnim } from '@components/animations'
+import { TextImprov } from '@components/animations'
 
 export enum LineState {
   LOADING = 1,
@@ -24,30 +24,28 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
 
   return (
     <Wrapper className={className}>
-      <TextAnim
-        inProp={state >= LineState.SUBTITLE_IN}
+      <TextImprov
+        in={state >= LineState.SUBTITLE_IN}
         timeout={{ enter: timeout.subtitle || 300 }}
         onEntered={() => setState(LineState.TITLE_IN)}
         className="subtitle"
         tag="h2"
         text={subtitle}
       />
-      <TextAnim
-        inProp={state >= LineState.TITLE_IN}
+      <TextImprov
+        in={state >= LineState.TITLE_IN}
         timeout={{ enter: timeout.title || 300 }}
         onEntered={() => setState(LineState.PARAGRAPH_IN)}
         className="h2"
         tag="h1"
         text={title}
       />
-      <TextAnim
-        inProp={state >= LineState.PARAGRAPH_IN}
+      <TextImprov
+        in={state >= LineState.PARAGRAPH_IN}
         timeout={{ enter: timeout.content || 300 }}
         onEntered={() => onFinished()}
         tag="p"
         text={content}
-        letterSpeedIn={0.01}
-        singleLine={false}
       />
       <div class="children">
         {children}

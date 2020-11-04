@@ -3,32 +3,46 @@ import styled from 'styled-components'
 import { CSSTransition } from 'react-transition-group'
 
 import usePrevious from '@hooks/usePrevious'
+// import console = require('console');
 
 const TextAnimation = ({
   text,
   className,
   tag: Tag,
-  style,
+  style = {},
   durationIn = 0.25, // seconds
   durationOut = 0.25, // seconds
   ...props
 }) => {
-  const [textReady, setTextReady] = useState('')
+  const [words, setWords] = useState([])
   const [speed, setSpeed] = useState({ in: 10, out: 20 })
   const [ready, setReady] = useState(false)
-
+  
   useEffect(() => {
     setReady(false)
-    setTextReady(text)
 
     if (text) {
       setSpeed({ in: text.length / durationIn, out: text.length / durationOut })
+      generateWords()
     }
   }, [text])
 
   useEffect(() => {
-    setTimeout(() => setReady(text && speed.in === text.length / durationIn), 0)
-  }, [speed])
+    setTimeout(() => setReady(words && words.length > 0 && speed.in === text.length / durationIn), 0)
+  }, [words])
+
+  const generateWords = () => {
+    const words = text.split(' ')
+    const objs = words.map((word: string, i: number) => {
+      const position = words.slice(0, i).reduce((acc: any, word: string) => acc + word.length, 0)
+      return {
+        value: word,
+        position
+      }
+    })
+
+    setWords(objs)
+  }
 
   if (!ready) return null
 
@@ -36,21 +50,26 @@ const TextAnimation = ({
     <CSSTransition classNames="text" {...props}>
       <Wrapper>
         <Tag className={className} style={style}>
-          {textReady.split('').map((letter: string, i: number) => {
-            return (
-              <span
-                className="letter"
-                style={{
-                  width: letter === ' ' ? '0.25em' : 'auto',
-                  transitionDelay: props.in
-                    ? `${i / speed.in}s`
-                    : `${i / speed.out}s`,
-                }}
-              >
-                {letter}
-              </span>
-            )
-          })}
+          {words.map((word: any) => word !== '{br}' ? (
+              <>
+                <span style={{ display: 'inline-block' }}>
+                  {word.value && word.value.split('').map((letter: string, i: number) => (
+                    <span
+                    className="letter"
+                    style={{
+                      transitionDelay: props.in
+                        ? `${(word.position + i) / speed.in}s`
+                        : `${(word.position + i) / speed.out}s`,
+                    }}
+                  >
+                    {letter}
+                  </span>
+                  ))}
+                </span>
+                <span>{' '}</span>
+              </>
+            ) : <br />
+          )}
         </Tag>
       </Wrapper>
     </CSSTransition>
