@@ -49,6 +49,7 @@ const VideoBackground = () => {
 
     if (url && url !== videoUrl) {
       setVideoUrl(url)
+      videoRef.current.focus()
     }
   }, [active.project, active.projectIndex])
 
