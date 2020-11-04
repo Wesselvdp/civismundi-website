@@ -85,6 +85,17 @@ const ProjectDetailedContainer = ({ location, data }) => {
 
   return (
     <>
+      <GlobeIcon
+        className={`anim-scale ${
+          locState.doAnimation && 'with-anim'
+        }`}
+        onClick={() =>
+          !fading &&
+          dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+        }
+      >
+        <img src="/globe-icon.svg" />
+      </GlobeIcon>
       {vimeo && (
         <ModalWrapper className={videoOpen ? 'open' : ''}>
           <ModalVideo
@@ -368,28 +379,29 @@ const svgNavigators = keyframes`
 `
 
 const GlobeIcon = styled.div`
-  position: absolute;
-  bottom: -10px;
-  transform: translate(-50%, 100%);
-  left: 50%;
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
   height: 56px;
   width: 56px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.5);
   opacity: 1;
+  z-index: 1000;
 
   &.anim-scale {
-    transform: translate(-50%, 100%) scale(1) !important;
+    transform: scale(1) !important;
+    transition: 0.25s ease;
 
     &:hover {
-      transform: translate(-50%, 100%) scale(1.1) !important;
+      transform: scale(1.1) !important;
     }
   }
 
   &.with-anim {
     opacity: 0;
     animation: ${svgNavigators} 1s forwards;
-    animation-delay: 1s;
+    animation-delay: 4s;
   }
 
   cursor: pointer;
