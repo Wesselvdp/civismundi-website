@@ -231,12 +231,12 @@ const WorldContainer = ({ layout, location }) => {
           />
           {world.version === WorldVersion.MOBILE && (
             <FadeAnim
-              timeout={1000}
+              timeout={500}
               in={
-                world.mode === WorldMode.PROJECT_PREVIEW ||
-                world.mode === WorldMode.AREA_PREVIEW
+          (world.mode === WorldMode.PROJECT_PREVIEW ||
+                world.mode === WorldMode.AREA_PREVIEW)  &&
+                !world.fadingVideo
               }
-              appear
             >
               <Button
                 className={world.mode}

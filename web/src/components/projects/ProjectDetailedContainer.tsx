@@ -280,7 +280,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   {stringifyArray(
                     get(world, 'active.project.node.clients'),
                     '',
-                    '  •  '
+                    '  •  ',
+                    { uppercase: true }
                   )}
                 </p>
               </div>

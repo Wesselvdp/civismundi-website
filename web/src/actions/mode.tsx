@@ -109,7 +109,7 @@ export function incrementActiveProjectIndex() {
     setTimeout(async () => {
       await dispatch({ type: SET_ACTIVE_PROJECT_INDEX, index: newIndex })
       dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA })
-    }, 1000)
+    }, 500)
   }
 }
 

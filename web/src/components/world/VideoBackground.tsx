@@ -36,7 +36,7 @@ const VideoBackground = () => {
     if (world.mode === WorldMode.AREA_PREVIEW) {
       videoTimer.current = setTimeout(() => {
         if (world.mode === WorldMode.AREA_PREVIEW) {
-          videoRef.current.pause()
+          onVideoPaused()
         }
       }, VIDEO_MAX_DURATION)
     }
