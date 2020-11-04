@@ -31,6 +31,8 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         className="subtitle"
         tag="h2"
         text={subtitle}
+        appear
+        durationIn={0.2}
       />
       <TextImprov
         in={state >= LineState.TITLE_IN}
@@ -39,6 +41,8 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         className="h2"
         tag="h1"
         text={title}
+        appear
+        durationIn={0.5}
       />
       <TextImprov
         in={state >= LineState.PARAGRAPH_IN}
@@ -46,6 +50,8 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         onEntered={() => onFinished()}
         tag="p"
         text={content}
+        appear
+        durationIn={1}
       />
       <div class="children">
         {children}
@@ -64,10 +70,6 @@ const Wrapper = styled.div`
 
   &.rm-padding-bottom {
     padding-bottom: 0;
-  }
-
-  @media ${breakpoints.phoneOnly} {
-    margin: 3em auto;
   }
 
   & > img {

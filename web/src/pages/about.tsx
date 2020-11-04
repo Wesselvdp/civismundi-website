@@ -20,7 +20,7 @@ const AboutPage = () => {
             subtitle="About us"
             title={TITLE}
             content={CONTENT.toUpperCase()}
-            timeout={{ subtitle: 200, title: 700, content: 1000 }}
+            timeout={{ subtitle: 500, title: 500, content: 500 }}
             onFinished={() => setHeroFinished(true) }
           />
           <FadeAnim in={heroFinished} timeout={1000}>

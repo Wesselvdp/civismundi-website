@@ -10,6 +10,10 @@ import { breakpoints } from '@utils/breakpoints'
 
 import localize from '@utils/localize'
 
+const INTRO_TEXT = `
+  A collective of interdisciplinary creatives whose collaborative
+  practice seeks to navigate the confluence of film, music, design and fashion`
+
 type PageProps = {
   data: {
     allSanityProject: AllProject
@@ -55,8 +59,8 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
         <Hero
           subtitle="Projects"
           title="Lorem ipsum dolor sit amet"
-          content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
-          timeout={{ title: 500, content: 1000 }}
+          content={INTRO_TEXT}
+          timeout={{ title: 500, content: 500 }}
           onFinished={() => setHeroFinished(true)}
           className="rm-padding-bottom"
         />
