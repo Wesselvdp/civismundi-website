@@ -8,10 +8,7 @@ import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
 
 import World from './World'
-import {
-  TextImprov,
-  FadeAnim,
-} from '@components/animations'
+import { TextImprov, FadeAnim } from '@components/animations'
 import { Button, ProjectSlider } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 import { stringifyArray } from '../../utils'
@@ -20,7 +17,7 @@ import { MarkerType, WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
 import { worldHandleResize } from '../../actions/initialize'
 
-import VideoBackground from './VideoBackground'
+import VideoPlayer from './VideoPlayer'
 
 const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
@@ -233,8 +230,8 @@ const WorldContainer = ({ layout, location }) => {
             <FadeAnim
               timeout={500}
               in={
-          (world.mode === WorldMode.PROJECT_PREVIEW ||
-                world.mode === WorldMode.AREA_PREVIEW)  &&
+                (world.mode === WorldMode.PROJECT_PREVIEW ||
+                  world.mode === WorldMode.AREA_PREVIEW) &&
                 !world.fadingVideo
               }
             >
@@ -281,9 +278,9 @@ const WorldContainer = ({ layout, location }) => {
       </FooterContainer>
 
       {/* Background video(s) */}
-      <VideoBackground />
+      <VideoPlayer />
 
-      {/* Area stuff (project slider) */}
+      {/* Area projects carousel */}
       <AreaContainer>
         <ProjectSlider
           className="project-slider"

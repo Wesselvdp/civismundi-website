@@ -105,11 +105,8 @@ export function incrementActiveProjectIndex() {
     const newIndex =
       ((active.projectIndex || 0) + 1) % active.areaProjects.length
 
-    await dispatch({ type: SET_FADING_VIDEO, fading: true })
-    setTimeout(async () => {
-      await dispatch({ type: SET_ACTIVE_PROJECT_INDEX, index: newIndex })
-      dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA })
-    }, 500)
+    await dispatch({ type: SET_ACTIVE_PROJECT_INDEX, index: newIndex })
+    dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA })
   }
 }
 
