@@ -95,7 +95,6 @@ const VideoPlayer = () => {
                 playsInline
                 muted
                 loop
-                autoPlay
                 preload="auto"
                 className={activeVideo === id ? 'active' : ''}
               >
