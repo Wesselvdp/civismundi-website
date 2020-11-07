@@ -214,10 +214,10 @@ const WorldContainer = ({ layout, location }) => {
                         world,
                         'lastActive.projectIndex'
                       )}].node.clients`,
-                      '',
-                      ' • ',
-                      { uppercase: true }
-                    )
+                    ),
+                    '',
+                    ' • ',
+                    { uppercase: true }
                   )
             }
             letterSpeedIn={0.01}
