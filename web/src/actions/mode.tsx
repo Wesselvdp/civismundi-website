@@ -199,8 +199,7 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
         })
 
         if (!state.doAnimation) {
-          const type = state.fadeVideo ? SET_FADING_VIDEO : SET_FADING_PAGE
-          dispatch({ type, fading: false })
+          state.fadeVideo && dispatch({ type: SET_FADING_VIDEO, fading: false })
         }
 
         // toggle markers

@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useRef, useLayoutEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import { CSSTransition } from 'react-transition-group'
-import { get } from 'lodash'
+import { get, debounce } from 'lodash'
 import { useDispatch } from 'react-redux'
 
 import World from './World'
@@ -23,25 +23,26 @@ const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
   practice seeks to navigate the confluence of film, music, design and fashion`
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0])
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight])
-    }
-    window.addEventListener('resize', updateSize)
-    updateSize()
-    return () => window.removeEventListener('resize', updateSize)
-  }, [])
-  return size
+function usePrevious(value) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = useRef()
+
+  // Store current value in ref
+  useEffect(() => {
+    ref.current = value
+  }, [value]) // Only re-run if value changes
+
+  // Return previous value (happens before update in useEffect above)
+  return ref.current
 }
 
 const WorldContainer = ({ layout, location }) => {
   const world = useSelector((state) => state.world)
   const [markers, setMarkers] = useState([]) // all markers (subset of Projects+Locations)
-  const [showGrabIcon, setShowGrabIcon] = useState(false)
-  const [width, height] = useWindowSize()
-
+  const [[width, height], setSize] = useState([0, 0])
+  const prevWidth = usePrevious(width)
+  const prevHeight = usePrevious(height)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const WorldContainer = ({ layout, location }) => {
       }
     }
 
+    // combine projects and areas for markers
     const projects = data.allSanityProject.edges.filter(
       (p) => p.node.locationGroup === null
     )
@@ -63,21 +65,25 @@ const WorldContainer = ({ layout, location }) => {
       )
     )
     setMarkers([...areas, ...projects])
+
+    // listen on resize
+    window.addEventListener(
+      'resize',
+      debounce(
+        () => {
+          setSize([window.innerWidth, window.innerHeight])
+        },
+        500,
+        { leading: true, trailing: true }
+      )
+    )
   }, [])
 
   useEffect(() => {
+    if (width === prevWidth && Math.abs(prevHeight - height) < 30) return
+
     dispatch(worldHandleResize())
   }, [width, height])
-
-  useEffect(() => {
-    if (
-      world.mode === WorldMode.PROJECTS_EXPLORE ||
-      world.mode === WorldMode.PROJECT_PREVIEW
-    ) {
-      if (!showGrabIcon) setTimeout(() => setShowGrabIcon(true), 2000)
-      else setShowGrabIcon(false)
-    }
-  }, [world.mode, world.ready])
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -213,15 +219,13 @@ const WorldContainer = ({ layout, location }) => {
                       `lastActive.areaProjects[${get(
                         world,
                         'lastActive.projectIndex'
-                      )}].node.clients`,
+                      )}].node.clients`
                     ),
                     '',
                     ' • ',
                     { uppercase: true }
                   )
             }
-            letterSpeedIn={0.01}
-            singleLine={false}
             appear
           />
           {world.version === WorldVersion.MOBILE && (
@@ -288,6 +292,7 @@ const WorldContainer = ({ layout, location }) => {
           }
           showOnFade
           withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
+          withAnimation={world.mode === WorldMode.AREA_PREVIEW}
         />
       </AreaContainer>
     </Page>

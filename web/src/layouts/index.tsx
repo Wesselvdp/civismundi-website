@@ -5,7 +5,7 @@ import 'react-circular-progressbar/dist/styles.css'
 
 import { Navigation, GlobeButton } from '../components/general'
 import { WorldContainer } from '../components/world'
-import { SET_READY, SET_FADING_PAGE } from '../actions/types'
+import { WORLD_SET_READY, SET_FADING_PAGE } from '../actions/types'
 
 type T = any
 
@@ -35,17 +35,22 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   }, [world.fadingPage])
 
   useEffect(() => {
-    if (world.initialized && world.loaded) {
+    if (world.initialized && !world.loading) {
       const elapsed = new Date().getTime() - startTime
 
       setTimeout(() => {
         setLoading(false)
-        setTimeout(() => {
-          dispatch({ type: SET_READY })
-        }, 1000)
+
+        if (!world.ready) {
+          setTimeout(() => {
+            dispatch({ type: WORLD_SET_READY, ready: true })
+          }, 1000)
+        }
       }, Math.max(MIN_LOADING_TIME - elapsed, 0))
+    } else {
+      setLoading(true)
     }
-  }, [world.initialized, world.loaded])
+  }, [world.initialized, world.loading])
 
   return (
     <>
@@ -56,15 +61,13 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
         <Navigation location={location} />
         <Main className={world.fadingPage && 'fading'}>{children}</Main>
       </>
-      {!world.ready && (
-        <Loader className={!loading && 'hidden'}>
-          <img src="/cm-white.svg" />
-          <div className="loader-circle"></div>
-          <div className="loader-line-mask">
-            <div className="loader-line"></div>
-          </div>
-        </Loader>
-      )}
+      <Loader className={!world.loading ? 'hidden' : ''}>
+        <img src="/cm-white.svg" />
+        <div className="loader-circle"></div>
+        <div className="loader-line-mask">
+          <div className="loader-line"></div>
+        </div>
+      </Loader>
       {pageContext.layout !== 'home' &&
         pageContext.layout !== 'project-detailed' && <GlobeButton />}
     </>
@@ -90,6 +93,7 @@ const Loader = styled.div`
   background-color: #000;
   opacity: 1;
   transition: all 1s ease;
+  pointer-events: none;
 
   &.hidden {
     opacity: 0;

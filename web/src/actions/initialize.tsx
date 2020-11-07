@@ -8,6 +8,9 @@ import {
   WORLD_INITIALIZE_COMPLETE,
   SET_LIGHTNING,
   WORLD_LOADING_COMPLETE,
+  WORLD_SET_VERSION,
+  WORLD_SET_LOADING,
+  WORLD_SET_RESIZE,
 } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
 import {
@@ -112,10 +115,18 @@ function createClouds() {
 }
 
 export function worldHandleResize() {
-  return function action(dispatch: any, getState: any) {
+  return async function action(dispatch: any, getState: any) {
+    const version = getWorldVersion()
+    await dispatch({ type: WORLD_SET_VERSION, version })
+
     const w = getState().world
 
-    if (w.ready) {
+    if (w.ref.current) {
+      w.ref.current.camera().position.z = 350
+      if (w.version === WorldVersion.MOBILE) {
+        w.ref.current.camera().position.z = calculateCameraZ()
+      }
+
       w.ref.current.camera().aspect = window.innerWidth / window.innerHeight
       w.ref.current.camera().updateProjectionMatrix()
       w.ref.current.renderer().setSize(window.innerWidth, window.innerHeight)
@@ -141,21 +152,10 @@ export function initializeWorld(
   options: any = {}
 ) {
   return async function action(dispatch: any, getState: any) {
-    const world = getState().world
-
     if (!ref.current) return Promise.resolve()
 
-    if (world.ready) {
-      if (options.force) {
-        // TODO: destroy world; use case: on resize
-      }
-
-      return Promise.resolve()
-    }
-
     THREE.DefaultLoadingManager.onLoad = function () {
-      console.log('loaded')
-      dispatch({ type: WORLD_LOADING_COMPLETE })
+      dispatch({ type: WORLD_SET_LOADING, loading: false })
     }
 
     // store sanity data

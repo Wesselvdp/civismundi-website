@@ -8,23 +8,17 @@ import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { SET_SLIDER_SCROLL } from '../../actions/types'
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
 
 const ProjectSlider = ({
   show,
   location,
   showOnFade,
   withProgressBar,
-  withAnimation,
+  withAnimation = false,
 }) => {
-  const world = useSelector((state: any) => state.world)
   const active = useSelector((state: any) => state.world.active || {})
-
   const dispatch = useDispatch()
   const ref = useRef(null)
-  const [thumbnailWidth, setThumbnailWidth] = useState(0)
 
   useEffect(() => {
     const child = get(ref, 'current.childNodes[0]')
@@ -37,22 +31,22 @@ const ProjectSlider = ({
       const padding =
         parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
       tWidth = width + margin - padding
+
+      const center = ref.current.clientWidth / 2
+      const thumbnailCenter = active.projectIndex * tWidth + 0.5 * tWidth
+      const newScroll = Math.max(
+        0,
+        Math.min(ref.current.scrollWidth, thumbnailCenter - center)
+      )
+      const curScroll = ref.current.scrollLeft
+
+      new TWEEN.Tween({ scroll: curScroll })
+        .to({ scroll: newScroll }, 500)
+        .onUpdate((d) => {
+          if (ref.current) ref.current.scrollLeft = d.scroll
+        })
+        .start()
     }
-
-    const center = ref.current.clientWidth / 2
-    const thumbnailCenter = active.projectIndex * tWidth + 0.5 * tWidth
-    const newScroll = Math.max(
-      0,
-      Math.min(ref.current.scrollWidth, thumbnailCenter - center)
-    )
-    const curScroll = ref.current.scrollLeft
-
-    new TWEEN.Tween({ scroll: curScroll })
-      .to({ scroll: newScroll }, 500)
-      .onUpdate((d) => {
-        if (ref.current) ref.current.scrollLeft = d.scroll
-      })
-      .start()
   }, [active.areaProjects, active.projectIndex])
 
   return (
@@ -60,14 +54,15 @@ const ProjectSlider = ({
       {active.areaProjects &&
         active.areaProjects.map((project: any, i: any) => (
           <Thumbnail
-            className={active.projectIndex === i && 'active'}
+            className={active.projectIndex === i ? 'active' : ''}
             onClick={() =>
               active.projectIndex !== i &&
               dispatch(
                 setWorldMode(WorldMode.PROJECT_DETAILED, {
                   project,
                   state: {
-                    withAnimation: false,
+                    doAnimation: withAnimation,
+                    delay: withAnimation ? 1500 : 0,
                     fadeVideo: true,
                     keepSliderScroll: true,
                   },

@@ -20,15 +20,18 @@ import {
   SET_ACTIVE,
   SET_FADING_PAGE,
   SET_FADING_VIDEO,
-  WORLD_LOADING_COMPLETE,
   SET_SLIDER_SCROLL,
   SET_HOVERED,
   SET_ACTIVE_PROJECT_INDEX,
+  WORLD_SET_VERSION,
+  WORLD_SET_READY,
+  WORLD_SET_LOADING,
+  WORLD_SET_RESIZE,
 } from '../actions/types'
 
 const initialState = {
   initialized: false, // initializing of store
-  loaded: false, // loading of threejs scene
+  loading: true, // loading of threejs scene
   ready: false, // if both loaded & initialized
   ref: { current: null },
   mode: WorldMode.PROJECTS_EXPLORE,
@@ -49,6 +52,7 @@ const initialState = {
   fadingPage: false,
   fadingVideo: false,
   sliderScroll: 0,
+  resize: false,
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -62,6 +66,18 @@ const reducer = (state = initialState, action: any) => {
       }
     }
 
+    case WORLD_SET_READY: {
+      return { ...state, ready: action.ready }
+    }
+
+    case WORLD_SET_LOADING: {
+      return { ...state, loading: action.loading }
+    }
+
+    case WORLD_SET_RESIZE: {
+      return { ...state, resize: action.resize }
+    }
+
     // Init
     case WORLD_INITIALIZE_START: {
       return { ...state, ref: action.ref, version: action.version }
@@ -71,12 +87,12 @@ const reducer = (state = initialState, action: any) => {
       return { ...state, initialized: true }
     }
 
-    case WORLD_LOADING_COMPLETE: {
-      return { ...state, loaded: true }
-    }
-
     case SET_HOVERED: {
       return { ...state, hovered: action.hovered }
+    }
+
+    case WORLD_SET_VERSION: {
+      return { ...state, version: action.version }
     }
 
     // Modes
