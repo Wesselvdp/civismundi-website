@@ -165,11 +165,7 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     if (!data.project && !data.area) return
 
     if (!data.project) {
-      data.project = w.projects.find(
-        (proj: any) =>
-          proj.node.locationGroup &&
-          proj.node.locationGroup._id === data.area.node._id
-      )
+      data.project = w.active.areaProjects[get(w.active, 'projectIndex', 0)]
     }
 
     if (data.skipInTransition)
@@ -177,9 +173,8 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
 
     const state = data.state || {}
     if (!state.doAnimation) {
-      state.fadeVideo
-        ? dispatch({ type: SET_FADING_VIDEO, fading: true })
-        : dispatch({ type: SET_FADING_PAGE, fading: true })
+      const type = state.fadeVideo ? SET_FADING_VIDEO : SET_FADING_PAGE
+      dispatch({ type, fading: true })
     }
 
     if (!state.keepSliderScroll)
@@ -194,10 +189,6 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
         // set active
         await dispatch(setActiveObjectFromProject(data.project))
 
-        // update videos
-        const videoUrl = get(data, 'project.node.video.asset.url')
-        videoUrl && (await dispatch({ type: SET_VIDEO_URLS, urls: [videoUrl] }))
-
         // dispatch mode change
         await dispatch({ type: MODE_GO_PROJECT_DETAILED })
 
@@ -206,6 +197,11 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
           lastShown:
             getState().world.lastActive.lastShown || MarkerType.PROJECT,
         })
+
+        if (!state.doAnimation) {
+          const type = state.fadeVideo ? SET_FADING_VIDEO : SET_FADING_PAGE
+          dispatch({ type, fading: false })
+        }
 
         // toggle markers
         const mDuration = dispatch(toggleMarkers(false))
@@ -219,7 +215,7 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
           moveToMarker(getState().world, !data.skipInTransition ? duration : 0)
         }, Math.max(mDuration - 250, 0))
       },
-      state.doAnimation ? 0 : 750
+      state.doAnimation ? 0 : 500
     )
   }
 }

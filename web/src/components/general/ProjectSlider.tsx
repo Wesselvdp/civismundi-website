@@ -12,29 +12,19 @@ import { SET_SLIDER_SCROLL } from '../../actions/types'
 // import console = require('console');
 // import console = require('console');
 
-const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
+const ProjectSlider = ({
+  show,
+  location,
+  showOnFade,
+  withProgressBar,
+  withAnimation,
+}) => {
   const world = useSelector((state: any) => state.world)
   const active = useSelector((state: any) => state.world.active || {})
-  const scroll = useSelector((state: any) => state.world.sliderScroll)
-  const fading = useSelector(
-    (state: any) => state.world.fadingVideo || state.world.fadingPage
-  )
+
   const dispatch = useDispatch()
   const ref = useRef(null)
   const [thumbnailWidth, setThumbnailWidth] = useState(0)
-
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     ref.current.scrollLeft = scroll
-
-  //     ref.current.addEventListener(
-  //       'scroll',
-  //       debounce(() => {
-  //         dispatch({ type: SET_SLIDER_SCROLL, scroll: ref.current.scrollLeft })
-  //       }, 250)
-  //     )
-  //   }
-  // }, [])
 
   useEffect(() => {
     const child = get(ref, 'current.childNodes[0]')
@@ -42,14 +32,19 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
     if (child) {
       const style = child.currentStyle || window.getComputedStyle(child)
       const width = child.offsetWidth
-      const margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
-      const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
+      const margin =
+        parseFloat(style.marginLeft) + parseFloat(style.marginRight)
+      const padding =
+        parseFloat(style.paddingLeft) + parseFloat(style.paddingRight)
       tWidth = width + margin - padding
     }
 
     const center = ref.current.clientWidth / 2
     const thumbnailCenter = active.projectIndex * tWidth + 0.5 * tWidth
-    const newScroll = Math.max(0, Math.min(ref.current.scrollWidth, thumbnailCenter - center))
+    const newScroll = Math.max(
+      0,
+      Math.min(ref.current.scrollWidth, thumbnailCenter - center)
+    )
     const curScroll = ref.current.scrollLeft
 
     new TWEEN.Tween({ scroll: curScroll })
@@ -61,7 +56,7 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
   }, [active.areaProjects, active.projectIndex])
 
   return (
-    <Container ref={ref} className={show && (showOnFade || !fading) && 'show'}>
+    <Container ref={ref} className={show && 'show'}>
       {active.areaProjects &&
         active.areaProjects.map((project: any, i: any) => (
           <Thumbnail
@@ -92,7 +87,12 @@ const ProjectSlider = ({ show, location, showOnFade, withProgressBar }) => {
               ></div>
             )}
             <div className="content">
-              <span>{get(project, 'node.title', '').toUpperCase().split('{BR}').join('')}</span>
+              <span>
+                {get(project, 'node.title', '')
+                  .toUpperCase()
+                  .split('{BR}')
+                  .join('')}
+              </span>
             </div>
           </Thumbnail>
         ))}

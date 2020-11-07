@@ -46,22 +46,28 @@ const VideoPlayer = () => {
     if (!project) return
 
     // DOM modifications
+    const elem = getVideoElem(project.node._id)
     if (prevVideo) {
       prevVideo.pause()
-      prevVideo.currentTime = 0
-    }
 
-    const elem = getVideoElem(project.node._id)
+      if (prevVideo.id !== elem.id) {
+        prevVideo.currentTime = 0
+      }
+    }
+    setPrevVideo(elem)
+
     if (!elem) return
     elem.play()
 
     if (world.mode === WorldMode.AREA_PREVIEW) {
       timer.current = setTimeout(() => {
-        dispatch(incrementActiveProjectIndex())
+        dispatch({ type: SET_FADING_VIDEO, fading: true })
+        setTimeout(() => {
+          dispatch(incrementActiveProjectIndex())
+          dispatch({ type: SET_FADING_VIDEO, fading: false })
+        }, 500)
       }, VIDEO_MAX_DURATION)
     }
-
-    setPrevVideo(elem)
   }
 
   useEffect(() => {
@@ -134,7 +140,7 @@ const Wrapper = styled.div`
     width: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: 1s ease;
+    transition: opacity 0.5s ease;
 
     &.active {
       opacity: 1;
@@ -147,20 +153,6 @@ const Wrapper = styled.div`
 
   &.fading {
     opacity: 0 !important;
-  }
-`
-
-const Transitioner = styled.div`
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  right: 0;
-  opacity: 1;
-  transition: opacity 1000ms ease-in-out;
-
-  &.hide {
-    opacity: 0;
   }
 `
 

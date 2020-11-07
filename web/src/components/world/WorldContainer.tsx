@@ -185,8 +185,7 @@ const WorldContainer = ({ layout, location }) => {
                     world,
                     `lastActive.areaProjects[${get(
                       world,
-                      'lastActive.projectIndex',
-                      0
+                      'lastActive.projectIndex'
                     )}].node.title`
                   )
             }
@@ -213,8 +212,7 @@ const WorldContainer = ({ layout, location }) => {
                       world,
                       `lastActive.areaProjects[${get(
                         world,
-                        'lastActive.projectIndex',
-                        0
+                        'lastActive.projectIndex'
                       )}].node.clients`,
                       '',
                       ' • ',
@@ -243,16 +241,20 @@ const WorldContainer = ({ layout, location }) => {
                     setWorldMode(WorldMode.PROJECT_DETAILED, {
                       project:
                         world.mode === WorldMode.AREA_PREVIEW
-                          ? world.active.areaProjects[0]
+                          ? get(
+                              world,
+                              `active.areaProjects[${get(
+                                world,
+                                `active.projectIndex`
+                              )}]`
+                            )
                           : world.active.project,
                       state: { doAnimation: true, delay: 1500 },
                     })
                   )
                 }
               >
-                {`VIEW PROJECT${
-                  world.mode === WorldMode.AREA_PREVIEW ? 'S' : ''
-                }`}
+                VIEW PROJECT
               </Button>
             </FadeAnim>
           )}
@@ -264,11 +266,7 @@ const WorldContainer = ({ layout, location }) => {
           <>
             <TextImprov
               in={
-                world.ready &&
-                [
-                  WorldMode.PROJECTS_EXPLORE,
-                  WorldMode.PROJECT_PREVIEW,
-                ].includes(world.mode)
+                world.ready && [WorldMode.PROJECTS_EXPLORE].includes(world.mode)
               }
               tag="p"
               text={INTRO_TEXT.toUpperCase()}
@@ -284,9 +282,12 @@ const WorldContainer = ({ layout, location }) => {
       <AreaContainer>
         <ProjectSlider
           className="project-slider"
-          show={world.mode === WorldMode.AREA_PREVIEW}
+          show={
+            world.mode === WorldMode.AREA_PREVIEW ||
+            (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
+          }
           showOnFade
-          withProgressBar
+          withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
         />
       </AreaContainer>
     </Page>
@@ -313,6 +314,7 @@ const Page = styled.div`
   &.project-detailed {
     position: absolute;
     opacity: 1;
+    z-index: 1;
   }
 `
 

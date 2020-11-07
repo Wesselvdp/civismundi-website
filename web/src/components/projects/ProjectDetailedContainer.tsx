@@ -44,7 +44,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
   const world = useSelector((state) => state.world)
   const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
-  const [fading, setFading] = useState(true)
+  const [fading, setFading] = useState(false)
 
   useEffect(() => {
     let timer
@@ -86,12 +86,9 @@ const ProjectDetailedContainer = ({ location, data }) => {
   return (
     <>
       <GlobeIcon
-        className={`anim-scale ${
-          locState.doAnimation && 'with-anim'
-        }`}
+        className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
         onClick={() =>
-          !fading &&
-          dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+          !fading && dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
         }
       >
         <img src="/globe-icon.svg" />
@@ -116,26 +113,27 @@ const ProjectDetailedContainer = ({ location, data }) => {
       <StyledMast>
         {(!locState.doAnimation || state >= ProjectState.VIDEO_BUTTON_IN) && (
           <ButtonContainer className="button-container">
-              <PrevSVG
-                style={{
-                  visibility: world.active.area && getProjectIndex() > 0 ? 'visible' : 'hidden',
-                }}
-                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
-                onClick={() =>
-                  !fading &&
-                  dispatch(
-                    setWorldMode(WorldMode.PROJECT_DETAILED, {
-                      project: world.active.areaProjects[getProjectIndex() - 1],
-                      state: { fadeVideo: true, keepSliderScroll: true },
-                    })
-                  )
-                }
-              />
+            <PrevSVG
+              style={{
+                visibility:
+                  world.active.area && getProjectIndex() > 0
+                    ? 'visible'
+                    : 'hidden',
+              }}
+              className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+              onClick={() =>
+                !fading &&
+                dispatch(
+                  setWorldMode(WorldMode.PROJECT_DETAILED, {
+                    project: world.active.areaProjects[getProjectIndex() - 1],
+                    state: { fadeVideo: true },
+                  })
+                )
+              }
+            />
             <PlayButton style={{ visibility: vimeo ? 'visible' : 'hidden' }}>
               <PlaySVG
-                className={`anim-scale ${
-                  locState.doAnimation && 'with-anim'
-                }`}
+                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
                 onClick={() => openVideo(true)}
               />
             </PlayButton>
@@ -143,7 +141,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
               className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
               style={{
                 visibility:
-                world.active.area && getProjectIndex() < world.active.areaProjects.length - 1
+                  world.active.area &&
+                  getProjectIndex() < world.active.areaProjects.length - 1
                     ? 'visible'
                     : 'hidden',
               }}
@@ -151,8 +150,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 dispatch(
                   !fading &&
                     setWorldMode(WorldMode.PROJECT_DETAILED, {
-                      project:
-                        world.active.areaProjects[getProjectIndex() + 1],
+                      project: world.active.areaProjects[getProjectIndex() + 1],
                       state: {
                         fadeVideo: true,
                         keepSliderScroll: true,
@@ -170,7 +168,10 @@ const ProjectDetailedContainer = ({ location, data }) => {
               <ButtonContainer className="button-container">
                 <PrevSVG
                   style={{
-                    visibility: world.active.area && getProjectIndex() > 0 ? 'visible' : 'hidden',
+                    visibility:
+                      world.active.area && getProjectIndex() > 0
+                        ? 'visible'
+                        : 'hidden',
                   }}
                   className={`anim-scale ${
                     locState.doAnimation && 'with-anim'
@@ -186,9 +187,11 @@ const ProjectDetailedContainer = ({ location, data }) => {
                     )
                   }
                 />
-                <PlayButton style={{
-                  visibility: vimeo ? 'visible' : 'hidden',
-                }}>
+                <PlayButton
+                  style={{
+                    visibility: vimeo ? 'visible' : 'hidden',
+                  }}
+                >
                   <PlaySVG
                     className={`anim-scale ${
                       locState.doAnimation && 'with-anim'
@@ -202,7 +205,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   }`}
                   style={{
                     visibility:
-                    world.active.area && getProjectIndex() < world.active.areaProjects.length - 1
+                      world.active.area &&
+                      getProjectIndex() < world.active.areaProjects.length - 1
                         ? 'visible'
                         : 'hidden',
                   }}
@@ -222,78 +226,59 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 />
               </ButtonContainer>
             )}
-            {locState.doAnimation ? (
-              <div className={`text-content ${fading && 'fading'}`}>
-                <TextImprov
-                  in={state >= ProjectState.SUBTITLE_IN}
-                  timeout={{ enter: 300 }}
-                  onEntered={() =>
-                    locState.doAnimation && setState(ProjectState.TITLE_IN)
-                  }
-                  className="subtitle"
-                  tag="h2"
-                  text={
-                    world.active.project &&
-                    world.active.project.node.locationGroup
-                      ? get(world, 'active.project.node.locationGroup.title')
-                      : get(world, 'active.project.node.city')
-                  }
-                />
-                <TextImprov
-                  in={state >= ProjectState.TITLE_IN}
-                  timeout={{ enter: 300 }}
-                  onEntered={() =>
-                    locState.doAnimation && setState(ProjectState.PARAGRAPH_IN)
-                  }
-                  className="h2"
-                  tag="h1"
-                  text={get(world, 'active.project.node.title')}
-                />
-                <TextImprov
-                  in={state >= ProjectState.PARAGRAPH_IN}
-                  timeout={{ enter: 600 }}
-                  onEntered={() =>
-                    locState.doAnimation &&
-                    setState(ProjectState.VIDEO_BUTTON_IN)
-                  }
-                  tag="p"
-                  text={stringifyArray(
-                    get(world, 'active.project.node.clients'),
-                    '',
-                    '  •  ',
-                    { uppercase: true }
-                  )}
-                />
-              </div>
-            ) : (
-              <div className={`text-content ${fading && 'fading'}`}>
-                <h2 className="subtitle">
-                  {world.active.project &&
+            <div className={`text-content`}>
+              <TextImprov
+                in={!fading && state >= ProjectState.SUBTITLE_IN}
+                onEntered={() =>
+                  locState.doAnimation && setState(ProjectState.TITLE_IN)
+                }
+                className="subtitle"
+                tag="h2"
+                text={
+                  world.active.project &&
                   world.active.project.node.locationGroup
                     ? get(world, 'active.project.node.locationGroup.title')
-                    : get(world, 'active.project.node.city')}
-                </h2>
-                <h1 className="h2">
-                  {get(world, 'active.project.node.title', '').split('{br}').join('')}
-                </h1>
-                <p>
-                  {stringifyArray(
-                    get(world, 'active.project.node.clients'),
-                    '',
-                    '  •  ',
-                    { uppercase: true }
-                  )}
-                </p>
-              </div>
-            )}
+                    : get(world, 'active.project.node.city')
+                }
+                appear
+                timeout={{ enter: 300 }}
+              />
+              <TextImprov
+                in={!fading && state >= ProjectState.TITLE_IN}
+                onEntered={() =>
+                  locState.doAnimation && setState(ProjectState.PARAGRAPH_IN)
+                }
+                className="h2"
+                tag="h1"
+                text={get(world, 'active.project.node.title')}
+                appear
+                timeout={{ enter: 300 }}
+              />
+              <TextImprov
+                in={!fading && state >= ProjectState.PARAGRAPH_IN}
+                onEntered={() =>
+                  locState.doAnimation && setState(ProjectState.VIDEO_BUTTON_IN)
+                }
+                tag="p"
+                text={stringifyArray(
+                  get(world, 'active.project.node.clients'),
+                  '',
+                  '  •  ',
+                  { uppercase: true }
+                )}
+                appear
+                timeout={{ enter: 600 }}
+              />
+            </div>
           </div>
         </Content>
-        <SliderWrapper>
+        {/* <SliderWrapper className="project-slider-wrapper">
           <ProjectSlider
             className="project-slider"
+            withAnimation={false}
             show={!locState.doAnimation || state === ProjectState.SLIDER_IN}
           />
-        </SliderWrapper>
+        </SliderWrapper> */}
       </StyledMast>
 
       {/* Project content */}
@@ -354,8 +339,12 @@ const SliderWrapper = styled.div`
   width: 100%;
   height: auto;
 
-  @media ${breakpoints.phoneOnly} {
-    bottom: 130px;
+  @media ${breakpoints.tabletLandscapeDown} {
+    position: relative;
+    bottom: auto;
+    top: auto;
+    right: auto;
+    left: auto;
   }
 `
 
@@ -482,6 +471,11 @@ const StyledMast = styled.div`
       display: none;
     }
   }
+
+  @media ${breakpoints.tabletLandscapeDown} {
+    display: flex;
+    align-items: flex-end;
+  }
 `
 
 const ButtonContainer = styled.div`
@@ -493,6 +487,7 @@ const ButtonContainer = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 1;
 
   .anim-scale {
     transform: scale(1);
