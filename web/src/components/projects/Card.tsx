@@ -58,8 +58,8 @@ const ProjectCard = ({ data, skipTransition = false, doAnimation = true }) => {
         <h5 className="subtitle">
           {locationGroup ? locationGroup.title : city}
         </h5>
-        <h4>{title}</h4>
-        <p>{stringifyArray(clients, '', '  •  ')}</p>
+        <h4>{title.toUpperCase().split('{BR}').join('')}</h4>
+        <p>{stringifyArray(clients, '', '  •  ', { uppercase: true })}</p>
       </Content>
     </Card>
   )

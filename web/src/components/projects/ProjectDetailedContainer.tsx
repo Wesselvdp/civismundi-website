@@ -250,7 +250,10 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 }
                 className="h2"
                 tag="h1"
-                text={get(world, 'active.project.node.title')}
+                text={get(world, 'active.project.node.title', '')
+                  .toUpperCase()
+                  .split('{BR}')
+                  .join('')}
                 appear
                 timeout={{ enter: 300 }}
               />
