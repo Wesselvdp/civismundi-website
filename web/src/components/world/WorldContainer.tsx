@@ -392,14 +392,14 @@ const MobileContent = styled.div`
   }
 
   p {
-    max-width: 750px;
+    max-width: 450px;
     margin-left: auto;
     margin-right: auto;
   }
 
-  // h1 {
-  //   line-height: 0.9em;
-  // }
+  h1 {
+    line-height: 0.9em;
+  }
 `
 
 const FooterContainer = styled.div`
