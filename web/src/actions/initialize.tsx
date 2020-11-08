@@ -267,48 +267,8 @@ export function initializeWorld(
       }
     }
 
-    function onMouseMove(event: any) {
-      // event.preventDefault()
-
-      const w = getState().world
-      if (
-        w.mode !== WorldMode.AREA_PREVIEW &&
-        w.mode !== WorldMode.PROJECTS_EXPLORE &&
-        w.mode !== WorldMode.PROJECT_PREVIEW
-      )
-        return
-
-      mouse.x =
-        (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
-        1
-      mouse.y =
-        -(event.clientY / w.ref.current.renderer().domElement.clientHeight) *
-          2 +
-        1
-
-      raycaster.setFromCamera(mouse, w.ref.current.camera())
-
-      const intersects = raycaster.intersectObjects(
-        w.ref.current.scene().children,
-        true
-      )
-      if (
-        intersects.length &&
-        intersects[0].object.__globeObjType === 'custom'
-      ) {
-        if (w.hovered === intersects[0].object.__data.node._id) return
-
-        console.log('onMarkerHovered', intersects[0].object.__data)
-        dispatch(onMarkerHovered(intersects[0].object.__data))
-      } else if (w.hovered) {
-        console.log('onMarkerHovered null')
-        dispatch(onMarkerHovered(null))
-      }
-    }
-
     document.addEventListener('mousedown', onDocumentMouseDown, false)
     document.addEventListener('touchstart', onDocumentMouseDown, false)
-    // window.addEventListener('mousemove', onMouseMove, false)
 
     // create additional THREE.js objects
     await Promise.all([dispatch(createLightning()), dispatch(createClouds())])

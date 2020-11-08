@@ -27,7 +27,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
     if (world.fadingPage) {
       timer = setTimeout(
         () => dispatch({ type: SET_FADING_PAGE, fading: false }),
-        1000
+        500
       )
     }
 
@@ -153,7 +153,7 @@ const Loader = styled.div`
 const Main = styled.main`
   overflow-x: hidden;
   opacity: 1;
-  transition: opacity 1s ease;
+  transition: opacity 0.5s ease;
 
   &.fading {
     opacity: 0;
@@ -162,7 +162,7 @@ const Main = styled.main`
 
 const WorldWrapper = styled.div`
   opacity: 1;
-  transition: opacity 1s ease;
+  transition: opacity 0.5s ease;
 
   &.fading {
     opacity: 0;

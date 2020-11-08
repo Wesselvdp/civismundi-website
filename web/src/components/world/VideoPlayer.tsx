@@ -140,9 +140,11 @@ const Wrapper = styled.div`
     width: 100%;
     object-fit: cover;
     opacity: 0;
+    visibility: hidden;
     transition: opacity 0.5s ease;
 
     &.active {
+      visibility: visible;
       opacity: 1;
     }
   }

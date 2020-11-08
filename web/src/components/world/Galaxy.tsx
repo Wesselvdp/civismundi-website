@@ -14,8 +14,8 @@ const GalaxyContainer = styled.div`
   height: 100%;
   width: 100%;
   background-image: url('/stars.png'), url('/bg-1.jpg');
-  background-size: contain;
-  background-position: center;
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
   z-index: -10;
   opacity: 0;
