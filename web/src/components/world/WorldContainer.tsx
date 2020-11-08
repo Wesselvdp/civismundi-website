@@ -74,8 +74,8 @@ const WorldContainer = ({ layout, location }) => {
         () => {
           setSize([window.innerWidth, window.innerHeight])
         },
-        500,
-        { leading: true, trailing: true }
+        100,
+        { trailing: true }
       )
     )
   }, [])

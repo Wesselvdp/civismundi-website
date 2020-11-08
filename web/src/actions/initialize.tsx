@@ -43,10 +43,8 @@ function configureScene(world: any) {
   controls.autoRotateSpeed = 0.3
 
   // set camera height according to version
-  world.ref.current.camera().position.z = 350
-  if (world.version === WorldVersion.MOBILE) {
-    world.ref.current.camera().position.z = calculateCameraZ()
-  }
+  world.ref.current.camera().position.z =
+    world.version === WorldVersion.MOBILE ? calculateCameraZ() : 350
 }
 
 function createLightning() {
@@ -122,16 +120,17 @@ export function worldHandleResize() {
     const w = getState().world
 
     if (w.ref.current) {
-      if (w.mode !== WorldMode.PROJECT_DETAILED) {
-        w.ref.current.camera().position.z = 350
-        if (w.version === WorldVersion.MOBILE) {
-          w.ref.current.camera().position.z = calculateCameraZ()
-        }
-      }
-
       w.ref.current.camera().aspect = window.innerWidth / window.innerHeight
       w.ref.current.camera().updateProjectionMatrix()
       w.ref.current.renderer().setSize(window.innerWidth, window.innerHeight)
+
+      if (w.mode !== WorldMode.PROJECT_DETAILED) {
+        w.ref.current
+          .camera()
+          .position.setLength(
+            w.version === WorldVersion.MOBILE ? calculateCameraZ() : 350
+          )
+      }
 
       w.markers.forEach((marker: any) => {
         Object.assign(
@@ -143,6 +142,18 @@ export function worldHandleResize() {
           )
         )
       })
+
+      dispatch(
+        toggleMarkers(
+          [
+            WorldMode.AREA_PREVIEW,
+            WorldMode.PROJECT_PREVIEW,
+            WorldMode.PROJECTS_EXPLORE,
+          ].includes(w.mode),
+          0,
+          true
+        )
+      )
     }
   }
 }

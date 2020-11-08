@@ -48,13 +48,22 @@ export const changeMarkerSize = (
 export function toggleFocusedMarker(focused: any) {
   return function action(dispatch: any, getState: any) {
     const w = getState().world
-    if (w.markerFocused) changeMarkerSize(w.markerFocused, MarkerSize.DEFAULT)
+    if (w.markerFocused)
+      changeMarkerSize(
+        w.markerFocused,
+        MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.5 : 1)
+      )
 
     if (focused) {
-      const newScale =
+      let newScale =
         focused.node._type === MarkerType.PROJECT
           ? MarkerSize.FOCUSED_PROJECT
           : MarkerSize.FOCUSED_AREA
+
+      if (w.version === WorldVersion.MOBILE) {
+        newScale *= 1.5
+      }
+
       const duration = focused.node._type === MarkerType.PROJECT ? 300 : 200
 
       changeMarkerSize(focused, newScale, duration)
@@ -158,16 +167,19 @@ export function onMarkerClicked(clicked: any) {
   }
 }
 
-export function toggleMarkers(show: boolean, duration = 750) {
+export function toggleMarkers(show: boolean, duration = 750, force = false) {
   return function action(dispatch: any, getState: any) {
     const w = getState().world
 
     // No action needed
-    if (w.markersVisible === show) return 0
+    if (!force && w.markersVisible === show) return 0
 
     w.markers.forEach((marker: any) => {
       const scale = marker.__threeObj.scale
-      const size = show === true ? 1 : 0
+      let size = show === true ? 1 : 0
+      if (w.version === WorldVersion.MOBILE) {
+        size *= 1.5
+      }
 
       new TWEEN.Tween({ ...scale })
         .to({ x: size, y: size, z: size }, duration)
@@ -192,11 +204,7 @@ export function createPulsingMarkers() {
   return function action(dispatch: any, getState: any) {
     const world = getState().world
 
-    const geometry = new THREE.CircleGeometry(
-      world.version === WorldVersion.MOBILE ? 7 : 3.5,
-      25,
-      25
-    )
+    const geometry = new THREE.CircleGeometry(3.5, 25, 25)
     geometry.vertices.splice(0, 1)
     const material = new THREE.LineBasicMaterial({
       color: 'white',
