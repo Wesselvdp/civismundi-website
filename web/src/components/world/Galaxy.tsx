@@ -1,17 +1,29 @@
 import React from 'react'
-
-import './styles.scss'
+import styled from 'styled-components'
 
 const Galaxy = ({ show }) => {
-  return (
-    <div className={`galaxy-container ${show && 'show'}`}>
-      <div className="perspective-container">
-        <div className="stars large" />
-        <div className="stars medium" />
-        <div className="stars small" />
-      </div>
-    </div>
-  )
+  return <GalaxyContainer className={show ? 'show' : ''} />
 }
 
+const GalaxyContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url('/stars.png'), url('/bg-1.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -10;
+  opacity: 0;
+  transition: opacity 1s;
+  transition-delay: 1s;
+
+  &.show {
+    opacity: 1;
+  }
+`
 export default Galaxy
