@@ -9,12 +9,20 @@ export enum LineState {
   LOADING = 1,
   SUBTITLE_IN = 2,
   TITLE_IN = 3,
-  PARAGRAPH_IN = 4
-} 
+  PARAGRAPH_IN = 4,
+}
 
-const Hero = ({ children, className, subtitle, title, content, timeout = {}, onFinished = () => {} }) => {
+const Hero = ({
+  children,
+  className,
+  subtitle,
+  title,
+  content,
+  timeout = {},
+  onFinished = () => {},
+}) => {
   const [state, setState] = useState(LineState.LOADING)
-  const world = useSelector(state => state.world)
+  const world = useSelector((state) => state.world)
 
   useEffect(() => {
     if (world.ready) {
@@ -37,7 +45,9 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
       <TextImprov
         in={state >= LineState.TITLE_IN}
         timeout={{ enter: timeout.title || 300 }}
-        onEntered={() => setState(LineState.PARAGRAPH_IN)}
+        onEntered={() =>
+          content ? setState(LineState.PARAGRAPH_IN) : onFinished()
+        }
         className="h2"
         tag="h1"
         text={title}
@@ -53,9 +63,7 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         appear
         // durationIn={0.5}
       />
-      <div class="children">
-        {children}
-      </div>
+      <div className="children">{children}</div>
     </Wrapper>
   )
 }

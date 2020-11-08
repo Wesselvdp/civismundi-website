@@ -58,8 +58,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
       <Page>
         <Hero
           title="All projects"
-          content={INTRO_TEXT}
-          timeout={{ title: 500, content: 500 }}
+          timeout={{ title: 500 }}
           onFinished={() => setHeroFinished(true)}
           className="rm-padding-bottom"
         />
