@@ -205,7 +205,10 @@ export function initializeWorld(
         ) {
           dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
           if (w.markerFocused)
-            changeMarkerSize(w.markerFocused, MarkerSize.DEFAULT)
+            changeMarkerSize(
+              w.markerFocused,
+              MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.5 : 1)
+            )
         }
       })
 

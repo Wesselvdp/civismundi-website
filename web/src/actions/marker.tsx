@@ -14,16 +14,6 @@ import { setWorldMode } from './mode'
 
 export const addMarker = (marker: any) => ({ type: ADD_MARKER, marker })
 
-export function setActiveProject(index: number) {
-  return async function action(dispatch: any, getState: any) {
-    const w = getState().world
-
-    if (w.areaProjects && w.areaProjects.length > index) {
-      dispatch({ type: SET_ACTIVE_PROJECT, project: w.areaProjects[index] })
-    }
-  }
-}
-
 export const changeMarkerSize = (
   marker: any,
   scale: number,
@@ -55,18 +45,18 @@ export function toggleFocusedMarker(focused: any) {
       )
 
     if (focused) {
-      let newScale =
+      const newScale =
         focused.node._type === MarkerType.PROJECT
           ? MarkerSize.FOCUSED_PROJECT
           : MarkerSize.FOCUSED_AREA
 
-      if (w.version === WorldVersion.MOBILE) {
-        newScale *= 1.5
-      }
-
       const duration = focused.node._type === MarkerType.PROJECT ? 300 : 200
 
-      changeMarkerSize(focused, newScale, duration)
+      changeMarkerSize(
+        focused,
+        newScale * (w.version === WorldVersion.MOBILE ? 1.5 : 1),
+        duration
+      )
     }
 
     return dispatch({ type: SET_MARKER_FOCUSED, marker: focused })

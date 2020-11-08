@@ -97,7 +97,7 @@ const World = ({ data, markers, width, height, layout, className }) => {
           p.node.locationGroup && p.node.locationGroup._id === obj.node._id
       ).length
       // path = `/area-marker/area-${projectCount}.svg`
-      path = '/marker-big.svg'
+      path = '/marker-location.svg'
 
       obj.node.projectCount = projectCount
     }
@@ -110,7 +110,7 @@ const World = ({ data, markers, width, height, layout, className }) => {
     }
 
     // determine marker size
-    const baseRadius = 3.5
+    const baseRadius = obj.node._type === 'location' ? 5 : 3.5
     const material = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
