@@ -165,19 +165,23 @@ export function toggleMarkers(show: boolean, duration = 750, force = false) {
     if (!force && w.markersVisible === show) return 0
 
     w.markers.forEach((marker: any) => {
-      const scale = marker.__threeObj.scale
-      let size = show === true ? 1 : 0
-      if (w.version === WorldVersion.MOBILE) {
-        size *= 1.5
-      }
+      changeMarkerSize(
+        marker,
+        (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? 1.5 : 1)
+      )
+      // const scale = marker.__threeObj.scale
+      // let size = show === true ? 1 : 0
+      // if (w.version === WorldVersion.MOBILE) {
+      //   size *= 1.5
+      // }
 
-      new TWEEN.Tween({ ...scale })
-        .to({ x: size, y: size, z: size }, duration)
-        .onUpdate((d) => {
-          marker.__threeObj.scale.set(d.x, d.y, d.z)
-        })
-        .easing(TWEEN.Easing.Cubic.InOut)
-        .start()
+      // new TWEEN.Tween({ ...scale })
+      //   .to({ x: size, y: size, z: size }, duration)
+      //   .onUpdate((d) => {
+      //     marker.__threeObj.scale.set(d.x, d.y, d.z)
+      //   })
+      //   .easing(TWEEN.Easing.Cubic.InOut)
+      //   .start()
 
       if (marker.pulsingRing)
         show
@@ -214,7 +218,11 @@ export function createPulsingMarkers() {
         ring.position.set(pos.x, pos.y, pos.z)
         world.ref.current.scene().add(ring)
 
-        const tween = createPulsingMarkerTween(ring)
+        const tween = createPulsingMarkerTween(
+          ring,
+          world.version === WorldVersion.MOBILE ? 1.5 : 1
+        )
+        tween.worldVersion = world.version
 
         marker.pulsingTween = tween
         marker.pulsingRing = ring
