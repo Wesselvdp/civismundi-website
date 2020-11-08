@@ -111,7 +111,7 @@ const World = ({ data, markers, layout, className }) => {
 
     // determine marker size
     let baseRadius = obj.node._type === MarkerType.PROJECT ? 3.5 : 5
-    if (window.innerWidth < 600) baseRadius *= 2
+    // if (window.innerWidth < 600) baseRadius *= 2
 
     const material = new THREE.MeshBasicMaterial({
       map: texture,
