@@ -2,9 +2,9 @@ import React from 'react'
 
 import './styles.scss'
 
-const Galaxy = () => {
+const Galaxy = ({ show }) => {
   return (
-    <div className="galaxy-container">
+    <div className={`galaxy-container ${show && 'show'}`}>
       <div className="perspective-container">
         <div className="stars large" />
         <div className="stars medium" />
