@@ -18,7 +18,7 @@ import { WorldVersion, WorldMode, MarkerType } from '../../actions'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
-const World = ({ data, markers, layout, className }) => {
+const World = ({ data, markers, width, height, layout, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef()
@@ -148,6 +148,8 @@ const World = ({ data, markers, layout, className }) => {
               alpha: true,
             }}
             waitForGlobeReady={true}
+            width={width}
+            height={height}
           />
         </Wrapper>
       </React.Suspense>

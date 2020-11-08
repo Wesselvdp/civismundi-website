@@ -120,9 +120,9 @@ export function worldHandleResize() {
     const w = getState().world
 
     if (w.ref.current) {
-      w.ref.current.camera().aspect = window.innerWidth / window.innerHeight
-      w.ref.current.camera().updateProjectionMatrix()
-      w.ref.current.renderer().setSize(window.innerWidth, window.innerHeight)
+      // w.ref.current.camera().aspect = window.innerWidth / window.innerHeight
+      // w.ref.current.camera().updateProjectionMatrix()
+      // w.ref.current.renderer().setSize(window.innerWidth, window.innerHeight)
 
       if (w.mode !== WorldMode.PROJECT_DETAILED) {
         w.ref.current

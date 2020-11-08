@@ -78,6 +78,7 @@ const WorldContainer = ({ layout, location }) => {
         { trailing: true }
       )
     )
+    setSize([window.innerWidth, window.innerHeight])
   }, [])
 
   useEffect(() => {
@@ -156,7 +157,13 @@ const WorldContainer = ({ layout, location }) => {
           <AnimatedWrapper
             className={world.skipInTransition ? 'skip-in-transition' : ''}
           >
-            <World location={location} data={data} markers={markers} />
+            <World
+              width={width}
+              height={height}
+              location={location}
+              data={data}
+              markers={markers}
+            />
           </AnimatedWrapper>
         </CSSTransition>
 
