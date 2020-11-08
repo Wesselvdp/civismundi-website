@@ -57,8 +57,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
       <SEO title="Projects" />
       <Page>
         <Hero
-          subtitle="Projects"
-          title="Lorem ipsum dolor sit amet"
+          title="All projects"
           content={INTRO_TEXT}
           timeout={{ title: 500, content: 500 }}
           onFinished={() => setHeroFinished(true)}

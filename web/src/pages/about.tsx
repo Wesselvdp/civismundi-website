@@ -17,7 +17,6 @@ const AboutPage = () => {
       <Page>
         <div>
           <Hero
-            subtitle="About us"
             title={TITLE}
             content={CONTENT.toUpperCase()}
             timeout={{ subtitle: 500, title: 500, content: 500 }}

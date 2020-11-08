@@ -18,13 +18,13 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
 
   useEffect(() => {
     if (world.ready) {
-      setState(LineState.SUBTITLE_IN)
+      setState(LineState.TITLE_IN)
     }
   }, [world.ready])
 
   return (
     <Wrapper className={className}>
-      <TextImprov
+      {/* <TextImprov
         in={state >= LineState.SUBTITLE_IN}
         timeout={{ enter: timeout.subtitle || 300 }}
         onEntered={() => setState(LineState.TITLE_IN)}
@@ -33,7 +33,7 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         text={subtitle}
         appear
         durationIn={0.2}
-      />
+      /> */}
       <TextImprov
         in={state >= LineState.TITLE_IN}
         timeout={{ enter: timeout.title || 300 }}
@@ -42,7 +42,7 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         tag="h1"
         text={title}
         appear
-        durationIn={0.5}
+        // durationIn={0.5}
       />
       <TextImprov
         in={state >= LineState.PARAGRAPH_IN}
@@ -51,7 +51,7 @@ const Hero = ({ children, className, subtitle, title, content, timeout = {}, onF
         tag="p"
         text={content}
         appear
-        durationIn={1}
+        // durationIn={0.5}
       />
       <div class="children">
         {children}
