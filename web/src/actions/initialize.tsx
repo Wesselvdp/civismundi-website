@@ -122,9 +122,11 @@ export function worldHandleResize() {
     const w = getState().world
 
     if (w.ref.current) {
-      w.ref.current.camera().position.z = 350
-      if (w.version === WorldVersion.MOBILE) {
-        w.ref.current.camera().position.z = calculateCameraZ()
+      if (w.mode !== WorldMode.PROJECT_DETAILED) {
+        w.ref.current.camera().position.z = 350
+        if (w.version === WorldVersion.MOBILE) {
+          w.ref.current.camera().position.z = calculateCameraZ()
+        }
       }
 
       w.ref.current.camera().aspect = window.innerWidth / window.innerHeight

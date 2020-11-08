@@ -160,7 +160,7 @@ const WorldContainer = ({ layout, location }) => {
         </CSSTransition>
 
         {/* Copy */}
-        <MobileContent>
+        <Content>
           <TextImprov
             in={
               (world.mode === WorldMode.PROJECT_PREVIEW ||
@@ -262,7 +262,7 @@ const WorldContainer = ({ layout, location }) => {
               </Button>
             </FadeAnim>
           )}
-        </MobileContent>
+        </Content>
       </>
       {/* Footer content */}
       <FooterContainer>
@@ -357,7 +357,7 @@ const AnimatedWrapper = styled.div`
   }
 `
 
-const MobileContent = styled.div`
+const Content = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -391,15 +391,16 @@ const MobileContent = styled.div`
     opacity: 0.9;
   }
 
+  h1 {
+    line-height: 0.9em;
+    margin: 10px 0 5px 0;
+  }
+
   p {
-    max-width: 750px;
+    max-width: 450px;
     margin-left: auto;
     margin-right: auto;
   }
-
-  // h1 {
-  //   line-height: 0.9em;
-  // }
 `
 
 const FooterContainer = styled.div`

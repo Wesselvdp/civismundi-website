@@ -275,13 +275,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
             </div>
           </div>
         </Content>
-        {/* <SliderWrapper className="project-slider-wrapper">
-          <ProjectSlider
-            className="project-slider"
-            withAnimation={false}
-            show={!locState.doAnimation || state === ProjectState.SLIDER_IN}
-          />
-        </SliderWrapper> */}
       </StyledMast>
 
       {/* Project content */}
@@ -432,6 +425,10 @@ const Content = styled.div`
 
       &.fading {
         opacity: 0;
+      }
+
+      h1 {
+        margin: 10px 0 5px;
       }
     }
 
