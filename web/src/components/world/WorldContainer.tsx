@@ -18,6 +18,7 @@ import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
 import { worldHandleResize } from '../../actions/initialize'
 
 import VideoPlayer from './VideoPlayer'
+import Galaxy from './Galaxy'
 
 const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
@@ -282,8 +283,11 @@ const WorldContainer = ({ layout, location }) => {
       {/* Background video(s) */}
       <VideoPlayer />
 
-      {/* Area projects carousel */}
-      <AreaContainer>
+      {/* Galaxy */}
+      <Galaxy />
+
+      {/* Area projects slider */}
+      <AreaSliderWrapper>
         <ProjectSlider
           className="project-slider"
           show={
@@ -294,7 +298,7 @@ const WorldContainer = ({ layout, location }) => {
           withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
           withAnimation={world.mode === WorldMode.AREA_PREVIEW}
         />
-      </AreaContainer>
+      </AreaSliderWrapper>
     </Page>
   )
 }
@@ -441,7 +445,7 @@ const FooterContainer = styled.div`
   }
 `
 
-const AreaContainer = styled.div`
+const AreaSliderWrapper = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;

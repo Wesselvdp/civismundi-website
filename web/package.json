@@ -45,6 +45,7 @@
     "react-helmet": "^5.2.1",
     "react-in-viewport": "^1.0.0-alpha.14",
     "react-modal-video": "^1.2.5",
+    "react-parallax-tilt": "^1.4.66",
     "react-player": "^2.5.0",
     "react-redux": "^7.2.1",
     "react-scroll": "^1.8.0",
