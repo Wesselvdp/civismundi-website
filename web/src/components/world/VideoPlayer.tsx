@@ -62,8 +62,8 @@ const VideoPlayer = () => {
     if (world.mode === WorldMode.AREA_PREVIEW) {
       timer.current = setTimeout(() => {
         dispatch({ type: SET_FADING_VIDEO, fading: true })
+        dispatch(incrementActiveProjectIndex())
         setTimeout(() => {
-          dispatch(incrementActiveProjectIndex())
           dispatch({ type: SET_FADING_VIDEO, fading: false })
         }, 500)
       }, VIDEO_MAX_DURATION)
@@ -84,9 +84,7 @@ const VideoPlayer = () => {
         ].includes(world.mode)
           ? 'visible'
           : ''
-      } ${
-        world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''
-      } ${world.fadingVideo ? 'fading' : ''} `}
+      } ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}
     >
       <div ref={videos}>
         {world.projects &&

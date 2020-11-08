@@ -107,7 +107,11 @@ export function incrementActiveProjectIndex() {
       ((active.projectIndex || 0) + 1) % active.areaProjects.length
 
     await dispatch({ type: SET_ACTIVE_PROJECT_INDEX, index: newIndex })
-    dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA })
+
+    setTimeout(
+      () => dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA }),
+      500
+    )
   }
 }
 
