@@ -6,9 +6,9 @@
 	@return unquote($bxshadow);
 }
 
-$bxshadow-large: box-shadow(100);
+$bxshadow-large: box-shadow(200);
 $bxshadow-medium: box-shadow(400);
-$bxshadow-small: box-shadow(70);
+$bxshadow-small: box-shadow(600);
 
 .galaxy-container {
   height: 100%;
