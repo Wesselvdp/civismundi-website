@@ -284,7 +284,7 @@ const WorldContainer = ({ layout, location }) => {
       <VideoPlayer />
 
       {/* Galaxy */}
-      <Galaxy show={world.ready} />
+      {/* <Galaxy show={world.ready} /> */}
 
       {/* Area projects slider */}
       <AreaSliderWrapper>
