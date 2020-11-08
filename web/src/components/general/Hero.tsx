@@ -90,14 +90,8 @@ const Wrapper = styled.div`
     }
   }
 
-  h2 {
-    @media ${breakpoints.phoneOnly} {
-      margin-bottom: 10px;
-
-      &.subtitle {
-        line-height: 6px;
-      }
-    }
+  h1 {
+    margin: 10px 0 5px;
   }
 
   .children {

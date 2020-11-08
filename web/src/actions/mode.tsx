@@ -24,6 +24,7 @@ import {
   moveToMarker,
   moveMarkerToCenter,
   getProjectFromSlug,
+  getProjectsFromArea,
 } from './helpers'
 
 let timer: any
@@ -165,7 +166,14 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     if (!data.project && !data.area) return
 
     if (!data.project) {
-      data.project = w.active.areaProjects[get(w.active, 'projectIndex', 0)]
+      data.project = get(
+        w.active,
+        `areaProjects[${get(w.active, 'projectIndex', 0)}]`
+      )
+
+      if (!data.project)
+        data.project = get(getProjectsFromArea(w.projects, data.area), '[0]')
+      if (!data.project) return
     }
 
     if (data.skipInTransition)
