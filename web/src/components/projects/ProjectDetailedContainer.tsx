@@ -347,7 +347,7 @@ const Content = styled.div`
 
   @media ${breakpoints.tabletLandscapeDown} {
     flex-wrap: wrap;
-    bottom: 28%;
+    bottom: 30%;
     padding-bottom: 0;
     padding-top: 60px;
   }
