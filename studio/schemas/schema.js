@@ -12,6 +12,7 @@ import content from './content'
 import styledContentBlock from './contentTypes/styledContentBlock'
 import aboutContent from './contentTypes/aboutContent'
 import location from './location'
+import quote from './contentTypes/quote'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -25,5 +26,6 @@ export default createSchema({
     content,
     award,
     blockContent,
+    quote
   ])
 })

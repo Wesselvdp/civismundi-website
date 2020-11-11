@@ -9,9 +9,9 @@ import { useDispatch } from 'react-redux'
 
 import World from './World'
 import { TextImprov, FadeAnim } from '@components/animations'
-import { Button, ProjectSlider } from '@components/general'
+import { Button, Quote, ProjectSlider } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
-import { stringifyArray } from '../../utils'
+import { stringifyArray, getQuoteOrClient } from '../../utils'
 
 import { MarkerType, WorldMode, WorldVersion } from '../../actions'
 import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
@@ -116,6 +116,10 @@ const WorldContainer = ({ layout, location }) => {
             featured
             city
             clients
+            quote {
+              content
+              quotee
+            }
             location {
               lat
               lng
@@ -205,7 +209,7 @@ const WorldContainer = ({ layout, location }) => {
             }
             appear
           />
-          <TextImprov
+          <Quote
             in={
               (world.mode === WorldMode.PROJECT_PREVIEW ||
                 world.mode === WorldMode.AREA_PREVIEW) &&
@@ -213,28 +217,11 @@ const WorldContainer = ({ layout, location }) => {
             }
             tag="p"
             className="lighter"
-            text={
-              lastActive && lastActive.lastShown === MarkerType.PROJECT
-                ? stringifyArray(
-                    get(world, 'lastActive.project.node.clients'),
-                    '',
-                    ' • ',
-                    { uppercase: true }
-                  )
-                : stringifyArray(
-                    get(
-                      world,
-                      `lastActive.areaProjects[${get(
-                        world,
-                        'lastActive.projectIndex'
-                      )}].node.clients`
-                    ),
-                    '',
-                    ' • ',
-                    { uppercase: true }
-                  )
-            }
             appear
+            project={world.lastActive && world.lastActive.lastShown === MarkerType.PROJECT ? world.lastActive.project : get(world, `lastActive.areaProjects[${get(
+              world,
+              'lastActive.projectIndex'
+            )}]`)}
           />
           {world.version === WorldVersion.MOBILE && (
             <FadeAnim

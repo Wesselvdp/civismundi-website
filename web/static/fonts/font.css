@@ -17,8 +17,18 @@
   src: url('OriyaMN.eot');
   src: 
     url('OriyaMN.eot') format('embedded-opentype'),
-    url('OriyaMN.woff2') format('woff2'), 
+    url('OriyaMN.woff2') format('woff2'),
     url('OriyaMN.woff') format('woff'),
     url('OriyaMN.ttf') format('truetype'),
     url('OriyaMN.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'Vanitas';
+  font-weight: 300;
+  font-style: italic;
+  src: url('vanitas.woff2') format('woff2');
+  src:
+    url('vanitas.woff2') format('woff2'),
+    url('vanitas.woff') format('woff');
 }

@@ -278,7 +278,7 @@ export function initializeWorld(
 
     await dispatch({ type: WORLD_INITIALIZE_COMPLETE })
 
-    setTimeout(dispatch(toggleMarkers(location.pathname === '/')), 2000)
+    setTimeout(dispatch(toggleMarkers(location.pathname === '/', 750, true), 2000))
 
     console.log('initialized')
   }

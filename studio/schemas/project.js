@@ -43,6 +43,11 @@ export default {
       of: [{ type: 'string' }]
     },
     {
+      name: 'quote',
+      title: 'Quote',
+      type: 'quote'
+    },
+    {
       name: 'awards',
       title: 'Awards & Festivals',
       type: 'array',

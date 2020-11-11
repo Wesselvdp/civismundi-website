@@ -6,6 +6,7 @@ import Hero from './Hero'
 import Select from './Select'
 import GlobeButton from './GlobeButton'
 import ProjectSlider from './ProjectSlider'
+import Quote from './Quote'
 
 export {
   Navigation,
@@ -16,4 +17,5 @@ export {
   Select,
   GlobeButton,
   ProjectSlider,
+  Quote
 }

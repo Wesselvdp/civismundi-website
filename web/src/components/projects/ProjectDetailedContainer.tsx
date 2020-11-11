@@ -15,7 +15,7 @@ import PrevSVG from '../../assets/btn-prev.svg'
 // Components
 import { ProjectList } from '@components/projects'
 import { TextImprov, FadeAnim } from '@components/animations'
-import { ProjectSlider } from '@components/general'
+import { Quote } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { getVideoId, stringifyArray } from '../../utils'
@@ -192,18 +192,13 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 timeout={{ enter: 300 }}
                 allowCustomBreaks
               />
-              <TextImprov
+              <Quote
                 in={!fading && state >= ProjectState.PARAGRAPH_IN}
                 onEntered={() =>
                   locState.doAnimation && setState(ProjectState.VIDEO_BUTTON_IN)
                 }
                 tag="p"
-                text={stringifyArray(
-                  get(world, 'active.project.node.clients'),
-                  '',
-                  '  •  ',
-                  { uppercase: true }
-                )}
+                project={get(world, 'active.project')}
                 appear
                 timeout={{ enter: 600 }}
               />
