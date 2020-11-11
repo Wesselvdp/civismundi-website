@@ -81,7 +81,7 @@ const Wrapper = styled.div`
   max-width: 1000px;
 
   @media ${breakpoints.tabletLandscapeDown} {
-    padding-top: 10em;
+    padding-top: 6em;
   }
 
   &.rm-padding-bottom {
