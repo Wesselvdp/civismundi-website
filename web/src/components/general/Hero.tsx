@@ -104,6 +104,9 @@ const Wrapper = styled.div`
 
   h1 {
     margin: 10px 0 5px;
+    @media ${breakpoints.tabletLandscapeUp} {
+      font-size: 62px;
+    }
   }
 
   .children {

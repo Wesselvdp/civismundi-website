@@ -69,7 +69,7 @@ export default handleViewport(ProjectCard)
 
 const Card = styled.div`
   text-align: left;
-  max-width: 750px;
+  max-width: 733px;
   cursor: pointer;
 `
 const Content = styled.div`
@@ -87,7 +87,7 @@ const Content = styled.div`
   }
 `
 const Visual = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   position: relative;
   padding-top: 60%;
 

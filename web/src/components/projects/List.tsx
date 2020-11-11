@@ -73,7 +73,7 @@ const ProjectList: FC<T> = ({
 }
 
 const Container = styled.div`
-  max-width: 1800px;
+max-width: 1630px;
   margin: 0 auto;
 
   h3 {
