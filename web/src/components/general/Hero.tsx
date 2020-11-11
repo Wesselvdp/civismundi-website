@@ -67,7 +67,7 @@ const Hero = ({
         durationIn={0.5}
         durationOut={0.5}
       />
-      <div className="children">{children}</div>
+      {children && (<div className="children">{children}</div>)}
     </Wrapper>
   )
 }
@@ -75,8 +75,8 @@ const Hero = ({
 export default Hero
 
 const Wrapper = styled.div`
-  padding: 3em 15px;
-  margin: 4em auto 0;
+  padding: 0 15px 3em;
+  margin: 0 auto;
   position: relative;
   max-width: 1000px;
 

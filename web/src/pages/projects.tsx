@@ -80,7 +80,7 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
 }
 
 const Page = styled.div`
-  padding-top: 8em;
+  padding-top: 11em;
   min-height: 100vh;
   position: relative;
 

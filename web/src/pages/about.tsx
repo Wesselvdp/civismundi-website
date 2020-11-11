@@ -44,7 +44,6 @@ const AboutPage = () => {
 }
 
 const Page = styled.div`
-  padding-top: 4em;
   min-height: 100vh;
   position: relative;
   display: flex;
@@ -61,10 +60,14 @@ const Page = styled.div`
 `
 
 const ContactInfo = styled.div`
-  max-width: 800px;
+  max-width: 750px;
   margin-left: auto;
   margin-right: auto;
-  padding: 2em 0 4em;
+  padding: 2em 0 0;
+
+  @media ${breakpoints.phoneOnly} {
+    padding: 2em 0 4em;
+  }
 
   .row {
     display: flex;
