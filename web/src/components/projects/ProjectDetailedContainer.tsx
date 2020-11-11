@@ -120,7 +120,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                     ? 'visible'
                     : 'hidden',
               }}
-              className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+              className={`anim-scale ${locState.doAnimation && 'with-anim'} nav-button`}
               onClick={() =>
                 !fading &&
                 dispatch(
@@ -133,7 +133,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
             />
             <PlayButton style={{ visibility: vimeo ? 'visible' : 'hidden' }}>
               <PlaySVG
-                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
+                className={`anim-scale ${locState.doAnimation && 'with-anim'} play-button`}
                 onClick={() => openVideo(true)}
               />
             </PlayButton>
@@ -175,7 +175,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   }}
                   className={`anim-scale ${
                     locState.doAnimation && 'with-anim'
-                  }`}
+                  } nav-button`}
                   onClick={() =>
                     !fading &&
                     dispatch(
@@ -195,14 +195,14 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   <PlaySVG
                     className={`anim-scale ${
                       locState.doAnimation && 'with-anim'
-                    }`}
+                    } play-button`}
                     onClick={() => openVideo(true)}
                   />
                 </PlayButton>
                 <NextSVG
                   className={`anim-scale ${
                     locState.doAnimation && 'with-anim'
-                  }`}
+                  } nav-button`}
                   style={{
                     visibility:
                       world.active.area &&
@@ -428,7 +428,7 @@ const Content = styled.div`
       }
 
       h1 {
-        margin: 10px 0 5px;
+        margin: 8px 0 5px;
       }
     }
 
@@ -437,9 +437,10 @@ const Content = styled.div`
     }
 
     p {
-      max-width: 450px;
+      max-width: 750px;
       margin-left: auto;
       margin-right: auto;
+      line-height: 22px;
     }
   }
 
@@ -456,7 +457,7 @@ const Content = styled.div`
 
   .h2 {
     @media ${breakpoints.phoneOnly} {
-      font-size: 44px;
+      font-size: 32px;
     }
   }
 `
@@ -526,6 +527,18 @@ const ButtonContainer = styled.div`
 
   & > svg:last-child {
     margin-left: 24px;
+  }
+
+  @media ${breakpoints.phoneOnly} {
+    .play-button {
+      height: 80px;
+      width: 80px;
+    }
+
+    .nav-button {
+      height: 46px;
+      width: 46px;
+    }
   }
 `
 
