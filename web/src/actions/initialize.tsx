@@ -207,7 +207,7 @@ export function initializeWorld(
           if (w.markerFocused)
             changeMarkerSize(
               w.markerFocused,
-              MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.5 : 1)
+              MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 2 : 1)
             )
         }
       })

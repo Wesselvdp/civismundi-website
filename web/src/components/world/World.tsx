@@ -90,14 +90,14 @@ const World = ({ data, markers, width, height, layout, className }) => {
     dispatch(addMarker(obj))
 
     // load texture
-    let path = '/marker-project.svg'
+    let path = '/marker-small.svg'
     if (obj.node._type === 'location') {
       const projectCount = data.allSanityProject.edges.filter(
         (p: any) =>
           p.node.locationGroup && p.node.locationGroup._id === obj.node._id
       ).length
       // path = `/area-marker/area-${projectCount}.svg`
-      path = '/marker-location.svg'
+      path = '/marker-big.svg'
 
       obj.node.projectCount = projectCount
     }

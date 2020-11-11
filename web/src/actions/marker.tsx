@@ -41,7 +41,7 @@ export function toggleFocusedMarker(focused: any) {
     if (w.markerFocused)
       changeMarkerSize(
         w.markerFocused,
-        MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.5 : 1)
+        MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
       )
 
     if (focused) {
@@ -54,7 +54,7 @@ export function toggleFocusedMarker(focused: any) {
 
       changeMarkerSize(
         focused,
-        newScale * (w.version === WorldVersion.MOBILE ? 1.5 : 1),
+        newScale * (w.version === WorldVersion.MOBILE ? 1.65 : 1),
         duration
       )
     }
@@ -167,12 +167,12 @@ export function toggleMarkers(show: boolean, duration = 750, force = false) {
     w.markers.forEach((marker: any) => {
       changeMarkerSize(
         marker,
-        (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? 1.5 : 1)
+        (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
       )
       // const scale = marker.__threeObj.scale
       // let size = show === true ? 1 : 0
       // if (w.version === WorldVersion.MOBILE) {
-      //   size *= 1.5
+      //   size *= 1.65
       // }
 
       // new TWEEN.Tween({ ...scale })
@@ -220,7 +220,7 @@ export function createPulsingMarkers() {
 
         const tween = createPulsingMarkerTween(
           ring,
-          world.version === WorldVersion.MOBILE ? 1.5 : 1
+          world.version === WorldVersion.MOBILE ? 1.65 : 1
         )
         tween.worldVersion = world.version
 

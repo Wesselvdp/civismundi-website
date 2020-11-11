@@ -112,7 +112,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
       )}
       <StyledMast>
         <Content>
-          <FadeAnim in={!fading && state >= ProjectState.VIDEO_BUTTON_IN} appear>
+          {(!locState.doAnimation || state >= ProjectState.VIDEO_BUTTON_IN) && (
             <ButtonContainer className="button-container">
               <PrevSVG
                 style={{
@@ -161,7 +161,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 }
               />
             </ButtonContainer>
-          </FadeAnim>
+          )}
           <div className="upper">
             <div className={`text-content`}>
               <TextImprov
@@ -626,18 +626,7 @@ const Section = styled.section`
         width: 100%;
 
         @media ${breakpoints.phoneOnly} {
-          display: flex;
-          flex-wrap: wrap;
           flex-basis: 50%;
-
-          &:nth-child(even) {
-            text-align: right;
-          }
-
-          h5.subtitle {
-            display: flex;
-            flex-basis: 100%;
-          }
         }
       }
     }
