@@ -20,7 +20,7 @@ const Quote = ({ project, className, ...rest }) => {
 
   return (
     <>
-      <TextImprov style={{ marginBottom: '6px' }} className={`${className} ${type === 'quote' ? 'italic' : ''}`} {...rest} text={`${type === 'quote' ? `"${content}"` : ''}`} />
+      <TextImprov style={{ marginBottom: '6px' }} className={`${className} ${type === 'quote' ? 'italic' : ''}`} {...rest} text={`${type === 'quote' ? `"${content}"` : content}`} />
       {quotee && (<TextImprov {...rest} className={className} text={`${quotee ? `- ${quotee}` : ''}`} />)}
     </>
 
