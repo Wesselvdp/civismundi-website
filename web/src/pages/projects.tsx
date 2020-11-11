@@ -58,17 +58,11 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
       <Page>
         <Hero
           title="All projects"
-          timeout={{ title: 500 }}
+          subtitle="List view"
+          timeout={{ title: 500, subtitle: 300, content: 0 }}
           onFinished={() => setHeroFinished(true)}
           className="rm-padding-bottom"
         />
-          {/* <FadeAnim in={heroFinished} timeout={1000}>
-            <Select
-              options={selectOptions}
-              value={director}
-              onChange={(value) => setDirector(value)}
-            />
-  </FadeAnim> */}
         {heroFinished && (
           <ProjectList
             projects={data.allSanityProject}
