@@ -27,8 +27,11 @@
   font-family: 'Vanitas';
   font-weight: 300;
   font-style: italic;
-  src: url('vanitas.woff2') format('woff2');
+  src: url('Vanitas-BlackItalic.eot') format('embedded-opentype');
   src:
-    url('vanitas.woff2') format('woff2'),
-    url('vanitas.woff') format('woff');
+    url('Vanitas-BlackItalic.eot') format('embedded-opentype'),
+    url('Vanitas-BlackItalic.woff2') format('woff2'),
+    url('Vanitas-BlackItalic.woff') format('woff'),
+    url('Vanitas-BlackItalic.ttf') format('truetype'),
+    url('Vanitas-BlackItalic.svg') format('svg');
 }
