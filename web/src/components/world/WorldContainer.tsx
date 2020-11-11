@@ -324,7 +324,7 @@ const Page = styled.div`
 
   &.other {
     z-index: -1;
-    opacity: 0.4;
+    opacity: 0.55;
   }
 
   &.project-detailed {
@@ -408,7 +408,7 @@ const Content = styled.div`
 
     @media ${breakpoints.phoneOnly} {
       font-size: 34px;
-      margin: 4px 0 5px 0;
+      margin: 7px 0 3px 0;
       line-height: 1em;
     }
   }
