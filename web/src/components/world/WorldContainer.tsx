@@ -324,7 +324,7 @@ const Page = styled.div`
 
   &.other {
     z-index: -1;
-    opacity: 0.55;
+    opacity: 0.55; 
   }
 
   &.project-detailed {
