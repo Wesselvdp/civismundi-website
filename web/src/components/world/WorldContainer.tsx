@@ -405,10 +405,16 @@ const Content = styled.div`
   h1 {
     line-height: 0.9em;
     margin: 10px 0 5px 0;
+
+    @media ${breakpoints.phoneOnly} {
+      font-size: 34px;
+      margin: 4px 0 5px 0;
+      line-height: 1em;
+    }
   }
 
   p {
-    max-width: 450px;
+    max-width: 455px;
     margin-left: auto;
     margin-right: auto;
   }
