@@ -43,8 +43,27 @@ const ProjectDetailedContainer = ({ location, data }) => {
   } = data.sanityProject
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
+  const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
   const [fading, setFading] = useState(false)
+
+  // useEffect(() => {
+  //   let timer
+
+  //   if (world.ready && location.state) {
+  //     if (location.state.doAnimation) {
+  //       timer = setTimeout(() => {
+  //         setState(ProjectState.SUBTITLE_IN)
+  //       }, get(location, 'state.delay', 0))
+  //     } else {
+  //       setState(ProjectState.SLIDER_IN)
+  //     }
+  //   }
+
+  //   return () => {
+  //     clearTimeout(timer)
+  //   }
+  // }, [world.ready, location])
 
   useEffect(() => {
     setFading(world.fadingPage || world.fadingVideo)
@@ -67,27 +86,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
       >
         <img src="/globe-icon.svg" />
       </GlobeIcon>
-
-      {vimeo && (
-        <ModalWrapper className={videoOpen ? 'open' : ''}>
-          <ModalVideo
-            channel={vimeo.includes('vimeo') ? 'vimeo' : 'youtube'}
-            isOpen={videoOpen}
-            videoId={getVideoId(vimeo)}
-            onClose={() => openVideo(false)}
-            width={1000}
-            height={1000}
-          />
-          <img
-            className="modal-close"
-            src="/close.svg"
-            onClick={() => openVideo(false)}
-          />
-        </ModalWrapper>
-      )}
-
-      {/* To compensate for WorldContainer */}
-      <Div100vh />
 
       {/* Project content */}
       <Element name="content">
@@ -124,8 +122,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
             </div>
           </div>
         </Section>
-
-        {/* Other projects */}
         <ProjectList
           title="Other projects"
           blockId={id}
@@ -346,69 +342,6 @@ const ButtonContainer = styled.div`
       height: 46px;
       width: 46px;
     }
-  }
-`
-
-const ModalWrapper = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  height: 100%;
-  width: 100%;
-  pointer-events: none;
-  background-color: rgba(0, 0, 0, 0);
-  transition: background-color 0.5s ease-in-out;
-
-  img.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    height: 40px;
-    opacity: 0;
-    color: #fff;
-    transition: opacity 0.5s ease-in-out;
-    cursor: pointer;
-
-    @media ${breakpoints.phoneOnly} {
-      top: 10px;
-      right: 10px;
-      height: 25px;
-    }
-  }
-
-  &.open {
-    background-color: rgba(0, 0, 0, 0.85);
-    pointer-events: initial;
-
-    img.modal-close {
-      opacity: 1;
-    }
-  }
-
-  .modal-video-movie-wrap {
-    padding-bottom: 0 !important;
-  }
-
-  .modal-video,
-  .modal-video-body,
-  .modal-video-inner,
-  .modal-video-movie-wrap {
-    height: 100%;
-    width: 100%;
-    outline: 0;
-  }
-
-  .modal-video-close-btn {
-    display: none !important;
-  }
-
-  iframe {
-    height: 100%;
-    width: 100%;
-    max-width: 90%;
-    max-height: 90%;
   }
 `
 

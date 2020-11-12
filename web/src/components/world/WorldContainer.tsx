@@ -660,9 +660,8 @@ const Page = styled.div`
   }
 
   &.project-detailed {
-    position: absolute;
+    position: relative;
     opacity: 1;
-    z-index: 1;
   }
 
   &.modal-open {
