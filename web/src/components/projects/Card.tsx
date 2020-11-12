@@ -38,9 +38,7 @@ const ProjectCard = ({ data, skipTransition = false, doAnimation = true }) => {
           setWorldMode(WorldMode.PROJECT_DETAILED, {
             project: { node: data },
             skipInTransition: skipTransition,
-            state: {
-              fadeVideo: true,
-            }
+            state: {},
           })
         )
       }

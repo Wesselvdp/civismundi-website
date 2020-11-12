@@ -207,7 +207,8 @@ export function initializeWorld(
           if (w.markerFocused)
             changeMarkerSize(
               w.markerFocused,
-              MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
+              MarkerSize.DEFAULT *
+                (w.version === WorldVersion.MOBILE ? 1.65 : 1)
             )
         }
       })
@@ -278,7 +279,9 @@ export function initializeWorld(
 
     await dispatch({ type: WORLD_INITIALIZE_COMPLETE })
 
-    setTimeout(dispatch(toggleMarkers(location.pathname === '/', 750, true), 2000))
+    setTimeout(
+      dispatch(toggleMarkers(location.pathname === '/', 750, true), 2000)
+    )
 
     console.log('initialized')
   }

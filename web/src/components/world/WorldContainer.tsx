@@ -373,7 +373,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   />
                   <PlayButton
                     style={{
-                      visibility: project.vimeo ? 'visible' : 'hidden',
+                      visibility: 'visible'
                     }}
                   >
                     <PlaySVG
