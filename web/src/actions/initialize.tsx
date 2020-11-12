@@ -191,7 +191,7 @@ export function initializeWorld(
     )
 
     // show/hide markers depending on location
-    dispatch(toggleMarkers(false, 0))
+    // dispatch(toggleMarkers(false, 0))
 
     // event listeners
     getState()

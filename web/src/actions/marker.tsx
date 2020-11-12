@@ -22,7 +22,7 @@ export const changeMarkerSize = (
   if (!marker) return
 
   const scaleFrom = marker.__threeObj.scale
-  if (scaleFrom.x === scale) return
+  // if (scaleFrom.x === scale) return
 
   if (marker.pulsingRing) updatePulsingScale(marker, scale)
 

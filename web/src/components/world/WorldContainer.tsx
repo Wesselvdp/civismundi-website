@@ -595,7 +595,7 @@ const ContentDetailed = styled.div`
     align-items: center;
     justify-content: center;
     padding: 0 15px;
-    margin-top: 8%;
+    margin-top: 15%;
 
     @media ${breakpoints.tabletLandscapeUp} {
       justify-content: space-between;
@@ -603,7 +603,7 @@ const ContentDetailed = styled.div`
     }
 
     @media ${breakpoints.phoneOnly} {
-      margin-top: 20%;
+      margin-top: 40%;
     }
 
     .anim-scale {
