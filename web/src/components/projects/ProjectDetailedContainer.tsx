@@ -196,6 +196,7 @@ const Section = styled.section`
     &.meta {
       flex: 0 0 300px;
       flex-wrap: wrap;
+      padding-right: 50px;
 
       .award-img {
         height: 75px;
@@ -211,6 +212,7 @@ const Section = styled.section`
 
       @media ${breakpoints.phoneOnly} {
         flex-basis: 100%;
+        padding-right: 0;
       }
 
       & > div {
