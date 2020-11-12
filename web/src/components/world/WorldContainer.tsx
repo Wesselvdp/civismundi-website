@@ -8,7 +8,6 @@ import { get, debounce } from 'lodash'
 import { useDispatch } from 'react-redux'
 import Div100vh from 'react-div-100vh'
 import ModalVideo from 'react-modal-video'
-import IsScrolling from 'react-is-scrolling'
 
 import World from './World'
 import { TextImprov, FadeAnim } from '@components/animations'
@@ -495,7 +494,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   )
 }
 
-export default IsScrolling(WorldContainer)
+export default WorldContainer
 
 const svgAnim = keyframes`
   0% {
