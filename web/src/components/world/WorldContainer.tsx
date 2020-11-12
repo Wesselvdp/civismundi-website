@@ -595,16 +595,16 @@ const ContentDetailed = styled.div`
     align-items: center;
     justify-content: center;
     padding: 0 15px;
-    margin-top: 15%;
+    margin-top: 5em;
 
     @media ${breakpoints.tabletLandscapeUp} {
       justify-content: space-between;
       padding: 0 90px;
     }
 
-    @media ${breakpoints.phoneOnly} {
-      margin-top: 40%;
-    }
+    // @media ${breakpoints.phoneOnly} {
+    //   margin-top: 40%;
+    // }
 
     .anim-scale {
       transform: scale(1);
