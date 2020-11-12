@@ -35,44 +35,20 @@ const ProjectDetailedContainer = ({ location, data }) => {
     id,
     city,
     locationGroup,
-    clients,
-    vimeo,
     director,
     awards,
     _rawOverview,
   } = data.sanityProject
+
+  console.log('project', data.sanityProject)
+
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
-  const [state, setState] = useState(ProjectState.LOADING)
-  const [videoOpen, openVideo] = useState(false)
   const [fading, setFading] = useState(false)
-
-  // useEffect(() => {
-  //   let timer
-
-  //   if (world.ready && location.state) {
-  //     if (location.state.doAnimation) {
-  //       timer = setTimeout(() => {
-  //         setState(ProjectState.SUBTITLE_IN)
-  //       }, get(location, 'state.delay', 0))
-  //     } else {
-  //       setState(ProjectState.SLIDER_IN)
-  //     }
-  //   }
-
-  //   return () => {
-  //     clearTimeout(timer)
-  //   }
-  // }, [world.ready, location])
 
   useEffect(() => {
     setFading(world.fadingPage || world.fadingVideo)
   }, [world.fadingPage, world.fadingVideo])
-
-  const getProjectIndex = () =>
-    world.active.areaProjects.findIndex(
-      (p: any) => p.node._id === world.active.project.node._id
-    ) || 0
 
   const locState = location.state || {}
 
@@ -105,14 +81,18 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   <div>
                     <h5 className="subtitle">AWARDS</h5>
                     {awards
-                      .filter((award: any) => award && award.image)
-                      .map((award: any) => (
-                        <img
-                          className="award-img"
-                          key={award.name}
-                          src={award.image.asset.url}
-                        />
-                      ))}
+                      .filter((award: any) => award)
+                      .map((award: any) =>
+                        award.image ? (
+                          <img
+                            className="award-img"
+                            key={award.name}
+                            src={award.image.asset.url}
+                          />
+                        ) : (
+                          <p className="award-text">{award.name}</p>
+                        )
+                      )}
                   </div>
                 ) : null}
               </div>
@@ -136,23 +116,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
 }
 
 export default ProjectDetailedContainer
-
-const SliderWrapper = styled.div`
-  position: absolute;
-  bottom: 14px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: auto;
-
-  @media ${breakpoints.tabletLandscapeDown} {
-    position: relative;
-    bottom: auto;
-    top: auto;
-    right: auto;
-    left: auto;
-  }
-`
 
 const svgNavigators = keyframes`
   0% {
@@ -199,194 +162,6 @@ const GlobeIcon = styled.div`
   }
 `
 
-const Content = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 40%;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 100px;
-  justify-content: center;
-
-  @media ${breakpoints.tabletLandscapeUp} {
-    transform: translateY(50px);
-    padding-top: 0;
-    top: 0;
-    bottom: 28%;
-    padding-bottom: 0;
-    align-items: flex-end;
-  }
-
-  @media ${breakpoints.tabletLandscapeDown} {
-    flex-wrap: wrap;
-    bottom: 20%;
-    padding-bottom: 0;
-    padding-top: 60px;
-  }
-
-  .upper {
-    padding: 0 15px;
-
-    .text-content {
-      opacity: 1;
-      transition: opacity 0.5s ease-in-out;
-
-      &.fading {
-        opacity: 0;
-      }
-
-      h1 {
-        margin: 8px 0 5px;
-      }
-    }
-
-    @media ${breakpoints.tabletLandscapeDown} {
-      padding: 0 15px;
-      min-height: 167px;
-      display: flex;
-      align-items: flex-end;
-    }
-
-    p {
-      max-width: 750px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 22px;
-    }
-  }
-
-  img.scroll {
-    @media ${breakpoints.tabletLandscapeUp} {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    cursor: pointer;
-  }
-
-  .h2 {
-    @media ${breakpoints.phoneOnly} {
-      font-size: 32px;
-    }
-  }
-`
-
-const StyledMast = styled.div`
-  position: relative;
-  height: 100%;
-  opacity: 1;
-
-  @media ${breakpoints.tabletLandscapeDown} {
-    display: flex;
-    align-items: flex-end;
-  }
-`
-
-const ButtonContainer = styled.div`
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .anim-scale {
-    transform: scale(1);
-    transition: 0.25s ease;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  @media ${breakpoints.tabletLandscapeUp} {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    width: 100%;
-    bottom: auto;
-    transform: translate(-50%, -50%);
-    justify-content: space-between;
-    padding: 0 90px;
-  }
-
-  & > svg {
-    cursor: pointer;
-  }
-
-  & > svg.with-anim {
-    opacity: 0;
-    animation: ${svgNavigators} 1s forwards;
-    animation-delay: 1s;
-  }
-
-  & > svg:first-child {
-    margin-right: 24px;
-  }
-
-  & > svg:last-child {
-    margin-left: 24px;
-  }
-
-  @media ${breakpoints.phoneOnly} {
-    .play-button {
-      height: 80px;
-      width: 80px;
-    }
-
-    .nav-button {
-      height: 46px;
-      width: 46px;
-    }
-  }
-`
-
-const svgAnim = keyframes`
-  0% {
-    stroke-dashoffset: 400;
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-`
-
-const PlayButton = styled.div`
-  z-index: 100;
-
-  svg {
-    &:hover {
-      cursor: pointer;
-    }
-
-    circle,
-    path {
-      stroke-dashoffset: 0;
-      opacity: 1;
-    }
-
-    &.with-anim {
-      circle {
-        stroke-dashoffset: 400;
-        opacity: 0;
-        animation: ${svgAnim} 2s forwards;
-      }
-
-      path {
-        stroke-dashoffset: 400;
-        opacity: 0;
-        animation: ${svgAnim} 3s forwards;
-        animation-delay: 0.75s;
-      }
-    }
-  }
-`
-
 const Section = styled.section`
   padding: 10em 0 5em;
   display: flex;
@@ -427,6 +202,11 @@ const Section = styled.section`
         width: auto;
         display: block;
         margin-bottom: 10px;
+      }
+
+      .award-text {
+        margin-bottom: 10px;
+        line-height: 1em;
       }
 
       @media ${breakpoints.phoneOnly} {
