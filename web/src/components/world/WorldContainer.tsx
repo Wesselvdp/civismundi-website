@@ -218,10 +218,18 @@ const WorldContainer = ({ layout, location }) => {
             tag="p"
             className="lighter"
             appear
-            project={world.lastActive && world.lastActive.lastShown === MarkerType.PROJECT ? world.lastActive.project : get(world, `lastActive.areaProjects[${get(
-              world,
-              'lastActive.projectIndex'
-            )}]`)}
+            project={
+              world.lastActive &&
+              world.lastActive.lastShown === MarkerType.PROJECT
+                ? world.lastActive.project
+                : get(
+                    world,
+                    `lastActive.areaProjects[${get(
+                      world,
+                      'lastActive.projectIndex'
+                    )}]`
+                  )
+            }
           />
           {world.version === WorldVersion.MOBILE && (
             <FadeAnim
@@ -311,7 +319,7 @@ const Page = styled.div`
 
   &.other {
     z-index: -1;
-    opacity: 0.55; 
+    opacity: 0.55;
   }
 
   &.project-detailed {

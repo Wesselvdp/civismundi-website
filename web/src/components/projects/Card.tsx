@@ -8,10 +8,10 @@ import { useDispatch } from 'react-redux'
 import { breakpoints } from '@utils/breakpoints'
 import { WorldMode } from '../../actions'
 import { setWorldMode } from '../../actions/mode'
-import { stringifyArray } from '../../utils'
+import { Quote } from '@components/general'
 
 const ProjectCard = ({ data, skipTransition = false, doAnimation = true }) => {
-  const { title, clients, locationGroup, city } = data
+  const { title, locationGroup, city } = data
   const poster = get(data, 'poster.asset.url')
   const video = get(data, 'video.asset.url')
 
@@ -59,7 +59,7 @@ const ProjectCard = ({ data, skipTransition = false, doAnimation = true }) => {
           {locationGroup ? locationGroup.title : city}
         </h5>
         <h4>{title.toUpperCase().split('{BR}').join('')}</h4>
-        <p>{stringifyArray(clients, '', '  •  ', { uppercase: true })}</p>
+        <Quote project={{ node: data }} animated={false} />
       </Content>
     </Card>
   )

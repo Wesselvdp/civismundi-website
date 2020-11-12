@@ -16,13 +16,15 @@ const AboutPage = () => {
       <SEO title="About" />
       <Page>
         <div>
-          <Hero
-            subtitle="About"
-            title={TITLE}
-            content={CONTENT.toUpperCase()}
-            timeout={{ subtitle: 300, title: 500, content: 500 }}
-            onFinished={() => setHeroFinished(true) }
-          />
+          <HeroContainer>
+            <Hero
+              subtitle="About"
+              title={TITLE}
+              content={CONTENT.toUpperCase()}
+              timeout={{ subtitle: 300, title: 500, content: 500 }}
+              onFinished={() => setHeroFinished(true)}
+            />
+          </HeroContainer>
           <FadeAnim in={heroFinished} timeout={1000}>
             <ContactInfo>
               <div className="row">
@@ -52,10 +54,13 @@ const Page = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`
+
+const HeroContainer = styled.div`
+  padding: 0 15px 3em;
 
   @media ${breakpoints.phoneOnly} {
-    display: block;
-    padding-top: 3em;
+    padding: 0 15px 2em;
   }
 `
 
@@ -66,7 +71,7 @@ const ContactInfo = styled.div`
   padding: 2em 0 0;
 
   @media ${breakpoints.phoneOnly} {
-    padding: 2em 0 4em;
+    padding: 0 15px;
   }
 
   .row {
@@ -81,7 +86,10 @@ const ContactInfo = styled.div`
 
       @media ${breakpoints.phoneOnly} {
         flex-basis: 100%;
-        margin-bottom: 50px;
+
+        &:not(:last-child) {
+          margin-bottom: 25px;
+        }
       }
 
       .subtitle {

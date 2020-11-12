@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { uniqBy } from 'lodash'
 
-import { SEO, Hero, Select } from '@components/general'
+import { SEO, Hero } from '@components/general'
 import { ProjectList } from '@components/projects'
-import { FadeAnim } from '@components/animations'
 import { breakpoints } from '@utils/breakpoints'
 
 import localize from '@utils/localize'
@@ -56,13 +55,14 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
     <>
       <SEO title="Projects" />
       <Page>
-        <Hero
-          title="All projects"
-          subtitle="List view"
-          timeout={{ title: 500, subtitle: 300, content: 0 }}
-          onFinished={() => setHeroFinished(true)}
-          className="rm-padding-bottom"
-        />
+        <HeroContainer>
+          <Hero
+            title="All projects"
+            subtitle="List view"
+            timeout={{ title: 500, subtitle: 300, content: 0 }}
+            onFinished={() => setHeroFinished(true)}
+          />
+        </HeroContainer>
         {heroFinished && (
           <ProjectList
             projects={data.allSanityProject}
@@ -80,12 +80,16 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
 }
 
 const Page = styled.div`
-  padding-top: 11em;
   min-height: 100vh;
   position: relative;
+  padding-bottom: 2em;
+`
+
+const HeroContainer = styled.div`
+  padding-top: 11em;
 
   @media ${breakpoints.phoneOnly} {
-    padding-top: 3em;
+    padding-top: 6em;
   }
 `
 
@@ -108,6 +112,10 @@ export const query = graphql`
           featured
           city
           clients
+          quote {
+            content
+            quotee
+          }
           location {
             lat
             lng

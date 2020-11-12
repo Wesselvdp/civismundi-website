@@ -67,7 +67,7 @@ const Hero = ({
         durationIn={0.5}
         durationOut={0.5}
       />
-      {children && (<div className="children">{children}</div>)}
+      {children && <div className="children">{children}</div>}
     </Wrapper>
   )
 }
@@ -75,18 +75,10 @@ const Hero = ({
 export default Hero
 
 const Wrapper = styled.div`
-  padding: 0 15px 3em;
+  padding: 0;
   margin: 0 auto;
   position: relative;
   max-width: 1000px;
-
-  @media ${breakpoints.tabletLandscapeDown} {
-    padding-top: 6em;
-  }
-
-  &.rm-padding-bottom {
-    padding-bottom: 0;
-  }
 
   & > img {
     position: absolute;
@@ -108,6 +100,7 @@ const Wrapper = styled.div`
 
   h1 {
     margin: 10px 0 5px;
+
     @media ${breakpoints.tabletLandscapeUp} {
       font-size: 62px;
     }

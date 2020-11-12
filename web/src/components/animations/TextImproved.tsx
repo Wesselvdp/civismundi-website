@@ -18,7 +18,7 @@ const TextAnimation = ({
   const [words, setWords] = useState([])
   const [speed, setSpeed] = useState({ in: 10, out: 20 })
   const [ready, setReady] = useState(false)
-  
+
   useEffect(() => {
     setReady(false)
 
@@ -29,16 +29,24 @@ const TextAnimation = ({
   }, [text])
 
   useEffect(() => {
-    setTimeout(() => setReady(words && words.length > 0 && speed.in === text.length / durationIn), 0)
+    setTimeout(
+      () =>
+        setReady(
+          words && words.length > 0 && speed.in === text.length / durationIn
+        ),
+      0
+    )
   }, [words])
 
   const generateWords = () => {
     const words = text.split(' ')
     const objs = words.map((word: string, i: number) => {
-      const position = words.slice(0, i).reduce((acc: any, word: string) => acc + word.length, 0)
+      const position = words
+        .slice(0, i)
+        .reduce((acc: any, word: string) => acc + word.length, 0)
       return {
         value: word,
-        position
+        position,
       }
     })
 
@@ -53,29 +61,31 @@ const TextAnimation = ({
         <Tag className={className} style={style}>
           {words.map((word: any) => {
             if (word.value.toLowerCase() === '{br}') {
-              return allowCustomBreaks ? <br /> : null;
+              return allowCustomBreaks ? <br /> : null
             }
 
             return (
               <>
                 <span style={{ display: 'inline-block' }}>
-                  {word.value && word.value.split('').map((letter: string, i: number) => (
-                    <span
-                    className="letter"
-                    style={{
-                      transitionDelay: props.in
-                        ? `${(word.position + i) / speed.in}s`
-                        : `${(word.position + i) / speed.out}s`,
-                    }}
-                  >
-                    {letter}
-                  </span>
-                  ))}
+                  {word.value &&
+                    word.value.split('').map((letter: string, i: number) => (
+                      <span
+                        key={word.position + i}
+                        className="letter"
+                        style={{
+                          transitionDelay: props.in
+                            ? `${(word.position + i) / speed.in}s`
+                            : `${(word.position + i) / speed.out}s`,
+                        }}
+                      >
+                        {letter}
+                      </span>
+                    ))}
                 </span>
-                <span>{' '}</span>
+                <span> </span>
               </>
             )
-        })}
+          })}
         </Tag>
       </Wrapper>
     </CSSTransition>
