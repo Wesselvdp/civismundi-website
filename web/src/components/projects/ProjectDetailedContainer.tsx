@@ -234,13 +234,31 @@ const Section = styled.section`
         width: 100%;
       }
 
+      strong {
+        font-weight: 700;
+        font-family: 'Druk Wide Super';
+        font-size: 14px;
+        text-transform: uppercase;
+        margin-bottom: -14px;
+        display: block;
+        color: rgb(255, 255, 255);
+
+        @media ${breakpoints.phoneOnly} {
+          font-size: 12px;
+        }
+      }
+
       h5 {
         font-weight: 700;
         font-family: 'Druk Wide Super';
         font-size: 14px;
         text-transform: uppercase;
         color: rgb(255, 255, 255);
-        opacity: 1;
+
+        strong {
+          margin-bottom: 0;
+          display: initial;
+        }
       }
 
       h6 {
