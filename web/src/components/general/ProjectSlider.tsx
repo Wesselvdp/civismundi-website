@@ -101,17 +101,17 @@ const Container = styled.div`
   overflow-x: auto;
   overflow-y: hidden;
   overflow-scrolling: touch;
-  height: 161px;
+  height: auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   opacity: 0;
   transform: translate(0, 100%);
   transition: all 0.5s ease;
+  padding-top: 10px;
 
   @media ${breakpoints.phoneOnly} {
     display: block;
-    height: 150px;
   }
 
   &.show {
@@ -150,15 +150,10 @@ const Thumbnail = styled.div`
     margin-bottom: 0;
     margin-right: 7px;
     margin-left: 7px;
-    transform: translateY(30px);
   }
 
   &.active {
-    transform: translateY(-20px);
-
-    @media ${breakpoints.phoneOnly} {
-      transform: translateY(20px);
-    }
+    transform: translateY(-10px);
   }
 
   .progress-bar {

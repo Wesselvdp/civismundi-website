@@ -3,6 +3,7 @@ import { Link, Element } from 'react-scroll'
 import styled, { keyframes } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { get } from 'lodash'
+import Div100vh from 'react-div-100vh'
 
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
@@ -42,39 +43,12 @@ const ProjectDetailedContainer = ({ location, data }) => {
   } = data.sanityProject
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
-  const [state, setState] = useState(ProjectState.LOADING)
   const [videoOpen, openVideo] = useState(false)
   const [fading, setFading] = useState(false)
 
   useEffect(() => {
-    let timer
-
-    if (world.ready && location.state) {
-      if (location.state.doAnimation) {
-        timer = setTimeout(() => {
-          setState(ProjectState.SUBTITLE_IN)
-        }, get(location, 'state.delay', 0))
-      } else {
-        setState(ProjectState.SLIDER_IN)
-      }
-    }
-
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [world.ready, location])
-
-  useEffect(() => {
     setFading(world.fadingPage || world.fadingVideo)
   }, [world.fadingPage, world.fadingVideo])
-
-  useEffect(() => {
-    if (state === ProjectState.VIDEO_BUTTON_IN) {
-      setTimeout(() => {
-        setState(ProjectState.SLIDER_IN)
-      }, 1500)
-    }
-  }, [state])
 
   const getProjectIndex = () =>
     world.active.areaProjects.findIndex(
@@ -93,6 +67,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
       >
         <img src="/globe-icon.svg" />
       </GlobeIcon>
+
       {vimeo && (
         <ModalWrapper className={videoOpen ? 'open' : ''}>
           <ModalVideo
@@ -110,102 +85,9 @@ const ProjectDetailedContainer = ({ location, data }) => {
           />
         </ModalWrapper>
       )}
-      <StyledMast>
-        <Content>
-          {(!locState.doAnimation || state >= ProjectState.VIDEO_BUTTON_IN) && (
-            <ButtonContainer className="button-container">
-              <PrevSVG
-                style={{
-                  visibility:
-                    world.active.area && getProjectIndex() > 0
-                      ? 'visible'
-                      : 'hidden',
-                }}
-                className={`anim-scale ${locState.doAnimation && 'with-anim'} nav-button`}
-                onClick={() =>
-                  !fading &&
-                  dispatch(
-                    setWorldMode(WorldMode.PROJECT_DETAILED, {
-                      project: world.active.areaProjects[getProjectIndex() - 1],
-                      state: { fadeVideo: true },
-                    })
-                  )
-                }
-              />
-              <PlayButton style={{ visibility: vimeo ? 'visible' : 'hidden' }}>
-                <PlaySVG
-                  className={`anim-scale ${locState.doAnimation && 'with-anim'} play-button`}
-                  onClick={() => openVideo(true)}
-                />
-              </PlayButton>
-              <NextSVG
-                className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
-                style={{
-                  visibility:
-                    world.active.area &&
-                    getProjectIndex() < world.active.areaProjects.length - 1
-                      ? 'visible'
-                      : 'hidden',
-                }}
-                onClick={() =>
-                  dispatch(
-                    !fading &&
-                      setWorldMode(WorldMode.PROJECT_DETAILED, {
-                        project: world.active.areaProjects[getProjectIndex() + 1],
-                        state: {
-                          fadeVideo: true,
-                          keepSliderScroll: true,
-                        },
-                      })
-                  )
-                }
-              />
-            </ButtonContainer>
-          )}
-          <div className="upper">
-            <div className={`text-content`}>
-              <TextImprov
-                in={!fading && state >= ProjectState.SUBTITLE_IN}
-                onEntered={() =>
-                  locState.doAnimation && setState(ProjectState.TITLE_IN)
-                }
-                className="subtitle"
-                tag="h2"
-                text={
-                  world.active.project &&
-                  world.active.project.node.locationGroup
-                    ? get(world, 'active.project.node.locationGroup.title')
-                    : get(world, 'active.project.node.city')
-                }
-                appear
-                timeout={{ enter: 300 }}
-              />
-              <TextImprov
-                in={!fading && state >= ProjectState.TITLE_IN}
-                onEntered={() =>
-                  locState.doAnimation && setState(ProjectState.PARAGRAPH_IN)
-                }
-                className="h2"
-                tag="h1"
-                text={get(world, 'active.project.node.title', '')}
-                appear
-                timeout={{ enter: 300 }}
-                allowCustomBreaks
-              />
-              <Quote
-                in={!fading && state >= ProjectState.PARAGRAPH_IN}
-                onEntered={() =>
-                  locState.doAnimation && setState(ProjectState.VIDEO_BUTTON_IN)
-                }
-                tag="p"
-                project={get(world, 'active.project')}
-                appear
-                timeout={{ enter: 600 }}
-              />
-            </div>
-          </div>
-        </Content>
-      </StyledMast>
+
+      {/* To compensate for WorldContainer */}
+      <Div100vh />
 
       {/* Project content */}
       <Element name="content">
@@ -242,6 +124,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
             </div>
           </div>
         </Section>
+
+        {/* Other projects */}
         <ProjectList
           title="Other projects"
           blockId={id}
@@ -342,7 +226,7 @@ const Content = styled.div`
 
   @media ${breakpoints.tabletLandscapeDown} {
     flex-wrap: wrap;
-    bottom: 30%;
+    bottom: 20%;
     padding-bottom: 0;
     padding-top: 60px;
   }
@@ -365,7 +249,7 @@ const Content = styled.div`
 
     @media ${breakpoints.tabletLandscapeDown} {
       padding: 0 15px;
-      min-height: 140px;
+      min-height: 167px;
       display: flex;
       align-items: flex-end;
     }
@@ -398,7 +282,7 @@ const Content = styled.div`
 
 const StyledMast = styled.div`
   position: relative;
-  height: 100vh;
+  height: 100%;
   opacity: 1;
 
   @media ${breakpoints.tabletLandscapeDown} {

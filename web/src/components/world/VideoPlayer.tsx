@@ -84,7 +84,9 @@ const VideoPlayer = () => {
         ].includes(world.mode)
           ? 'visible'
           : ''
-      } ${world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''}`}
+      } ${
+        world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''
+      } ${world.fadingVideo ? 'fading' : ''}`}
     >
       <div ref={videos}>
         {world.projects &&

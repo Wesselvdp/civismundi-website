@@ -192,12 +192,12 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
     if (!state.keepSliderScroll)
       dispatch({ type: SET_SLIDER_SCROLL, scroll: 0 })
 
+
+    navigate(`/projects/${get(data, 'project.node.slug.current')}`, {
+      state,
+    })
     setTimeout(
       async () => {
-        navigate(`/projects/${get(data, 'project.node.slug.current')}`, {
-          state,
-        })
-
         // set active
         await dispatch(setActiveObjectFromProject(data.project))
 
