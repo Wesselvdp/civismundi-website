@@ -120,12 +120,14 @@ const WorldContainer = ({ layout, location }) => {
 
     if (!world.ready) return
 
-    if (location.state && location.state.doAnimation) {
-      timer = setTimeout(() => {
-        setDetailedState(DetailedState.SUBTITLE)
-      }, get(location, 'state.delay', 0))
-    } else {
-      setDetailedState(DetailedState.BUTTONS)
+    if (location.pathname.includes('/projects')) {
+      if (location.state && location.state.doAnimation) {
+        timer = setTimeout(() => {
+          setDetailedState(DetailedState.SUBTITLE)
+        }, get(location, 'state.delay', 0))
+      } else {
+        setDetailedState(DetailedState.BUTTONS)
+      }
     }
 
     return () => clearTimeout(timer)
