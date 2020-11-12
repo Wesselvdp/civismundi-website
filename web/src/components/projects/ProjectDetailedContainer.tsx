@@ -234,17 +234,26 @@ const Section = styled.section`
         width: 100%;
       }
 
-      strong {
+      h5 {
         font-weight: 700;
         font-family: 'Druk Wide Super';
         font-size: 14px;
         text-transform: uppercase;
-        margin-bottom: -14px;
-        display: block;
         color: rgb(255, 255, 255);
+        opacity: 1;
+      }
+
+      h6 {
+        font-size: 18px;
+        margin-bottom: 0.5em;
+        font-weight: 300;
+
+        strong {
+          font-weight: 300;
+        }
 
         @media ${breakpoints.phoneOnly} {
-          font-size: 12px;
+          font-size: 14px;
         }
       }
 
