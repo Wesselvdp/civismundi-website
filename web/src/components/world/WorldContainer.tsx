@@ -8,6 +8,7 @@ import { get, debounce } from 'lodash'
 import { useDispatch } from 'react-redux'
 import Div100vh from 'react-div-100vh'
 import ModalVideo from 'react-modal-video'
+import IsScrolling from 'react-is-scrolling'
 
 import World from './World'
 import { TextImprov, FadeAnim } from '@components/animations'
@@ -52,7 +53,7 @@ function usePrevious(value) {
   return ref.current
 }
 
-const WorldContainer = ({ layout, location }) => {
+const WorldContainer = ({ layout, location, isScrolling }) => {
   const world = useSelector((state) => state.world)
   const [markers, setMarkers] = useState([]) // all markers (subset of Projects+Locations)
   const [[width, height], setSize] = useState([0, 0])
@@ -100,8 +101,6 @@ const WorldContainer = ({ layout, location }) => {
   }, [])
 
   useEffect(() => {
-    if (width === prevWidth && Math.abs(prevHeight - height) < 30) return
-
     dispatch(worldHandleResize())
   }, [width, height])
 
@@ -496,7 +495,7 @@ const WorldContainer = ({ layout, location }) => {
   )
 }
 
-export default WorldContainer
+export default IsScrolling(WorldContainer)
 
 const svgAnim = keyframes`
   0% {
@@ -517,20 +516,20 @@ const PlayButton = styled.div`
       cursor: pointer;
     }
 
-    circle,
-    path {
+    #Oval_Copy,
+    #Stroke_19 {
       stroke-dashoffset: 0;
       opacity: 1;
     }
 
     &.with-anim {
-      circle {
+      #Oval_Copy {
         stroke-dashoffset: 400;
         opacity: 0;
         animation: ${svgAnim} 2s forwards;
       }
 
-      path {
+      #Stroke_19 {
         stroke-dashoffset: 400;
         opacity: 0;
         animation: ${svgAnim} 3s forwards;
