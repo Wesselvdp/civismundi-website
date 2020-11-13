@@ -118,6 +118,8 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
 
     if (!world.ready) return
 
+    openVideo(false)
+
     if (location.pathname.includes('/projects')) {
       if (location.state && location.state.doAnimation) {
         timer = setTimeout(() => {
@@ -203,7 +205,9 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   const project = active.project ? active.project.node : null
 
   return (
-    <Page className={`${layout} ${videoOpen ? 'modal-open' : ''}`}>
+    <Page
+      className={`${layout} ${videoOpen && project.vimeo ? 'modal-open' : ''}`}
+    >
       {/* Globe */}
       <Div100vh>
         <CSSTransition
@@ -373,7 +377,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   />
                   <PlayButton
                     style={{
-                      visibility: 'visible'
+                      visibility: 'visible',
                     }}
                   >
                     <PlaySVG
