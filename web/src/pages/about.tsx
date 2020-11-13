@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import Div100vh from 'react-div-100vh'
 
 import { breakpoints } from '@utils/breakpoints'
 import { Hero, SEO } from '@components/general'
 import { FadeAnim } from '@components/animations'
 
-const TITLE = 'A collective of interdisciplinary creatives';
-const CONTENT = 'whose collaborative practice seeks to navigate the confluence of film, music, design and fashion'
+const TITLE = 'A collective of interdisciplinary creatives'
+const CONTENT =
+  'whose collaborative practice seeks to navigate the confluence of film, music, design and fashion'
 
 const AboutPage = () => {
   const [heroFinished, setHeroFinished] = useState(false)
@@ -14,39 +16,41 @@ const AboutPage = () => {
   return (
     <>
       <SEO title="About" />
-      <Page>
-        <div>
-          <HeroContainer>
-            <Hero
-              subtitle="About"
-              title={TITLE}
-              content={CONTENT.toUpperCase()}
-              timeout={{ subtitle: 300, title: 500, content: 500 }}
-              onFinished={() => setHeroFinished(true)}
-            />
-          </HeroContainer>
-          <FadeAnim in={heroFinished} timeout={1000}>
-            <ContactInfo>
-              <div className="row">
-                <div className="col">
-                  <h5 className="subtitle">E-MAIL</h5>
-                  <h6>info@civismundi.com</h6>
+      <Div100vh>
+        <Page>
+          <div>
+            <HeroContainer>
+              <Hero
+                subtitle="About"
+                title={TITLE}
+                content={CONTENT.toUpperCase()}
+                timeout={{ subtitle: 300, title: 500, content: 500 }}
+                onFinished={() => setHeroFinished(true)}
+              />
+            </HeroContainer>
+            <FadeAnim in={heroFinished} timeout={1000}>
+              <ContactInfo>
+                <div className="row">
+                  <div className="col">
+                    <h5 className="subtitle">E-MAIL</h5>
+                    <h6>info@civismundi.com</h6>
+                  </div>
+                  <div className="col">
+                    <h5 className="subtitle">PHONE</h5>
+                    <h6>+370 495 385 30</h6>
+                  </div>
                 </div>
-                <div className="col">
-                  <h5 className="subtitle">PHONE</h5>
-                  <h6>+370 495 385 30</h6>
-                </div>
-              </div>
-            </ContactInfo>
-          </FadeAnim>
-        </div>
-      </Page>
+              </ContactInfo>
+            </FadeAnim>
+          </div>
+        </Page>
+      </Div100vh>
     </>
   )
 }
 
 const Page = styled.div`
-  min-height: 100vh;
+  height: 100%;
   position: relative;
   display: flex;
   justify-content: center;
