@@ -209,7 +209,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       className={`${layout} ${videoOpen && project.vimeo ? 'modal-open' : ''}`}
     >
       {/* Globe */}
-      <Div100vh>
+      <Div100vh style={{ minHeight: '475px' }}>
         <CSSTransition
           in={world.ready}
           timeout={{ enter: 1600 }}
@@ -220,7 +220,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
           >
             <World
               width={width}
-              height={height}
+              height={Math.max(height, 475)}
               location={location}
               data={data}
               markers={markers}

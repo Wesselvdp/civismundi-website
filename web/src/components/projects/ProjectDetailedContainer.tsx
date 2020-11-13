@@ -53,7 +53,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
   const locState = location.state || {}
 
   return (
-    <>
+    <Page>
       <GlobeIcon
         className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
         onClick={() =>
@@ -111,11 +111,15 @@ const ProjectDetailedContainer = ({ location, data }) => {
           doAnimation={false}
         />
       </Element>
-    </>
+    </Page>
   )
 }
 
 export default ProjectDetailedContainer
+
+const Page = styled.div`
+  padding-bottom: 4em;
+`
 
 const svgNavigators = keyframes`
   0% {
