@@ -324,6 +324,8 @@ export function setWorldMode(mode: WorldMode, data: any = {}) {
 
 export function setWorldModeFromLocation(location: any = {}, data: any = {}) {
   return function action(dispatch: any, getState: any) {
+    console.log('world mode from location', location)
+
     if (!location.pathname) return
 
     if (location.pathname === '/')

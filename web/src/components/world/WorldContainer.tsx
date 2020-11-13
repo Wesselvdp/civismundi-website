@@ -65,15 +65,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // back button support
-    if (typeof window !== 'undefined') {
-      window.onpopstate = (e) => {
-        dispatch(
-          setWorldModeFromLocation(e.target.location, { skipTransition: false })
-        )
-      }
-    }
-
     // combine projects and areas for markers
     const projects = data.allSanityProject.edges.filter(
       (p) => p.node.locationGroup === null
@@ -112,6 +103,17 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       setDetailedState(DetailedState.LOADING)
     }
   }, [world.mode])
+
+  useEffect(() => {
+    // back button support
+    if (world.ready && typeof window !== 'undefined') {
+      window.onpopstate = (e) => {
+        dispatch(
+          setWorldModeFromLocation(e.target.location, { skipTransition: false })
+        )
+      }
+    }
+  }, [world.ready])
 
   useEffect(() => {
     let timer
