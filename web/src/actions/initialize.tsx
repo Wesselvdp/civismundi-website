@@ -186,12 +186,12 @@ export function initializeWorld(
     configureScene(getState().world)
 
     // set world mode from location
-    dispatch(
+    await dispatch(
       setWorldModeFromLocation(location, { data: { state: { delay: 0 } } })
     )
 
     // show/hide markers depending on location
-    // dispatch(toggleMarkers(false, 0))
+    // dispatch(toggleMarkers(false, 0, true))
 
     // event listeners
     getState()
@@ -280,7 +280,8 @@ export function initializeWorld(
     await dispatch({ type: WORLD_INITIALIZE_COMPLETE })
 
     setTimeout(
-      dispatch(toggleMarkers(location.pathname === '/', 750, true), 2000)
+      () => dispatch(toggleMarkers(location.pathname === '/', 750, true)),
+      2000
     )
 
     console.log('initialized')

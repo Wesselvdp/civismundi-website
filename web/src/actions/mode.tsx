@@ -258,7 +258,7 @@ function navigateAreaPreview(data: any = {}, duration = 1500) {
     dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.AREA })
 
     // toggle markers
-    dispatch(toggleMarkers(true))
+    // dispatch(toggleMarkers(true))
 
     // on mobile, center marker
     if (w.version === WorldVersion.MOBILE) moveMarkerToCenter(w)
@@ -291,7 +291,7 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
     dispatch({ type: SET_LAST_ACTIVE, lastShown: MarkerType.PROJECT })
 
     // toggle markers on
-    dispatch(toggleMarkers(true))
+    // dispatch(toggleMarkers(true))
 
     // if on mobile, center marker
     if (w.version === WorldVersion.MOBILE) moveMarkerToCenter(w)

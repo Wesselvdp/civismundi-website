@@ -15,21 +15,30 @@ import { setWorldMode } from './mode'
 export const addMarker = (marker: any) => ({ type: ADD_MARKER, marker })
 
 export const changeMarkerSize = (
-  marker: any,
+  markers: any,
   scale: number,
   duration = 500
 ) => {
-  if (!marker) return
+  if (!markers) return
 
-  const scaleFrom = marker.__threeObj.scale
+  if (!Array.isArray(markers)) {
+    markers = [markers]
+  }
+
+  const scaleFrom = markers[0].__threeObj.scale
   // if (scaleFrom.x === scale) return
 
-  if (marker.pulsingRing) updatePulsingScale(marker, scale)
+  markers.forEach((marker: any) => {
+    if (marker.pulsingRing)
+      setTimeout(() => updatePulsingScale(marker, scale), duration)
+  })
 
   new TWEEN.Tween({ ...scaleFrom })
     .to({ x: scale, y: scale, z: scale }, duration)
     .onUpdate((d) => {
-      marker.__threeObj.scale.set(d.x, d.y, d.z)
+      markers.forEach((marker: any) =>
+        marker.__threeObj.scale.set(d.x, d.y, d.z)
+      )
     })
     .easing(TWEEN.Easing.Cubic.InOut)
     .start()
@@ -164,25 +173,12 @@ export function toggleMarkers(show: boolean, duration = 750, force = false) {
     // No action needed
     if (!force && w.markersVisible === show) return 0
 
+    changeMarkerSize(
+      w.markers,
+      (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
+    )
+
     w.markers.forEach((marker: any) => {
-      changeMarkerSize(
-        marker,
-        (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
-      )
-      // const scale = marker.__threeObj.scale
-      // let size = show === true ? 1 : 0
-      // if (w.version === WorldVersion.MOBILE) {
-      //   size *= 1.65
-      // }
-
-      // new TWEEN.Tween({ ...scale })
-      //   .to({ x: size, y: size, z: size }, duration)
-      //   .onUpdate((d) => {
-      //     marker.__threeObj.scale.set(d.x, d.y, d.z)
-      //   })
-      //   .easing(TWEEN.Easing.Cubic.InOut)
-      //   .start()
-
       if (marker.pulsingRing)
         show
           ? continuePulsingMarkerTween(marker)
