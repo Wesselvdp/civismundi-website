@@ -63,6 +63,7 @@ export const query = graphql`
           title
           featured
           city
+          vimeo
           clients
           quote {
             content
