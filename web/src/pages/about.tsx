@@ -16,7 +16,7 @@ const AboutPage = () => {
   return (
     <>
       <SEO title="About" />
-      <Div100vh>
+      <Div100vh style={{ minHeight: '520px' }}>
         <Page>
           <div>
             <HeroContainer>

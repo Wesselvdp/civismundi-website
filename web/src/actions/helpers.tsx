@@ -63,7 +63,8 @@ export const setCameraInitialPosition = (world: any, duration = 1500) => {
   const targetTo = { x: 0, y: 0, z: 0 }
 
   const length = camera.position.length()
-  const lengthTo = world.version === WorldVersion.MOBILE ? calculateCameraZ() : 350
+  const lengthTo =
+    world.version === WorldVersion.MOBILE ? calculateCameraZ() : 350
 
   // Change target and camera position
   new TWEEN.Tween({ target: { ...target }, length })
@@ -106,7 +107,11 @@ export const moveToMarker = (world: any, duration = 1500) => {
 
 export const getWorldVersion = () => {
   if (typeof window !== 'undefined') {
-    return window.innerWidth < 600 ? WorldVersion.MOBILE : WorldVersion.DESKTOP
+    return window.innerWidth < 600 ||
+      (window.matchMedia('(orientation: landscape)').matches &&
+        window.innerWidth < 850)
+      ? WorldVersion.MOBILE
+      : WorldVersion.DESKTOP
   }
 
   return WorldVersion.DESKTOP

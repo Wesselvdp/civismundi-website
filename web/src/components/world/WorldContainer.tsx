@@ -652,16 +652,17 @@ const ContentDetailed = styled.div`
 `
 
 const Page = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   overflow: hidden;
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
 
   &.other {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     z-index: -1;
     opacity: 0.55;
   }

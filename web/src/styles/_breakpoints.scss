@@ -11,6 +11,10 @@ $break-lg: 1200px;
   @media (max-width: 599px) {
     @content;
   }
+
+  @media (orientation: landscape) and (max-width: 850px) {
+    @content;
+  }
 }
 @mixin tablet-portrait-up {
   @media (min-width: 600px) {

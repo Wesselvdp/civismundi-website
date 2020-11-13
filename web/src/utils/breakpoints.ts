@@ -2,13 +2,13 @@ const size = {
   phone: `599px`,
   tabletLandscape: `900px`,
   desktop: '1200px',
-  desktopLarge: '1800px'
+  desktopLarge: '1800px',
 }
 
 export const breakpoints = {
-  phoneOnly: `(max-width: ${size.phone})`,
+  phoneOnly: `(max-width: ${size.phone}), (orientation: landscape) and (max-width: 850px)`,
   tabletLandscapeDown: `(max-width: ${size.tabletLandscape})`,
   tabletLandscapeUp: `(min-width: ${size.tabletLandscape})`,
-  desktopUp: (`min-width: ${size.desktop}`),
-  desktopLargeUp: `(min-width: ${size.desktopLarge})`
+  desktopUp: `min-width: ${size.desktop}`,
+  desktopLargeUp: `(min-width: ${size.desktopLarge})`,
 }
