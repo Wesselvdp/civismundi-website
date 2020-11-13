@@ -99,6 +99,9 @@ const Grid = styled.div`
 
   @media ${breakpoints.phoneOnly} {
     padding: 2em 15px 2em;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 `
 const GridItem = styled.div`
