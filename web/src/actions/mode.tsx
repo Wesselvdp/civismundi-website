@@ -330,7 +330,8 @@ export function setWorldModeFromLocation(location: any = {}, data: any = {}) {
       return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE, { force: true }))
 
     if (
-      location.pathname.includes('/projects') ||
+      location.pathname === '/projects' ||
+      location.pathname === '/projects/' ||
       location.pathname.includes('/about')
     )
       return dispatch(setWorldMode(WorldMode.IN_BACKGROUND))
