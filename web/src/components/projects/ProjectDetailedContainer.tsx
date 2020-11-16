@@ -40,8 +40,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
     _rawOverview,
   } = data.sanityProject
 
-  console.log('project', data.sanityProject)
-
   const dispatch = useDispatch()
   const world = useSelector((state) => state.world)
   const [fading, setFading] = useState(false)

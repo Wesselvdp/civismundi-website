@@ -88,18 +88,41 @@ export const moveToMarker = (world: any, duration = 1500) => {
   const coords = world.active.area
     ? world.active.area.node.location
     : world.active.project.node.location
-  const camPos = camera.position
-  const camPosTo = world.ref.current.getCoords(coords.lat - 20, coords.lng, 0.4)
 
   const target = controls.target
   const targetTo = world.ref.current.getCoords(coords.lat, coords.lng, 0.25)
 
+  const geoCoords = world.ref.current.toGeoCoords(camera.position)
+  const geoCoordsTo = Object.assign({}, geoCoords, {
+    lat: coords.lat - 20,
+    lng: coords.lng,
+    altitude: 0.4,
+  })
+
+  while (geoCoords.lng - geoCoordsTo.lng > 180) geoCoords.lng -= 360
+  while (geoCoords.lng - geoCoordsTo.lng < -180) geoCoords.lng += 360
+
   // Move camera to marker
-  new TWEEN.Tween({ target: { ...target }, position: { ...camPos } })
-    .to({ target: { ...targetTo }, position: { ...camPosTo } }, duration)
+  new TWEEN.Tween({
+    target: { ...target },
+    position: { ...geoCoords },
+  })
+    .to(
+      {
+        target: { ...targetTo },
+        position: { ...geoCoordsTo },
+      },
+      duration
+    )
     .easing(TWEEN.Easing.Cubic.InOut)
     .onUpdate((d) => {
-      camera.position.set(d.position.x, d.position.y, d.position.z)
+      const coords = world.ref.current.getCoords(
+        d.position.lat,
+        d.position.lng,
+        d.position.altitude
+      )
+
+      camera.position.set(coords.x, coords.y, coords.z)
       controls.target.set(d.target.x, d.target.y, d.target.z)
     })
     .start()
