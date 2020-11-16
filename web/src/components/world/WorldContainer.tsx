@@ -64,6 +64,21 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   const prevHeight = usePrevious(height)
   const dispatch = useDispatch()
 
+  const resize = () =>
+    debounce(
+      () => {
+        if (
+          window.innerWidth === width &&
+          world.version === WorldVersion.MOBILE &&
+          world.mode === WorldMode.PROJECT_DETAILED
+        )
+          return
+
+        setSize([window.innerWidth, window.innerHeight])
+      },
+      100,
+      { trailing: true }
+    )
   useEffect(() => {
     // combine projects and areas for markers
     const projects = data.allSanityProject.edges.filter(
@@ -76,19 +91,15 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
     )
     setMarkers([...areas, ...projects])
 
-    // listen on resize
-    window.addEventListener(
-      'resize',
-      debounce(
-        () => {
-          setSize([window.innerWidth, window.innerHeight])
-        },
-        100,
-        { trailing: true }
-      )
-    )
+    window.addEventListener('resize', resize)
     setSize([window.innerWidth, window.innerHeight])
+
+    return () => window.removeEventListener('resize', resize)
   }, [])
+
+  useEffect(() => {
+    // listen on resize
+  }, [width, world.version, world.mode])
 
   useEffect(() => {
     dispatch(worldHandleResize())

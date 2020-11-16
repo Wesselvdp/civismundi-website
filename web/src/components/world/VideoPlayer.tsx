@@ -18,6 +18,7 @@ const VideoPlayer = () => {
 
   const videos = useRef(null)
   const [activeVideo, setActiveVideo] = useState('')
+  const [error, setError] = useState(false)
   const [prevVideo, setPrevVideo] = useState(null)
   const timer = useRef(null)
 
@@ -88,27 +89,29 @@ const VideoPlayer = () => {
         world.mode === WorldMode.PROJECT_DETAILED ? 'project-detailed' : ''
       } ${world.fadingVideo ? 'fading' : ''}`}
     >
-      <div ref={videos}>
-        {world.projects &&
-          world.projects.map((project: any, i: number) => {
-            const url = get(project, 'node.video.asset.url')
-            const id = get(project, 'node._id')
+      {!error && (
+        <div ref={videos}>
+          {world.projects &&
+            world.projects.map((project: any, i: number) => {
+              const url = get(project, 'node.video.asset.url')
+              const id = get(project, 'node._id')
 
-            return url ? (
-              <video
-                key={id}
-                id={`video-${id}`}
-                playsInline
-                muted
-                loop
-                preload="auto"
-                className={activeVideo === id ? 'active' : ''}
-              >
-                <source src={url} type="video/mp4" />
-              </video>
-            ) : null
-          })}
-      </div>
+              return url ? (
+                <video
+                  key={id}
+                  id={`video-${id}`}
+                  playsInline
+                  muted
+                  loop
+                  preload="auto"
+                  className={activeVideo === id ? 'active' : ''}
+                >
+                  <source src={url} type="video/mp4" />
+                </video>
+              ) : null
+            })}
+        </div>
+      )}
     </Wrapper>
   )
 }

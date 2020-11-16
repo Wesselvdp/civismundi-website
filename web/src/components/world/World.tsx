@@ -79,12 +79,12 @@ const World = ({ data, markers, width, height, layout, className }) => {
     }
   }
 
-  const onClick = (obj) => {
-    if (disableEvents) return
+  // const onClick = (obj) => {
+  //   if (disableEvents) return
 
-    setDisableEvents(true)
-    dispatch(onMarkerClicked(obj))
-  }
+  //   setDisableEvents(true)
+  //   dispatch(onMarkerClicked(obj))
+  // }
 
   const labelObject = (obj, radius) => {
     dispatch(addMarker(obj))

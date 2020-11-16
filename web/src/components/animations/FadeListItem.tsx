@@ -8,16 +8,24 @@ const FadeListItem = ({ children, visible }) => {
 
   useEffect(() => {
     if (!visible) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => setVisible(entry.isIntersecting))
-      }, { rootMargin: '100px' })
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => setVisible(entry.isIntersecting))
+        },
+        { rootMargin: '100px' }
+      )
 
       observer.observe(ref.current)
+
+      return () => observer.disconnect()
     }
   }, [])
 
   return (
-    <ItemStyled ref={ref} className={`${visible || isVisible ? 'is-visible' : ''}`}>
+    <ItemStyled
+      ref={ref}
+      className={`${visible || isVisible ? 'is-visible' : ''}`}
+    >
       {children}
     </ItemStyled>
   )
@@ -30,7 +38,7 @@ const ItemStyled = styled.div`
   transform: translateY(20vh);
   visibility: hidden;
   transition: opacity 1200ms ease-out, transform 600ms ease-out,
-  visibility 1200ms ease-out;
+    visibility 1200ms ease-out;
   will-change: opacity, transform, visibility;
 
   &.is-visible {
