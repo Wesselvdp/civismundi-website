@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useRef, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useRef, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
@@ -64,21 +64,21 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   const prevHeight = usePrevious(height)
   const dispatch = useDispatch()
 
-  const resize = () =>
-    debounce(
-      () => {
-        if (
-          window.innerWidth === width &&
-          world.version === WorldVersion.MOBILE &&
-          world.mode === WorldMode.PROJECT_DETAILED
-        )
-          return
+  const resize = useCallback(() => {
+    console.log('width', window.innerWidth, width)
+    console.log('version', world.version)
+    console.log('mode', world.mode)
 
-        setSize([window.innerWidth, window.innerHeight])
-      },
-      100,
-      { trailing: true }
+    if (
+      window.innerWidth === width &&
+      world.version === WorldVersion.MOBILE &&
+      world.mode === WorldMode.PROJECT_DETAILED
     )
+      return
+
+    setSize([window.innerWidth, window.innerHeight])
+  }, [world, width])
+
   useEffect(() => {
     // combine projects and areas for markers
     const projects = data.allSanityProject.edges.filter(
@@ -705,7 +705,7 @@ const AnimatedWrapper = styled.div`
   &.globe-enter-active {
     transform: scale(1);
     opacity: 1;
-    transition: all 1600ms ease-in-out;
+    transition: all 1500ms cubic-bezier(0.235, 0.000, 0.060, 1.005);
   }
 
   &.globe-enter-done {
