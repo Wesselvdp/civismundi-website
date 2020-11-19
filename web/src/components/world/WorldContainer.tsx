@@ -215,13 +215,151 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
 
   const { lastActive, active } = world
   const { doAnimation } = location.state || {}
-  const project = active.project ? active.project.node : null
+  const project = active.project ? active.project.node : {}
 
   return (
     <Page
       className={`${layout} ${videoOpen && project.vimeo ? 'modal-open' : ''}`}
     >
-      {layout === 'project-detailed' && <Div100vh style={{ zIndex: -1 }} />}
+      {layout === 'project-detailed' && (
+        <Div100vh style={{ zIndex: -1 }}>
+          {project.vimeo && (
+            <ModalWrapper className={videoOpen ? 'open' : ''}>
+              <ModalVideo
+                channel={
+                  project.vimeo.includes('vimeo') ? 'vimeo' : 'youtube'
+                }
+                isOpen={videoOpen}
+                videoId={getVideoId(project.vimeo)}
+                onClose={() => openVideo(false)}
+                width={1000}
+                height={1000}
+              />
+              <img
+                className="modal-close"
+                src="/close.svg"
+                onClick={() => openVideo(false)}
+              />
+            </ModalWrapper>
+          )}
+          <ContentDetailed>
+            {detailedState >= DetailedState.BUTTONS && (
+              <div className="button-container">
+                <PrevSVG
+                  style={{
+                    visibility:
+                      world.active.area && getProjectIndex() > 0
+                        ? 'visible'
+                        : 'hidden',
+                  }}
+                  className={`anim-scale ${
+                    doAnimation ? 'with-anim' : ''
+                  } nav-button`}
+                  onClick={() =>
+                    dispatch(
+                      setWorldMode(WorldMode.PROJECT_DETAILED, {
+                        project:
+                          world.active.areaProjects[getProjectIndex() - 1],
+                        state: { fadeVideo: true },
+                      })
+                    )
+                  }
+                />
+                <PlayButton
+                  style={{
+                    visibility: 'visible',
+                  }}
+                >
+                  <PlaySVG
+                    className={`anim-scale ${
+                      doAnimation && 'with-anim'
+                    } play-button`}
+                    onClick={() => openVideo(true)}
+                  />
+                </PlayButton>
+                <NextSVG
+                  className={`nav-button anim-scale ${
+                    doAnimation ? 'with-anim' : ''
+                  }`}
+                  style={{
+                    visibility:
+                      world.active.area &&
+                      getProjectIndex() < world.active.areaProjects.length - 1
+                        ? 'visible'
+                        : 'hidden',
+                  }}
+                  onClick={() =>
+                    dispatch(
+                      setWorldMode(WorldMode.PROJECT_DETAILED, {
+                        project:
+                          world.active.areaProjects[getProjectIndex() + 1],
+                        state: {
+                          fadeVideo: true,
+                        },
+                      })
+                    )
+                  }
+                />
+              </div>
+            )}
+            <div className="copy">
+              <div>
+                <TextImprov
+                  in={!fading && detailedState >= DetailedState.SUBTITLE}
+                  onEntered={() =>
+                    doAnimation && setDetailedState(DetailedState.TITLE)
+                  }
+                  className="subtitle"
+                  tag="h2"
+                  text={
+                    world.active.project &&
+                    world.active.project.node.locationGroup
+                      ? get(world, 'active.project.node.locationGroup.title')
+                      : get(world, 'active.project.node.city')
+                  }
+                  appear
+                  timeout={{ enter: 300 }}
+                />
+                <TextImprov
+                  in={!fading && detailedState >= DetailedState.TITLE}
+                  onEntered={() =>
+                    doAnimation && setDetailedState(DetailedState.PARAGRAPH)
+                  }
+                  className="h2"
+                  tag="h1"
+                  text={get(world, 'active.project.node.title', '')}
+                  appear
+                  timeout={{ enter: 300 }}
+                  allowCustomBreaks
+                />
+                <Quote
+                  in={!fading && detailedState >= DetailedState.PARAGRAPH}
+                  onEntered={() =>
+                    doAnimation && setDetailedState(DetailedState.BUTTONS)
+                  }
+                  tag="p"
+                  project={get(world, 'active.project')}
+                  appear
+                  timeout={{ enter: 600 }}
+                />
+              </div>
+            </div>
+          </ContentDetailed>
+        {/* Area projects slider */}
+        <AreaSliderWrapper>
+          <ProjectSlider
+            className="project-slider"
+            show={
+              world.mode === WorldMode.AREA_PREVIEW ||
+              (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
+            }
+            showOnFade
+            withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
+            withAnimation={world.mode === WorldMode.AREA_PREVIEW}
+          />
+        </AreaSliderWrapper>
+      </Div100vh>
+      )}
       {/* Globe */}
       <Div100vh className="globe__container" style={{ minHeight: '475px' }}>
         <CSSTransition
@@ -344,134 +482,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
           </ContentHome>
         )}
 
-        {/* Copy PROJECT_DETAILED */}
-        {world.mode === WorldMode.PROJECT_DETAILED && (
-          <>
-            {project.vimeo && (
-              <ModalWrapper className={videoOpen ? 'open' : ''}>
-                <ModalVideo
-                  channel={
-                    project.vimeo.includes('vimeo') ? 'vimeo' : 'youtube'
-                  }
-                  isOpen={videoOpen}
-                  videoId={getVideoId(project.vimeo)}
-                  onClose={() => openVideo(false)}
-                  width={1000}
-                  height={1000}
-                />
-                <img
-                  className="modal-close"
-                  src="/close.svg"
-                  onClick={() => openVideo(false)}
-                />
-              </ModalWrapper>
-            )}
-            <ContentDetailed>
-              {detailedState >= DetailedState.BUTTONS && (
-                <div className="button-container">
-                  <PrevSVG
-                    style={{
-                      visibility:
-                        world.active.area && getProjectIndex() > 0
-                          ? 'visible'
-                          : 'hidden',
-                    }}
-                    className={`anim-scale ${
-                      doAnimation ? 'with-anim' : ''
-                    } nav-button`}
-                    onClick={() =>
-                      dispatch(
-                        setWorldMode(WorldMode.PROJECT_DETAILED, {
-                          project:
-                            world.active.areaProjects[getProjectIndex() - 1],
-                          state: { fadeVideo: true },
-                        })
-                      )
-                    }
-                  />
-                  <PlayButton
-                    style={{
-                      visibility: 'visible',
-                    }}
-                  >
-                    <PlaySVG
-                      className={`anim-scale ${
-                        doAnimation && 'with-anim'
-                      } play-button`}
-                      onClick={() => openVideo(true)}
-                    />
-                  </PlayButton>
-                  <NextSVG
-                    className={`nav-button anim-scale ${
-                      doAnimation ? 'with-anim' : ''
-                    }`}
-                    style={{
-                      visibility:
-                        world.active.area &&
-                        getProjectIndex() < world.active.areaProjects.length - 1
-                          ? 'visible'
-                          : 'hidden',
-                    }}
-                    onClick={() =>
-                      dispatch(
-                        setWorldMode(WorldMode.PROJECT_DETAILED, {
-                          project:
-                            world.active.areaProjects[getProjectIndex() + 1],
-                          state: {
-                            fadeVideo: true,
-                          },
-                        })
-                      )
-                    }
-                  />
-                </div>
-              )}
-              <div className="copy">
-                <div>
-                  <TextImprov
-                    in={!fading && detailedState >= DetailedState.SUBTITLE}
-                    onEntered={() =>
-                      doAnimation && setDetailedState(DetailedState.TITLE)
-                    }
-                    className="subtitle"
-                    tag="h2"
-                    text={
-                      world.active.project &&
-                      world.active.project.node.locationGroup
-                        ? get(world, 'active.project.node.locationGroup.title')
-                        : get(world, 'active.project.node.city')
-                    }
-                    appear
-                    timeout={{ enter: 300 }}
-                  />
-                  <TextImprov
-                    in={!fading && detailedState >= DetailedState.TITLE}
-                    onEntered={() =>
-                      doAnimation && setDetailedState(DetailedState.PARAGRAPH)
-                    }
-                    className="h2"
-                    tag="h1"
-                    text={get(world, 'active.project.node.title', '')}
-                    appear
-                    timeout={{ enter: 300 }}
-                    allowCustomBreaks
-                  />
-                  <Quote
-                    in={!fading && detailedState >= DetailedState.PARAGRAPH}
-                    onEntered={() =>
-                      doAnimation && setDetailedState(DetailedState.BUTTONS)
-                    }
-                    tag="p"
-                    project={get(world, 'active.project')}
-                    appear
-                    timeout={{ enter: 600 }}
-                  />
-                </div>
-              </div>
-            </ContentDetailed>
-          </>
-        )}
-
         {/* Footer content */}
         <FooterContainer>
           <div className="footer--content">
@@ -494,19 +504,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         {/* Galaxy */}
         <Galaxy show={world.ready} />
 
-        {/* Area projects slider */}
-        <AreaSliderWrapper>
-          <ProjectSlider
-            className="project-slider"
-            show={
-              world.mode === WorldMode.AREA_PREVIEW ||
-              (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
-            }
-            showOnFade
-            withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
-            withAnimation={world.mode === WorldMode.AREA_PREVIEW}
-          />
-        </AreaSliderWrapper>
       </Div100vh>
     </Page>
   )
