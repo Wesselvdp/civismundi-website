@@ -225,7 +225,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       <Div100vh style={{ minHeight: '475px' }}>
         <CSSTransition
           in={world.ready}
-          timeout={{ enter: 1600 }}
+          timeout={{ enter: 2000 }}
           classNames="globe"
         >
           <AnimatedWrapper
@@ -705,7 +705,8 @@ const AnimatedWrapper = styled.div`
   &.globe-enter-active {
     transform: scale(1);
     opacity: 1;
-    transition: all 1500ms cubic-bezier(0.235, 0.000, 0.060, 1.005);
+    transition: all 2000ms cubic-bezier(0.655, 0.005, 0.160, 1.020); /* custom */
+    transition-timing-function: cubic-bezier(0.655, 0.005, 0.160, 1.020); /* custom */
   }
 
   &.globe-enter-done {
