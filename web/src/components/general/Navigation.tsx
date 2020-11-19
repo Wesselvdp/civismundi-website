@@ -43,7 +43,7 @@ const Navigation: FC<T> = ({ location }) => {
 
 const Container = styled.div`
   padding: 0 30px;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

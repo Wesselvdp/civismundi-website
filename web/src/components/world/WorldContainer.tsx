@@ -221,8 +221,9 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
     <Page
       className={`${layout} ${videoOpen && project.vimeo ? 'modal-open' : ''}`}
     >
+      {layout === 'project-detailed' && <Div100vh style={{ zIndex: -1 }} />}
       {/* Globe */}
-      <Div100vh style={{ minHeight: '475px' }}>
+      <Div100vh className="globe__container" style={{ minHeight: '475px' }}>
         <CSSTransition
           in={world.ready}
           timeout={{ enter: 2000 }}
@@ -687,6 +688,15 @@ const Page = styled.div`
 
   &.modal-open {
     z-index: 100 !important;
+  }
+
+  .globe__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
   }
 `
 
