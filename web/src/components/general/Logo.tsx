@@ -1,7 +1,7 @@
 import React, { FC, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
@@ -15,6 +15,7 @@ const Logo: FC<T> = () => {
   const ref = useRef()
   const { hideVideo, setHideVideo } = useLogo()
   const dispatch = useDispatch()
+  const world = useSelector(state => state.world)
 
   useEffect(() => {
     if (ref.current) {
@@ -25,7 +26,9 @@ const Logo: FC<T> = () => {
       ref.current.addEventListener('ended', () => setHideVideo(true))
       ref.current.addEventListener('error', () => setHideVideo(true))
     }
-  }, [ref.current])
+  }, [world.ready])
+
+  if (!world.ready) return null
 
   return (
     <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
