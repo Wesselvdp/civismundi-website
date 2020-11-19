@@ -118,6 +118,7 @@ export default ProjectDetailedContainer
 const Page = styled.div`
   padding-bottom: 4em;
   background-color: #000;
+  min-height: 100vh;
 `
 
 const svgNavigators = keyframes`
