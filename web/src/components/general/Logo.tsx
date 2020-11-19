@@ -18,17 +18,17 @@ const Logo: FC<T> = () => {
   const world = useSelector(state => state.world)
 
   useEffect(() => {
-    if (ref.current) {
+    if (!world.loading && ref.current) {
       let timeout;
 
-      ref.current.addEventListener('loadstart', () => { timeout = setTimeout(() => setHideVideo(true), 1000)})
+      // ref.current.addEventListener('loadstart', () => { timeout = setTimeout(() => setHideVideo(true), 1000)})
       ref.current.addEventListener('play', () => { timeout && clearTimeout(timeout) })
       ref.current.addEventListener('ended', () => setHideVideo(true))
       ref.current.addEventListener('error', () => setHideVideo(true))
     }
-  }, [world.ready])
+  }, [world.loading])
 
-  if (!world.ready) return null
+  if (world.loading) return null
 
   return (
     <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
