@@ -20,6 +20,7 @@ const SEO = ({ description = '', meta = [], title }) => {
   )
   const { locale } = useLocale()
   const metaDescription = description || site.siteMetadata.description
+  title = title ? title.toUpperCase().split('{BR}').join('') : ''
 
   return (
     <Helmet
