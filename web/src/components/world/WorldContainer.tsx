@@ -347,19 +347,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
               </div>
             </div>
           </ContentDetailed>
-          {/* Area projects slider */}
-          <AreaSliderWrapper>
-            <ProjectSlider
-              className="project-slider"
-              show={
-                world.mode === WorldMode.AREA_PREVIEW ||
-                (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
-              }
-              showOnFade
-              withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
-              withAnimation={world.mode === WorldMode.AREA_PREVIEW}
-            />
-          </AreaSliderWrapper>
         </>
       </Div100vh>
       )}
@@ -504,20 +491,19 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         <VideoPlayer />
 
         {/* Area projects slider */}
-        {world.mode !== WorldMode.PROJECT_DETAILED && (
-          <AreaSliderWrapper>
-            <ProjectSlider
-              className="project-slider"
-              show={
-                world.mode === WorldMode.AREA_PREVIEW ||
-                (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
-              }
-              showOnFade
-              withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
-              withAnimation={world.mode === WorldMode.AREA_PREVIEW}
-            />
-          </AreaSliderWrapper>
-        )} 
+        <AreaSliderWrapper>
+          <ProjectSlider
+            className="project-slider"
+            show={
+              world.mode === WorldMode.AREA_PREVIEW ||
+              (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
+            }
+            showOnFade
+            withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
+            withAnimation={world.mode === WorldMode.AREA_PREVIEW}
+          />
+        </AreaSliderWrapper>
+
         {/* Galaxy */}
         <Galaxy show={world.ready} />
       </Div100vh>
