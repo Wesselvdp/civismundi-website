@@ -222,131 +222,8 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       className={`${layout} ${videoOpen && project.vimeo ? 'modal-open' : ''}`}
     >
       {layout === 'project-detailed' && (
-        <Div100vh style={{ zIndex: -1 }} />
-      )}
-      {/* Globe */}
-      <Div100vh className="globe__container" style={{ minHeight: '475px' }}>
-        <CSSTransition
-          in={world.ready}
-          timeout={{ enter: 2000 }}
-          classNames="globe"
-        >
-          <AnimatedWrapper
-            className={world.skipInTransition ? 'skip-in-transition' : ''}
-          >
-            <World
-              width={width}
-              height={Math.max(height, 475)}
-              location={location}
-              data={data}
-              markers={markers}
-            />
-          </AnimatedWrapper>
-        </CSSTransition>
-
-        {/* Copy HOME */}
-        {[
-          WorldMode.PROJECTS_EXPLORE,
-          WorldMode.PROJECT_PREVIEW,
-          WorldMode.AREA_PREVIEW,
-        ].includes(world.mode) && (
-          <ContentHome>
-            <TextImprov
-              in={
-                (world.mode === WorldMode.PROJECT_PREVIEW ||
-                  world.mode === WorldMode.AREA_PREVIEW) &&
-                !world.fadingVideo
-              }
-              tag="h2"
-              className="subtitle"
-              text={
-                lastActive && lastActive.lastShown === MarkerType.PROJECT
-                  ? get(world, 'lastActive.project.node.city')
-                  : get(world, 'lastActive.area.node.title')
-              }
-              appear
-            />
-            <TextImprov
-              in={
-                (world.mode === WorldMode.PROJECT_PREVIEW ||
-                  world.mode === WorldMode.AREA_PREVIEW) &&
-                !world.fadingVideo
-              }
-              tag="h1"
-              allowCustomBreaks
-              text={
-                lastActive && lastActive.lastShown === MarkerType.PROJECT
-                  ? get(world, 'lastActive.project.node.title')
-                  : get(
-                      world,
-                      `lastActive.areaProjects[${get(
-                        world,
-                        'lastActive.projectIndex'
-                      )}].node.title`
-                    )
-              }
-              appear
-            />
-            <Quote
-              in={
-                (world.mode === WorldMode.PROJECT_PREVIEW ||
-                  world.mode === WorldMode.AREA_PREVIEW) &&
-                !world.fadingVideo
-              }
-              tag="p"
-              className="lighter"
-              appear
-              project={
-                world.lastActive &&
-                world.lastActive.lastShown === MarkerType.PROJECT
-                  ? world.lastActive.project
-                  : get(
-                      world,
-                      `lastActive.areaProjects[${get(
-                        world,
-                        'lastActive.projectIndex'
-                      )}]`
-                    )
-              }
-            />
-            {world.version === WorldVersion.MOBILE && (
-              <FadeAnim
-                timeout={500}
-                in={
-                  (world.mode === WorldMode.PROJECT_PREVIEW ||
-                    world.mode === WorldMode.AREA_PREVIEW) &&
-                  !world.fadingVideo
-                }
-              >
-                <Button
-                  className={world.mode}
-                  buttonStyle="outlined"
-                  onClick={() =>
-                    dispatch(
-                      setWorldMode(WorldMode.PROJECT_DETAILED, {
-                        project:
-                          world.mode === WorldMode.AREA_PREVIEW
-                            ? get(
-                                world,
-                                `active.areaProjects[${get(
-                                  world,
-                                  `active.projectIndex`
-                                )}]`
-                              )
-                            : world.active.project,
-                        state: { doAnimation: true, delay: 1500 },
-                      })
-                    )
-                  }
-                >
-                  VIEW PROJECT
-                </Button>
-              </FadeAnim>
-            )}
-          </ContentHome>
-        )}
-        {/* Copy PROJECT_DETAILED */}
-        {world.mode === WorldMode.PROJECT_DETAILED && (
+        <Div100vh style={{ zIndex: -1, minHeight: '475px' }}>
+          {/* Copy PROJECT_DETAILED */}
           <>
           {project.vimeo && (
             <ModalWrapper className={videoOpen ? 'open' : ''}>
@@ -470,7 +347,142 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
               </div>
             </div>
           </ContentDetailed>
+          {/* Area projects slider */}
+          <AreaSliderWrapper>
+            <ProjectSlider
+              className="project-slider"
+              show={
+                world.mode === WorldMode.AREA_PREVIEW ||
+                (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
+              }
+              showOnFade
+              withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
+              withAnimation={world.mode === WorldMode.AREA_PREVIEW}
+            />
+          </AreaSliderWrapper>
         </>
+      </Div100vh>
+      )}
+      {/* Globe */}
+      <Div100vh className="globe__container" style={{ minHeight: '475px' }}>
+        <CSSTransition
+          in={world.ready}
+          timeout={{ enter: 2000 }}
+          classNames="globe"
+        >
+          <AnimatedWrapper
+            className={world.skipInTransition ? 'skip-in-transition' : ''}
+          >
+            <World
+              width={width}
+              height={Math.max(height, 475)}
+              location={location}
+              data={data}
+              markers={markers}
+            />
+          </AnimatedWrapper>
+        </CSSTransition>
+
+        {/* Copy HOME */}
+        {[
+          WorldMode.PROJECTS_EXPLORE,
+          WorldMode.PROJECT_PREVIEW,
+          WorldMode.AREA_PREVIEW,
+        ].includes(world.mode) && (
+          <ContentHome>
+            <TextImprov
+              in={
+                (world.mode === WorldMode.PROJECT_PREVIEW ||
+                  world.mode === WorldMode.AREA_PREVIEW) &&
+                !world.fadingVideo
+              }
+              tag="h2"
+              className="subtitle"
+              text={
+                lastActive && lastActive.lastShown === MarkerType.PROJECT
+                  ? get(world, 'lastActive.project.node.city')
+                  : get(world, 'lastActive.area.node.title')
+              }
+              appear
+            />
+            <TextImprov
+              in={
+                (world.mode === WorldMode.PROJECT_PREVIEW ||
+                  world.mode === WorldMode.AREA_PREVIEW) &&
+                !world.fadingVideo
+              }
+              tag="h1"
+              allowCustomBreaks
+              text={
+                lastActive && lastActive.lastShown === MarkerType.PROJECT
+                  ? get(world, 'lastActive.project.node.title')
+                  : get(
+                      world,
+                      `lastActive.areaProjects[${get(
+                        world,
+                        'lastActive.projectIndex'
+                      )}].node.title`
+                    )
+              }
+              appear
+            />
+            <Quote
+              in={
+                (world.mode === WorldMode.PROJECT_PREVIEW ||
+                  world.mode === WorldMode.AREA_PREVIEW) &&
+                !world.fadingVideo
+              }
+              tag="p"
+              className="lighter"
+              appear
+              project={
+                world.lastActive &&
+                world.lastActive.lastShown === MarkerType.PROJECT
+                  ? world.lastActive.project
+                  : get(
+                      world,
+                      `lastActive.areaProjects[${get(
+                        world,
+                        'lastActive.projectIndex'
+                      )}]`
+                    )
+              }
+            />
+            {world.version === WorldVersion.MOBILE && (
+              <FadeAnim
+                timeout={500}
+                in={
+                  (world.mode === WorldMode.PROJECT_PREVIEW ||
+                    world.mode === WorldMode.AREA_PREVIEW) &&
+                  !world.fadingVideo
+                }
+              >
+                <Button
+                  className={world.mode}
+                  buttonStyle="outlined"
+                  onClick={() =>
+                    dispatch(
+                      setWorldMode(WorldMode.PROJECT_DETAILED, {
+                        project:
+                          world.mode === WorldMode.AREA_PREVIEW
+                            ? get(
+                                world,
+                                `active.areaProjects[${get(
+                                  world,
+                                  `active.projectIndex`
+                                )}]`
+                              )
+                            : world.active.project,
+                        state: { doAnimation: true, delay: 1500 },
+                      })
+                    )
+                  }
+                >
+                  VIEW PROJECT
+                </Button>
+              </FadeAnim>
+            )}
+          </ContentHome>
         )}
         {/* Footer content */}
         <FooterContainer>
@@ -493,20 +505,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
 
         {/* Galaxy */}
         <Galaxy show={world.ready} />
-
-        {/* Area projects slider */}
-        <AreaSliderWrapper>
-          <ProjectSlider
-            className="project-slider"
-            show={
-              world.mode === WorldMode.AREA_PREVIEW ||
-              (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
-            }
-            showOnFade
-            withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
-            withAnimation={world.mode === WorldMode.AREA_PREVIEW}
-          />
-        </AreaSliderWrapper>
       </Div100vh>
     </Page>
   )
