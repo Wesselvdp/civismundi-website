@@ -12,15 +12,18 @@ const Quote = ({ project, className = '', animated = true, ...rest }) => {
 
   useEffect(() => {
     if (project) {
-      setContent(
+      let content =
         get(
           project,
           'node.quote.content',
           stringifyArray(get(project, 'node.clients', []), '', ' • ', {
             uppercase: true,
           })
-        ).toUpperCase()
-      )
+        )
+
+      if (content) content = content.toUpperCase()
+
+      setContent(content)
       setQuotee(
         get(project, 'node.quote.content')
           ? get(project, 'node.quote.quotee', '').toUpperCase()
