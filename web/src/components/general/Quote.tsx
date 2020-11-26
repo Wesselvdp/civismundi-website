@@ -21,17 +21,19 @@ const Quote = ({ project, className = '', animated = true, ...rest }) => {
           })
         )
 
-      if (content) content = content.toUpperCase()
-
-      setContent(content)
-      setQuotee(
-        get(project, 'node.quote.content')
-          ? get(project, 'node.quote.quotee', '').toUpperCase()
-          : ''
-      )
-      setType(
-        project.node.quote && project.node.quote.content ? 'quote' : 'clients'
-      )
+      if (content) {
+        content = content.toUpperCase()
+        setContent(content)
+        
+        setQuotee(
+          get(project, 'node.quote.content')
+            ? get(project, 'node.quote.quotee', '').toUpperCase()
+            : ''
+        )
+        setType(
+          project.node.quote && project.node.quote.content ? 'quote' : 'clients'
+        )
+      }
     }
   }, [project])
 
