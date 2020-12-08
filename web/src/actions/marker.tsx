@@ -1,7 +1,7 @@
 import TWEEN from '@tweenjs/tween.js'
 import * as THREE from 'three'
 
-import { MarkerSize, MarkerType, WorldMode, WorldVersion } from '.'
+import { MarkerSize, WorldMode, WorldVersion } from '.'
 import {
   ADD_MARKER,
   SET_MARKER_FOCUSED,
@@ -50,20 +50,16 @@ export function toggleFocusedMarker(focused: any) {
     if (w.markerFocused)
       changeMarkerSize(
         w.markerFocused,
-        MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
+        MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)
       )
 
     if (focused) {
-      const newScale =
-        focused.node._type === MarkerType.PROJECT
-          ? MarkerSize.FOCUSED_PROJECT
-          : MarkerSize.FOCUSED_AREA
-
-      const duration = focused.node._type === MarkerType.PROJECT ? 300 : 200
+      const newScale = MarkerSize.FOCUSED_PROJECT
+      const duration = 300
 
       changeMarkerSize(
         focused,
-        newScale * (w.version === WorldVersion.MOBILE ? 1.65 : 1),
+        newScale * (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1),
         duration
       )
     }
@@ -90,22 +86,17 @@ export function onMarkerHovered(hovered: any) {
 
     if (
       w.mode !== WorldMode.PROJECTS_EXPLORE &&
-      w.mode !== WorldMode.PROJECT_PREVIEW &&
-      w.mode !== WorldMode.AREA_PREVIEW
+      w.mode !== WorldMode.PROJECT_PREVIEW
     )
       return
 
     dispatch(toggleFocusedMarker(hovered))
     dispatch({ type: SET_HOVERED, hovered: hovered ? hovered.node._id : null })
     if (w.version === WorldVersion.DESKTOP) {
-      if (hovered && hovered.node._type === MarkerType.PROJECT) {
+      if (hovered) {
         return dispatch(
           setWorldMode(WorldMode.PROJECT_PREVIEW, { project: hovered })
         )
-      }
-
-      if (hovered && hovered.node._type === MarkerType.AREA) {
-        return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { area: hovered }))
       }
 
       if (hovered === null) {
@@ -122,45 +113,27 @@ export function onMarkerClicked(clicked: any) {
     if (!w.markersVisible) return
 
     if (w.version === WorldVersion.DESKTOP) {
-      if (clicked.node._type === MarkerType.PROJECT) {
-        return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, {
-            project: clicked,
-            state: { delay: 1500, doAnimation: true },
-          })
-        )
-      }
-
-      if (clicked.node._type === MarkerType.AREA) {
-        return dispatch(
-          setWorldMode(WorldMode.PROJECT_DETAILED, {
-            area: clicked,
-            state: { delay: 1500, doAnimation: true },
-          })
-        )
-      }
+      return dispatch(
+        setWorldMode(WorldMode.PROJECT_DETAILED, {
+          project: clicked,
+          state: { delay: 1500, doAnimation: true },
+        })
+      )
     }
 
     if (w.version === WorldVersion.MOBILE) {
-      if (clicked.node._type === MarkerType.PROJECT) {
-        if (
-          w.mode === WorldMode.PROJECT_PREVIEW &&
-          clicked.node._id !== w.project.node._id
-        ) {
-          return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
-        }
-
-        if (w.mode === WorldMode.PROJECTS_EXPLORE) {
-          dispatch(toggleFocusedMarker(clicked))
-          return dispatch(
-            setWorldMode(WorldMode.PROJECT_PREVIEW, { project: clicked })
-          )
-        }
+      if (
+        w.mode === WorldMode.PROJECT_PREVIEW &&
+        clicked.node._id !== w.project.node._id
+      ) {
+        return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
       }
 
-      if (clicked.node._type === MarkerType.AREA) {
+      if (w.mode === WorldMode.PROJECTS_EXPLORE) {
         dispatch(toggleFocusedMarker(clicked))
-        return dispatch(setWorldMode(WorldMode.AREA_PREVIEW, { area: clicked }))
+        return dispatch(
+          setWorldMode(WorldMode.PROJECT_PREVIEW, { project: clicked })
+        )
       }
     }
   }
@@ -175,7 +148,7 @@ export function toggleMarkers(show: boolean, duration = 750, force = false) {
 
     changeMarkerSize(
       w.markers,
-      (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? 1.65 : 1)
+      (show === true ? 1 : 0) * (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)
     )
 
     w.markers.forEach((marker: any) => {
@@ -194,7 +167,7 @@ export function createPulsingMarkers() {
   return function action(dispatch: any, getState: any) {
     const world = getState().world
 
-    const geometry = new THREE.CircleGeometry(3.5, 25, 25)
+    const geometry = new THREE.CircleGeometry(MarkerSize.BASE, 25, 25)
     geometry.vertices.splice(0, 1)
     const material = new THREE.LineBasicMaterial({
       color: 'white',
@@ -202,7 +175,7 @@ export function createPulsingMarkers() {
     })
 
     world.markers.forEach((marker: any) => {
-      if (marker.node._type === MarkerType.PROJECT && marker.node.featured) {
+      if (marker.node.featured) {
         // for every marker that represents a featured project, create a ring
         const pos = world.ref.current.getCoords(
           marker.node.location.lat,
@@ -216,7 +189,7 @@ export function createPulsingMarkers() {
 
         const tween = createPulsingMarkerTween(
           ring,
-          world.version === WorldVersion.MOBILE ? 1.65 : 1
+          world.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1
         )
         tween.worldVersion = world.version
 

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { get } from 'lodash'
 
-import { MarkerType, MarkerSize, WorldVersion, WorldMode } from '.'
+import { MarkerSize, WorldVersion, WorldMode } from '.'
 import {
   SET_DATA,
   WORLD_INITIALIZE_START,
@@ -138,7 +138,7 @@ export function worldHandleResize() {
           w.ref.current.getCoords(
             get(marker, 'node.location.lat', 0),
             get(marker, 'node.location.lng', 0),
-            get(marker, 'node._type') === MarkerType.PROJECT ? 0.05 : 0.08
+            0.05
           )
         )
       })
@@ -146,7 +146,6 @@ export function worldHandleResize() {
       dispatch(
         toggleMarkers(
           [
-            WorldMode.AREA_PREVIEW,
             WorldMode.PROJECT_PREVIEW,
             WorldMode.PROJECTS_EXPLORE,
           ].includes(w.mode),
@@ -171,10 +170,24 @@ export function initializeWorld(
       dispatch({ type: WORLD_SET_LOADING, loading: false })
     }
 
+    // sort projects on area
+    const projects = [];
+    data.allSanityProject.edges.forEach(p => {
+      if (projects.some(pj => p.node._id === pj.node._id)) return
+
+
+      // if project is part of area, find all projects of that area
+      if (p.node.locationGroup) {
+        const areaProjects = data.allSanityProject.edges.filter(pj => pj.node.locationGroup && pj.node.locationGroup._id === p.node.locationGroup._id);
+        projects.push(...areaProjects)
+      } else {
+        projects.push(p)
+      }
+    })
     // store sanity data
     dispatch({
       type: SET_DATA,
-      projects: data.allSanityProject.edges,
+      projects: projects,
       areas: data.allSanityLocation.edges,
     })
 
@@ -199,16 +212,13 @@ export function initializeWorld(
       .addEventListener('start', () => {
         const w = getState().world
 
-        if (
-          w.mode === WorldMode.PROJECT_PREVIEW ||
-          w.mode === WorldMode.AREA_PREVIEW
-        ) {
+        if (w.mode === WorldMode.PROJECT_PREVIEW) {
           dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
           if (w.markerFocused)
             changeMarkerSize(
               w.markerFocused,
               MarkerSize.DEFAULT *
-                (w.version === WorldVersion.MOBILE ? 1.65 : 1)
+                (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)
             )
         }
       })
@@ -237,7 +247,6 @@ export function initializeWorld(
       const w = getState().world
 
       if (
-        w.mode !== WorldMode.AREA_PREVIEW &&
         w.mode !== WorldMode.PROJECTS_EXPLORE &&
         w.mode !== WorldMode.PROJECT_PREVIEW
       )

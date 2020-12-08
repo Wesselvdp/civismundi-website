@@ -15,8 +15,8 @@ import { Button, Quote, ProjectSlider } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 import { getVideoId } from '../../utils'
 
-import { MarkerType, WorldMode, WorldVersion } from '../../actions'
-import { setWorldMode, setWorldModeFromLocation } from '../../actions/mode'
+import { WorldMode, WorldVersion } from '../../actions'
+import { setWorldMode, toggleSlider, setWorldModeFromLocation } from '../../actions/mode'
 import { worldHandleResize } from '../../actions/initialize'
 
 import PlaySVG from '../../assets/play.svg'
@@ -25,6 +25,7 @@ import PrevSVG from '../../assets/btn-prev.svg'
 
 import VideoPlayer from './VideoPlayer'
 import Galaxy from './Galaxy'
+// import console = require('console');
 
 const INTRO_TEXT = `
   A collective of interdisciplinary creatives whose collaborative
@@ -38,37 +39,17 @@ export enum DetailedState {
   BUTTONS = 5,
 }
 
-function usePrevious(value) {
-  // The ref object is a generic container whose current property is mutable ...
-  // ... and can hold any value, similar to an instance property on a class
-  const ref = useRef()
-
-  // Store current value in ref
-  useEffect(() => {
-    ref.current = value
-  }, [value]) // Only re-run if value changes
-
-  // Return previous value (happens before update in useEffect above)
-  return ref.current
-}
-
 const WorldContainer = ({ layout, location, isScrolling }) => {
-  const world = useSelector((state) => state.world)
+  const world = useSelector((state: any) => state.world)
   const [markers, setMarkers] = useState([]) // all markers (subset of Projects+Locations)
   const [[width, height], setSize] = useState([0, 0])
   const [videoOpen, openVideo] = useState(false)
   const [fading, setFading] = useState(false)
   const [detailedState, setDetailedState] = useState(DetailedState.LOADING)
 
-  const prevWidth = usePrevious(width)
-  const prevHeight = usePrevious(height)
   const dispatch = useDispatch()
 
   const resize = useCallback(() => {
-    console.log('width', window.innerWidth, width)
-    console.log('version', world.version)
-    console.log('mode', world.mode)
-
     if (
       window.innerWidth === width &&
       world.version === WorldVersion.MOBILE &&
@@ -80,16 +61,9 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   }, [world, width])
 
   useEffect(() => {
-    // combine projects and areas for markers
-    const projects = data.allSanityProject.edges.filter(
-      (p) => p.node.locationGroup === null
-    )
-    const areas = data.allSanityLocation.edges.filter((a) =>
-      data.allSanityProject.edges.some(
-        (p) => p.node.locationGroup && p.node.locationGroup._id === a.node._id
-      )
-    )
-    setMarkers([...areas, ...projects])
+    // set projects as markers
+    const projects = data.allSanityProject.edges
+    setMarkers(projects)
 
     window.addEventListener('resize', resize)
     setSize([window.innerWidth, window.innerHeight])
@@ -120,7 +94,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
     if (world.ready && typeof window !== 'undefined') {
       window.onpopstate = (e) => {
         dispatch(
-          setWorldModeFromLocation(e.target.location, { skipTransition: false })
+          setWorldModeFromLocation(e.target.location, { skipTransition: false, fadeVideo: true })
         )
       }
     }
@@ -145,11 +119,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
 
     return () => clearTimeout(timer)
   }, [world.ready, location])
-
-  const getProjectIndex = () =>
-    world.active.areaProjects.findIndex(
-      (p: any) => p.node._id === world.active.project.node._id
-    ) || 0
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -245,73 +214,42 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         {[
           WorldMode.PROJECTS_EXPLORE,
           WorldMode.PROJECT_PREVIEW,
-          WorldMode.AREA_PREVIEW,
         ].includes(world.mode) && (
           <ContentHome>
             <TextImprov
               in={
-                (world.mode === WorldMode.PROJECT_PREVIEW ||
-                  world.mode === WorldMode.AREA_PREVIEW) &&
-                !world.fadingVideo
+                world.mode === WorldMode.PROJECT_PREVIEW && !world.fadingVideo
               }
               tag="h2"
               className="subtitle"
-              text={
-                lastActive && lastActive.lastShown === MarkerType.PROJECT
-                  ? get(world, 'lastActive.project.node.city')
-                  : get(world, 'lastActive.area.node.title')
-              }
+              text={lastActive ? get(world, 'lastActive.project.node.city') : ''}
               appear
             />
             <TextImprov
               in={
-                (world.mode === WorldMode.PROJECT_PREVIEW ||
-                  world.mode === WorldMode.AREA_PREVIEW) &&
+                world.mode === WorldMode.PROJECT_PREVIEW &&
                 !world.fadingVideo
               }
               tag="h1"
               allowCustomBreaks
-              text={
-                lastActive && lastActive.lastShown === MarkerType.PROJECT
-                  ? get(world, 'lastActive.project.node.title')
-                  : get(
-                      world,
-                      `lastActive.areaProjects[${get(
-                        world,
-                        'lastActive.projectIndex'
-                      )}].node.title`
-                    )
-              }
+              text={lastActive ? get(world, 'lastActive.project.node.title') : ''}
               appear
             />
             <Quote
               in={
-                (world.mode === WorldMode.PROJECT_PREVIEW ||
-                  world.mode === WorldMode.AREA_PREVIEW) &&
+                world.mode === WorldMode.PROJECT_PREVIEW &&
                 !world.fadingVideo
               }
               tag="p"
               className="lighter"
               appear
-              project={
-                world.lastActive &&
-                world.lastActive.lastShown === MarkerType.PROJECT
-                  ? world.lastActive.project
-                  : get(
-                      world,
-                      `lastActive.areaProjects[${get(
-                        world,
-                        'lastActive.projectIndex'
-                      )}]`
-                    )
-              }
+              project={world.lastActive ? world.lastActive.project : null}
             />
             {world.version === WorldVersion.MOBILE && (
               <FadeAnim
                 timeout={500}
                 in={
-                  (world.mode === WorldMode.PROJECT_PREVIEW ||
-                    world.mode === WorldMode.AREA_PREVIEW) &&
+                  world.mode === WorldMode.PROJECT_PREVIEW &&
                   !world.fadingVideo
                 }
               >
@@ -321,16 +259,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   onClick={() =>
                     dispatch(
                       setWorldMode(WorldMode.PROJECT_DETAILED, {
-                        project:
-                          world.mode === WorldMode.AREA_PREVIEW
-                            ? get(
-                                world,
-                                `active.areaProjects[${get(
-                                  world,
-                                  `active.projectIndex`
-                                )}]`
-                              )
-                            : world.active.project,
+                        project: world.active.project,
                         state: { doAnimation: true, delay: 1500 },
                       })
                     )
@@ -369,12 +298,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
             {detailedState >= DetailedState.BUTTONS && (
               <div className="button-container">
                 <PrevSVG
-                  style={{
-                    visibility:
-                      world.active.area && getProjectIndex() > 0
-                        ? 'visible'
-                        : 'hidden',
-                  }}
                   className={`anim-scale ${
                     doAnimation ? 'with-anim' : ''
                   } nav-button`}
@@ -382,8 +305,12 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                     dispatch(
                       setWorldMode(WorldMode.PROJECT_DETAILED, {
                         project:
-                          world.active.areaProjects[getProjectIndex() - 1],
-                        state: { fadeVideo: true },
+                          world.projects[world.active.prevIndex],
+                        state: {
+                          fadeVideo: true,
+                          // delay: 1500,
+                          // doAnimation: true,
+                        }
                       })
                     )
                   }
@@ -404,20 +331,15 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   className={`nav-button anim-scale ${
                     doAnimation ? 'with-anim' : ''
                   }`}
-                  style={{
-                    visibility:
-                      world.active.area &&
-                      getProjectIndex() < world.active.areaProjects.length - 1
-                        ? 'visible'
-                        : 'hidden',
-                  }}
                   onClick={() =>
                     dispatch(
                       setWorldMode(WorldMode.PROJECT_DETAILED, {
                         project:
-                          world.active.areaProjects[getProjectIndex() + 1],
+                          world.projects[world.active.nextIndex],
                         state: {
                           fadeVideo: true,
+                          // delay: 1500,
+                          // doAnimation: true,
                         },
                       })
                     )
@@ -434,12 +356,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   }
                   className="subtitle"
                   tag="h2"
-                  text={
-                    world.active.project &&
-                    world.active.project.node.locationGroup
-                      ? get(world, 'active.project.node.locationGroup.title')
-                      : get(world, 'active.project.node.city')
-                  }
+                  text={get(world, 'active.project.node.city')}
                   appear
                   timeout={{ enter: 300 }}
                 />
@@ -472,11 +389,12 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         )}
 
         {/* Footer content */}
-        <FooterContainer>
+        <FooterContainer style={world.showSlider ? { pointerEvents: 'none' } : {}}>
           <div className="footer--content">
             <>
               <TextImprov
                 in={
+                  !world.showSlider &&
                   world.ready &&
                   [WorldMode.PROJECTS_EXPLORE].includes(world.mode)
                 }
@@ -484,6 +402,14 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                 text={INTRO_TEXT.toUpperCase()}
               />
             </>
+            {!world.showSlider && [WorldMode.PROJECTS_EXPLORE].includes(world.mode) && (
+              <div className="show-slider" onClick={() => dispatch(toggleSlider)}>
+                <p>
+                  <img src="/arrow-down.svg" />
+                  PROJECT PREVIEWS
+                </p>
+              </div>
+            )}
           </div>
         </FooterContainer>
 
@@ -491,16 +417,11 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         <VideoPlayer />
 
         {/* Area projects slider */}
-        <AreaSliderWrapper>
+        <AreaSliderWrapper style={!(world.showSlider || world.mode === WorldMode.PROJECT_DETAILED) ? { pointerEvents: 'none' } : {}}>
           <ProjectSlider
             className="project-slider"
-            show={
-              world.mode === WorldMode.AREA_PREVIEW ||
-              (world.mode === WorldMode.PROJECT_DETAILED && world.active.area)
-            }
-            showOnFade
-            withProgressBar={world.mode === WorldMode.AREA_PREVIEW}
-            withAnimation={world.mode === WorldMode.AREA_PREVIEW}
+            show={world.mode !== WorldMode.IN_BACKGROUND && (world.showSlider || world.mode === WorldMode.PROJECT_DETAILED)}
+            withAnimation={world.mode === WorldMode.PROJECTS_EXPLORE}
           />
         </AreaSliderWrapper>
 
@@ -753,10 +674,6 @@ const ContentHome = styled.div`
       border-width: 0.5px;
     }
 
-    &.${WorldMode.AREA_PREVIEW} {
-      display: initial;
-    }
-
     &.${WorldMode.PROJECT_PREVIEW} {
       @media ${breakpoints.phoneOnly} {
         display: initial;
@@ -798,12 +715,6 @@ const FooterContainer = styled.div`
   .footer--content {
     max-width: 750px;
     font-weight: 400;
-    padding-bottom: 30px;
-
-    img {
-      margin-bottom: 20px;
-      opacity: 0.75;
-    }
 
     p {
       line-height: 1.5em;
@@ -818,8 +729,35 @@ const FooterContainer = styled.div`
       }
     }
 
-    .skip-intro {
+    .show-slider {
+      border: 0.5px solid rgba(255, 255, 255, 0.5);
+      border-bottom: none;
+      padding: 10px 35px 10px;
+      display: inline-block;
+      margin-top: 25px;
       cursor: pointer;
+
+      @media ${breakpoints.phoneOnly} {
+        margin-top: 15px;
+        padding: 5px 15px 5px;
+      }
+
+      p {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+      }
+
+      img {
+        height: 75%;
+        margin-right: 10px;
+        transform: rotate(180deg);
+
+        @media ${breakpoints.phoneOnly} {
+          height: 10px;
+        }
+      }
     }
   }
 `

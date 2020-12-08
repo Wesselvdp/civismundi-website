@@ -14,7 +14,7 @@ import {
   onMarkerClicked,
   createPulsingMarkers,
 } from '../../actions/marker'
-import { WorldVersion, WorldMode, MarkerType } from '../../actions'
+import { WorldVersion, WorldMode, MarkerSize } from '../../actions'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
@@ -66,7 +66,7 @@ const World = ({ data, markers, width, height, layout, className }) => {
       ref.current.getCoords(
         get(d, 'node.location.lat', 0),
         get(d, 'node.location.lng', 0),
-        get(d, 'node._type') === MarkerType.PROJECT ? 0.05 : 0.08
+        0.05
       )
     )
   }
@@ -79,29 +79,11 @@ const World = ({ data, markers, width, height, layout, className }) => {
     }
   }
 
-  // const onClick = (obj) => {
-  //   if (disableEvents) return
-
-  //   setDisableEvents(true)
-  //   dispatch(onMarkerClicked(obj))
-  // }
-
   const labelObject = (obj, radius) => {
     dispatch(addMarker(obj))
 
     // load texture
-    let path = '/marker-small.svg'
-    if (obj.node._type === 'location') {
-      const projectCount = data.allSanityProject.edges.filter(
-        (p: any) =>
-          p.node.locationGroup && p.node.locationGroup._id === obj.node._id
-      ).length
-      // path = `/area-marker/area-${projectCount}.svg`
-      path = '/marker-big.svg'
-
-      obj.node.projectCount = projectCount
-    }
-
+    const path = '/marker-small.svg'
     const texture = new THREE.TextureLoader().load(path)
     if (ref.current) {
       texture.anisotropy = ref.current
@@ -110,12 +92,13 @@ const World = ({ data, markers, width, height, layout, className }) => {
     }
 
     // determine marker size
-    const baseRadius = obj.node._type === 'location' ? 5 : 3.5
+    const baseRadius = MarkerSize.BASE
     const material = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
       color: 0xffffff,
     })
+
     material.map.minFilter = THREE.LinearFilter
     return new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [
       material,
@@ -161,7 +144,7 @@ const Wrapper = styled.div`
   opacity: 1;
   transition: opacity 1.5s ease;
 
-  &.${WorldMode.PROJECT_PREVIEW}, &.${WorldMode.AREA_PREVIEW} {
+  &.${WorldMode.PROJECT_PREVIEW} {
     transition: opacity 0.25s ease;
     opacity: 0.4;
   }
