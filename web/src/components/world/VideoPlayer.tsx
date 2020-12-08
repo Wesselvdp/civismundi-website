@@ -5,10 +5,6 @@ import { get } from 'lodash'
 import styled from 'styled-components'
 
 import { WorldMode } from '../../actions'
-import { incrementActiveProjectIndex } from '../../actions/mode'
-import { SET_FADING_VIDEO } from '../../actions/types'
-
-const VIDEO_MAX_DURATION = 4000
 
 const VideoPlayer = () => {
   const dispatch = useDispatch()
@@ -23,9 +19,7 @@ const VideoPlayer = () => {
   const timer = useRef(null)
 
   const getActiveProject = () => {
-    if (active.project) return active.project
-
-    return get(active, `areaProjects[${active.projectIndex}]`)
+    return active.project
   }
 
   const getVideoElem = (projectId: string) =>
@@ -59,16 +53,6 @@ const VideoPlayer = () => {
 
     if (!elem) return
     elem.play()
-
-    if (world.mode === WorldMode.AREA_PREVIEW) {
-      timer.current = setTimeout(() => {
-        dispatch({ type: SET_FADING_VIDEO, fading: true })
-        dispatch(incrementActiveProjectIndex())
-        setTimeout(() => {
-          dispatch({ type: SET_FADING_VIDEO, fading: false })
-        }, 500)
-      }, VIDEO_MAX_DURATION)
-    }
   }
 
   useEffect(() => {
@@ -81,7 +65,6 @@ const VideoPlayer = () => {
         [
           WorldMode.PROJECT_PREVIEW,
           WorldMode.PROJECT_DETAILED,
-          WorldMode.AREA_PREVIEW,
         ].includes(world.mode)
           ? 'visible'
           : ''

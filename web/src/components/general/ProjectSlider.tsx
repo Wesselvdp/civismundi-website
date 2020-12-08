@@ -5,18 +5,16 @@ import styled, { keyframes } from 'styled-components'
 import TWEEN from '@tweenjs/tween.js'
 
 import { breakpoints } from '@utils/breakpoints'
-import { setWorldMode } from '../../actions/mode'
+import { setWorldMode, toggleSlider } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { SET_SLIDER_SCROLL } from '../../actions/types'
+import { world } from 'src/reducers';
 
-const ProjectSlider = ({
-  show,
-  location,
-  showOnFade,
-  withProgressBar,
-  withAnimation = false,
-}) => {
+const ProjectSlider = ({ show, withAnimation = false, }) => {
+  const mode = useSelector((state: any) => state.world.mode)
+  const projects = useSelector((state: any) => state.world.projects || [])
   const active = useSelector((state: any) => state.world.active || {})
+
   const dispatch = useDispatch()
   const ref = useRef(null)
 
@@ -38,60 +36,59 @@ const ProjectSlider = ({
         0,
         Math.min(ref.current.scrollWidth, thumbnailCenter - center)
       )
-      const curScroll = ref.current.scrollLeft
 
-      new TWEEN.Tween({ scroll: curScroll })
-        .to({ scroll: newScroll }, 500)
-        .onUpdate((d) => {
-          if (ref.current) ref.current.scrollLeft = d.scroll
-        })
-        .start()
+      ref.current.scrollLeft = newScroll;
     }
-  }, [active.areaProjects, active.projectIndex])
+    // TODO: scroll in view on change project
+  }, [active.project])
 
   return (
-    <Container ref={ref} className={show && 'show'}>
-      {active.areaProjects &&
-        active.areaProjects.map((project: any, i: any) => (
-          <Thumbnail
-            className={active.projectIndex === i ? 'active' : ''}
-            onClick={() =>
-              active.projectIndex !== i &&
-              dispatch(
-                setWorldMode(WorldMode.PROJECT_DETAILED, {
-                  project,
-                  state: {
-                    doAnimation: withAnimation,
-                    delay: withAnimation ? 1500 : 0,
-                    fadeVideo: true,
-                    keepSliderScroll: true,
-                  },
-                })
-              )
-            }
-            key={project.node._id}
-            style={{
-              backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
-            }}
-          >
-            {withProgressBar && (
-              <div
-                className={`progress-bar ${
-                  active.projectIndex === i && show && 'active'
-                }`}
-              ></div>
-            )}
-            <div className="content">
-              <span>
-                {get(project, 'node.title', '')
-                  .toUpperCase()
-                  .split('{BR}')
-                  .join('')}
-              </span>
-            </div>
-          </Thumbnail>
-        ))}
-    </Container>
+    <>
+      {show && mode !== WorldMode.PROJECT_DETAILED && (
+        <HideSlider onClick={() => dispatch(toggleSlider)}>
+          <img src="/arrow-down.svg" />
+          HIDE PREVIEWS
+        </HideSlider>
+      )}
+      <Container ref={ref} className={show && 'show'}>
+        {projects && projects.map((project: any, i: any) => (
+          <>
+            <Thumbnail
+              className={active.project && active.project.node._id === project.node._id ? 'active' : ''}
+              onClick={() =>
+                (!active.project || active.project.node._id !== project.node._id) &&
+                  dispatch(
+                    setWorldMode(WorldMode.PROJECT_DETAILED, {
+                      project,
+                      state: {
+                        doAnimation: withAnimation,
+                        delay: withAnimation ? 1500 : 0,
+                        fadeVideo: true,
+                      },
+                    })
+                  )
+              }
+              key={project.node._id}
+              style={{
+                backgroundImage: `url(${get(project, 'node.poster.asset.url')})`,
+              }}
+            >
+              <div className="content">
+                <span>
+                  {get(project, 'node.title', '')
+                    .toUpperCase()
+                    .split('{BR}')
+                    .join('')}
+                </span>
+              </div>
+            </Thumbnail>
+            {/* {i < projects.length - 1 && (!project.node.locationGroup || !projects[i + 1].node.locationGroup || project.node.locationGroup._id !== projects[i + 1].node.locationGroup._id) && (
+              <AreaSpacer />
+            )} */}
+          </>
+          ))}
+      </Container>
+    </>
   )
 }
 
@@ -102,17 +99,13 @@ const Container = styled.div`
   overflow-y: hidden;
   overflow-scrolling: touch;
   height: auto;
-  display: flex;
+  display: block;
   align-items: flex-end;
   justify-content: center;
   opacity: 0;
   transform: translate(0, 100%);
   transition: all 0.5s ease;
   padding-top: 10px;
-
-  @media ${breakpoints.phoneOnly} {
-    display: block;
-  }
 
   &.show {
     opacity: 1;
@@ -130,6 +123,23 @@ const fill = keyframes`
   }
 `
 
+const HideSlider = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  img {
+    height: 85%;
+    width: auto;
+    margin-right: 5px;
+
+    @media ${breakpoints.phoneOnly} {
+      height: 10px;
+    }
+  }
+`
+
 const Thumbnail = styled.div`
   background-position: center;
   background-size: cover;
@@ -139,7 +149,7 @@ const Thumbnail = styled.div`
   margin-left: 10px;
   margin-bottom: 20px;
   height: 115px;
-  width: 184px;
+  width: 200px;
   transition: all 0.5s ease;
   cursor: pointer;
   position: relative;
@@ -191,6 +201,13 @@ const Thumbnail = styled.div`
   &:hover span {
     transform: translateY(-5px);
   }
+`
+
+const AreaSpacer = styled.div`
+  display: inline-block;
+  width: 40px;
+  background: transparent;
+  pointer-events: none;
 `
 
 export default ProjectSlider

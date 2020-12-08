@@ -1,7 +1,6 @@
-import { get } from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
 
-import { MarkerType, WorldVersion } from '.'
+import { WorldVersion } from '.'
 
 export const getProjectFromSlug = (slug: string, projects: any[]) =>
   projects.find(

@@ -27,6 +27,7 @@ import {
   WORLD_SET_READY,
   WORLD_SET_LOADING,
   WORLD_SET_RESIZE,
+  WORLD_TOGGLE_SLIDER,
 } from '../actions/types'
 
 const initialState = {
@@ -53,6 +54,7 @@ const initialState = {
   fadingVideo: false,
   sliderScroll: 0,
   resize: false,
+  showSlider: false
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -66,6 +68,9 @@ const reducer = (state = initialState, action: any) => {
       }
     }
 
+    case WORLD_TOGGLE_SLIDER: {
+      return { ...state, showSlider: !state.showSlider }
+    }
     case WORLD_SET_READY: {
       return { ...state, ready: action.ready }
     }
@@ -100,13 +105,6 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         mode: WorldMode.PROJECT_PREVIEW,
-      }
-    }
-
-    case MODE_GO_AREA_PREVIEW: {
-      return {
-        ...state,
-        mode: WorldMode.AREA_PREVIEW,
       }
     }
 
@@ -145,7 +143,7 @@ const reducer = (state = initialState, action: any) => {
     case SET_LAST_ACTIVE: {
       return {
         ...state,
-        lastActive: { ...state.active, lastShown: action.lastShown },
+        lastActive: { ...state.active  },
       }
     }
 

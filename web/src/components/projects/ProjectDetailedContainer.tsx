@@ -100,6 +100,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
             </div>
           </div>
         </Section>
+
         <ProjectList
           title="Other projects"
           blockId={id}
