@@ -75,8 +75,10 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 <div>
                   {content && content.middle && content.middle.map((entry: any, i: number) => (
                     <div>
-                      <p className="header">{entry.header}</p>
-                      <p>{entry.copy}</p>
+                      <div>
+                        <p className="header">{entry.header}</p>
+                        <p>{entry.copy}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -222,7 +224,23 @@ const Section = styled.section`
         & > div {
           width: 33.33%;
           margin-bottom: 25px;
-          padding-right: 50px;
+          padding: 0 15px;
+
+          &:nth-child(3n + 2) {
+            text-align: center;
+
+            & > div {
+              text-align: left;
+            }
+          }
+
+          &:nth-child(3n + 3) {
+            text-align: right;
+          }
+
+          & > div {
+            display: inline-block;
+          }
         }
       }
     }
