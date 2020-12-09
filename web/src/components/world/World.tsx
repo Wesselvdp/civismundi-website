@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import * as THREE from 'three'
 
+import { breakpoints } from '@utils/breakpoints'
 import { initializeWorld } from '../../actions/initialize'
 import {
   addMarker,
@@ -147,6 +148,10 @@ const Wrapper = styled.div`
   &.${WorldMode.PROJECT_PREVIEW} {
     transition: opacity 0.25s ease;
     opacity: 0.4;
+
+    @media ${breakpoints.phoneOnly} {
+      opacity: 0.25;
+    }
   }
 
   &.${WorldMode.PROJECT_DETAILED} {
