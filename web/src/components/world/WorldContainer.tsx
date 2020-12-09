@@ -220,9 +220,9 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
               in={
                 world.mode === WorldMode.PROJECT_PREVIEW && !world.fadingVideo
               }
-              tag="h2"
-              className="subtitle"
-              text={lastActive ? get(world, 'lastActive.project.node.city') : ''}
+              tag="p"
+              className="no-mb"
+              text={lastActive ? get(world, 'lastActive.project.node.city', '').toUpperCase() : ''}
               appear
             />
             <TextImprov
@@ -231,6 +231,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                 !world.fadingVideo
               }
               tag="h1"
+              className="no-mt"
               allowCustomBreaks
               text={lastActive ? get(world, 'lastActive.project.node.title') : ''}
               appear
@@ -354,9 +355,9 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   onEntered={() =>
                     doAnimation && setDetailedState(DetailedState.TITLE)
                   }
-                  className="subtitle"
-                  tag="h2"
-                  text={get(world, 'active.project.node.city')}
+                  tag="p"
+                  className="no-mb"
+                  text={get(world, 'active.project.node.city', '').toUpperCase()}
                   appear
                   timeout={{ enter: 300 }}
                 />

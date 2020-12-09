@@ -2,18 +2,16 @@ import React, { useEffect, useState, useRef } from 'react'
 import { get, debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
-import TWEEN from '@tweenjs/tween.js'
 
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode, toggleSlider } from '../../actions/mode'
-import { WorldMode } from '../../actions'
-import { SET_SLIDER_SCROLL } from '../../actions/types'
-import { world } from 'src/reducers';
+import { WorldMode, WorldVersion } from '../../actions'
 
 const ProjectSlider = ({ show, withAnimation = false, }) => {
   const mode = useSelector((state: any) => state.world.mode)
   const projects = useSelector((state: any) => state.world.projects || [])
   const active = useSelector((state: any) => state.world.active || {})
+  const version = useSelector((state: any) => state.version);
 
   const dispatch = useDispatch()
   const ref = useRef(null)
@@ -54,11 +52,11 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
         {projects && projects.map((project: any, i: any) => (
           <>
             <Thumbnail
-              className={active.project && active.project.node._id === project.node._id ? 'active' : ''}
+              className={[WorldMode.PROJECT_DETAILED, WorldMode.PROJECT_PREVIEW].includes(mode) && active.project && active.project.node._id === project.node._id ? 'active' : ''}
               onClick={() =>
                 (!active.project || active.project.node._id !== project.node._id) &&
                   dispatch(
-                    setWorldMode(WorldMode.PROJECT_DETAILED, {
+                    setWorldMode(version === WorldVersion.DESKTOP ? WorldMode.PROJECT_DETAILED : WorldMode.PROJECT_PREVIEW, {
                       project,
                       state: {
                         doAnimation: withAnimation,

@@ -196,10 +196,6 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
     await dispatch(setActiveObjectFromProject(data.project))
     w = getState().world
 
-    // update video
-    const videoUrl = get(data, 'project.node.video.asset.url')
-    videoUrl && (await dispatch({ type: SET_VIDEO_URLS, urls: [videoUrl] }))
-
     // go to mode
     await dispatch({ type: MODE_GO_PROJECT_PREVIEW })
 
