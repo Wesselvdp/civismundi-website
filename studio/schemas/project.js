@@ -47,25 +47,17 @@ export default {
       title: 'Quote',
       type: 'quote'
     },
-    {
-      name: 'awards',
-      title: 'Awards & Festivals',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{ type: 'award' }]
-        }
-      ]
-    },
-
-    {
-      name: 'overview',
-      title: 'Overview',
-      type: 'array',
-      of: [{ type: 'block' }]
-    },
-
+    // {
+    //   name: 'awards',
+    //   title: 'Awards & Festivals',
+    //   type: 'array',
+    //   of: [
+    //     {
+    //       type: 'reference',
+    //       to: [{ type: 'award' }]
+    //     }
+    //   ]
+    // },
     {
       name: 'city',
       title: 'City',
@@ -99,6 +91,17 @@ export default {
       name: 'video',
       title: 'Video',
       type: 'file'
+    },
+    {
+      name: 'overview',
+      title: 'Overview',
+      type: 'array',
+      of: [{ type: 'block' }]
+    },
+    {
+      name: 'content',
+      title: 'Content',
+      type: 'projectContent'
     },
     { // custom ordering
       name: "order",

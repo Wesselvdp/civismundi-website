@@ -8,6 +8,8 @@ import blockContent from './blockContent'
 import project from './project'
 import director from './director'
 import award from './award'
+import entry from './entry'
+import projectContent from './projectContent'
 import content from './content'
 import styledContentBlock from './contentTypes/styledContentBlock'
 import aboutContent from './contentTypes/aboutContent'
@@ -25,6 +27,8 @@ export default createSchema({
     styledContentBlock,
     content,
     award,
+    entry,
+    projectContent,
     blockContent,
     quote
   ])

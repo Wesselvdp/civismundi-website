@@ -35,14 +35,6 @@ export const query = graphql`
         name
       }
       city
-      awards {
-        name
-        image {
-          asset {
-            url
-          }
-        }
-      }
       locationGroup {
         _id
         title
@@ -50,6 +42,24 @@ export const query = graphql`
       city
       vimeo
       _rawOverview
+      content {
+        left {
+          header
+          copy
+        }
+        middle {
+          header
+          copy
+        }
+        right {
+          name
+          image {
+            asset {
+              url
+            }
+          }
+        }
+      }
     }
     allSanityProject(sort: { fields: order, order: ASC }) {
       edges {

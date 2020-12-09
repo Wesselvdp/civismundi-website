@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Link, Element } from 'react-scroll'
+import { Element } from 'react-scroll'
 import styled, { keyframes } from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
-import { get } from 'lodash'
-import Div100vh from 'react-div-100vh'
 
 import { breakpoints } from '@utils/breakpoints'
 import BlockContent from '@sanity/block-content-to-react'
-import ModalVideo from 'react-modal-video'
-
-import PlaySVG from '../../assets/play.svg'
-import NextSVG from '../../assets/btn-next.svg'
-import PrevSVG from '../../assets/btn-prev.svg'
 
 // Components
 import { ProjectList } from '@components/projects'
-import { TextImprov, FadeAnim } from '@components/animations'
-import { Quote } from '@components/general'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
-import { getVideoId, stringifyArray } from '../../utils'
+import { stringifyArray } from '../../utils'
 
 export enum ProjectState {
   LOADING = 1,
@@ -38,6 +29,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
     director,
     awards,
     _rawOverview,
+    content = {}
   } = data.sanityProject
 
   const dispatch = useDispatch()
@@ -66,36 +58,41 @@ const ProjectDetailedContainer = ({ location, data }) => {
         <Section>
           <div className="container">
             <div className="row">
-              <div className="col meta">
-                <div>
-                  <h5 className="subtitle">DIRECTED BY</h5>
-                  <h5>{stringifyArray(director, 'name', ', ')}</h5>
-                </div>
-                <div>
-                  <h5 className="subtitle">LOCATION</h5>
-                  <h5>{locationGroup ? locationGroup.title : city}</h5>
-                </div>
-                {awards && awards.length ? (
+              <div className="col col-1">
+                {content && content.left && content.left.map((entry: any) => (
                   <div>
-                    <h5 className="subtitle">AWARDS</h5>
-                    {awards
-                      .filter((award: any) => award)
-                      .map((award: any) =>
-                        award.image ? (
-                          <img
-                            className="award-img"
-                            key={award.name}
-                            src={award.image.asset.url}
-                          />
-                        ) : (
-                          <p className="award-text">{award.name}</p>
-                        )
-                      )}
+                    <p className="header">{entry.header}</p>
+                    <p>{entry.copy}</p>
                   </div>
-                ) : null}
+                ))}
               </div>
-              <div className="col content content--sanity">
-                <BlockContent blocks={_rawOverview} />
+              <div className="col col-2">
+                {_rawOverview && (
+                  <div className="block-content">
+                    <BlockContent blocks={_rawOverview} />
+                  </div>
+                )}
+                <div>
+                  {content && content.middle && content.middle.map((entry: any, i: number) => (
+                    <div>
+                      <p className="header">{entry.header}</p>
+                      <p>{entry.copy}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="col col-3">
+                {content && content.right && content.right.filter((award: any) => award) .map((award: any) =>
+                    award.image ? (
+                      <img
+                        className="award-img"
+                        key={award.name}
+                        src={award.image.asset.url}
+                      />
+                    ) : (
+                      <p className="award-text">{award.name}</p>
+                    )
+                  )}
               </div>
             </div>
           </div>
@@ -178,7 +175,7 @@ const Section = styled.section`
   }
 
   .container {
-    max-width: 800px;
+    max-width: 1200px;
     width: 100%;
     padding: 0 20px;
   }
@@ -197,99 +194,60 @@ const Section = styled.section`
   .col {
     display: flex;
     text-align: left;
+    flex-wrap: wrap;
 
-    &.meta {
-      flex: 0 0 300px;
-      flex-wrap: wrap;
-      padding-right: 50px;
-
-      .award-img {
-        height: 75px;
-        width: auto;
-        display: block;
-        margin-bottom: 10px;
-      }
-
-      .award-text {
-        margin-bottom: 10px;
-        line-height: 1em;
-      }
-
-      @media ${breakpoints.phoneOnly} {
-        flex-basis: 100%;
-        padding-right: 0;
-      }
+    &-1, &-3 {
+      width: 450px;
+      flex: 1;
+      align-self: flex-start;
 
       & > div {
         margin-bottom: 25px;
-        width: 100%;
+      }
+    }
 
-        @media ${breakpoints.phoneOnly} {
-          flex-basis: 50%;
+    &-2 {
+      padding: 0 75px;
+
+      .block-content {
+        margin-bottom: 50px;
+      }
+
+      & > div:not(.block-content) {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+
+        & > div {
+          width: 33.33%;
+          margin-bottom: 25px;
+          padding-right: 50px;
         }
       }
     }
 
-    &.content {
-      flex: 1 1 auto;
-
-      @media ${breakpoints.phoneOnly} {
-        flex-basis: 100%;
-      }
-
-      & > div {
-        width: 100%;
-      }
-
-      strong {
-        font-weight: 700;
-        font-family: 'Druk Wide Super';
-        font-size: 14px;
-        text-transform: uppercase;
-        margin-bottom: -14px;
-        display: block;
-        color: rgb(255, 255, 255);
-
-        @media ${breakpoints.phoneOnly} {
-          font-size: 12px;
-        }
-      }
-
-      h5 {
-        font-weight: 700;
-        font-family: 'Druk Wide Super';
-        font-size: 14px;
-        text-transform: uppercase;
-        color: rgb(255, 255, 255);
-
-        strong {
-          margin-bottom: 0;
-          display: initial;
-        }
-      }
-
-      h6 {
-        font-size: 18px;
-        margin-bottom: 0.5em;
-        font-weight: 300;
-
-        strong {
-          font-weight: 300;
-        }
-
-        @media ${breakpoints.phoneOnly} {
-          font-size: 14px;
-        }
-      }
-
-      p {
-        opacity: 1;
-        color: rgba(255, 255, 255, 0.85);
-      }
+    .award-img {
+      height: 75px;
+      width: auto;
+      display: block;
+      margin-bottom: 25px;
     }
 
-    h5 {
-      margin-bottom: 0.5em;
+    .award-text {
+      margin-bottom: 25px;
+      line-height: 1em;
+    }
+
+    .header {
+      font-family: 'Druk Wide Super';
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    p:not(.header) {
+      line-height: 1.2em;
     }
   }
 `
