@@ -59,6 +59,7 @@ function navigateProjectsExplore(data: any = {}) {
     }
 
     await dispatch({ type: MODE_GO_PROJECTS_EXPLORE })
+    dispatch({ type: SET_ACTIVE, active: {} })
     setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECTS_EXPLORE)
 
     clearTimeout(timer)
@@ -93,6 +94,7 @@ function navigateBackground(data: any = {}) {
     }, Math.max(duration - 250, 0))
 
     await dispatch({ type: MODE_GO_BACKGROUND })
+    dispatch({ type: SET_ACTIVE, active: {} })
   }
 }
 

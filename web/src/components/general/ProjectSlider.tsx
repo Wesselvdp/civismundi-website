@@ -11,7 +11,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const mode = useSelector((state: any) => state.world.mode)
   const projects = useSelector((state: any) => state.world.projects || [])
   const active = useSelector((state: any) => state.world.active || {})
-  const version = useSelector((state: any) => state.version);
+  const version = useSelector((state: any) => state.world.version);
 
   const dispatch = useDispatch()
   const ref = useRef(null)
