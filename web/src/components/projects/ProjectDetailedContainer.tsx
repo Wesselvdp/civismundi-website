@@ -42,15 +42,6 @@ const ProjectDetailedContainer = ({ location, data }) => {
   console.log(content);
   return (
     <Page>
-      <GlobeIcon
-        className={`anim-scale ${locState.doAnimation && 'with-anim'}`}
-        onClick={() =>
-          !fading && dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
-        }
-      >
-        <img src="/globe-icon.svg" />
-      </GlobeIcon>
-
       {/* Project content */}
       <Element name="content">
         <Section>

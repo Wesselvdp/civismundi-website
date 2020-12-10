@@ -68,8 +68,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
           <div className="loader-line"></div>
         </div>
       </Loader>
-      {pageContext.layout !== 'home' &&
-        pageContext.layout !== 'project-detailed' && <GlobeButton />}
+      {pageContext.layout !== 'home' && <GlobeButton transparent={pageContext.layout === 'project-detailed'} />}
     </>
   )
 }

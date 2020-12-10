@@ -7,7 +7,7 @@ import { breakpoints } from '@utils/breakpoints'
 import { WorldMode } from '../../actions'
 import { setWorldMode } from '../../actions/mode'
 
-const GlobeButton = () => {
+const GlobeButton = ({ transparent }) => {
   const dispatch = useDispatch()
 
   return (
@@ -15,7 +15,7 @@ const GlobeButton = () => {
       to="/"
       onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}
     >
-      <ButtonStyled>
+      <ButtonStyled className={transparent && 'transparent'}>
         <img src="/globe-icon.svg" />
       </ButtonStyled>
     </Link>
@@ -34,6 +34,10 @@ const ButtonStyled = styled.div`
   border: 1px solid #707070;
   z-index: 10000;
   background-color: #000;
+
+  &.transparent {
+    background-color: transparent;
+  }
 
   @media ${breakpoints.phoneOnly} {
     left: 10px;
