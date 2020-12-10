@@ -8,13 +8,6 @@ export const getProjectFromSlug = (slug: string, projects: any[]) =>
       project.node._type === 'project' && project.node.slug.current === slug
   )
 
-export const getProjectsFromArea = (projects: any[], area: any) => {
-  return projects.filter(
-    (p: any) =>
-      p.node.locationGroup && p.node.locationGroup._id === area.node._id
-  )
-}
-
 export const updateLightningPosition = (world: any) => {
   const lightning = world.lightning
   const camera = world.ref.current.camera()
@@ -38,9 +31,9 @@ export const calculateCameraZ = () => {
 }
 
 export const moveMarkerToCenter = (world: any, duration = 1000) => {
-  const coords = world.active.area
-    ? world.active.area.node.location
-    : world.active.project.node.location
+  if (!world.active || !world.active.project) return
+
+  const coords = world.active.project.node.location
 
   world.ref.current.pointOfView(
     {
@@ -79,14 +72,12 @@ export const setCameraInitialPosition = (world: any, duration = 1500) => {
 }
 
 export const moveToMarker = (world: any, duration = 1500) => {
-  if (!world.active) return
+  if (!world.active || !world.active.project) return
 
   const controls = world.ref.current.controls()
   const camera = world.ref.current.camera()
 
-  const coords = world.active.area
-    ? world.active.area.node.location
-    : world.active.project.node.location
+  const coords = world.active.project.node.location
 
   const target = controls.target
   const targetTo = world.ref.current.getCoords(coords.lat, coords.lng, 0.25)

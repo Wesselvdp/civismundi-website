@@ -18,13 +18,12 @@ import {
   SET_ACTIVE_PROJECT_INDEX,
 } from './types'
 
-import { toggleMarkers } from './marker'
+import { toggleFocusedMarker, toggleMarkers } from './marker'
 import {
   setCameraInitialPosition,
   moveToMarker,
   moveMarkerToCenter,
   getProjectFromSlug,
-  getProjectsFromArea,
 } from './helpers'
 // import console = require('console');
 
@@ -60,6 +59,7 @@ function navigateProjectsExplore(data: any = {}) {
 
     await dispatch({ type: MODE_GO_PROJECTS_EXPLORE })
     dispatch({ type: SET_ACTIVE, active: {} })
+    dispatch(toggleFocusedMarker(null))
     setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECTS_EXPLORE)
 
     clearTimeout(timer)
@@ -100,13 +100,13 @@ function navigateBackground(data: any = {}) {
 
 const mod = (n, m) => ((n % m) + m) % m
 
-function setActiveObjectFromProject(project: any) {
+function setActiveObjectFromProject(project: any, options: any = {}) {
   return function action(dispatch: any, getState: any) {
     if (!project) return
 
     const w = getState().world
 
-    const active: any = { project }
+    const active: any = { project, ...options }
     active.projectIndex = w.projects.findIndex(
       (proj: any) => proj.node._id === project.node._id
     )
@@ -121,18 +121,7 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
   return async function action(dispatch: any, getState: any) {
     const w = getState().world
 
-    if (!data.project && !data.area) return
-
-    if (!data.project) {
-      data.project = get(
-        w.active,
-        `areaProjects[${get(w.active, 'projectIndex', 0)}]`
-      )
-
-      if (!data.project)
-        data.project = get(getProjectsFromArea(w.projects, data.area), '[0]')
-      if (!data.project) return
-    }
+    if (!data.project) return
 
     if (data.skipInTransition)
       dispatch({ type: SET_SKIP_TRANSITION, payload: true })
@@ -195,7 +184,7 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
     setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_PREVIEW)
 
     // set active object
-    await dispatch(setActiveObjectFromProject(data.project))
+    await dispatch(setActiveObjectFromProject(data.project, { fromCarousel: data.fromCarousel }))
     w = getState().world
 
     // go to mode
@@ -203,8 +192,12 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
 
     dispatch({ type: SET_LAST_ACTIVE })
 
+    if (data.fromCarousel) {
+      const hovered = w.markers.find((marker: any) => marker.node._id === data.project.node._id)
+      dispatch(toggleFocusedMarker(hovered))
+    }
     // if on mobile, center marker
-    if (w.version === WorldVersion.MOBILE) moveMarkerToCenter(w)
+    if (w.version === WorldVersion.MOBILE || data.fromCarousel) moveMarkerToCenter(w)
   }
 }
 

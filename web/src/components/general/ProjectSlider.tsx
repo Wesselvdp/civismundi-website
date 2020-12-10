@@ -17,6 +17,8 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const ref = useRef(null)
 
   useEffect(() => {
+    if (active.fromCarousel) return
+
     const child = get(ref, 'current.childNodes[0]')
     let tWidth = 0
     if (child) {
@@ -40,6 +42,18 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     // TODO: scroll in view on change project
   }, [active.project])
 
+  const handleMouseHover = (i = null) => {
+    if (![WorldMode.PROJECTS_EXPLORE, WorldMode.PROJECT_PREVIEW].includes(mode)) return
+
+    if (i === null) {
+      return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+    }
+
+    if (active.projectIndex !== i) {
+      return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projects[i], fromCarousel: true }))
+    }
+  }
+
   return (
     <>
       {show && mode !== WorldMode.PROJECT_DETAILED && (
@@ -53,6 +67,8 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
           <>
             <Thumbnail
               className={[WorldMode.PROJECT_DETAILED, WorldMode.PROJECT_PREVIEW].includes(mode) && active.project && active.project.node._id === project.node._id ? 'active' : ''}
+              onMouseEnter={() => handleMouseHover(i)}
+              onMouseLeave={() => handleMouseHover()}
               onClick={() =>
                 (!active.project || active.project.node._id !== project.node._id) &&
                   dispatch(
