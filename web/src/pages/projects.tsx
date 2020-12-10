@@ -58,7 +58,6 @@ const ProjectsPage = ({ data, transitionStatus }: PageProps) => {
         <HeroContainer>
           <Hero
             title="All projects"
-            subtitle="List view"
             timeout={{ title: 500, subtitle: 300, content: 0 }}
             onFinished={() => setHeroFinished(true)}
           />
