@@ -296,7 +296,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
             </ModalWrapper>
           )}
           <ContentDetailed>
-            {detailedState >= DetailedState.BUTTONS && (
+            {detailedState >= DetailedState.PARAGRAPH && (
               <div className="button-container">
                 <PrevSVG
                   className={`anim-scale ${
@@ -375,9 +375,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                 />
                 <Quote
                   in={!fading && detailedState >= DetailedState.PARAGRAPH}
-                  onEntered={() =>
-                    doAnimation && setDetailedState(DetailedState.BUTTONS)
-                  }
                   tag="p"
                   project={get(world, 'active.project')}
                   appear
