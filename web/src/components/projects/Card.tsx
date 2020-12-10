@@ -55,9 +55,9 @@ const ProjectCard = ({ data, skipTransition = false, doAnimation = true }) => {
         </video>
       </Visual>
       <Content>
-        <h5 className="subtitle">
-          {locationGroup ? locationGroup.title : city}
-        </h5>
+        <p>
+          {city ? city.toUpperCase() : ''}
+        </p>
         <h4>{title.toUpperCase().split('{BR}').join('')}</h4>
         <Quote project={{ node: data }} animated={false} />
       </Content>
@@ -75,7 +75,7 @@ const Card = styled.div`
 const Content = styled.div`
   padding-left: 1em;
   text-decoration: none;
-  margin-top: -3.5em;
+  margin-top: -4.25em;
 
   p {
     max-width: 75%;
