@@ -70,7 +70,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
               onMouseEnter={() => handleMouseHover(i)}
               onMouseLeave={() => handleMouseHover()}
               onClick={() =>
-                (!active.project || active.project.node._id !== project.node._id) &&
+                (mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id) &&
                   dispatch(
                     setWorldMode(version === WorldVersion.MOBILE && mode !== WorldMode.PROJECT_DETAILED ? WorldMode.PROJECT_PREVIEW : WorldMode.PROJECT_DETAILED, {
                       project,

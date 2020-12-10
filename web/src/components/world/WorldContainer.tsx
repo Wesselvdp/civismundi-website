@@ -422,7 +422,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
           <ProjectSlider
             className="project-slider"
             show={world.mode !== WorldMode.IN_BACKGROUND && (world.showSlider || world.mode === WorldMode.PROJECT_DETAILED)}
-            withAnimation={world.mode === WorldMode.PROJECTS_EXPLORE}
+            withAnimation={world.mode === WorldMode.PROJECTS_EXPLORE || world.mode === WorldMode.PROJECT_PREVIEW}
           />
         </AreaSliderWrapper>
 
