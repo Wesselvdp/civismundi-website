@@ -54,7 +54,7 @@ const initialState = {
   fadingVideo: false,
   sliderScroll: 0,
   resize: false,
-  showSlider: false
+  showSlider: true
 }
 
 const reducer = (state = initialState, action: any) => {

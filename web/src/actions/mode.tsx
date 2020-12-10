@@ -143,7 +143,7 @@ function navigateProjectDetailed(data: any = {}, duration = 1500) {
         })
 
         // set active
-        await dispatch(setActiveObjectFromProject(data.project))
+        await dispatch(setActiveObjectFromProject(data.project, { fromCarousel: data.fromCarousel }))
 
         // dispatch mode change
         await dispatch({ type: MODE_GO_PROJECT_DETAILED })

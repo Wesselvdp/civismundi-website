@@ -2,10 +2,13 @@ import React, { useEffect, useState, useRef } from 'react'
 import { get, debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
+import TWEEN from '@tweenjs/tween.js'
 
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode, toggleSlider } from '../../actions/mode'
 import { WorldMode, WorldVersion } from '../../actions'
+
+const SCROLL_STEP = 220
 
 const ProjectSlider = ({ show, withAnimation = false, }) => {
   const mode = useSelector((state: any) => state.world.mode)
@@ -13,12 +16,16 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const active = useSelector((state: any) => state.world.active || {})
   const version = useSelector((state: any) => state.world.version);
 
+  const [nextActive, setNextActive] = useState(false)
+  const [prevActive, setPrevActive] = useState(false)
+  const [scrollBusy, setScrollBusy] = useState(false)
+
   const dispatch = useDispatch()
   const ref = useRef(null)
   const timeout = useRef(null)
 
   useEffect(() => {
-    if (active.fromCarousel) return
+    if (!active.project || active.fromCarousel) return
 
     const child = get(ref, 'current.childNodes[0]')
     let tWidth = 0
@@ -40,6 +47,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
 
       ref.current.scrollLeft = newScroll;
     }
+
     // TODO: scroll in view on change project
   }, [active.project])
 
@@ -61,13 +69,72 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     }, 300)
   }
 
+  const buttonActive = (type: string) => {
+    if (!ref.current) return false
+
+    if (type === 'prev') {
+      return ref.current.scrollLeft > 0
+    }
+
+    if (type === 'next') {
+      return ref.current.scrollLeft + ref.current.clientWidth < ref.current.scrollWidth
+    }
+  }
+
+  const onScrollClick = (type: string) => {
+    if (scrollBusy || !buttonActive(type)) return
+
+    const scroll = ref.current.scrollLeft
+    let newScroll = scroll
+
+    if (type === 'prev') {
+      newScroll = Math.max(0, newScroll - SCROLL_STEP)
+    } else {
+      newScroll = Math.min(ref.current.scrollWidth, newScroll + SCROLL_STEP)
+    }
+
+    new TWEEN.Tween({ scroll })
+      .to({ scroll: newScroll }, 500)
+      .onUpdate((d) => {
+        if (ref.current) ref.current.scrollLeft = d.scroll
+      })
+      .easing(TWEEN.Easing.Cubic.InOut)
+      .start()
+
+    setScrollBusy(true)
+    setTimeout(() => {
+      setScrollBusy(false)
+    }, 500)
+  }
+
+  useEffect(() => {
+    ref.current.addEventListener('scroll', debounce(() => {
+      setNextActive(buttonActive('next'))
+      setPrevActive(buttonActive('prev'))
+    }, 250))
+  }, [buttonActive])
+
   return (
     <>
-      {show && mode !== WorldMode.PROJECT_DETAILED && (
-        <HideSlider onClick={() => dispatch(toggleSlider)}>
-          <img src="/arrow-down.svg" />
-          HIDE PREVIEWS
-        </HideSlider>
+      {show && (
+        <TopContainer>
+          <div className="scroller">
+            {ref.current && ref.current.clientWidth < ref.current.scrollWidth && version === WorldVersion.DESKTOP && (
+              <img src="/arrow-down.svg" className={`prev ${buttonActive('prev') ? 'active' : ''}`} onClick={() => onScrollClick('prev')} />
+            )}
+          </div>
+          {mode !== WorldMode.PROJECT_DETAILED && (
+            <HideSlider onClick={() => dispatch(toggleSlider)}>
+              <img src="/arrow-down.svg" />
+              HIDE PREVIEWS
+            </HideSlider>
+          )}
+          <div className="scroller">
+            {ref.current && ref.current.clientWidth < ref.current.scrollWidth && version === WorldVersion.DESKTOP && (
+              <img src="/arrow-down.svg" className={`next ${buttonActive('next') ? 'active' : ''}`} onClick={() => onScrollClick('next')} />
+            )}
+          </div>
+        </TopContainer>
       )}
       <Container ref={ref} className={show && 'show'}>
         {projects && projects.map((project: any, i: any) => (
@@ -81,6 +148,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
                   dispatch(
                     setWorldMode(version === WorldVersion.MOBILE && mode !== WorldMode.PROJECT_DETAILED ? WorldMode.PROJECT_PREVIEW : WorldMode.PROJECT_DETAILED, {
                       project,
+                      fromCarousel: true,
                       state: {
                         doAnimation: withAnimation,
                         delay: withAnimation ? 1500 : 0,
@@ -112,6 +180,40 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     </>
   )
 }
+
+const TopContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+
+  .scroller {
+    &:first-child {
+      padding-left: 15px;
+    }
+
+    img {
+      height: 10px;
+      opacity: 0.5;
+      cursor: pointer;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+
+    .next {
+      transform: rotate(-90deg);
+    }
+
+    .prev {
+      transform: rotate(90deg);
+    }
+
+    &:last-child {
+      padding-right: 15px;
+    }
+  }
+`
 
 const Container = styled.div`
   white-space: nowrap;
@@ -164,6 +266,16 @@ const HideSlider = styled.p`
 
     @media ${breakpoints.phoneOnly} {
       height: 10px;
+    }
+  }
+`
+
+const ScrollButtons = styled.div`
+  p {
+    opacity: 0.5;
+
+    &.active {
+      opacity: 1;
     }
   }
 `
