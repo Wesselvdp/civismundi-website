@@ -47,11 +47,11 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
 
       ref.current.scrollLeft = newScroll;
     }
-
-    // TODO: scroll in view on change project
   }, [active.project])
 
   const handleMouseHover = (i = null) => {
+    if (version === WorldVersion.MOBILE) return
+
     if (![WorldMode.PROJECTS_EXPLORE, WorldMode.PROJECT_PREVIEW].includes(mode)) return
 
     if (timeout.current) {
