@@ -47,7 +47,7 @@ export const changeMarkerSize = (
 export function toggleFocusedMarker(focused: any) {
   return function action(dispatch: any, getState: any) {
     const w = getState().world
-    if (w.markerFocused)
+    if (w.markerFocused && w.markerFocused.__threeObj.scale.x !== 0)
       changeMarkerSize(
         w.markerFocused,
         MarkerSize.DEFAULT * (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)

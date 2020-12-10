@@ -155,9 +155,10 @@ const HideSlider = styled.p`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  font-size: 12px;
 
   img {
-    height: 85%;
+    height: 8px;
     width: auto;
     margin-right: 5px;
 

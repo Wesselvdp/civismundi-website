@@ -739,10 +739,11 @@ const FooterContainer = styled.div`
         align-items: center;
         justify-content: center;
         opacity: 1;
+        font-size: 12px;
       }
 
       img {
-        height: 75%;
+        height: 8px;
         margin-right: 10px;
         transform: rotate(180deg);
 
