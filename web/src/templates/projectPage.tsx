@@ -46,10 +46,12 @@ export const query = graphql`
         left {
           header
           copy
+          specialFont
         }
         middle {
           header
           copy
+          specialFont
         }
         right {
           name

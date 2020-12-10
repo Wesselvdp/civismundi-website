@@ -11,6 +11,7 @@ import { ProjectList } from '@components/projects'
 import { setWorldMode } from '../../actions/mode'
 import { WorldMode } from '../../actions'
 import { stringifyArray } from '../../utils'
+// import console = require('console');
 
 export enum ProjectState {
   LOADING = 1,
@@ -42,6 +43,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
 
   const locState = location.state || {}
 
+  console.log(content);
   return (
     <Page>
       <GlobeIcon
@@ -62,7 +64,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 {content && content.left && content.left.map((entry: any) => (
                   <div>
                     <p className="header">{entry.header}</p>
-                    <p>{entry.copy}</p>
+                    <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
                   </div>
                 ))}
               </div>
@@ -77,7 +79,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                     <div>
                       <div>
                         <p className="header">{entry.header}</p>
-                        <p>{entry.copy}</p>
+                        <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
                       </div>
                     </div>
                   ))}
@@ -262,6 +264,7 @@ const Section = styled.section`
       font-weight: 700;
       font-size: 12px;
       margin-bottom: 6px;
+      line-height: 1.3em;
     }
 
     p:not(.header) {

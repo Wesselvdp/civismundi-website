@@ -11,11 +11,20 @@
 }
 
 @font-face {
+  font-family: 'DalekPinpoint';
+  font-weight: 300;
+  src: url('DalekPinpoint.woff2') format('woff2');
+  src:
+    url('DalekPinpoint.woff2') format('woff2'),
+    url('DalekPinpoint.woff') format('woff');
+}
+
+@font-face {
   font-family: 'OriyaMN';
   font-weight: 300;
   font-style: normal;
   src: url('OriyaMN.eot');
-  src: 
+  src:
     url('OriyaMN.eot') format('embedded-opentype'),
     url('OriyaMN.woff2') format('woff2'),
     url('OriyaMN.woff') format('woff'),

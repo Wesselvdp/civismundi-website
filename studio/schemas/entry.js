@@ -12,6 +12,12 @@ export default {
       name: 'copy',
       title: 'Copy',
       type: 'string'
+    },
+    {
+      name: 'specialFont',
+      title: 'Use special font',
+      type: 'boolean',
+      default: false
     }
   ]
 }
