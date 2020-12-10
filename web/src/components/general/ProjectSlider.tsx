@@ -270,16 +270,6 @@ const HideSlider = styled.p`
   }
 `
 
-const ScrollButtons = styled.div`
-  p {
-    opacity: 0.5;
-
-    &.active {
-      opacity: 1;
-    }
-  }
-`
-
 const Thumbnail = styled.div`
   background-position: center;
   background-size: cover;
@@ -296,7 +286,7 @@ const Thumbnail = styled.div`
 
   @media ${breakpoints.phoneOnly} {
     height: 80px;
-    width: 132px;
+    width: 160px;
     margin-bottom: 0;
     margin-right: 7px;
     margin-left: 7px;
