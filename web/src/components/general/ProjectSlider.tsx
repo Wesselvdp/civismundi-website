@@ -127,6 +127,12 @@ const Container = styled.div`
   transform: translate(0, 100%);
   transition: all 0.5s ease;
   padding-top: 10px;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   &.show {
     opacity: 1;
