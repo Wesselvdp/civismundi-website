@@ -118,11 +118,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     <>
       {show && (
         <TopContainer>
-          <div className="scroller">
-            {ref.current && ref.current.clientWidth < ref.current.scrollWidth && version === WorldVersion.DESKTOP && (
-              <img src="/arrow-down.svg" className={`prev ${buttonActive('prev') ? 'active' : ''}`} onClick={() => onScrollClick('prev')} />
-            )}
-          </div>
+          <div />
           {mode !== WorldMode.PROJECT_DETAILED && (
             <HideSlider onClick={() => dispatch(toggleSlider)}>
               <img src="/arrow-down.svg" />
@@ -131,7 +127,10 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
           )}
           <div className="scroller">
             {ref.current && ref.current.clientWidth < ref.current.scrollWidth && version === WorldVersion.DESKTOP && (
-              <img src="/arrow-down.svg" className={`next ${buttonActive('next') ? 'active' : ''}`} onClick={() => onScrollClick('next')} />
+              <>
+                <img src="/arrow-down.svg" className={`prev ${buttonActive('prev') ? 'active' : ''}`} onClick={() => onScrollClick('prev')} />
+                <img src="/arrow-down.svg" className={`next ${buttonActive('next') ? 'active' : ''}`} onClick={() => onScrollClick('next')} />
+              </>
             )}
           </div>
         </TopContainer>
@@ -187,17 +186,24 @@ const TopContainer = styled.div`
   justify-content: space-between;
 
   .scroller {
-    &:first-child {
-      padding-left: 15px;
-    }
+    padding-right: 15px;
 
     img {
+      display: inline-block;
       height: 10px;
       opacity: 0.5;
       cursor: pointer;
 
       &.active {
         opacity: 1;
+      }
+
+      &:first-child {
+        margin-right: 5px;
+      }
+
+      &:last-child {
+        margin-left: 5px;
       }
     }
 
@@ -207,10 +213,6 @@ const TopContainer = styled.div`
 
     .prev {
       transform: rotate(90deg);
-    }
-
-    &:last-child {
-      padding-right: 15px;
     }
   }
 `
