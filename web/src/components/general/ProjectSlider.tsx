@@ -15,6 +15,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
 
   const dispatch = useDispatch()
   const ref = useRef(null)
+  const timeout = useRef(null)
 
   useEffect(() => {
     if (active.fromCarousel) return
@@ -45,13 +46,19 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const handleMouseHover = (i = null) => {
     if (![WorldMode.PROJECTS_EXPLORE, WorldMode.PROJECT_PREVIEW].includes(mode)) return
 
-    if (i === null) {
-      return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+    if (timeout.current) {
+      clearTimeout(timeout.current)
     }
 
-    if (active.projectIndex !== i) {
-      return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projects[i], fromCarousel: true }))
-    }
+    timeout.current = setTimeout(() => {
+      if (i === null) {
+        return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+      }
+
+      if (active.projectIndex !== i) {
+        return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projects[i], fromCarousel: true }))
+      }
+    }, 300)
   }
 
   return (
