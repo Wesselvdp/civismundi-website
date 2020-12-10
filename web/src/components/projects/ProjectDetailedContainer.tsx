@@ -25,10 +25,6 @@ export enum ProjectState {
 const ProjectDetailedContainer = ({ location, data }) => {
   const {
     id,
-    city,
-    locationGroup,
-    director,
-    awards,
     _rawOverview,
     content = {}
   } = data.sanityProject
@@ -88,13 +84,15 @@ const ProjectDetailedContainer = ({ location, data }) => {
               <div className="col col-3">
                 {content && content.right && content.right.filter((award: any) => award) .map((award: any) =>
                     award.image ? (
-                      <img
-                        className="award-img"
-                        key={award.name}
-                        src={award.image.asset.url}
-                      />
+                      <div>
+                        <img
+                          className="award-img"
+                          key={award.name}
+                          src={award.image.asset.url}
+                        />
+                      </div>
                     ) : (
-                      <p className="award-text">{award.name}</p>
+                      <div><p className="award-text">{award.name}</p></div>
                     )
                   )}
               </div>
@@ -200,6 +198,33 @@ const Section = styled.section`
     text-align: left;
     flex-wrap: wrap;
 
+    @media ${breakpoints.phoneOnly} {
+      width: 100% !important;
+      padding: 0 !important;
+
+      &-1 {
+        order: 1;
+      }
+
+      &-2 {
+        order: 3;
+      }
+
+      &-3 {
+        order: 2;
+      }
+
+      & > div {
+        &:nth-child(odd) {
+          padding-right: 5px !important;
+        }
+
+        &:nth-child(even) {
+          padding-left: 5px !important;
+        }
+      }
+    }
+
     &-1, &-3 {
       width: 450px;
       flex: 1;
@@ -207,6 +232,12 @@ const Section = styled.section`
 
       & > div {
         margin-bottom: 25px;
+
+        @media ${breakpoints.phoneOnly} {
+          width: 50%;
+          flex-grow: 1;
+          margin-bottom: 15px;
+        }
       }
     }
 
@@ -215,6 +246,10 @@ const Section = styled.section`
 
       .block-content {
         margin-bottom: 50px;
+
+        @media ${breakpoints.phoneOnly} {
+          margin-bottom: 15px;
+        }
       }
 
       & > div:not(.block-content) {
@@ -243,6 +278,13 @@ const Section = styled.section`
           & > div {
             display: inline-block;
           }
+
+          @media ${breakpoints.phoneOnly} {
+            width: 50%;
+            padding: 0;
+            margin-bottom: 15px;
+            text-align: left !important;
+          }
         }
       }
     }
@@ -265,6 +307,7 @@ const Section = styled.section`
       font-size: 12px;
       margin-bottom: 6px;
       line-height: 1.3em;
+      opacity: 1;
     }
 
     p:not(.header) {
