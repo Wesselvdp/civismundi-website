@@ -16,15 +16,18 @@ const Quote = ({ project, className = '', animated = true, ...rest }) => {
         get(
           project,
           'node.quote.content',
-          stringifyArray(get(project, 'node.clients', []), '', ' • ', {
-            uppercase: true,
-          })
         )
+
+      if (!content) {
+        content = stringifyArray(get(project, 'node.clients', []), '', ' • ', {
+          uppercase: true,
+        })
+      }
 
       if (!content) content = ''
       content = content.toUpperCase()
-      setContent(content)
 
+      setContent(content)
       setQuotee(
         get(project, 'node.quote.content')
           ? get(project, 'node.quote.quotee', '').toUpperCase()
