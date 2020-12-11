@@ -33,11 +33,9 @@ const AboutPage = () => {
                 <div className="row">
                   <div className="col">
                     <h5 className="subtitle">E-MAIL</h5>
-                    <h6>info@civismundi.com</h6>
-                  </div>
-                  <div className="col">
-                    <h5 className="subtitle">PHONE</h5>
-                    <h6>+370 495 385 30</h6>
+                    <a href="mailto: info@civismundi.com">
+                      <h6>info@civismundi.com</h6>
+                    </a>
                   </div>
                 </div>
               </ContactInfo>
@@ -87,6 +85,7 @@ const ContactInfo = styled.div`
 
     .col {
       flex-basis: 50%;
+      flex-grow: 1;
 
       @media ${breakpoints.phoneOnly} {
         flex-basis: 100%;
