@@ -206,6 +206,10 @@ const Section = styled.section`
         margin-bottom: 50px;
         padding: 0 15px;
 
+        p {
+          line-height: 1.8em;
+        }
+
         @media ${breakpoints.phoneOnly} {
           margin-bottom: 15px;
           padding: 0;
