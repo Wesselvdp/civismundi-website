@@ -15,6 +15,11 @@ export default {
       name: 'image',
       title: 'Image',
       type: 'image'
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'string'
     }
   ],
   preview: {

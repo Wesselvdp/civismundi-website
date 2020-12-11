@@ -77,19 +77,12 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 </div>
               </div>
               <div className="col col-3">
-                {content && content.right && content.right.filter((award: any) => award) .map((award: any) =>
-                    award.image ? (
+                {content && content.right && content.right.filter((award: any) => award).map((award: any) => (
                       <div>
-                        <img
-                          className="award-img"
-                          key={award.name}
-                          src={award.image.asset.url}
-                        />
+                        {award.image && <img className="award-img" key={award.name} src={award.image.asset.url} />}
+                        {award.description && <p className="award-text">{award.description}</p>}
                       </div>
-                    ) : (
-                      <div><p className="award-text">{award.name}</p></div>
-                    )
-                  )}
+                  ))}
               </div>
             </div>
           </div>
@@ -261,16 +254,22 @@ const Section = styled.section`
       }
     }
 
+    &-3 {
+      & > div {
+        margin-bottom: 25px;
+      }
+    }
+
     .award-img {
       height: 75px;
       width: auto;
       display: block;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
     }
 
     .award-text {
-      margin-bottom: 25px;
       line-height: 1em;
+      margin: 0;
     }
 
     .header {
