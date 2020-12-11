@@ -205,15 +205,15 @@ const Section = styled.section`
         order: 2;
       }
 
-      & > div {
-        &:nth-child(odd) {
-          padding-right: 5px !important;
-        }
+      // & > div{
+      //   &:nth-child(odd) {
+      //     padding-right: 5px !important;
+      //   }
 
-        &:nth-child(even) {
-          padding-left: 5px !important;
-        }
-      }
+      //   &:nth-child(even) {
+      //     padding-left: 5px !important;
+      //   }
+      // }
     }
 
     &-1, &-3 {
@@ -237,9 +237,11 @@ const Section = styled.section`
 
       .block-content {
         margin-bottom: 50px;
+        padding: 0 15px;
 
         @media ${breakpoints.phoneOnly} {
           margin-bottom: 15px;
+          padding: 0;
         }
       }
 
