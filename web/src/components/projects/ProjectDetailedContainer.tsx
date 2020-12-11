@@ -50,8 +50,10 @@ const ProjectDetailedContainer = ({ location, data }) => {
               <div className="col col-1">
                 {content && content.left && content.left.map((entry: any) => (
                   <div>
-                    <p className="header">{entry.header}</p>
-                    <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
+                    <div>
+                      <p className="header">{entry.header}</p>
+                      <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -65,7 +67,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 </div>
                 <div>
                   {content && content.middle && content.middle.map((entry: any, i: number) => (
-                    <div className={content.middle.length === 2 && i === 1 && 'two'}>
+                    <div>
                       <div>
                         <p className="header">{entry.header}</p>
                         <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
@@ -194,6 +196,15 @@ const Section = styled.section`
           width: 50%;
           flex-grow: 1;
           margin-bottom: 15px;
+          text-align: left !important;
+
+          &:nth-child(odd) {
+            padding-right: 5px;
+          }
+
+          &:nth-child(even) {
+            padding-left: 5px;
+          }
         }
       }
     }
@@ -228,26 +239,6 @@ const Section = styled.section`
           padding: 0 15px;
           flex-grow: 1;
 
-          &:nth-child(3n + 2) {
-            text-align: center;
-
-            & > div {
-              text-align: left;
-            }
-
-            &.two {
-              text-align: right;
-
-              & > div {
-                text-align: right;
-              }
-            }
-          }
-
-          &:nth-child(3n + 3) {
-            text-align: right;
-          }
-
           & > div {
             display: inline-block;
           }
@@ -257,6 +248,14 @@ const Section = styled.section`
             padding: 0;
             margin-bottom: 15px;
             text-align: left !important;
+
+            &:nth-child(odd) {
+              padding-right: 5px;
+            }
+
+            &:nth-child(even) {
+              padding-left: 5px;
+            }
           }
         }
       }
