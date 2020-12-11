@@ -170,9 +170,9 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
                 </span>
               </div>
             </Thumbnail>
-            {/* {i < projects.length - 1 && (!project.node.locationGroup || !projects[i + 1].node.locationGroup || project.node.locationGroup._id !== projects[i + 1].node.locationGroup._id) && (
+            {i < projects.length - 1 && (!project.node.locationGroup || !projects[i + 1].node.locationGroup || project.node.locationGroup._id !== projects[i + 1].node.locationGroup._id) && (
               <AreaSpacer />
-            )} */}
+            )}
           </>
           ))}
       </Container>
@@ -184,6 +184,10 @@ const TopContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+
+  & > div {
+    min-width: 58px;
+  }
 
   .scroller {
     padding-right: 15px;
