@@ -65,7 +65,7 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 </div>
                 <div>
                   {content && content.middle && content.middle.map((entry: any, i: number) => (
-                    <div>
+                    <div className={content.middle.length === 2 && i === 1 && 'two'}>
                       <div>
                         <p className="header">{entry.header}</p>
                         <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
@@ -229,6 +229,14 @@ const Section = styled.section`
 
             & > div {
               text-align: left;
+            }
+
+            &.two {
+              text-align: right;
+
+              & > div {
+                text-align: right;
+              }
             }
           }
 
