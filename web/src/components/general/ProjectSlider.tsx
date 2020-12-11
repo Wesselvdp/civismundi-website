@@ -39,7 +39,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
       tWidth = width + margin - padding
 
       const center = ref.current.clientWidth / 2
-      const thumbnailCenter = active.projectIndex * tWidth + 0.5 * tWidth
+      const thumbnailCenter = active.projectIndex * tWidth + 0.5 * tWidth + (active.project.areaCount * 40)
       const newScroll = Math.max(
         0,
         Math.min(ref.current.scrollWidth, thumbnailCenter - center)

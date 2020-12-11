@@ -172,17 +172,20 @@ export function initializeWorld(
 
     // sort projects on area
     const projects = [];
-    data.allSanityProject.edges.forEach(p => {
+    let areaCount = 0;
+    data.allSanityProject.edges.forEach((p, i) => {
       if (projects.some(pj => p.node._id === pj.node._id)) return
 
 
       // if project is part of area, find all projects of that area
       if (p.node.locationGroup) {
-        const areaProjects = data.allSanityProject.edges.filter(pj => pj.node.locationGroup && pj.node.locationGroup._id === p.node.locationGroup._id);
+        const areaProjects = data.allSanityProject.edges.filter(pj => pj.node.locationGroup && pj.node.locationGroup._id === p.node.locationGroup._id).map(pj => ({ ...pj, areaCount }));
         projects.push(...areaProjects)
       } else {
-        projects.push(p)
+        projects.push({ ...p, areaCount })
       }
+
+      areaCount += 1
     })
     // store sanity data
     dispatch({
