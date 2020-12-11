@@ -56,11 +56,13 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 ))}
               </div>
               <div className="col col-2">
-                {_rawOverview && (
-                  <div className="block-content">
-                    <BlockContent blocks={_rawOverview} />
-                  </div>
-                )}
+                <div className="block-content">
+                  {_rawOverview && (
+                    <div>
+                      <BlockContent blocks={_rawOverview} />
+                    </div>
+                  )}
+                </div>
                 <div>
                   {content && content.middle && content.middle.map((entry: any, i: number) => (
                     <div>
@@ -118,42 +120,6 @@ const svgNavigators = keyframes`
   }
   100% {
     opacity: 1;
-  }
-`
-
-const GlobeIcon = styled.div`
-  position: fixed;
-  bottom: 25px;
-  left: 25px;
-  height: 56px;
-  width: 56px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  opacity: 1;
-  z-index: 1000;
-
-  &.anim-scale {
-    transform: scale(1) !important;
-    transition: 0.25s ease;
-
-    &:hover {
-      transform: scale(1.1) !important;
-    }
-  }
-
-  &.with-anim {
-    opacity: 0;
-    animation: ${svgNavigators} 1s forwards;
-    animation-delay: 4s;
-  }
-
-  cursor: pointer;
-
-  img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 `
 
@@ -234,8 +200,9 @@ const Section = styled.section`
 
     &-2 {
       padding: 0 75px;
+      flex-grow: 1;
 
-      .block-content {
+      .block-content > div {
         margin-bottom: 50px;
         padding: 0 15px;
 
@@ -255,6 +222,7 @@ const Section = styled.section`
           width: 33.33%;
           margin-bottom: 25px;
           padding: 0 15px;
+          flex-grow: 1;
 
           &:nth-child(3n + 2) {
             text-align: center;
