@@ -95,7 +95,7 @@ export function onMarkerHovered(hovered: any) {
     if (w.version === WorldVersion.DESKTOP) {
       if (hovered) {
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_PREVIEW, { project: hovered })
+          setWorldMode(WorldMode.PROJECT_PREVIEW, { project: w.projects.find(pj => pj.node._id === hovered.node._id) })
         )
       }
 
@@ -109,13 +109,14 @@ export function onMarkerHovered(hovered: any) {
 export function onMarkerClicked(clicked: any) {
   return function action(dispatch: any, getState: any) {
     const w = getState().world
+    const project = w.projects.find(pj => pj.node._id === clicked.node._id)
 
     if (!w.markersVisible) return
 
     if (w.version === WorldVersion.DESKTOP) {
       return dispatch(
         setWorldMode(WorldMode.PROJECT_DETAILED, {
-          project: clicked,
+          project,
           state: { delay: 1500, doAnimation: true },
         })
       )
@@ -132,7 +133,7 @@ export function onMarkerClicked(clicked: any) {
       if (w.mode === WorldMode.PROJECTS_EXPLORE) {
         dispatch(toggleFocusedMarker(clicked))
         return dispatch(
-          setWorldMode(WorldMode.PROJECT_PREVIEW, { project: clicked })
+          setWorldMode(WorldMode.PROJECT_PREVIEW, { project })
         )
       }
     }

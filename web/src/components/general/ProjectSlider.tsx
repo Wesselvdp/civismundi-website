@@ -25,11 +25,15 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const timeout = useRef(null)
 
   useEffect(() => {
+    console.log('active', active)
+
     if (!active.project || active.fromCarousel) return
 
     const child = get(ref, 'current.childNodes[0]')
     let tWidth = 0
     if (child) {
+      console.log('has child');
+
       const style = child.currentStyle || window.getComputedStyle(child)
       const width = child.offsetWidth
       const margin =
@@ -45,7 +49,16 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
         Math.min(ref.current.scrollWidth, thumbnailCenter - center)
       )
 
-      ref.current.scrollLeft = newScroll;
+      const scroll = ref.current.scrollLeft
+      // const duration = 2000 * (Math.abs(scroll - newScroll) / ref.current.scrollWidth)
+
+      new TWEEN.Tween({ scroll })
+      .to({ scroll: newScroll }, 2000)
+      .onUpdate((d) => {
+        if (ref.current) ref.current.scrollLeft = d.scroll
+      })
+      .easing(TWEEN.Easing.Cubic.InOut)
+      .start()
     }
   }, [active.project])
 
