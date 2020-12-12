@@ -33,8 +33,8 @@ const AboutPage = () => {
                 <div className="row">
                   <div className="col">
                     <h5 className="subtitle">E-MAIL</h5>
-                    <a href="mailto: info@civismundi.com">
-                      <h6>info@civismundi.com</h6>
+                    <a href="mailto:hello@civismundi.world">
+                      <h6>hello@civismundi.world</h6>
                     </a>
                   </div>
                 </div>
