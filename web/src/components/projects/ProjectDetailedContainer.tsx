@@ -165,16 +165,10 @@ const Section = styled.section`
       &-3 {
         order: 2;
       }
+    }
 
-      // & > div{
-      //   &:nth-child(odd) {
-      //     padding-right: 5px !important;
-      //   }
-
-      //   &:nth-child(even) {
-      //     padding-left: 5px !important;
-      //   }
-      // }
+    & > div:not(.block-content) p {
+      text-transform: uppercase;
     }
 
     &-1, &-3 {
