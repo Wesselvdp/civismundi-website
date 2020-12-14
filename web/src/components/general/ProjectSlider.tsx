@@ -7,6 +7,10 @@ import TWEEN from '@tweenjs/tween.js'
 import { breakpoints } from '@utils/breakpoints'
 import { setWorldMode, toggleSlider } from '../../actions/mode'
 import { WorldMode, WorldVersion } from '../../actions'
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const SCROLL_STEP = 220
 
@@ -20,13 +24,50 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const [prevActive, setPrevActive] = useState(false)
   const [scrollBusy, setScrollBusy] = useState(false)
 
+  const posRef = useRef({ left: 0, x: 0 })
+  const mouseDown = useRef(false)
+  const dragged = useRef(false)
+
   const dispatch = useDispatch()
   const ref = useRef(null)
   const timeout = useRef(null)
 
   useEffect(() => {
-    console.log('active', active)
+    if (version === WorldVersion.DESKTOP) {
+      ref.current.addEventListener('mousedown', mouseDownHandler)
+    }
+  }, [version])
 
+  const mouseDownHandler = function (e) {
+    mouseDown.current = true
+
+    posRef.current = {
+        left: ref.current.scrollLeft,
+        x: e.clientX,
+    }
+
+    document.addEventListener('mousemove', mouseMoveHandler)
+    document.addEventListener('mouseup', mouseUpHandler)
+  };
+
+  const mouseMoveHandler = function (e) {
+      const dx = e.clientX - posRef.current.x
+      if (!dragged.current && Math.abs(dx) > 25) dragged.current = true
+
+      ref.current.scrollLeft = posRef.current.left - dx
+  };
+
+  const mouseUpHandler = function() {
+      mouseDown.current = false
+      setTimeout(() => {
+        dragged.current = false
+      }, 200)
+
+      document.removeEventListener('mousemove', mouseMoveHandler)
+      document.removeEventListener('mouseup', mouseUpHandler)
+  };
+
+  useEffect(() => {
     if (!active.project || active.fromCarousel) return
 
     const child = get(ref, 'current.childNodes[0]')
@@ -63,7 +104,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   }, [active.project])
 
   const handleMouseHover = (i = null) => {
-    if (version === WorldVersion.MOBILE) return
+    if (mouseDown.current || version === WorldVersion.MOBILE) return
 
     if (![WorldMode.PROJECTS_EXPLORE, WorldMode.PROJECT_PREVIEW].includes(mode)) return
 
@@ -72,14 +113,14 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     }
 
     timeout.current = setTimeout(() => {
-      if (i === null) {
+      if (mouseDown.current || i === null) {
         return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
       }
 
       if (active.projectIndex !== i) {
         return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projects[i], fromCarousel: true }))
       }
-    }, 300)
+    }, 500)
   }
 
   const buttonActive = (type: string) => {
@@ -156,7 +197,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
               onMouseEnter={() => handleMouseHover(i)}
               onMouseLeave={() => handleMouseHover()}
               onClick={() =>
-                (mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id) &&
+                (!mouseDown.current && !dragged.current && (mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id)) &&
                   dispatch(
                     setWorldMode(version === WorldVersion.MOBILE && mode !== WorldMode.PROJECT_DETAILED ? WorldMode.PROJECT_PREVIEW : WorldMode.PROJECT_DETAILED, {
                       project,
@@ -341,6 +382,7 @@ const Thumbnail = styled.div`
     padding: 5px;
     overflow: hidden;
     white-space: pre-wrap;
+    user-select: none;
   }
 
   span {
