@@ -11,6 +11,9 @@ import { WorldMode, WorldVersion } from '../../actions'
 // import console = require('console');
 // import console = require('console');
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
+// import console = require('console');
 
 const SCROLL_STEP = 220
 
@@ -26,45 +29,48 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
 
   const posRef = useRef({ left: 0, x: 0 })
   const mouseDown = useRef(false)
-  const dragged = useRef(false)
+  const slided = useRef(false)
+  const hovered = useRef(null)
+  const projectsRef = useRef([])
 
   const dispatch = useDispatch()
   const ref = useRef(null)
   const timeout = useRef(null)
+  const slideTimeout = useRef(null)
+
+  useEffect(() => {
+    projectsRef.current = projects
+  }, [projects])
 
   useEffect(() => {
     if (version === WorldVersion.DESKTOP) {
-      ref.current.addEventListener('mousedown', mouseDownHandler)
+      ref.current.addEventListener('mousewheel', mouseDownHandler)
     }
   }, [version])
 
+
   const mouseDownHandler = function (e) {
-    mouseDown.current = true
+    slided.current = true
+    e.preventDefault()
+
+    if (slideTimeout.current) {
+      clearTimeout(slideTimeout.current)
+    }
 
     posRef.current = {
         left: ref.current.scrollLeft,
         x: e.clientX,
     }
 
-    document.addEventListener('mousemove', mouseMoveHandler)
-    document.addEventListener('mouseup', mouseUpHandler)
-  };
+    const dx = e.deltaY
+    ref.current.scrollLeft = posRef.current.left - dx
 
-  const mouseMoveHandler = function (e) {
-      const dx = e.clientX - posRef.current.x
-      if (!dragged.current && Math.abs(dx) > 25) dragged.current = true
-
-      ref.current.scrollLeft = posRef.current.left - dx
-  };
-
-  const mouseUpHandler = function() {
-      mouseDown.current = false
-      setTimeout(() => {
-        dragged.current = false
-      }, 200)
-
-      document.removeEventListener('mousemove', mouseMoveHandler)
-      document.removeEventListener('mouseup', mouseUpHandler)
+    slideTimeout.current = setTimeout(() => {
+      slided.current = false
+      if (hovered.current && hovered.current !== active.projectIndex && mode !== WorldMode.PROJECT_DETAILED) {
+        dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projectsRef.current[hovered.current], fromCarousel: true }))
+      }
+    }, 250)
   };
 
   useEffect(() => {
@@ -73,8 +79,6 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     const child = get(ref, 'current.childNodes[0]')
     let tWidth = 0
     if (child) {
-      console.log('has child');
-
       const style = child.currentStyle || window.getComputedStyle(child)
       const width = child.offsetWidth
       const margin =
@@ -104,7 +108,9 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   }, [active.project])
 
   const handleMouseHover = (i = null) => {
-    if (mouseDown.current || version === WorldVersion.MOBILE) return
+    hovered.current = i
+
+    if (slided.current || version === WorldVersion.MOBILE) return
 
     if (![WorldMode.PROJECTS_EXPLORE, WorldMode.PROJECT_PREVIEW].includes(mode)) return
 
@@ -197,7 +203,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
               onMouseEnter={() => handleMouseHover(i)}
               onMouseLeave={() => handleMouseHover()}
               onClick={() =>
-                (!mouseDown.current && !dragged.current && (mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id)) &&
+                ((mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id)) &&
                   dispatch(
                     setWorldMode(version === WorldVersion.MOBILE && mode !== WorldMode.PROJECT_DETAILED ? WorldMode.PROJECT_PREVIEW : WorldMode.PROJECT_DETAILED, {
                       project,
