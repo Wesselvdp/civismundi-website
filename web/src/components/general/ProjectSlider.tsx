@@ -32,6 +32,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const slided = useRef(false)
   const hovered = useRef(null)
   const projectsRef = useRef([])
+  const modeRef = useRef([])
 
   const dispatch = useDispatch()
   const ref = useRef(null)
@@ -41,6 +42,10 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   useEffect(() => {
     projectsRef.current = projects
   }, [projects])
+
+  useEffect(() => {
+    modeRef.current = mode
+  }, [mode])
 
   useEffect(() => {
     if (version === WorldVersion.DESKTOP) {
@@ -67,7 +72,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
 
     slideTimeout.current = setTimeout(() => {
       slided.current = false
-      if (hovered.current && hovered.current !== active.projectIndex && mode !== WorldMode.PROJECT_DETAILED) {
+      if (hovered.current && hovered.current !== active.projectIndex && modeRef.current !== WorldMode.PROJECT_DETAILED) {
         dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projectsRef.current[hovered.current], fromCarousel: true }))
       }
     }, 250)
