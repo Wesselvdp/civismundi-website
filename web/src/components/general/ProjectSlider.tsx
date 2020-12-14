@@ -75,7 +75,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
       if (hovered.current && hovered.current !== active.projectIndex && modeRef.current !== WorldMode.PROJECT_DETAILED) {
         dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projectsRef.current[hovered.current], fromCarousel: true }))
       }
-    }, 250)
+    }, 100)
   };
 
   useEffect(() => {
