@@ -11,9 +11,6 @@ import { WorldMode, WorldVersion } from '../../actions'
 // import console = require('console');
 // import console = require('console');
 // import console = require('console');
-// import console = require('console');
-// import console = require('console');
-// import console = require('console');
 
 const SCROLL_STEP = 220
 
@@ -26,18 +23,38 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const [nextActive, setNextActive] = useState(false)
   const [prevActive, setPrevActive] = useState(false)
   const [scrollBusy, setScrollBusy] = useState(false)
+  const [scrollSize, setScrollSize] = useState(220)
 
   const posRef = useRef({ left: 0, x: 0 })
   const mouseDown = useRef(false)
-  const slided = useRef(false)
+  const dragged = useRef(false)
   const hovered = useRef(null)
   const projectsRef = useRef([])
-  const modeRef = useRef([])
-
+  const modeRef = useRef(null)
+  
   const dispatch = useDispatch()
   const ref = useRef(null)
   const timeout = useRef(null)
-  const slideTimeout = useRef(null)
+
+  const onResize = () => {
+    if (ref.current) {
+      setScrollSize(Math.max(100, ref.current.clientWidth - 100))
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', onResize)
+
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  useEffect(() => {
+    if (version === WorldVersion.DESKTOP) {
+      ref.current.addEventListener('mousedown', mouseDownHandler)
+    } else {
+      ref.current.removeEventListener('mousedown', mouseDownHandler)
+    }
+  }, [version])
 
   useEffect(() => {
     projectsRef.current = projects
@@ -48,34 +65,36 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   }, [mode])
 
   useEffect(() => {
-    if (version === WorldVersion.DESKTOP) {
-      ref.current.addEventListener('mousewheel', mouseDownHandler)
-    }
-  }, [version])
-
+    setScrollSize(Math.max(100, ref.current.clientWidth - 100))
+  }, [ref.current])
 
   const mouseDownHandler = function (e) {
-    slided.current = true
-    e.preventDefault()
-
-    if (slideTimeout.current) {
-      clearTimeout(slideTimeout.current)
-    }
+    mouseDown.current = true
 
     posRef.current = {
         left: ref.current.scrollLeft,
         x: e.clientX,
     }
 
-    const dx = e.deltaY
-    ref.current.scrollLeft = posRef.current.left - dx
+    document.addEventListener('mousemove', mouseMoveHandler)
+    document.addEventListener('mouseup', mouseUpHandler)
+  };
 
-    slideTimeout.current = setTimeout(() => {
-      slided.current = false
-      if (hovered.current && hovered.current !== active.projectIndex && modeRef.current !== WorldMode.PROJECT_DETAILED) {
-        dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projectsRef.current[hovered.current], fromCarousel: true }))
-      }
-    }, 100)
+  const mouseMoveHandler = function (e) {
+      const dx = e.clientX - posRef.current.x
+      if (!dragged.current && Math.abs(dx) > 25) dragged.current = true
+
+      ref.current.scrollLeft = posRef.current.left - dx
+  };
+
+  const mouseUpHandler = function() {
+      mouseDown.current = false
+      setTimeout(() => {
+        dragged.current = false
+      }, 200)
+
+      document.removeEventListener('mousemove', mouseMoveHandler)
+      document.removeEventListener('mouseup', mouseUpHandler)
   };
 
   useEffect(() => {
@@ -84,6 +103,8 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     const child = get(ref, 'current.childNodes[0]')
     let tWidth = 0
     if (child) {
+      console.log('has child');
+
       const style = child.currentStyle || window.getComputedStyle(child)
       const width = child.offsetWidth
       const margin =
@@ -115,7 +136,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
   const handleMouseHover = (i = null) => {
     hovered.current = i
 
-    if (slided.current || version === WorldVersion.MOBILE) return
+    if (mouseDown.current || version === WorldVersion.MOBILE) return
 
     if (![WorldMode.PROJECTS_EXPLORE, WorldMode.PROJECT_PREVIEW].includes(mode)) return
 
@@ -124,13 +145,13 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     }
 
     timeout.current = setTimeout(() => {
-      if (mouseDown.current || i === null) {
+      if (![WorldMode.PROJECT_PREVIEW, WorldMode.PROJECTS_EXPLORE].includes(modeRef.current)) return
+
+      if (hovered.current === null) {
         return dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
       }
 
-      if (active.projectIndex !== i) {
-        return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projects[i], fromCarousel: true }))
-      }
+      return dispatch(setWorldMode(WorldMode.PROJECT_PREVIEW, { project: projectsRef.current[hovered.current], fromCarousel: true }))
     }, 500)
   }
 
@@ -153,9 +174,9 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     let newScroll = scroll
 
     if (type === 'prev') {
-      newScroll = Math.max(0, newScroll - SCROLL_STEP)
+      newScroll = Math.max(0, newScroll - scrollSize)
     } else {
-      newScroll = Math.min(ref.current.scrollWidth, newScroll + SCROLL_STEP)
+      newScroll = Math.min(ref.current.scrollWidth, newScroll + scrollSize)
     }
 
     new TWEEN.Tween({ scroll })
@@ -183,19 +204,20 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
     <>
       {show && (
         <TopContainer>
-          <div />
+          <div>
+            {ref.current && ref.current.clientWidth < ref.current.scrollWidth && version === WorldVersion.DESKTOP && (
+              <img src="/arrow-down.svg" className={`nav prev ${buttonActive('prev') ? 'active' : ''}`} onClick={() => onScrollClick('prev')} />
+            )}
+          </div>
           {mode !== WorldMode.PROJECT_DETAILED && (
             <HideSlider onClick={() => dispatch(toggleSlider)}>
               <img src="/arrow-down.svg" />
               HIDE PREVIEWS
             </HideSlider>
           )}
-          <div className="scroller">
+          <div>
             {ref.current && ref.current.clientWidth < ref.current.scrollWidth && version === WorldVersion.DESKTOP && (
-              <>
-                <img src="/arrow-down.svg" className={`prev ${buttonActive('prev') ? 'active' : ''}`} onClick={() => onScrollClick('prev')} />
-                <img src="/arrow-down.svg" className={`next ${buttonActive('next') ? 'active' : ''}`} onClick={() => onScrollClick('next')} />
-              </>
+              <img src="/arrow-down.svg" className={`nav next ${buttonActive('next') ? 'active' : ''}`} onClick={() => onScrollClick('next')} />
             )}
           </div>
         </TopContainer>
@@ -208,7 +230,7 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
               onMouseEnter={() => handleMouseHover(i)}
               onMouseLeave={() => handleMouseHover()}
               onClick={() =>
-                ((mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id)) &&
+                (!mouseDown.current && !dragged.current && (mode !== WorldMode.PROJECT_DETAILED || !active.project || active.project.node._id !== project.node._id)) &&
                   dispatch(
                     setWorldMode(version === WorldVersion.MOBILE && mode !== WorldMode.PROJECT_DETAILED ? WorldMode.PROJECT_PREVIEW : WorldMode.PROJECT_DETAILED, {
                       project,
@@ -251,40 +273,31 @@ const TopContainer = styled.div`
   justify-content: space-between;
 
   & > div {
-    min-width: 58px;
+    min-width: 40px;
   }
 
-  .scroller {
-    padding-right: 15px;
+  img.nav {
+    display: inline-block;
+    height: 10px;
+    opacity: 0.5;
+    cursor: pointer;
 
-    img {
-      display: inline-block;
-      height: 10px;
-      opacity: 0.5;
-      cursor: pointer;
-
-      &.active {
-        opacity: 1;
-      }
-
-      &:first-child {
-        margin-right: 5px;
-      }
-
-      &:last-child {
-        margin-left: 5px;
-      }
+    &.active {
+      opacity: 1;
     }
 
-    .next {
+    &.next {
       transform: rotate(-90deg);
+      margin-right: 15px;
     }
 
-    .prev {
+    &.prev {
       transform: rotate(90deg);
+      margin-left: 15px;
     }
   }
 `
+
 
 const Container = styled.div`
   white-space: nowrap;
@@ -300,8 +313,13 @@ const Container = styled.div`
   transform: translate(0, 100%);
   transition: all 0.5s ease;
   padding-top: 10px;
+  padding-bottom: 10px;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+
+  @media ${breakpoints.phoneOnly} {
+    padding-bottom: 0;
+  }
 
   &::-webkit-scrollbar {
     display: none;
@@ -348,7 +366,6 @@ const Thumbnail = styled.div`
   display: inline-block;
   margin-right: 10px;
   margin-left: 10px;
-  margin-bottom: 20px;
   height: 115px;
   width: 200px;
   transition: all 0.5s ease;
@@ -358,7 +375,6 @@ const Thumbnail = styled.div`
   @media ${breakpoints.phoneOnly} {
     height: 80px;
     width: 160px;
-    margin-bottom: 0;
     margin-right: 7px;
     margin-left: 7px;
   }
