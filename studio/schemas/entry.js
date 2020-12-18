@@ -18,6 +18,12 @@ export default {
       title: 'Use special font',
       type: 'boolean',
       default: false
+    },
+    {
+      name: 'smallFont',
+      title: 'Use smaller font size',
+      type: 'boolean',
+      default: false
     }
   ]
 }

@@ -560,6 +560,10 @@ const ContentDetailed = styled.div`
       margin-left: 24px;
     }
 
+    .nav-button {
+      visibility: hidden;
+    }
+
     @media ${breakpoints.phoneOnly} {
       .play-button {
         height: 80px;

@@ -51,8 +51,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
                 {content && content.left && content.left.map((entry: any) => (
                   <div>
                     <div>
-                      <p className="header">{entry.header}</p>
-                      <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
+                      <p className={`header ${entry.smallFont && 'smaller'}`}>{entry.header}</p>
+                      <p className={`${entry.specialFont && 'dalek-pinpoint'} ${entry.smallFont && 'smaller'}`}>{entry.copy}</p>
                     </div>
                   </div>
                 ))}
@@ -69,8 +69,8 @@ const ProjectDetailedContainer = ({ location, data }) => {
                   {content && content.middle && content.middle.map((entry: any, i: number) => (
                     <div>
                       <div>
-                        <p className="header">{entry.header}</p>
-                        <p className={entry.specialFont && 'dalek-pinpoint'}>{entry.copy}</p>
+                        <p className={`header ${entry.smallFont && 'smaller'}`}>{entry.header}</p>
+                        <p className={`${entry.specialFont && 'dalek-pinpoint'} ${entry.smallFont && 'smaller'}`}>{entry.copy}</p>
                       </div>
                     </div>
                   ))}
@@ -273,10 +273,18 @@ const Section = styled.section`
       margin-bottom: 6px;
       line-height: 1.3em;
       opacity: 1;
+
+      &.smaller {
+        font-size: 8px;
+      }
     }
 
     p:not(.header) {
       line-height: 1.2em;
+
+      &.smaller {
+        font-size: 14px;
+      }
     }
   }
 `
