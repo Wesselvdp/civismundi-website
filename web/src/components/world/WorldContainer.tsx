@@ -495,6 +495,7 @@ const ContentDetailed = styled.div`
   align-items: flex-end;
   justify-content: center;
   flex-wrap: wrap;
+  pointer-events: none;
 
   .copy {
     width: 100%;
@@ -525,6 +526,7 @@ const ContentDetailed = styled.div`
   }
 
   .button-container {
+    pointer-events: auto;
     width: 100%;
     display: flex;
     justify-content: center;
