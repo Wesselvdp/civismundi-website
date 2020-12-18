@@ -184,13 +184,13 @@ const ProjectSlider = ({ show, withAnimation = false, }) => {
       .onUpdate((d) => {
         if (ref.current) ref.current.scrollLeft = d.scroll
       })
+      .onComplete(() => {
+        setScrollBusy(false)
+      })
       .easing(TWEEN.Easing.Cubic.InOut)
       .start()
 
     setScrollBusy(true)
-    setTimeout(() => {
-      setScrollBusy(false)
-    }, 500)
   }
 
   useEffect(() => {
