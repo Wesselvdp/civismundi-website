@@ -275,7 +275,7 @@ const Section = styled.section`
       opacity: 1;
 
       &.smaller {
-        font-size: 8px;
+        font-size: 10px;
       }
     }
 
