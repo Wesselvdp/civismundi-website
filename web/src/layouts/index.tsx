@@ -33,22 +33,43 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   const progressRing = useRef(null)
   const progressRingFinal = useRef(null)
   const [pseudoProgress, setPseudoProgress] = useState(0)
+  const [defaultProgress, setDefaultProgress] = useState(0)
 
   useEffect(() => {
-    const radius = progressRing.current.r.baseVal.value
-    const circumference = radius * 2 * Math.PI
+    if (world.loading) {
+      setTimeout(() => {
+        new TWEEN.Tween({ progress: 0 })
+          .to({ progress: 1 }, 3000)
+          .onUpdate((d) => {
+            setDefaultProgress(d.progress)
+          })
+          .start()
+      }, 1000)
+    }
+  }, [world.loading])
 
+  useEffect(() => {
     new TWEEN.Tween({ progress: pseudoProgress })
       .to({ progress: world.progress }, 500)
       .onUpdate((d) => {
         setPseudoProgress(d.progress)
-
-        const offset = circumference - d.progress * circumference
-        progressRing.current.style.strokeDashoffset = offset
       })
       .easing(TWEEN.Easing.Cubic.InOut)
       .start()
   }, [world.progress])
+
+  useEffect(() => {
+    const radius = progressRing.current.r.baseVal.value
+    const circumference = radius * 2 * Math.PI
+    const progress = Math.min(pseudoProgress, defaultProgress)
+    const offset = circumference - progress * circumference
+
+    progressRing.current.style.strokeDashoffset = offset
+
+    if (progress === 1) {
+      dispatch({ type: WORLD_SET_LOADING, loading: false })
+    }
+  }, [pseudoProgress, defaultProgress])
 
   useEffect(() => {
     if (!world.loading) {
@@ -131,7 +152,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               />
             </svg>
           </div>
-          <p className={!world.initialized && 'hidden'}>{`${parseInt(pseudoProgress * 100, 10)}%`}</p>
+          <p className={!world.initialized && 'hidden'}>{`${parseInt(Math.min(pseudoProgress, defaultProgress) * 100, 10)}%`}</p>
         </div>
       </Loader>
       {pageContext.layout !== 'home' && (
