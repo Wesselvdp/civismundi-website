@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components'
 import Lottie from 'react-lottie'
 import TWEEN from '@tweenjs/tween.js'
 
-import animationData from './data.json'
+import animationData from './lottie-globe.json'
 import { Navigation, GlobeButton } from '../components/general'
 import { WorldContainer } from '../components/world'
 import {
@@ -16,6 +16,8 @@ import {
 type T = any
 
 const MIN_LOADING_TIME = 2000
+const CIRCLE_SIZE = 80
+const CIRCUMFERENCE = CIRCLE_SIZE * 2 * Math.PI
 
 const defaultOptions = {
   loop: true,
@@ -43,6 +45,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
           .onUpdate((d) => {
             setDefaultProgress(d.progress)
           })
+          .easing(TWEEN.Easing.Cubic.InOut)
           .start()
       }, 1000)
     }
@@ -59,10 +62,8 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   }, [world.progress])
 
   useEffect(() => {
-    const radius = progressRing.current.r.baseVal.value
-    const circumference = radius * 2 * Math.PI
     const progress = Math.min(pseudoProgress, defaultProgress)
-    const offset = circumference - progress * circumference
+    const offset = CIRCUMFERENCE - progress * CIRCUMFERENCE
 
     progressRing.current.style.strokeDashoffset = offset
 
@@ -73,18 +74,15 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
 
   useEffect(() => {
     if (!world.loading) {
-      const radius = progressRing.current.r.baseVal.value
-      const circumference = radius * 2 * Math.PI
-
       setTimeout(() => {
         new TWEEN.Tween({ progress: 0 })
           .to({ progress: 1 }, 1000)
           .onStart((d) => {
-            progressRingFinal.current.style.strokeDasharray = `${circumference} ${circumference}`
-            progressRingFinal.current.style.strokeDashoffset = circumference
+            progressRingFinal.current.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`
+            progressRingFinal.current.style.strokeDashoffset = CIRCUMFERENCE
           })
           .onUpdate((d) => {
-            const offset = circumference - d.progress * circumference
+            const offset = CIRCUMFERENCE - d.progress * CIRCUMFERENCE
             progressRingFinal.current.style.strokeDashoffset = offset
           })
           .easing(TWEEN.Easing.Cubic.InOut)
@@ -129,16 +127,20 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               isStopped={false}
               isPaused={false}
             />
-            <svg className="progress-ring" width="140" height="140">
+            <svg
+              className="progress-ring"
+              width={CIRCLE_SIZE * 2}
+              height={CIRCLE_SIZE * 2}
+            >
               <circle
                 ref={progressRing}
                 className="progress-ring__circle"
                 stroke="rgba(255, 255, 255, 0.5)"
                 strokeWidth="1"
                 fill="transparent"
-                r="68"
-                cx="70"
-                cy="70"
+                r={CIRCLE_SIZE - 2}
+                cx={CIRCLE_SIZE}
+                cy={CIRCLE_SIZE}
               />
               <circle
                 ref={progressRingFinal}
@@ -146,13 +148,16 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
                 stroke="rgba(255, 255, 255, 1)"
                 strokeWidth="1"
                 fill="transparent"
-                r="68"
-                cx="70"
-                cy="70"
+                r={CIRCLE_SIZE - 2}
+                cx={CIRCLE_SIZE}
+                cy={CIRCLE_SIZE}
               />
             </svg>
           </div>
-          <p className={!world.initialized && 'hidden'}>{`${parseInt(Math.min(pseudoProgress, defaultProgress) * 100, 10)}%`}</p>
+          <p className={!world.initialized && 'hidden'}>{`${parseInt(
+            Math.min(pseudoProgress, defaultProgress) * 100,
+            10
+          )}%`}</p>
         </div>
       </Loader>
       {pageContext.layout !== 'home' && (
@@ -184,7 +189,7 @@ const Loader = styled.div`
 
   .lottie-wrapper {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 
     .progress-ring {
       position: absolute;
@@ -193,8 +198,8 @@ const Loader = styled.div`
       transform: translate(-50%, -50%);
 
       &__circle {
-        stroke-dashoffset: 427;
-        stroke-dasharray: 427 427;
+        stroke-dashoffset: ${CIRCUMFERENCE};
+        stroke-dasharray: ${CIRCUMFERENCE} ${CIRCUMFERENCE};
         transform: rotate(-90deg);
         transform-origin: 50% 50%;
       }
