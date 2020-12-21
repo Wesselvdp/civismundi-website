@@ -169,7 +169,6 @@ export function initializeWorld(
 
     THREE.DefaultLoadingManager.onLoad = function () {
       ref.current.resumeAnimation()
-      dispatch({ type: WORLD_SET_LOADING, loading: false })
     }
 
     THREE.DefaultLoadingManager.onProgress = function (

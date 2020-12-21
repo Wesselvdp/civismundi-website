@@ -7,7 +7,11 @@ import TWEEN from '@tweenjs/tween.js'
 import animationData from './data.json'
 import { Navigation, GlobeButton } from '../components/general'
 import { WorldContainer } from '../components/world'
-import { WORLD_SET_READY, SET_FADING_PAGE } from '../actions/types'
+import {
+  WORLD_SET_LOADING,
+  WORLD_SET_READY,
+  SET_FADING_PAGE,
+} from '../actions/types'
 
 type T = any
 
@@ -66,7 +70,10 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
             progressRingFinal.current.style.strokeDashoffset = offset
           })
           .onComplete((d) => {
-            dispatch({ type: WORLD_SET_READY, ready: true })
+            dispatch({ type: WORLD_SET_LOADING, loading: false })
+            setTimeout(() => {
+              dispatch({ type: WORLD_SET_READY, ready: true })
+            }, 250)
           })
           .easing(TWEEN.Easing.Cubic.InOut)
           .start()
@@ -114,7 +121,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
         <Navigation location={location} />
         <Main className={world.fadingPage && 'fading'}>{children}</Main>
       </>
-      <Loader className={world.ready ? 'hidden' : ''}>
+      <Loader className={!world.loading ? 'hidden' : ''}>
         <div>
           <div className="lottie-wrapper">
             <Lottie
