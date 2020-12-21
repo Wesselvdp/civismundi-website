@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { get } from 'lodash'
+import { debounce, get } from 'lodash'
 
 import { MarkerSize, WorldVersion, WorldMode } from '.'
 import {
@@ -169,20 +169,24 @@ export function initializeWorld(
 
     THREE.DefaultLoadingManager.onLoad = function () {
       ref.current.resumeAnimation()
+      dispatch({ type: WORLD_SET_LOADING, loading: false })
     }
 
-    THREE.DefaultLoadingManager.onProgress = function (
-      url,
-      itemsLoaded,
-      itemsTotal
-    ) {
-      console.log(
-        `${
-          (itemsLoaded / itemsTotal) * 100
-        }% - Texture ${url} is loaded. (${itemsLoaded}/${itemsTotal})`
-      )
-      dispatch({ type: SET_PROGRESS, progress: itemsLoaded / itemsTotal })
-    }
+    THREE.DefaultLoadingManager.onProgress = debounce(
+      (url, itemsLoaded, itemsTotal) => {
+        console.log(
+          `${
+            (itemsLoaded / itemsTotal) * 100
+          }% - Texture ${url} is loaded. (${itemsLoaded}/${itemsTotal})`
+        )
+        dispatch({ type: SET_PROGRESS, progress: itemsLoaded / itemsTotal })
+      },
+      50,
+      {
+        leading: true,
+        trailing: true
+      }
+    )
 
     // sort projects on area
     const projects = []

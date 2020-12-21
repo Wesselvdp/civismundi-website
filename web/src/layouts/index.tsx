@@ -28,8 +28,6 @@ const defaultOptions = {
 
 const Layout: FC<T> = ({ children, pageContext, location }) => {
   const world = useSelector((state) => state.world)
-  const [loading, setLoading] = useState(true)
-  const [startTime, setStartTime] = useState(0)
   const dispatch = useDispatch()
 
   const progressRing = useRef(null)
@@ -37,27 +35,28 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   const [pseudoProgress, setPseudoProgress] = useState(0)
 
   useEffect(() => {
-    setStartTime(new Date().getTime())
-  }, [])
-
-  useEffect(() => {
     const radius = progressRing.current.r.baseVal.value
     const circumference = radius * 2 * Math.PI
 
-    if (world.progress !== 0) {
-      new TWEEN.Tween({ progress: pseudoProgress })
-        .to({ progress: world.progress }, 500)
-        .onUpdate((d) => {
-          setPseudoProgress(d.progress)
+    console.log('new tween', pseudoProgress, world.progress)
 
-          const offset = circumference - d.progress * circumference
-          progressRing.current.style.strokeDashoffset = offset
-        })
-        .easing(TWEEN.Easing.Cubic.InOut)
-        .start()
-    }
+    new TWEEN.Tween({ progress: pseudoProgress })
+      .to({ progress: world.progress }, 500)
+      .onUpdate((d) => {
+        setPseudoProgress(d.progress)
 
-    if (world.progress === 1) {
+        const offset = circumference - d.progress * circumference
+        progressRing.current.style.strokeDashoffset = offset
+      })
+      .easing(TWEEN.Easing.Cubic.InOut)
+      .start()
+  }, [world.progress])
+
+  useEffect(() => {
+    if (!world.loading) {
+      const radius = progressRing.current.r.baseVal.value
+      const circumference = radius * 2 * Math.PI
+
       setTimeout(() => {
         new TWEEN.Tween({ progress: 0 })
           .to({ progress: 1 }, 1000)
@@ -69,17 +68,15 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
             const offset = circumference - d.progress * circumference
             progressRingFinal.current.style.strokeDashoffset = offset
           })
-          .onComplete((d) => {
-            dispatch({ type: WORLD_SET_LOADING, loading: false })
-            setTimeout(() => {
-              dispatch({ type: WORLD_SET_READY, ready: true })
-            }, 250)
-          })
           .easing(TWEEN.Easing.Cubic.InOut)
           .start()
-      }, 500)
+      }, 250)
+
+      setTimeout(() => {
+        dispatch({ type: WORLD_SET_READY, ready: true })
+      }, 1250)
     }
-  }, [world.progress])
+  }, [world.loading])
 
   useEffect(() => {
     let timer
@@ -91,26 +88,8 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
       )
     }
 
-    return () => clearTimeout()
+    return () => clearTimeout(timer)
   }, [world.fadingPage])
-
-  // useEffect(() => {
-  //   if (world.initialized && !world.loading) {
-  //     const elapsed = new Date().getTime() - startTime
-
-  //     setTimeout(() => {
-  //       setLoading(false)
-
-  //       if (!world.ready) {
-  //         setTimeout(() => {
-  //           dispatch({ type: WORLD_SET_READY, ready: true })
-  //         }, 1000)
-  //       }
-  //     }, Math.max(MIN_LOADING_TIME - elapsed, 0))
-  //   } else {
-  //     setLoading(true)
-  //   }
-  // }, [world.initialized, world.loading])
 
   return (
     <>
@@ -121,7 +100,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
         <Navigation location={location} />
         <Main className={world.fadingPage && 'fading'}>{children}</Main>
       </>
-      <Loader className={!world.loading ? 'hidden' : ''}>
+      <Loader className={world.ready ? 'hidden' : ''}>
         <div>
           <div className="lottie-wrapper">
             <Lottie
@@ -154,10 +133,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               />
             </svg>
           </div>
-          <p className={pseudoProgress === 0 ? 'hidden' : ''}>{`${parseInt(
-            pseudoProgress * 100,
-            10
-          )}%`}</p>
+          <p>{`${parseInt(pseudoProgress * 100, 10)}%`}</p>
         </div>
       </Loader>
       {pageContext.layout !== 'home' && (
