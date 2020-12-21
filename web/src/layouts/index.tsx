@@ -2,6 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import Lottie from 'react-lottie'
+import TWEEN from '@tweenjs/tween.js'
 
 import animationData from './data.json'
 import { Navigation, GlobeButton } from '../components/general'
@@ -28,6 +29,8 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   const dispatch = useDispatch()
 
   const progressRing = useRef(null)
+  const progressRingFinal = useRef(null)
+  const [pseudoProgress, setPseudoProgress] = useState(0)
 
   useEffect(() => {
     setStartTime(new Date().getTime())
@@ -37,12 +40,37 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
     const radius = progressRing.current.r.baseVal.value
     const circumference = radius * 2 * Math.PI
 
-    if (world.progress === 0) {
-      progressRing.current.style.strokeDasharray = `${circumference} ${circumference}`
-      progressRing.current.style.strokeDashoffset = circumference
-    } else {
-      const offset = circumference - world.progress * circumference
-      progressRing.current.style.strokeDashoffset = offset
+    if (world.progress !== 0) {
+      new TWEEN.Tween({ progress: pseudoProgress })
+        .to({ progress: world.progress }, 500)
+        .onUpdate((d) => {
+          setPseudoProgress(d.progress)
+
+          const offset = circumference - d.progress * circumference
+          progressRing.current.style.strokeDashoffset = offset
+        })
+        .easing(TWEEN.Easing.Cubic.InOut)
+        .start()
+    }
+
+    if (world.progress === 1) {
+      setTimeout(() => {
+        new TWEEN.Tween({ progress: 0 })
+          .to({ progress: 1 }, 1000)
+          .onStart((d) => {
+            progressRingFinal.current.style.strokeDasharray = `${circumference} ${circumference}`
+            progressRingFinal.current.style.strokeDashoffset = circumference
+          })
+          .onUpdate((d) => {
+            const offset = circumference - d.progress * circumference
+            progressRingFinal.current.style.strokeDashoffset = offset
+          })
+          .onComplete((d) => {
+            dispatch({ type: WORLD_SET_READY, ready: true })
+          })
+          .easing(TWEEN.Easing.Cubic.InOut)
+          .start()
+      }, 500)
     }
   }, [world.progress])
 
@@ -59,23 +87,23 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
     return () => clearTimeout()
   }, [world.fadingPage])
 
-  useEffect(() => {
-    if (world.initialized && !world.loading) {
-      const elapsed = new Date().getTime() - startTime
+  // useEffect(() => {
+  //   if (world.initialized && !world.loading) {
+  //     const elapsed = new Date().getTime() - startTime
 
-      setTimeout(() => {
-        setLoading(false)
+  //     setTimeout(() => {
+  //       setLoading(false)
 
-        if (!world.ready) {
-          setTimeout(() => {
-            dispatch({ type: WORLD_SET_READY, ready: true })
-          }, 1000)
-        }
-      }, Math.max(MIN_LOADING_TIME - elapsed, 0))
-    } else {
-      setLoading(true)
-    }
-  }, [world.initialized, world.loading])
+  //       if (!world.ready) {
+  //         setTimeout(() => {
+  //           dispatch({ type: WORLD_SET_READY, ready: true })
+  //         }, 1000)
+  //       }
+  //     }, Math.max(MIN_LOADING_TIME - elapsed, 0))
+  //   } else {
+  //     setLoading(true)
+  //   }
+  // }, [world.initialized, world.loading])
 
   return (
     <>
@@ -100,7 +128,17 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               <circle
                 ref={progressRing}
                 className="progress-ring__circle"
-                stroke="white"
+                stroke="rgba(255, 255, 255, 0.5)"
+                strokeWidth="1"
+                fill="transparent"
+                r="68"
+                cx="70"
+                cy="70"
+              />
+              <circle
+                ref={progressRingFinal}
+                className="progress-ring__circle"
+                stroke="rgba(255, 255, 255, 1)"
                 strokeWidth="1"
                 fill="transparent"
                 r="68"
@@ -109,7 +147,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               />
             </svg>
           </div>
-          <p>{parseInt(world.progress * 100, 10)}%</p>
+          <p>{parseInt(pseudoProgress * 100, 10)}%</p>
         </div>
       </Loader>
       {pageContext.layout !== 'home' && (
@@ -149,11 +187,10 @@ const Loader = styled.div`
       transform: translate(-50%, -50%);
 
       &__circle {
-        transition: stroke-dashoffset 0.35s;
         stroke-dashoffset: 427;
         stroke-dasharray: 427 427;
-        // transform: rotate(-90deg);
-        // transform-origin: 50% 50%;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
       }
     }
   }
