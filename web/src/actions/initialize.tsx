@@ -10,6 +10,7 @@ import {
   WORLD_LOADING_COMPLETE,
   WORLD_SET_VERSION,
   WORLD_SET_LOADING,
+  SET_PROGRESS,
   WORLD_SET_RESIZE,
 } from './types'
 import { setWorldMode, setWorldModeFromLocation } from './mode'
@@ -145,10 +146,9 @@ export function worldHandleResize() {
 
       dispatch(
         toggleMarkers(
-          [
-            WorldMode.PROJECT_PREVIEW,
-            WorldMode.PROJECTS_EXPLORE,
-          ].includes(w.mode),
+          [WorldMode.PROJECT_PREVIEW, WorldMode.PROJECTS_EXPLORE].includes(
+            w.mode
+          ),
           0,
           true
         )
@@ -165,21 +165,41 @@ export function initializeWorld(
 ) {
   return async function action(dispatch: any, getState: any) {
     if (!ref.current) return Promise.resolve()
+    ref.current.pauseAnimation()
 
     THREE.DefaultLoadingManager.onLoad = function () {
+      ref.current.resumeAnimation()
       dispatch({ type: WORLD_SET_LOADING, loading: false })
     }
 
-    // sort projects on area
-    const projects = [];
-    let areaCount = 0;
-    data.allSanityProject.edges.forEach((p, i) => {
-      if (projects.some(pj => p.node._id === pj.node._id)) return
+    THREE.DefaultLoadingManager.onProgress = function (
+      url,
+      itemsLoaded,
+      itemsTotal
+    ) {
+      console.log(
+        `${
+          (itemsLoaded / itemsTotal) * 100
+        }% - Texture ${url} is loaded. (${itemsLoaded}/${itemsTotal})`
+      )
+      dispatch({ type: SET_PROGRESS, progress: itemsLoaded / itemsTotal })
+    }
 
+    // sort projects on area
+    const projects = []
+    let areaCount = 0
+    data.allSanityProject.edges.forEach((p, i) => {
+      if (projects.some((pj) => p.node._id === pj.node._id)) return
 
       // if project is part of area, find all projects of that area
       if (p.node.locationGroup) {
-        const areaProjects = data.allSanityProject.edges.filter(pj => pj.node.locationGroup && pj.node.locationGroup._id === p.node.locationGroup._id).map(pj => ({ ...pj, areaCount }));
+        const areaProjects = data.allSanityProject.edges
+          .filter(
+            (pj) =>
+              pj.node.locationGroup &&
+              pj.node.locationGroup._id === p.node.locationGroup._id
+          )
+          .map((pj) => ({ ...pj, areaCount }))
         projects.push(...areaProjects)
       } else {
         projects.push({ ...p, areaCount })

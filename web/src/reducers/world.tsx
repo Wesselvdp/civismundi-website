@@ -10,7 +10,7 @@ import {
   MODE_GO_PROJECTS_EXPLORE,
   MODE_GO_PROJECT_DETAILED,
   MODE_GO_BACKGROUND,
-  MODE_GO_AREA_PREVIEW,
+  SET_PROGRESS,
   ADD_MARKER,
   SET_MARKER_FOCUSED,
   SET_VISIBILITY_MARKERS,
@@ -54,7 +54,8 @@ const initialState = {
   fadingVideo: false,
   sliderScroll: 0,
   resize: false,
-  showSlider: true
+  showSlider: true,
+  progress: 0,
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -66,6 +67,10 @@ const reducer = (state = initialState, action: any) => {
         projects: action.projects,
         areas: action.areas,
       }
+    }
+
+    case SET_PROGRESS: {
+      return { ...state, progress: action.progress }
     }
 
     case WORLD_TOGGLE_SLIDER: {

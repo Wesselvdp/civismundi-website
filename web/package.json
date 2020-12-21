@@ -46,6 +46,7 @@
     "react-helmet": "^5.2.1",
     "react-in-viewport": "^1.0.0-alpha.14",
     "react-is-scrolling": "^1.0.1",
+    "react-lottie": "^1.2.3",
     "react-modal-video": "^1.2.5",
     "react-parallax-tilt": "^1.4.66",
     "react-player": "^2.5.0",

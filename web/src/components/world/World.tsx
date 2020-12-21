@@ -111,6 +111,7 @@ const World = ({ data, markers, width, height, layout, className }) => {
       <React.Suspense fallback={<div />}>
         <Wrapper className={world.mode}>
           <Globe
+            pauseAnimation={!world.ready}
             ref={ref}
             // appearance
             globeImageUrl="/earth-blue-marble-alt.jpg"
