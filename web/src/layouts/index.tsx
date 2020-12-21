@@ -154,7 +154,10 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               />
             </svg>
           </div>
-          <p>{parseInt(pseudoProgress * 100, 10)}%</p>
+          <p className={pseudoProgress === 0 ? 'hidden' : ''}>{`${parseInt(
+            pseudoProgress * 100,
+            10
+          )}%`}</p>
         </div>
       </Loader>
       {pageContext.layout !== 'home' && (
@@ -179,7 +182,8 @@ const Loader = styled.div`
   align-items: center;
   justify-content: center;
 
-  &.hidden {
+  &.hidden,
+  .hidden {
     opacity: 0;
   }
 
