@@ -38,8 +38,6 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
     const radius = progressRing.current.r.baseVal.value
     const circumference = radius * 2 * Math.PI
 
-    console.log('new tween', pseudoProgress, world.progress)
-
     new TWEEN.Tween({ progress: pseudoProgress })
       .to({ progress: world.progress }, 500)
       .onUpdate((d) => {
@@ -133,7 +131,7 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
               />
             </svg>
           </div>
-          <p>{`${parseInt(pseudoProgress * 100, 10)}%`}</p>
+          <p className={!world.initialized && 'hidden'}>{`${parseInt(pseudoProgress * 100, 10)}%`}</p>
         </div>
       </Loader>
       {pageContext.layout !== 'home' && (

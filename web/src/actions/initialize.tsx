@@ -184,7 +184,7 @@ export function initializeWorld(
       50,
       {
         leading: true,
-        trailing: true
+        trailing: true,
       }
     )
 
