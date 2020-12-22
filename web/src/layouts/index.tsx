@@ -189,7 +189,7 @@ const Loader = styled.div`
 
   .lottie-wrapper {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 
     .progress-ring {
       position: absolute;

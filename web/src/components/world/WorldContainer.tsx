@@ -8,6 +8,7 @@ import { get, debounce } from 'lodash'
 import { useDispatch } from 'react-redux'
 import Div100vh from 'react-div-100vh'
 import ModalVideo from 'react-modal-video'
+import TWEEN from '@tweenjs/tween.js'
 
 import World from './World'
 import { TextImprov, FadeAnim } from '@components/animations'
@@ -46,6 +47,8 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   const [videoOpen, openVideo] = useState(false)
   const [fading, setFading] = useState(false)
   const [detailedState, setDetailedState] = useState(DetailedState.LOADING)
+
+  const pageRef = useRef(null)
 
   const dispatch = useDispatch()
 
@@ -116,6 +119,20 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
     return () => clearTimeout(timer)
   }, [world.ready, location])
 
+  const handleScrollIndicator = () => {
+    if (window.scrollY < pageRef.current.clientHeight) {
+      // new TWEEN.Tween({ scroll: window.scrollY })
+      //   .to({ scroll: pageRef.current.clientHeight }, 500)
+      //   .onUpdate((d) => window.scroll(0, d.scroll))
+      //   .start()
+      window.scrollTo({
+        left: 0,
+        top: pageRef.current.clientHeight,
+        behavior: 'smooth'
+      })
+    }
+  }
+
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -184,6 +201,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
 
   return (
     <Page
+      ref={pageRef}
       className={`${layout} ${videoOpen && project.vimeo ? 'modal-open' : ''}`}
     >
       {/* Globe */}
@@ -376,6 +394,14 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
                   appear
                   timeout={{ enter: 600 }}
                 />
+                {/* Scroll */}
+                <div class="arrow-scroll__wrap arrow-scroll__wrap_animated" onClick={handleScrollIndicator}>
+                  <svg fill='#ffffff' x="0px" y="0px" width="38.417px" height="18.592px" viewbox="0 0 38.417 18.592">
+                    <g>
+                      <path d="M19.208,18.592c-0.241,0-0.483-0.087-0.673-0.261L0.327,1.74c-0.408-0.372-0.438-1.004-0.066-1.413c0.372-0.409,1.004-0.439,1.413-0.066L19.208,16.24L36.743,0.261c0.411-0.372,1.042-0.342,1.413,0.066c0.372,0.408,0.343,1.041-0.065,1.413L19.881,18.332C19.691,18.505,19.449,18.592,19.208,18.592z"></path>
+                    </g>
+                  </svg>
+                </div>
               </div>
             </div>
           </ContentDetailed>
@@ -478,6 +504,12 @@ const svgNavigators = keyframes`
     opacity: 1;
   }
 `
+const arrowScroll = keyframes`
+  0% {transform: translateY(0)}
+  50% {transform: translateY(-7px)}
+  55% {transform: translateY(-7px)}
+  100% {transform: translateY(0)}
+`
 
 const ContentDetailed = styled.div`
   position: absolute;
@@ -518,6 +550,23 @@ const ContentDetailed = styled.div`
       margin-left: auto;
       margin-right: auto;
       line-height: 22px;
+    }
+  }
+
+  .arrow-scroll__wrap {
+    padding-top: 10px;
+    pointer-events: initial;
+    cursor: pointer;
+    display: inline-block;
+    transition: all ease-in-out 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .85;
+    }
+
+    &_animated {
+      animation: ${arrowScroll} 1.7s infinite ease;
     }
   }
 
@@ -599,6 +648,15 @@ const Page = styled.div`
 
   &.modal-open {
     z-index: 100 !important;
+  }
+
+  .anim-scale {
+    transform: scale(1);
+    transition: 0.25s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
   // .globe__container {
