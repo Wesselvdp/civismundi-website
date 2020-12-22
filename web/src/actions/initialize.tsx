@@ -7,6 +7,7 @@ import {
   WORLD_INITIALIZE_START,
   WORLD_INITIALIZE_COMPLETE,
   SET_LIGHTNING,
+  WORLD_TOGGLE_SLIDER,
   WORLD_LOADING_COMPLETE,
   WORLD_SET_VERSION,
   WORLD_SET_LOADING,
@@ -245,6 +246,10 @@ export function initializeWorld(
               MarkerSize.DEFAULT *
                 (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)
             )
+        }
+
+        if (w.version === WorldVersion.MOBILE && w.showSlider === null) {
+          dispatch({ type: WORLD_TOGGLE_SLIDER });
         }
       })
 

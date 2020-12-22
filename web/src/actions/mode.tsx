@@ -192,6 +192,10 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
 
     dispatch({ type: SET_LAST_ACTIVE })
 
+    if (w.showSlider === null && w.version === WorldVersion.DESKTOP) {
+      dispatch({ type: WORLD_TOGGLE_SLIDER })
+    }
+
     if (data.fromCarousel) {
       const hovered = w.markers.find((marker: any) => marker.node._id === data.project.node._id)
       dispatch(toggleFocusedMarker(hovered))
