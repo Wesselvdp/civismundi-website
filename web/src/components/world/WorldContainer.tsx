@@ -72,10 +72,6 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   }, [])
 
   useEffect(() => {
-    // listen on resize
-  }, [width, world.version, world.mode])
-
-  useEffect(() => {
     dispatch(worldHandleResize())
   }, [width, height])
 

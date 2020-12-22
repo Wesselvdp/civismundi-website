@@ -16,7 +16,7 @@ import {
 type T = any
 
 const MIN_LOADING_TIME = 2000
-const CIRCLE_SIZE = 80
+const CIRCLE_SIZE = 60
 const CIRCUMFERENCE = CIRCLE_SIZE * 2 * Math.PI
 
 const defaultOptions = {
@@ -122,8 +122,8 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
           <div className="lottie-wrapper">
             <Lottie
               options={defaultOptions}
-              height={125}
-              width={125}
+              height={87}
+              width={87}
               isStopped={false}
               isPaused={false}
             />
@@ -189,7 +189,7 @@ const Loader = styled.div`
 
   .lottie-wrapper {
     position: relative;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 
     .progress-ring {
       position: absolute;
