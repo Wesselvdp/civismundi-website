@@ -184,7 +184,7 @@ function navigateProjectPreview(data: any = {}, duration = 1500) {
     setControlsFromMode(w.ref.current.controls(), WorldMode.PROJECT_PREVIEW)
 
     // set active object
-    await dispatch(setActiveObjectFromProject(data.project, { fromCarousel: data.fromCarousel }))
+    await dispatch(setActiveObjectFromProject(data.project, { fromCarousel: data.fromCarousel || (w.showSlider === null && w.version === WorldVersion.DESKTOP) }))
     w = getState().world
 
     // go to mode
