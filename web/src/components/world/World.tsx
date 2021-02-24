@@ -23,109 +23,24 @@ const World = ({ data, markers, width, height, layout, className }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef()
-  const world = useSelector((state) => state.world)
-  const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useDispatch()
 
-  const [disableEvents, setDisableEvents] = useState(false)
-
   useEffect(() => {
-    if (loading) {
+    setTimeout(() => {
+      console.log('data', data);
       dispatch(initializeWorld(ref, data, location))
-    }
-  }, [loading])
-
-  useEffect(() => {
-    if (!world.ready) return
-
-    dispatch(createPulsingMarkers())
-  }, [world.ready])
-
-  useEffect(() => {
-    if (!world.ready) return
-
-    if (
-      [
-        WorldMode.IN_BACKGROUND,
-        WorldMode.PROJECT_DETAILED,
-        WorldMode.PROJECTS_EXPLORE,
-      ].includes(world.mode)
-    )
-      setDisableEvents(false)
-  }, [world.ready, world.mode])
-
-  const onLabelUpdate = (obj, d) => {
-    // this way we determine when ref.current is populated
-    if (!loading) {
-      setLoading(true)
-    }
-
-    if (!world.ready) return
-
-    Object.assign(
-      obj.position,
-      ref.current.getCoords(
-        get(d, 'node.location.lat', 0),
-        get(d, 'node.location.lng', 0),
-        0.05
-      )
-    )
-  }
-
-  const onHover = (obj) => {
-    if (disableEvents) return
-
-    if (world.version === WorldVersion.DESKTOP) {
-      dispatch(onMarkerHovered(obj))
-    }
-  }
-
-  const labelObject = (obj, radius) => {
-    dispatch(addMarker(obj))
-
-    // load texture
-    const path = '/marker-small.svg'
-    const texture = new THREE.TextureLoader().load(path)
-    if (ref.current) {
-      texture.anisotropy = ref.current
-        .renderer()
-        .capabilities.getMaxAnisotropy()
-    }
-
-    // determine marker size
-    const baseRadius = MarkerSize.BASE
-    const material = new THREE.MeshBasicMaterial({
-      map: texture,
-      transparent: true,
-      color: 0xffffff,
-    })
-
-    material.map.minFilter = THREE.LinearFilter
-    return new THREE.Mesh(new THREE.CircleGeometry(baseRadius, 25, 25), [
-      material,
-    ])
-  }
+    }, 100)
+  }, [isSSR])
 
   return (
     !isSSR && (
       <React.Suspense fallback={<div />}>
-        <Wrapper className={world.mode}>
+        <Wrapper>
           <Globe
-            pauseAnimation={!world.ready}
             ref={ref}
-            // appearance
             globeImageUrl="/earth-blue-marble-alt.jpg"
             bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
             backgroundColor="rgba(0,0,0,0)"
-            // labels
-            customLayerData={markers}
-            customThreeObject={(obj, globeRadius) =>
-              labelObject(obj, globeRadius)
-            }
-            customThreeObjectUpdate={(obj, d) => onLabelUpdate(obj, d)}
-            onCustomLayerHover={(obj) => onHover(obj)}
-            // onCustomLayerClick={(obj) => onClick(obj)}
-            // settings
             animateIn={false}
             renderConfig={{
               sortObjects: false,

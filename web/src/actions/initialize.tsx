@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { debounce, get } from 'lodash'
 
+import World from '../world'
+
 import { MarkerSize, WorldVersion, WorldMode } from '.'
 import {
   SET_DATA,
@@ -165,164 +167,167 @@ export function initializeWorld(
   options: any = {}
 ) {
   return async function action(dispatch: any, getState: any) {
-    if (!ref.current) return Promise.resolve()
-    ref.current.pauseAnimation()
+    const projects = data.allSanityProject.edges;
+    const world = new World(ref, projects, dispatch);
 
-    THREE.DefaultLoadingManager.onLoad = function () {
-      ref.current.resumeAnimation()
-    }
+    await dispatch({ type: WORLD_INITIALIZE_COMPLETE, world })
 
-    THREE.DefaultLoadingManager.onProgress = debounce(
-      (url, itemsLoaded, itemsTotal) => {
-        console.log(
-          `${
-            (itemsLoaded / itemsTotal) * 100
-          }% - Texture ${url} is loaded. (${itemsLoaded}/${itemsTotal})`
-        )
-        dispatch({ type: SET_PROGRESS, progress: itemsLoaded / itemsTotal })
-      },
-      50,
-      {
-        leading: true,
-        trailing: true,
-      }
-    )
+    // if (!ref.current) return Promise.resolve()
+    // ref.current.pauseAnimation()
 
-    // sort projects on area
-    const projects = []
-    let areaCount = 0
-    data.allSanityProject.edges.forEach((p, i) => {
-      if (projects.some((pj) => p.node._id === pj.node._id)) return
+    // THREE.DefaultLoadingManager.onLoad = function () {
+    //   ref.current.resumeAnimation()
+    // }
 
-      // if project is part of area, find all projects of that area
-      if (p.node.locationGroup) {
-        const areaProjects = data.allSanityProject.edges
-          .filter(
-            (pj) =>
-              pj.node.locationGroup &&
-              pj.node.locationGroup._id === p.node.locationGroup._id
-          )
-          .map((pj) => ({ ...pj, areaCount }))
-        projects.push(...areaProjects)
-      } else {
-        projects.push({ ...p, areaCount })
-      }
+    // THREE.DefaultLoadingManager.onProgress = debounce(
+    //   (url, itemsLoaded, itemsTotal) => {
+    //     console.log(
+    //       `${
+    //         (itemsLoaded / itemsTotal) * 100
+    //       }% - Texture ${url} is loaded. (${itemsLoaded}/${itemsTotal})`
+    //     )
+    //     dispatch({ type: SET_PROGRESS, progress: itemsLoaded / itemsTotal })
+    //   },
+    //   50,
+    //   {
+    //     leading: true,
+    //     trailing: true,
+    //   }
+    // )
 
-      areaCount += 1
-    })
-    // store sanity data
-    dispatch({
-      type: SET_DATA,
-      projects: projects,
-      areas: data.allSanityLocation.edges,
-    })
+    // // sort projects on area
+    // const projects = []
+    // let areaCount = 0
+    // data.allSanityProject.edges.forEach((p, i) => {
+    //   if (projects.some((pj) => p.node._id === pj.node._id)) return
 
-    // initialize world
-    const version = getWorldVersion()
-    await dispatch({ type: WORLD_INITIALIZE_START, ref, version })
+    //   // if project is part of area, find all projects of that area
+    //   if (p.node.locationGroup) {
+    //     const areaProjects = data.allSanityProject.edges
+    //       .filter(
+    //         (pj) =>
+    //           pj.node.locationGroup &&
+    //           pj.node.locationGroup._id === p.node.locationGroup._id
+    //       )
+    //       .map((pj) => ({ ...pj, areaCount }))
+    //     projects.push(...areaProjects)
+    //   } else {
+    //     projects.push({ ...p, areaCount })
+    //   }
 
-    // configure THREE.js scene
-    configureScene(getState().world)
+    //   areaCount += 1
+    // })
+    // // store sanity data
+    // dispatch({
+    //   type: SET_DATA,
+    //   projects: projects,
+    //   areas: data.allSanityLocation.edges,
+    // })
 
-    // set world mode from location
-    await dispatch(
-      setWorldModeFromLocation(location, { data: { state: { delay: 0 } } })
-    )
+    // // initialize world
+    // const version = getWorldVersion()
+    // await dispatch({ type: WORLD_INITIALIZE_START, ref, version })
 
-    // show/hide markers depending on location
-    // dispatch(toggleMarkers(false, 0, true))
+    // // configure THREE.js scene
+    // configureScene(getState().world)
 
-    // event listeners
-    getState()
-      .world.ref.current.controls()
-      .addEventListener('start', () => {
-        const w = getState().world
+    // // set world mode from location
+    // await dispatch(
+    //   setWorldModeFromLocation(location, { data: { state: { delay: 0 } } })
+    // )
 
-        if (w.mode === WorldMode.PROJECT_PREVIEW) {
-          dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
-          if (w.markerFocused)
-            changeMarkerSize(
-              w.markerFocused,
-              MarkerSize.DEFAULT *
-                (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)
-            )
-        }
+    // // show/hide markers depending on location
+    // // dispatch(toggleMarkers(false, 0, true))
 
-        if (w.version === WorldVersion.MOBILE && w.showSlider === null) {
-          dispatch({ type: WORLD_TOGGLE_SLIDER });
-        }
-      })
+    // // event listeners
+    // getState()
+    //   .world.ref.current.controls()
+    //   .addEventListener('start', () => {
+    //     const w = getState().world
 
-    getState()
-      .world.ref.current.controls()
-      .addEventListener('change', () => {
-        const w = getState().world
+    //     if (w.mode === WorldMode.PROJECT_PREVIEW) {
+    //       dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))
+    //       if (w.markerFocused)
+    //         changeMarkerSize(
+    //           w.markerFocused,
+    //           MarkerSize.DEFAULT *
+    //             (w.version === WorldVersion.MOBILE ? MarkerSize.MOBILE : 1)
+    //         )
+    //     }
 
-        updateLightningPosition(w)
+    //     if (w.version === WorldVersion.MOBILE && w.showSlider === null) {
+    //       dispatch({ type: WORLD_TOGGLE_SLIDER });
+    //     }
+    //   })
 
-        // Update marker quaternions every MARKER_SPF ms
-        if (!newFrame) {
-          updateMarkersQuaternion(w)
+    // getState()
+    //   .world.ref.current.controls()
+    //   .addEventListener('change', () => {
+    //     const w = getState().world
 
-          newFrame = setTimeout(() => {
-            newFrame = false
-          }, SEC_PER_FRAME)
-        }
-      })
+    //     updateLightningPosition(w)
 
-    // Custom click
-    const raycaster = new THREE.Raycaster() // create once
-    const mouse = new THREE.Vector2() // create once
-    function onDocumentMouseDown(event: any) {
-      const w = getState().world
+    //     // Update marker quaternions every MARKER_SPF ms
+    //     if (!newFrame) {
+    //       updateMarkersQuaternion(w)
 
-      if (
-        w.mode !== WorldMode.PROJECTS_EXPLORE &&
-        w.mode !== WorldMode.PROJECT_PREVIEW
-      )
-        return
+    //       newFrame = setTimeout(() => {
+    //         newFrame = false
+    //       }, SEC_PER_FRAME)
+    //     }
+    //   })
 
-      // support mobile touches
-      if (event.clientX === undefined)
-        event.clientX = event.targetTouches[0].clientX
-      if (event.clientY === undefined)
-        event.clientY = event.targetTouches[0].clientY
+    // // Custom click
+    // const raycaster = new THREE.Raycaster() // create once
+    // const mouse = new THREE.Vector2() // create once
+    // function onDocumentMouseDown(event: any) {
+    //   const w = getState().world
 
-      mouse.x =
-        (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
-        1
-      mouse.y =
-        -(event.clientY / w.ref.current.renderer().domElement.clientHeight) *
-          2 +
-        1
+    //   if (
+    //     w.mode !== WorldMode.PROJECTS_EXPLORE &&
+    //     w.mode !== WorldMode.PROJECT_PREVIEW
+    //   )
+    //     return
 
-      raycaster.setFromCamera(mouse, w.ref.current.camera())
+    //   // support mobile touches
+    //   if (event.clientX === undefined)
+    //     event.clientX = event.targetTouches[0].clientX
+    //   if (event.clientY === undefined)
+    //     event.clientY = event.targetTouches[0].clientY
 
-      const intersects = raycaster.intersectObjects(
-        w.ref.current.scene().children,
-        true
-      )
-      if (
-        intersects.length &&
-        intersects[0].object.__globeObjType === 'custom'
-      ) {
-        dispatch(onMarkerClicked(intersects[0].object.__data))
-      }
-    }
+    //   mouse.x =
+    //     (event.clientX / w.ref.current.renderer().domElement.clientWidth) * 2 -
+    //     1
+    //   mouse.y =
+    //     -(event.clientY / w.ref.current.renderer().domElement.clientHeight) *
+    //       2 +
+    //     1
 
-    document.addEventListener('mousedown', onDocumentMouseDown, false)
-    document.addEventListener('touchstart', onDocumentMouseDown, false)
+    //   raycaster.setFromCamera(mouse, w.ref.current.camera())
 
-    // create additional THREE.js objects
-    await Promise.all([dispatch(createLightning()), dispatch(createClouds())])
+    //   const intersects = raycaster.intersectObjects(
+    //     w.ref.current.scene().children,
+    //     true
+    //   )
+    //   if (
+    //     intersects.length &&
+    //     intersects[0].object.__globeObjType === 'custom'
+    //   ) {
+    //     dispatch(onMarkerClicked(intersects[0].object.__data))
+    //   }
+    // }
 
-    await dispatch({ type: WORLD_INITIALIZE_COMPLETE })
+    // document.addEventListener('mousedown', onDocumentMouseDown, false)
+    // document.addEventListener('touchstart', onDocumentMouseDown, false)
 
-    setTimeout(
-      () => dispatch(toggleMarkers(location.pathname === '/', 750, true)),
-      2000
-    )
+    // // create additional THREE.js objects
+    // await Promise.all([dispatch(createLightning()), dispatch(createClouds())])
 
-    console.log('initialized')
+    // await dispatch({ type: WORLD_INITIALIZE_COMPLETE })
+
+    // setTimeout(
+    //   () => dispatch(toggleMarkers(location.pathname === '/', 750, true)),
+    //   2000
+    // )
   }
 }

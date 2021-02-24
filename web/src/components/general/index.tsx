@@ -7,6 +7,7 @@ import Select from './Select'
 import GlobeButton from './GlobeButton'
 import ProjectSlider from './ProjectSlider'
 import Quote from './Quote'
+import Loader from './Loader'
 
 export {
   Navigation,
@@ -17,5 +18,6 @@ export {
   Select,
   GlobeButton,
   ProjectSlider,
-  Quote
+  Quote,
+  Loader
 }

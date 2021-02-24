@@ -13,6 +13,8 @@
     "@types/loadable__component": "^5.10.0",
     "@types/react-transition-group": "^4.4.0",
     "@types/styled-components": "^5.1.0",
+    "d3": "^6.3.1",
+    "d3-scale": "^3.2.3",
     "dotenv": "^8.2.0",
     "gatsby": "^2.19.23",
     "gatsby-image": "^2.2.39",
@@ -62,6 +64,8 @@
     "styled-components": "^5.1.1",
     "swiper": "^6.3.3",
     "three": "^0.118.3",
+    "three-conic-polygon-geometry": "^1.4.0",
+    "three-geojson-geometry": "^1.1.1",
     "yup": "^0.28.1"
   },
   "devDependencies": {

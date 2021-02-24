@@ -136,3 +136,23 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   createCustomPages(graphql, createPage)
 }
+
+exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+  console.log('stage', stage);
+  if (stage === 'build-html' || stage === 'develop-html') {
+    actions.setWebpackConfig({
+      module: {
+        rules: [
+          {
+            test: /three-geojson-geometry/,
+            use: loaders.null(),
+          },
+          {
+            test: /three-conic-polygon-geometry/,
+            use: loaders.null(),
+          },
+        ],
+      },
+    })
+  }
+}
