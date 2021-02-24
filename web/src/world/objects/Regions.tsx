@@ -44,7 +44,7 @@ export default class Regions extends BaseObject {
     })
 
     const objLoader = new OBJLoader()
-    objLoader.load('/Globe_v4.obj', (object: any) => {
+    objLoader.load('/Globe_v5.obj', (object: any) => {
       console.log('children', object.children)
 
       object.traverse((child: any) => {
@@ -63,7 +63,7 @@ export default class Regions extends BaseObject {
       });
 
       object.scale.set(101, 101, 101)
-      // object.rotation.y = 1.1 * Math.PI
+      object.rotation.y = 1.1 * Math.PI
       that.object = object
       that.world.globe.scene().add(that.object)
       console.log('globe material', that.world.globe.globeMaterial())
