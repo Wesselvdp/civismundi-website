@@ -19,7 +19,7 @@ import { WorldVersion, WorldMode, MarkerSize } from '../../actions'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
-const World = ({ data, markers, width, height, layout, className }) => {
+const World = ({ data }) => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef()
@@ -27,7 +27,6 @@ const World = ({ data, markers, width, height, layout, className }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log('data', data);
       dispatch(initializeWorld(ref, data, location))
     }, 100)
   }, [isSSR])
@@ -40,7 +39,8 @@ const World = ({ data, markers, width, height, layout, className }) => {
             ref={ref}
             globeImageUrl="/earth-blue-marble-alt.jpg"
             bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-            backgroundColor="rgba(0,0,0,0)"
+            showAtmosphere={false}
+            backgroundColor="#000000"
             animateIn={false}
             renderConfig={{
               sortObjects: false,
@@ -48,8 +48,6 @@ const World = ({ data, markers, width, height, layout, className }) => {
               alpha: true,
             }}
             waitForGlobeReady={true}
-            width={width}
-            height={height}
           />
         </Wrapper>
       </React.Suspense>

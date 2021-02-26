@@ -27,6 +27,7 @@ export default class Regions extends BaseObject {
     // create video textures
     Object.values(VIDEO_MAP).forEach((obj: any) => {
       const video = document.createElement( 'video' );
+      video.setAttribute('playsinline', 'playsinline');
       video.src = `/videos/${obj.name}`
       video.autoplay = true;
       video.muted = true;

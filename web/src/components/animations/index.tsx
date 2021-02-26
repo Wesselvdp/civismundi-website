@@ -3,6 +3,7 @@ import RotateAnim from './Rotate'
 import TextAnim from './Text'
 import FadeListItem from './FadeListItem'
 import VerticalAnim from './Vertical'
-import TextImprov from './TextImproved' 
+import TextImprov from './TextImproved'
+import TextDecode from  './TextDecode'
 
-export { FadeAnim, RotateAnim, TextAnim, TextImprov, FadeListItem, VerticalAnim }
+export { FadeAnim, RotateAnim, TextAnim, TextImprov, FadeListItem, VerticalAnim, TextDecode }

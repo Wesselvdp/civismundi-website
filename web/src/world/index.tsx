@@ -3,6 +3,8 @@ type Ref = { current: any };
 import LoadingController from './controllers/LoadingController';
 import VersionController from './controllers/VersionController';
 import DataController from './controllers/DataController';
+import GlobeController from './controllers/GlobeController';
+import PostProcessingController from './controllers/PostProcessingController';
 
 import Clouds from './objects/Clouds';
 import Lightning from './objects/Lightning';
@@ -15,6 +17,7 @@ export default class World {
   private _loaderCtrl: LoadingController;
   private _versionCtrl: VersionController;
   private _dataCtrl: DataController;
+  private _globeCtrl: GlobeController;
 
   public globe: any;
   public dispatch: any;
@@ -25,6 +28,8 @@ export default class World {
   public regions?: Partial<tThreeObject>;
 
   constructor(reactGlobeRef: Ref, projects: tProject[], dispatch: any) {
+    if (!reactGlobeRef.current) return
+
     this.globe = reactGlobeRef.current;
     this.dispatch = dispatch;
 
@@ -32,10 +37,12 @@ export default class World {
     this._loaderCtrl = new LoadingController(this);
     this._versionCtrl = new VersionController(this);
     this._dataCtrl = new DataController(this, projects);
+    this._globeCtrl = new GlobeController(this);
+    new PostProcessingController(this);
 
     // threejs objects
     this.sphere = this.globe.scene().children[0];
-    // this.clouds = new Clouds(this);
+    this.clouds = new Clouds(this);
     this.lightning = new Lightning(this);
     this.regions = new Regions(this);
   }

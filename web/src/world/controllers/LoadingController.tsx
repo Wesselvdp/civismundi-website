@@ -6,7 +6,7 @@ import World from '..';
 import BaseController from './BaseController';
 import { SET_PROGRESS } from 'src/actions/types';
 
-const MIN_PROGRESS_TIME: number = 3000;
+const MIN_PROGRESS_TIME: number = 1000;
 
 export default class LoadingController extends BaseController {
   private _threeProgress: number = 0;

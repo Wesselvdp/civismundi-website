@@ -10,7 +10,7 @@ import ModalVideo from 'react-modal-video'
 import TWEEN from '@tweenjs/tween.js'
 
 import World from './World'
-import { TextImprov, FadeAnim } from '@components/animations'
+import { TextDecode, TextImprov, FadeAnim } from '@components/animations'
 import { Button, Quote, ProjectSlider } from '@components/general'
 import { breakpoints } from '@utils/breakpoints'
 import { getVideoId } from '../../utils'
@@ -28,8 +28,7 @@ import Galaxy from './Galaxy'
 // import console = require('console');
 
 const INTRO_TEXT = `
-  A collective of interdisciplinary creatives whose collaborative
-  practice seeks to navigate the confluence of film, music, design and fashion`
+  A DIVERSE GROUP OF HUMANS WHO TELL STORIES, WRITE FILMS, DEVELOP SHOWS, DESIGN THINGS, SUPPORT  THE ARTS & CREATE MEMORIES`
 
 export enum DetailedState {
   LOADING = 1,
@@ -40,6 +39,8 @@ export enum DetailedState {
 }
 
 const WorldContainer = ({ layout, location, isScrolling }) => {
+  const world = useSelector(state => state.world)
+
   // Projects
   const data = useStaticQuery(graphql`
     query HeaderQuery {
@@ -103,11 +104,34 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   `)
 
   return (
-    <World width={1000} height={1000} data={data} />
+    <>
+      <World data={data} />
+      {/* {world.ready && (
+        <Copy>
+          <TextDecode tag="h2" text={INTRO_TEXT}></TextDecode>
+        </Copy>
+      )} */}
+    </>
   )
 }
 
 export default WorldContainer
+
+const Copy = styled.div`
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    max-width: 840px;
+    margin: 0 auto;
+  }
+`
 
 const svgAnim = keyframes`
   0% {

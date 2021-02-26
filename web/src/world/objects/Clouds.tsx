@@ -15,7 +15,6 @@ export default class Clouds extends BaseObject {
   constructor(world: World) {
     super(world);
 
-    console.log('version', this.world.getVersion())
     this.setRotationFromVersion(this.world.getVersion());
     this.init();
   }
