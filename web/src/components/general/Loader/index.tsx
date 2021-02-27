@@ -86,7 +86,7 @@ const Loader = () => {
               <circle
                 ref={ring}
                 className="progress-ring__circle"
-                stroke="rgba(0, 0, 0, 1)"
+                stroke="rgba(255, 255, 255, 1)"
                 strokeWidth="1"
                 fill="transparent"
                 r={CIRCLE_SIZE - 2}
@@ -96,7 +96,7 @@ const Loader = () => {
               <circle
                 ref={finalRing}
                 className="progress-ring__circle"
-                stroke="rgba(0, 0, 0, 1)"
+                stroke="rgba(255, 255, 255, 1)"
                 strokeWidth="2"
                 fill="transparent"
                 r={CIRCLE_SIZE - 2}
@@ -123,17 +123,16 @@ const Container = styled.div`
   right: 0;
   bottom: 0;
   z-index: 10000000;
-  background-color: rgb(248,248,255);
+  background-color: rgb(0, 0, 0);
   opacity: 1;
-  transition: all 0s ease-in-out;
+  transition: all 1s ease-in-out;
   pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translate(0, 0);
 
   &.hidden {
-    transform: translate(0, -100%);
+    opacity: 0;
   }
 
   .hidden {
@@ -141,8 +140,8 @@ const Container = styled.div`
   }
 
   p {
-    color: rgba(0, 0, 0, 1);
-    // color: rgba(255, 255, 255, 1);
+    // color: rgba(0, 0, 0, 1);
+    color: rgba(255, 255, 255, 1);
   }
 
   .lottie-wrapper {

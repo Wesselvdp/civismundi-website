@@ -106,6 +106,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   return (
     <>
       <World data={data} />
+      <Galaxy show={true} />
       {/* {world.ready && (
         <Copy>
           <TextDecode tag="h2" text={INTRO_TEXT}></TextDecode>

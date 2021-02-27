@@ -19,10 +19,10 @@ const Navigation: FC<T> = ({ location }) => {
       <Nav>
         {/* Left */}
         <div className="item item--left">
-          <Link to="/projects" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/projects' ? 'active' : ''}>
+          {/* <Link to="/projects" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/projects' ? 'active' : ''}>
             <span className="desktop">All projects</span>
             <span className="mobile">Work</span>
-          </Link>
+          </Link> */}
         </div>
 
         {/* Center logo */}
@@ -32,9 +32,9 @@ const Navigation: FC<T> = ({ location }) => {
 
         {/* Right */}
         <div className="item item--right">
-          <Link to="/about" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/about' ? 'active' : ''}>
+          {/* <Link to="/about" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/about' ? 'active' : ''}>
             <span>About</span>
-          </Link>
+          </Link> */}
         </div>
       </Nav>
     </Container>

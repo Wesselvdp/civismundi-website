@@ -44,10 +44,8 @@ export default class Regions extends BaseObject {
       obj.material = material
     })
 
-    const objLoader = new OBJLoader()
+    const objLoader = new OBJLoader(THREE.DefaultLoadingManager)
     objLoader.load('/Globe_v5.obj', (object: any) => {
-      console.log('children', object.children)
-
       object.traverse((child: any) => {
         if (child instanceof THREE.Mesh) {
           if (child.name === 'Globe_Mesh.001') {
@@ -67,7 +65,6 @@ export default class Regions extends BaseObject {
       object.rotation.y = 1.1 * Math.PI
       that.object = object
       that.world.globe.scene().add(that.object)
-      console.log('globe material', that.world.globe.globeMaterial())
     })
   }
 }

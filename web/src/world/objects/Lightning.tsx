@@ -28,7 +28,7 @@ export default class Lightning extends BaseObject {
         .children.find((obj3d: any) => obj3d.type === 'DirectionalLight')
 
       directionalLight.position.copy(this.world.globe.camera().position)
-      directionalLight.intensity = 0.4
+      directionalLight.intensity = 0.6
 
       this.object = directionalLight;
       this.world.globe.scene().add(this.object);

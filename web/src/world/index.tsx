@@ -22,7 +22,7 @@ export default class World {
   public globe: any;
   public dispatch: any;
 
-  public sphere: tThreeObject;
+  public sphere: Partial<tThreeObject>;
   public clouds?: Partial<tThreeObject>;
   public lightning?: Partial<tThreeObject>;
   public regions?: Partial<tThreeObject>;
@@ -37,14 +37,15 @@ export default class World {
     this._loaderCtrl = new LoadingController(this);
     this._versionCtrl = new VersionController(this);
     this._dataCtrl = new DataController(this, projects);
-    this._globeCtrl = new GlobeController(this);
-    new PostProcessingController(this);
 
     // threejs objects
     this.sphere = this.globe.scene().children[0];
+    this.regions = new Regions(this);
     this.clouds = new Clouds(this);
     this.lightning = new Lightning(this);
-    this.regions = new Regions(this);
+
+    this._globeCtrl = new GlobeController(this);
+    new PostProcessingController(this);
   }
 
   setVersion() {

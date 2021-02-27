@@ -6,7 +6,7 @@ import World from '..';
 import BaseController from './BaseController';
 import { SET_PROGRESS } from 'src/actions/types';
 
-const MIN_PROGRESS_TIME: number = 1000;
+const MIN_PROGRESS_TIME: number = 4000;
 
 export default class LoadingController extends BaseController {
   private _threeProgress: number = 0;
@@ -27,6 +27,7 @@ export default class LoadingController extends BaseController {
     const that = this;
     THREE.DefaultLoadingManager.onProgress = debounce(
       (url, itemsLoaded, itemsTotal) => {
+        console.log('progress', itemsLoaded, itemsTotal)
         that.threeProgress = itemsLoaded / itemsTotal
       },
       50,
