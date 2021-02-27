@@ -1,5 +1,4 @@
 import World from '..';
-import BaseController from './BaseController';
 import { SET_VERSION } from 'src/actions/types';
 
 export enum Version {
@@ -7,11 +6,13 @@ export enum Version {
   DESKTOP,
 }
 
-export default class VersionController extends BaseController {
+export default class VersionController  {
   private _version: Version = Version.DESKTOP;
 
+  world: World;
+
   constructor(world: World) {
-    super(world);
+    this.world = world;
 
     this.init();
   }

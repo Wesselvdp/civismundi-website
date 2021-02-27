@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 import BaseObject from './BaseObject';
-import { Version } from '../controllers/VersionController';
+import { Version } from '../controllers/Version';
 import World from '..';
 
 type TRotation = {
@@ -15,7 +15,7 @@ export default class Clouds extends BaseObject {
   constructor(world: World) {
     super(world);
 
-    this.setRotationFromVersion(this.world.getVersion());
+    this.setRotationFromVersion(this.world.controller.version.version);
     this.init();
   }
 

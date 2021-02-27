@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import Lottie from 'react-lottie'
 import TWEEN from '@tweenjs/tween.js'
+import { Mode } from '@components/world/WorldContainer'
 
 import animationData from './lottie-globe.json'
 import { SET_READY } from '../../../actions/types'
@@ -28,6 +29,16 @@ const Loader = () => {
   const ringTween = useRef(null)
 
   const [pseudoProgress, setPseudoProgress] = useState(0)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!loading && !world.ready) {
+      setTimeout(() => {
+        dispatch({ type: SET_READY, ready: true })
+        world.world.controller.mode.setMode(Mode.EXPLORE)
+      }, 1000)
+    }
+  }, [loading])
 
   useEffect(() => {
     if (ringTween.current) ringTween.current.stop()
@@ -40,6 +51,10 @@ const Loader = () => {
       .easing(TWEEN.Easing.Cubic.InOut)
       .start(0)
   }, [world.progress])
+
+  useEffect(() => {
+    console.log('ready', world.ready)
+  }, [world.ready])
 
   useEffect(() => {
     ring.current.style.strokeDashoffset = CIRCUMFERENCE - pseudoProgress * CIRCUMFERENCE
@@ -61,14 +76,14 @@ const Loader = () => {
         finalRing.current.style.strokeDashoffset = offset
       })
       .onComplete(() => {
-        dispatch({ type: SET_READY, ready: true })
+          setLoading(false)
       })
       .easing(TWEEN.Easing.Cubic.InOut)
       .start()
   }
 
   return (
-    <Container className={world.ready ? 'hidden' : ''}>
+    <Container className={!loading ? 'hidden' : ''}>
         <div>
           <div className="lottie-wrapper">
             <Lottie

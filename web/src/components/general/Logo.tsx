@@ -18,23 +18,19 @@ const Logo: FC<T> = () => {
   const world = useSelector(state => state.world)
 
   useEffect(() => {
-    if (!world.loading && ref.current) {
-      let timeout;
+    if (world.ready) {
+      ref.current.play()
 
-      // ref.current.addEventListener('loadstart', () => { timeout = setTimeout(() => setHideVideo(true), 1000)})
-      ref.current.addEventListener('play', () => { timeout && clearTimeout(timeout) })
       ref.current.addEventListener('ended', () => setHideVideo(true))
       ref.current.addEventListener('error', () => setHideVideo(true))
     }
-  }, [world.loading])
-
-  if (world.loading) return null
+  }, [world.ready])
 
   return (
     <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
       <Container>
         <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
-        <video ref={ref} className={hideVideo ? 'hidden' : ''} playsInline autoPlay muted>
+        <video ref={ref} className={hideVideo ? 'hidden' : ''} playsInline muted>
           <source src="/cm-logo-3-1.mov" type="video/quicktime" />
           <source src="/logo4.webm" type="video/webm" />
         </video>

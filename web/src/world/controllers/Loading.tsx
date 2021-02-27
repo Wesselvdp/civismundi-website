@@ -3,20 +3,20 @@ import TWEEN from '@tweenjs/tween.js'
 import { debounce } from 'lodash'
 
 import World from '..';
-import BaseController from './BaseController';
 import { SET_PROGRESS } from 'src/actions/types';
 
-const MIN_PROGRESS_TIME: number = 4000;
+const MIN_PROGRESS_TIME: number = 1000;
 
-export default class LoadingController extends BaseController {
+export default class LoadingController {
   private _threeProgress: number = 0;
   private _minProgress: number = 0;
 
+  world: World;
   progress: number = 0;
   ready: boolean = false;
 
   constructor(world: World) {
-    super(world);
+    this.world = world;
 
     this.init();
   }

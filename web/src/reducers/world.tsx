@@ -1,9 +1,11 @@
-import { WORLD_INITIALIZE_COMPLETE, SET_PROGRESS, SET_READY, SET_VERSION } from '../actions/types'
+import { WORLD_INITIALIZE_COMPLETE, SET_PROGRESS, SET_READY, SET_VERSION, SET_MODE } from '../actions/types'
+import { Mode } from '@components/world/WorldContainer'
 
 const initialState = {
   world: {},
   progress: 0,
-  ready: false
+  ready: false,
+  mode: Mode.LOADING
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -22,6 +24,10 @@ const reducer = (state = initialState, action: any) => {
 
     case SET_VERSION: {
       return { ...state, version: action.version };
+    }
+
+    case SET_MODE: {
+      return { ...state, mode: action.mode }
     }
 
     default:
