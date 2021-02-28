@@ -61,6 +61,7 @@
     "react-use-measure": "^2.0.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "smooth-scrolling": "^2.3.12",
     "styled-components": "^5.1.1",
     "swiper": "^6.3.3",
     "three": "^0.118.3",
