@@ -151,6 +151,10 @@ const Home = styled.div`
     overflow: hidden;
   }
 
+  .home__content {
+    pointer-events: none;
+  }
+
   .section {
     .section__footer {
       position: absolute;
