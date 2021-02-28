@@ -10,16 +10,19 @@ type T = any
 
 const Layout: FC<T> = ({ children, pageContext, location }) => {
   const world = useSelector(state => state.world)
+  const isSSR = typeof document === 'undefined' 
 
   useEffect(() => {
-    const scroll = new Scroll({
-      native: true,
-      direction: 'vertical',
-      section: document.querySelector('.home__content'),
-    })
+    if (!isSSR) {
+      const scroll = new Scroll({
+        native: true,
+        direction: 'vertical',
+        section: document.querySelector('.home__content'),
+      })
 
-    scroll.init()
-  }, [])
+      scroll.init()
+    }
+  }, [isSSR])
 
   return (
     <>

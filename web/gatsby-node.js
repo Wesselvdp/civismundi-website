@@ -151,6 +151,10 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
             test: /three-conic-polygon-geometry/,
             use: loaders.null(),
           },
+          {
+            test: /smooth-scrolling/,
+            use: loaders.null()
+          }
         ],
       },
     })
