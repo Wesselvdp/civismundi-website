@@ -16,8 +16,8 @@ export default class PostProcessingController {
     const composer = this.world.globe.postProcessingComposer()
 
     // - Filmgrain pass
-    // const filmgrainPass = new FilmgrainPass()
-    // filmgrainPass.pass.renderToScreen = true
-    // composer.addPass(filmgrainPass.pass)
+    const filmgrainPass = new FilmgrainPass()
+    filmgrainPass.pass.renderToScreen = true
+    composer.addPass(filmgrainPass.pass)
   }
 }

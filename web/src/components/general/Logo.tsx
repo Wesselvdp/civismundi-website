@@ -27,7 +27,7 @@ const Logo: FC<T> = () => {
   }, [world.ready])
 
   return (
-    <Link to="/" onClick={() => dispatch(setWorldMode(WorldMode.PROJECTS_EXPLORE))}>
+    <Link to="/">
       <Container>
         <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
         <video ref={ref} className={hideVideo ? 'hidden' : ''} playsInline muted>
@@ -44,7 +44,7 @@ const Container = styled.div`
     margin-top: -15px;
     height: 75px;
     width: 245px;
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);

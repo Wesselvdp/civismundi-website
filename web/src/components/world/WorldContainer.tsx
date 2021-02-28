@@ -5,7 +5,6 @@ import { useStaticQuery, graphql } from 'gatsby'
 import Div100vh from 'react-div-100vh'
 
 import World from './World'
-import Galaxy from './Galaxy'
 
 export enum Mode {
   LOADING,
@@ -79,43 +78,44 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   `)
 
   return (
-    <Div100vh>
-      <Home>
-        <div className="home__globe">
-          <World data={data} />
-        </div>
+    <Home>
+      <div className="home__globe">
+        <World data={data} />
+      </div>
 
-        <Galaxy show={true} />
-
-        <div className={`home__content`}>
-          <div className={`home__content--centered fade ${world.mode === Mode.CONTENT ? 'visible' : ''}`}>
-            <h2>
-              A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
-              <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
-              <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
-              <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
-            </h2>
-            <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
-          </div>
-          <div className={`home__content--footer ${world.mode === Mode.EXPLORE ? 'visible' : ''}`}>
-            <div className={`fade ${world.mode === Mode.CONTENT ? 'visible' : ''}`}>
-              <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
-            </div>
-            <div className={`fade ${world.mode === Mode.EXPLORE ? 'visible' : ''}`}>
-              <div className="scroll-indicator" onClick={() => world.world.controller.mode.setMode(Mode.CONTENT)}>
-                <div>
-                  <img src="/arrow-down.svg" />
-                </div>
+      <div className="section section--one">
+        <div className="section__footer">
+          <div>
+            <div className="scroll-indicator" onClick={() => world.world.controller.mode.setMode(Mode.CONTENT)}>
+              <div>
+                <img src="/arrow-down.svg" />
               </div>
-              <p>MORE TO COME... WORKING ON BEING BETTER</p>
             </div>
-            <div className={`fade ${world.mode === Mode.CONTENT ? 'visible' : ''}`}>
-              <p>HELLO@CIVISMUNDI.WORLD &middot; INSTAGRAM</p>
-            </div>
+            <p>MORE TO COME... WORKING ON BEING BETTER</p>
           </div>
         </div>
-      </Home>
-    </Div100vh>
+      </div>
+
+      <div className="section section--two">
+        <div className="section__title">
+          <h2>
+            A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
+            <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
+            <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
+            <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
+          </h2>
+          <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
+        </div>
+        <div className="section__footer">
+          <div>
+            <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
+          </div>
+          <div>
+            <p>HELLO@CIVISMUNDI.WORLD &middot; INSTAGRAM</p>
+          </div>
+        </div>
+      </div>
+    </Home>
   )
 }
 
@@ -132,47 +132,27 @@ const scrollAnim = keyframes`
 const Home = styled.div`
   height: 100%;
 
+  .section {
+    position: relative;
+    height: 100vh;
+    pointer-events: none;
+  }
+
   .home__globe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
     height: 100%;
     width: 100%;
     outline: 0;
     overflow: hidden;
   }
 
-  .fade {
-    opacity: 0;
-    transition: opacity 1s ease-out;
-
-    &.visible {
-      opacity: 1;
-    }
-  }
-
-  .home__content {
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    text-align: left;
-
-    &--centered {
-      max-width: 1450px;
-      margin: 0 auto;
-      padding: 0 15px;
-
-      p {
-        font-size: 26px;
-      }
-    }
-
-    &--footer {
+  .section {
+    .section__footer {
       position: absolute;
       left: 0;
       right: 0;
@@ -180,49 +160,60 @@ const Home = styled.div`
       bottom: 15px;
       width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: flex-end;
 
       p {
         font-size: 14px;
         margin: 0;
       }
+    }
+  }
 
-      & > div {
-        width: 33.33%;
+  .section--one {
+    .section__footer {
+      justify-content: center;
+    }
+  }
 
-        &:nth-child(2) {
-          text-align: center;
-        }
+  .section--two {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+  }
 
-        &:nth-child(3) {
-          text-align: right;
-        }
-      }
+  .section__title {
+    h2 {
+      font-size: 3.5vw;
+    }
 
-      .scroll-indicator {
-        pointer-events: initial;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: 1px solid grey;
-        position: relative;
-        display: inline-block;
-        margin-bottom: 10px;
-        cursor: pointer;
+    p {
+      font-size: 1.6vw;
+    }
+  }
 
-        & > div {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -25%);
+  .scroll-indicator {
+    pointer-events: initial;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid grey;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
+    cursor: pointer;
 
-          img {
-            width: 14px;
-            height: auto;
-            animation: ${scrollAnim} 1.7s infinite ease;
-          }
-        }
+    & > div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -25%);
+
+      img {
+        width: 14px;
+        height: auto;
+        animation: ${scrollAnim} 1.7s infinite ease;
       }
     }
   }

@@ -11,8 +11,10 @@ body {
   margin: 0;
   font-family: $font-family;
   text-align: center;
+
   * {
     box-sizing: border-box;
+    outline: 0;
   }
 }
 

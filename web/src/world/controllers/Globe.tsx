@@ -13,6 +13,7 @@ export default class GlobeController {
     const globe = this.world.globe;
 
     globe.controls().enableZoom = false;
+    globe.controls().autoRotate = true
     globe.controls().autoRotateSpeed = 0.3
 
     globe.camera().aspect = window.innerWidth / window.innerHeight
@@ -21,6 +22,8 @@ export default class GlobeController {
     globe.renderer().setSize( window.innerWidth, window.innerHeight );
 
     globe.globeMaterial().opacity = 0
+    globe.renderer().setClearColor( 0x000000, 0 );
+    globe.scene().background = null
 
     const that = this
     globe.controls().addEventListener('change', () => {

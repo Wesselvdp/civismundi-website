@@ -14,14 +14,16 @@ const World = ({ data }) => {
 
   const ref = useRef()
   const dispatch = useDispatch()
+  const [toggle, setToggle] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(initializeWorld(ref, data, location))
-    }, 100)
+    if (!ref.current) {
+      setTimeout(() => setToggle(!toggle), 100)
+      return
+    }
 
-    window.addEventListener('scroll', () => console.log('scrolling!'))
-  }, [isSSR])
+    dispatch(initializeWorld(ref, data, location))
+  }, [toggle])
 
   return (
     !isSSR && (
@@ -31,8 +33,8 @@ const World = ({ data }) => {
           globeImageUrl="/earth-blue-marble-alt.jpg"
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           showAtmosphere={false}
-          backgroundColor="#000000"
           animateIn={false}
+          backgroundColor="#000000"
           renderConfig={{
             sortObjects: false,
             antialias: true,
