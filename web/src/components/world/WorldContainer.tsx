@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
-
 import World from './World'
 import Galaxy from './Galaxy'
+import Div100vh from 'react-div-100vh'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -85,7 +85,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         <World data={data} />
         <Galaxy show={true} />
       </div>
-      <div className="home__content">
+      {/* <div className="home__content">
         <div className="section section--one">
           <div className="section__footer">
             <div>
@@ -97,28 +97,31 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
               <p>MORE TO COME... WORKING ON BEING BETTER</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="section section--two">
-          <div className="section__title">
-            <h2>
-              A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
-              <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
-              <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
-              <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
-            </h2>
-            <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
-          </div>
-          <div className="section__footer">
-            <div>
-              <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
+        <Div100vh>
+          <div className="section section--two">
+            <div className="section__title">
+              <h2>
+                A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
+                <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
+                <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
+                <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
+              </h2>
+              <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
             </div>
-            <div>
-              <p>HELLO@CIVISMUNDI.WORLD &middot; INSTAGRAM</p>
+            <div className="section__footer">
+              <div>
+                <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
+              </div>
+              <div>
+                <p>
+                  <a target="_blank" href="mailto: hello@civismundi.world">HELLO@CIVISMUNDI.WORLD</a> &middot; <a target="_blank" href="https://www.instagram.com">INSTAGRAM</a>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Div100vh>
     </Home>
   )
 }
@@ -170,6 +173,7 @@ const Home = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      pointer-events: initial;
 
       p {
         font-size: 14px;
@@ -187,7 +191,6 @@ const Home = styled.div`
   }
 
   .section--two {
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -207,6 +210,13 @@ const Home = styled.div`
 
           &:last-child {
             order: 1;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+            margin-bottom: 5px;
+
+            p, a {
+              font-size: 18px;
+            }
           }
         }
       }
