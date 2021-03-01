@@ -206,6 +206,10 @@ const Home = styled.div`
 
           &:first-child {
             order: 2;
+
+            p {
+              font-size: 14px;
+            }
           }
 
           &:last-child {
@@ -215,7 +219,7 @@ const Home = styled.div`
             margin-bottom: 5px;
 
             p, a {
-              font-size: 18px;
+              font-size: 16px;
             }
           }
         }
