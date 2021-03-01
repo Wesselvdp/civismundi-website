@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 
 import World from './World'
+import Galaxy from './Galaxy'
+
 import { breakpoints } from '@utils/breakpoints'
 
 export enum Mode {
@@ -81,6 +83,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
     <Home className="home">
       <div className="home__globe">
         <World data={data} />
+        <Galaxy show={true} />
       </div>
       <div className="home__content">
         <div className="section section--one">
