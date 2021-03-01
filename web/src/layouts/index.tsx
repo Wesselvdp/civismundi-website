@@ -13,15 +13,15 @@ const Layout: FC<T> = ({ children, pageContext, location }) => {
   const isSSR = typeof document === 'undefined' 
 
   useEffect(() => {
-    if (!isSSR) {
-      const scroll = new Scroll({
-        native: true,
-        direction: 'vertical',
-        section: document.querySelector('.home__content'),
-      })
+    // if (!isSSR) {
+    //   const scroll = new Scroll({
+    //     native: true,
+    //     direction: 'vertical',
+    //     section: document.querySelector('.home__content'),
+    //   })
 
-      scroll.init()
-    }
+    //   scroll.init()
+    // }
   }, [isSSR])
 
   return (
@@ -55,13 +55,13 @@ const Main = styled.main`
 const WorldWrapper = styled.div`
   opacity: 1;
   transition: opacity 0.5s ease;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  font-size: 0;
+  // position: fixed;
+  // width: 100%;
+  // height: 100%;
+  // top: 0;
+  // left: 0;
+  // bottom: 0;
+  // font-size: 0;
 
   &.fading {
     opacity: 0;

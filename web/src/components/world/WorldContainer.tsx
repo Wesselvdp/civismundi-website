@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 
 import World from './World'
+import { breakpoints } from '@utils/breakpoints'
 
 export enum Mode {
   LOADING,
@@ -188,6 +189,25 @@ const Home = styled.div`
     justify-content: center;
     align-items: center;
     text-align: left;
+
+    @media ${breakpoints.phoneOnly} {
+      .section__footer {
+        flex-wrap: wrap;
+        text-align: center;
+
+        & > div {
+          width: 100%;
+
+          &:first-child {
+            order: 2;
+          }
+
+          &:last-child {
+            order: 1;
+          }
+        }
+      }
+    }
   }
 
   .section__title {
