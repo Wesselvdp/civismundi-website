@@ -127,6 +127,10 @@ export default class PostProcessingController {
     // gui.close();
 
     function frame(time: number) {
+      if (staticPass.uniforms['time'].value > 60 * 0.1 * 2) {
+        staticPass.uniforms['time'].value = 0
+      }
+
       staticPass.uniforms['time'].value += 0.1
 
       window.requestAnimationFrame(frame);
