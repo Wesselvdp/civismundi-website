@@ -2,6 +2,7 @@ import World from '..';
 import { Mode } from '@components/world/WorldContainer'
 
 const calculateCameraZ = () => {
+  console.log('window.innerWidth', window.innerWidth)
   const base = 350
   if (window.innerWidth > 760) return base
 
@@ -56,8 +57,10 @@ export default class GlobeController {
       that.world.globe.camera().aspect = window.innerWidth / window.innerHeight
       that.world.globe.camera().updateProjectionMatrix()
       that.world.globe.renderer().setSize(window.innerWidth, window.innerHeight)
-      globe.camera().position.z = calculateCameraZ()
+      that.world.globe.camera().position.setLength(calculateCameraZ())
     })
+
+    globe.camera().position.setLength(calculateCameraZ())
   }
 
   public setGlobeOpacity(value: number) {

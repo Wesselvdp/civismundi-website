@@ -86,7 +86,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         <Galaxy show={true} />
       </div>
       <div className="home__content">
-        {/* <div className="section section--one">
+        <div className="section section--one">
           <div className="section__footer">
             <div>
               <div className="scroll-indicator" onClick={() => world.world.controller.mode.setMode(Mode.CONTENT)}>
@@ -97,7 +97,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
               <p>MORE TO COME... WORKING ON BEING BETTER</p>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <div className="section section--two">
           <div className="section__title">
@@ -220,6 +220,22 @@ const Home = styled.div`
 
     p {
       font-size: 1.6vw;
+    }
+
+    @media ${breakpoints.phoneOnly} {
+      padding: 0 15px;
+
+      h2 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      br {
+        display: none;
+      }
     }
   }
 
