@@ -154,6 +154,10 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
           {
             test: /smooth-scrolling/,
             use: loaders.null()
+          },
+          {
+            test: /dat.gui/,
+            use: loaders.null()
           }
         ],
       },
