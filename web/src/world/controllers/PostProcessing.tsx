@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass.js'
 import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js';
 import * as dat from 'dat.gui';
 
@@ -44,8 +45,8 @@ const StaticShader = {
 
 		"tDiffuse": { type: "t", value: null },
 		"time":     { type: "f", value: 0.0 },
-		"amount":   { type: "f", value: 0.5 },
-		"size":     { type: "f", value: 4.0 }
+		"amount":   { type: "f", value: 0.15 },
+		"size":     { type: "f", value: 5.0 }
 	},
 
 	vertexShader: [
@@ -104,13 +105,18 @@ export default class PostProcessingController {
     // Create composer
     const composer = this.world.globe.postProcessingComposer()
 
+    // - Glitch effect
+    const glitchPass = new GlitchPass(64);
+    glitchPass.goWild = false
+    // glitchPass.renderToScreen = true;
+
     // - Filmgrain pass
     const staticPass = new ShaderPass( StaticShader );
     const copyPass = new ShaderPass( CopyShader );
 
     const staticParams = {
-      amount: 0.5,
-      size: 4.0
+      amount: 0.15,
+      size: 5.0
     };
 
     const gui = new dat.GUI();
@@ -120,6 +126,7 @@ export default class PostProcessingController {
     f4.open();
 
 
+    composer.addPass(glitchPass)
     composer.addPass(staticPass)
     composer.addPass(copyPass)
     copyPass.renderToScreen = true
