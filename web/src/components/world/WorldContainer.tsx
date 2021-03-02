@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
 import World from './World'
 import Galaxy from './Galaxy'
 import Div100vh from 'react-div-100vh'
+import TWEEN from '@tweenjs/tween.js'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -16,6 +17,7 @@ export enum Mode {
 
 const WorldContainer = ({ layout, location, isScrolling }) => {
   const world = useSelector(state => state.world)
+  const [showText, setShowText] = useState(false)
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -79,6 +81,24 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
     }
   `)
 
+  useEffect(() => {
+    if (world.ready) {
+      new TWEEN.Tween({ amount: 0.0 })
+        .to({ amount: 0.15 }, 2000)
+        .onUpdate((d) => {
+          world.world.controller.postprocessing.staticPass.uniforms['amount'].value = d.amount
+        })
+        .start()
+
+
+      setTimeout(() => {
+        world.world.controller.postprocessing.glitchPass.enabled = false
+
+        setShowText(true)
+      }, 1000)
+    }
+  }, [world.ready])
+
   return (
     <Home className="home">
       <div className="home__globe">
@@ -100,7 +120,7 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         </div> */}
 
         <Div100vh>
-          <div className="section section--two">
+          <div className="section section--two" style={{ opacity: `${showText ? 1 : 0}`}}>
             <div className="section__title">
               <h2>
                 A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
@@ -143,6 +163,7 @@ const Home = styled.div`
     position: relative;
     height: 100%;
     pointer-events: none;
+    transition: all 1s ease-in;
   }
 
   .home__globe {
