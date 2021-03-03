@@ -7,6 +7,7 @@ import Galaxy from './Galaxy'
 import Div100vh from 'react-div-100vh'
 import TWEEN from '@tweenjs/tween.js'
 import * as THREE from 'three'
+import { throttle } from 'lodash'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -102,19 +103,16 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         interactionTimer.current = Date.now()
       })
 
-      world.world.globe.controls().addEventListener('change', () => {
+      world.world.globe.controls().addEventListener('end', () => {
         if (interactionTimer.current) {
           const elapsed = Date.now() - interactionTimer.current
 
           if (elapsed > 150) {
             setShowText(false)
-            interactionTimer.current = null
           }
-        }
-      })
 
-      world.world.globe.controls().addEventListener('end', () => {
-        interactionTimer.current = null
+          interactionTimer.current = null
+        }
       })
     }
   }, [world.ready])
