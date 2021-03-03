@@ -272,7 +272,7 @@ const Home = styled.div`
                 order: 2;
 
                 p {
-                  font-size: 14px;
+                  font-size: 9px;
                 }
               }
 
@@ -283,7 +283,7 @@ const Home = styled.div`
                 margin-bottom: 5px;
 
                 p, a {
-                  font-size: 16px;
+                  font-size: 12px;
                 }
               }
             }
