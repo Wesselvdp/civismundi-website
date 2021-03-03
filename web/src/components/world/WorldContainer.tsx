@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { useStaticQuery, graphql } from 'gatsby'
@@ -19,6 +19,8 @@ export enum Mode {
 const WorldContainer = ({ layout, location, isScrolling }) => {
   const world = useSelector(state => state.world)
   const [showText, setShowText] = useState(false)
+  const [finishedGlitch, setFinishedGlitch] = useState(false)
+  const interactionTimer = useRef(0)
 
   // Projects
   const data = useStaticQuery(graphql`
@@ -87,13 +89,33 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       setTimeout(() => {
         world.world.controller.postprocessing.glitchPass.goWild = false
         world.world.controller.postprocessing.staticPass.uniforms['amount'].value = 0.10
-        setShowText(true)
+        setFinishedGlitch(true)
 
         setTimeout(() => {
           world.world.controller.postprocessing.glitchPass.range = [540, 660]
           world.world.controller.postprocessing.glitchPass.generateTrigger()
         }, 10000)
       }, 1000)
+
+      // Add listener
+      world.world.globe.controls().addEventListener('start', () => {
+        interactionTimer.current = Date.now()
+      })
+
+      world.world.globe.controls().addEventListener('change', () => {
+        if (interactionTimer.current) {
+          const elapsed = Date.now() - interactionTimer.current
+
+          if (elapsed > 150) {
+            setShowText(false)
+            interactionTimer.current = null
+          }
+        }
+      })
+
+      world.world.globe.controls().addEventListener('end', () => {
+        interactionTimer.current = null
+      })
     }
   }, [world.ready])
 
@@ -103,32 +125,31 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
         <World data={data} />
         <Galaxy show={true} />
       </div>
-      {/* <div className="home__content">
-        <div className="section section--one">
-          <div className="section__footer">
-            <div>
-              <div className="scroll-indicator" onClick={() => world.world.controller.mode.setMode(Mode.CONTENT)}>
-                <div>
-                  <img src="/arrow-down.svg" />
-                </div>
-              </div>
-              <p>MORE TO COME... WORKING ON BEING BETTER</p>
-            </div>
-          </div>
-        </div> */}
 
-        <Div100vh>
-          <div className="section section--two" style={{ opacity: `${showText ? 1 : 0}`}}>
-            <div className="section__title">
-              <h2>
-                A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
-                <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
-                <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
-                <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
-              </h2>
-              <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
+      <Div100vh>
+        <div className="section">
+          <div className="section__title" style={{ opacity: `${showText ? 1 : 0}`}}>
+            <h2>
+              A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
+              <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
+              <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
+              <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
+            </h2>
+            <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
+          </div>
+          <div className="section__footer">
+            <div className={`${showText || !finishedGlitch ? 'fade' : 'fade in'}`}>
+              <div className="scroll-container">
+                <div className="scroll-indicator" onClick={() => setShowText(true) }>
+                  <div>
+                    <img src="/arrow-down.svg" />
+                  </div>
+                </div>
+                <p>MORE TO COME... WORKING ON BEING BETTER</p>
+              </div>
             </div>
-            <div className="section__footer">
+
+            <div className={`${showText ? 'fade in' : 'fade'}`}>
               <div>
                 <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
               </div>
@@ -139,7 +160,8 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
               </div>
             </div>
           </div>
-        </Div100vh>
+        </div>
+      </Div100vh>
     </Home>
   )
 }
@@ -156,13 +178,6 @@ const scrollAnim = keyframes`
 
 const Home = styled.div`
   height: 100%;
-
-  .section {
-    position: relative;
-    height: 100%;
-    pointer-events: none;
-    transition: all 1s ease-in;
-  }
 
   .home__globe {
     position: fixed;
@@ -182,6 +197,14 @@ const Home = styled.div`
   }
 
   .section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    position: relative;
+    height: 100%;
+    pointer-events: none;
+
     .section__footer {
       position: absolute;
       left: 0;
@@ -189,10 +212,80 @@ const Home = styled.div`
       padding: 0 15px;
       bottom: 15px;
       width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
       pointer-events: initial;
+
+      & > div {
+        display: flex;
+        align-items: flex-end;
+
+        &:first-child {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100%;
+          justify-content: center;
+          text-align: center;
+          transition: all 4s;
+
+          &.fade {
+            opacity: 0;
+            transition: all 1.2s;
+
+            &.in {
+              opacity: 1;
+              transition: all 4s;
+            }
+          }
+        }
+
+        &:last-child {
+          justify-content: space-between;
+
+          &.fade {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s;
+
+            &.in {
+              opacity: 1;
+              transition: opacity 2s;
+              pointer-events: initial;
+            }
+          }
+
+
+          @media ${breakpoints.phoneOnly} {
+            flex-wrap: wrap;
+            text-align: center;
+
+            & > div {
+              width: 100%;
+
+              &:first-child {
+                order: 2;
+
+                p {
+                  font-size: 14px;
+                }
+              }
+
+              &:last-child {
+                order: 1;
+                padding-bottom: 5px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+                margin-bottom: 5px;
+
+                p, a {
+                  font-size: 16px;
+                }
+              }
+            }
+          }
+        }
+      }
 
       p {
         font-size: 14px;
@@ -201,52 +294,9 @@ const Home = styled.div`
     }
   }
 
-  .section--one {
-    height: 100vh;
-
-    .section__footer {
-      justify-content: center;
-    }
-  }
-
-  .section--two {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: left;
-
-    @media ${breakpoints.phoneOnly} {
-      .section__footer {
-        flex-wrap: wrap;
-        text-align: center;
-
-        & > div {
-          width: 100%;
-
-          &:first-child {
-            order: 2;
-
-            p {
-              font-size: 14px;
-            }
-          }
-
-          &:last-child {
-            order: 1;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.85);
-            margin-bottom: 5px;
-
-            p, a {
-              font-size: 16px;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .section__title {
+    transition: all 1.2s;
+
     h2 {
       font-size: 3.5vw;
     }
@@ -272,6 +322,19 @@ const Home = styled.div`
     }
   }
 
+  .scroll-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    max-width: 315px;
+    flex-wrap: wrap;
+
+    p {
+      margin-top: 10px !important;
+    }
+  }
+
   .scroll-indicator {
     pointer-events: initial;
     width: 36px;
@@ -279,8 +342,7 @@ const Home = styled.div`
     border-radius: 50%;
     border: 1px solid grey;
     position: relative;
-    display: inline-block;
-    margin-bottom: 10px;
+    display: block;
     cursor: pointer;
 
     & > div {

@@ -89,7 +89,7 @@ export default class PostProcessingController {
     composer.addPass(copyPass)
 
     // - GUI
-    // this.addGUI()
+    this.addGUI()
 
     // this.staticPass.uniforms['amount'].value = 0.15
 
@@ -118,18 +118,18 @@ export default class PostProcessingController {
     f1.add(staticParams, 'size', 1.0, 100.0).step(1.0).onChange(onParamsChange)
     f1.open()
 
-    const f2 = gui.addFolder('Glitch');
-    const glitchParams = {
-      byp: 0.0
-    }
-    f2.add(glitchParams, 'byp', 0.0, 1.0).step(0.1).onChange(onParamsChange)
-    f2.open()
+    // const f2 = gui.addFolder('Glitch');
+    // const glitchParams = {
+    //   byp: 0.0
+    // }
+    // f2.add(glitchParams, 'byp', 0.0, 1.0).step(0.1).onChange(onParamsChange)
+    // f2.open()
 
     const that = this
     function onParamsChange() {
       that.staticPass.uniforms['amount'].value = staticParams.amount;
       that.staticPass.uniforms['size'].value = staticParams.size;
-      that.glitchPass.uniforms['byp'].value = glitchParams.byp;
+      // that.glitchPass.uniforms['byp'].value = glitchParams.byp;
     }
   }
 }
