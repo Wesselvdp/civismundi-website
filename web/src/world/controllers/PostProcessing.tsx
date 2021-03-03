@@ -13,7 +13,7 @@ const StaticShader = {
 		"tDiffuse": { type: "t", value: null },
 		"time":     { type: "f", value: 0.0 },
 		"amount":   { type: "f", value: 0.15 },
-		"size":     { type: "f", value: 5.0 }
+		"size":     { type: "f", value: 3.0 }
 	},
 
 	vertexShader: [
@@ -91,7 +91,7 @@ export default class PostProcessingController {
     // - GUI
     this.addGUI()
 
-    this.staticPass.uniforms['amount'].value = 0.0;
+    // this.staticPass.uniforms['amount'].value = 0.15
 
     const that = this
     function frame() {

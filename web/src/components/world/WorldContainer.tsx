@@ -6,6 +6,7 @@ import World from './World'
 import Galaxy from './Galaxy'
 import Div100vh from 'react-div-100vh'
 import TWEEN from '@tweenjs/tween.js'
+import * as THREE from 'three'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -83,18 +84,15 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
 
   useEffect(() => {
     if (world.ready) {
-      new TWEEN.Tween({ amount: 0.0 })
-        .to({ amount: 0.15 }, 2000)
-        .onUpdate((d) => {
-          world.world.controller.postprocessing.staticPass.uniforms['amount'].value = d.amount
-        })
-        .start()
-
-
       setTimeout(() => {
-        world.world.controller.postprocessing.glitchPass.enabled = false
-
+        world.world.controller.postprocessing.glitchPass.goWild = false
+        world.world.controller.postprocessing.staticPass.uniforms['amount'].value = 0.10
         setShowText(true)
+
+        setTimeout(() => {
+          world.world.controller.postprocessing.glitchPass.range = [540, 660]
+          world.world.controller.postprocessing.glitchPass.generateTrigger()
+        }, 10000)
       }, 1000)
     }
   }, [world.ready])

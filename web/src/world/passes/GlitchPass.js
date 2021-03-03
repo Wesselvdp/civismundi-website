@@ -15,7 +15,7 @@ var GlitchPass = function ( dt_size ) {
 
 
 	this.uniforms[ 'tDisp' ].value = this.generateHeightmap( dt_size );
-
+  this.range = [0, 0]
 
 	this.material = new THREE.ShaderMaterial( {
 		uniforms: this.uniforms,
@@ -43,23 +43,24 @@ GlitchPass.prototype = Object.assign( Object.create( Pass.prototype ), {
 
 		if ( this.curF % this.randX == 0 || this.goWild == true ) {
 
-			this.uniforms[ 'amount' ].value = Math.random() / 90;
-			this.uniforms[ 'angle' ].value = THREE.MathUtils.randFloat( - Math.PI, Math.PI );
-			this.uniforms[ 'seed_x' ].value = THREE.MathUtils.randFloat( - 1, 1 );
-			this.uniforms[ 'seed_y' ].value = THREE.MathUtils.randFloat( - 1, 1 );
-			this.uniforms[ 'distortion_x' ].value = THREE.MathUtils.randFloat( 0, 1 );
-			this.uniforms[ 'distortion_y' ].value = THREE.MathUtils.randFloat( 0, 1 );
-			this.curF = 0;
-			this.generateTrigger();
-
-		} else if ( this.curF % this.randX < this.randX / 5 ) {
-
-			// this.uniforms[ 'amount' ].value = Math.random() / 90;
+			this.uniforms[ 'amount' ].value = 0.00000001
 			this.uniforms[ 'angle' ].value = THREE.MathUtils.randFloat( - Math.PI, Math.PI );
 			this.uniforms[ 'distortion_x' ].value = THREE.MathUtils.randFloat( 0, 1 );
 			this.uniforms[ 'distortion_y' ].value = THREE.MathUtils.randFloat( 0, 1 );
 			this.uniforms[ 'seed_x' ].value = THREE.MathUtils.randFloat( - 0.3, 0.3 );
 			this.uniforms[ 'seed_y' ].value = THREE.MathUtils.randFloat( - 0.3, 0.3 );
+			this.curF = 0;
+			this.generateTrigger();
+
+		} else if ( this.curF % this.randX < this.randX / 10 ) {
+
+			this.uniforms[ 'amount' ].value = 0.00000001
+			this.uniforms[ 'angle' ].value = THREE.MathUtils.randFloat( - Math.PI, Math.PI );
+			this.uniforms[ 'distortion_x' ].value = THREE.MathUtils.randFloat( 0, 1 );
+			this.uniforms[ 'distortion_y' ].value = THREE.MathUtils.randFloat( 0, 1 );
+			this.uniforms[ 'seed_x' ].value = THREE.MathUtils.randFloat( - 0.3, 0.3 );
+			this.uniforms[ 'seed_y' ].value = THREE.MathUtils.randFloat( - 0.3, 0.3 );
+      // this.uniforms[ 'byp' ].value = 1.0
 
 		} else if ( this.goWild == false ) {
 
@@ -86,7 +87,7 @@ GlitchPass.prototype = Object.assign( Object.create( Pass.prototype ), {
 
 	generateTrigger: function () {
 
-		this.randX = THREE.MathUtils.randInt( 120, 240 );
+		this.randX = THREE.MathUtils.randInt( this.range[0], this.range[1] );
 
 	},
 
