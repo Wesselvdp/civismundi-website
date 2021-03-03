@@ -116,6 +116,10 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       world.world.globe.controls().addEventListener('end', () => {
         interactionTimer.current = null
       })
+
+      window.addEventListener('mousewheel', () => {
+        setShowText(true)
+      })
     }
   }, [world.ready])
 
