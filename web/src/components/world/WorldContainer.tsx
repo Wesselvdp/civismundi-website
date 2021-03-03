@@ -116,12 +116,14 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
       world.world.globe.controls().addEventListener('end', () => {
         interactionTimer.current = null
       })
-
-      window.addEventListener('mousewheel', () => {
-        setShowText(true)
-      })
     }
   }, [world.ready])
+
+  useEffect(() => {
+    window.addEventListener('mousewheel', () => {
+      setShowText(true)
+    })
+  }, [finishedGlitch])
 
   return (
     <Home className="home">
