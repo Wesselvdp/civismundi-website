@@ -89,7 +89,7 @@ export default class PostProcessingController {
     composer.addPass(copyPass)
 
     // - GUI
-    this.addGUI()
+    // this.addGUI()
 
     // this.staticPass.uniforms['amount'].value = 0.15
 
