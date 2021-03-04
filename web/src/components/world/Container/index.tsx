@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
-import { World, Galaxy } from '@components/world'
+import { World, Title, Galaxy } from '@components/world'
 import Div100vh from 'react-div-100vh'
 
 import { breakpoints } from '@utils/breakpoints'
@@ -67,15 +67,8 @@ const WorldContainer = ({}) => {
 
       <Div100vh>
         <div className="section">
-          <div className="section__title" style={{ opacity: `${showText ? 1 : 0}`}}>
-            <h2>
-              A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
-              <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
-              <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
-              <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
-            </h2>
-            <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
-          </div>
+          <Title show={showText} />
+
           <div className="section__footer">
             <div className={`${showText || !finishedGlitch ? 'fade' : 'fade in'}`}>
               <div className="scroll-container">
@@ -230,41 +223,6 @@ const Home = styled.div`
         font-size: 14px;
         margin: 0;
       }
-    }
-  }
-
-  .section__title {
-    transition: all 1.2s;
-
-    h2 {
-      font-size: 3.5vw;
-    }
-
-    p {
-      font-size: 1.6vw;
-    }
-
-    @media ${breakpoints.phoneOnly} {
-      padding: 0 15px;
-
-      h2 {
-        font-size: 22px;
-      }
-
-      p {
-        font-size: 16px;
-      }
-
-      br {
-        display: none;
-      }
-    }
-
-    h2, p {
-      color: rgba(255, 255, 255, 0.85);
-      -webkit-background-clip: text;
-      background-clip: text;
-      background-image: url(https://dl.dropbox.com/s/0nobgmnqhkqce5t/source.gif?dl=0);
     }
   }
 

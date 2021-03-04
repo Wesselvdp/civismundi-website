@@ -1,5 +1,4 @@
 import { get } from 'lodash'
-// import console = require('console');
 
 export const stringifyArray = (
   array: any[],
@@ -43,4 +42,8 @@ export const calculateCameraZ = () => {
   const z = base + aspect * multiplier * base - multiplier * base
 
   return z
+}
+
+export const R = (max: number, min: number): number => {
+  return Math.random() * (max - min) + min
 }
