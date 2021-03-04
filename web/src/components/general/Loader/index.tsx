@@ -53,10 +53,6 @@ const Loader = () => {
   }, [world.progress])
 
   useEffect(() => {
-    console.log('ready', world.ready)
-  }, [world.ready])
-
-  useEffect(() => {
     ring.current.style.strokeDashoffset = CIRCUMFERENCE - pseudoProgress * CIRCUMFERENCE
 
     if (pseudoProgress === 1) {

@@ -20,6 +20,7 @@ const WorldContainer = ({}) => {
         world.ref.controller.postprocessing.glitchPass.goWild = false
         world.ref.controller.postprocessing.staticPass.uniforms['amount'].value = 0.10
         setFinishedGlitch(true)
+        // world.ref.controller.postprocessing.addGlitchEasy()
 
         setTimeout(() => {
           world.ref.controller.postprocessing.glitchPass.range = [540, 660]

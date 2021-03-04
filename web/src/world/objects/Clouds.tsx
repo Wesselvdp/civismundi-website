@@ -48,6 +48,22 @@ export default class Clouds extends BaseObject {
 
     this.object = clouds;
     this.world.globe.scene().add(this.object);
+
+    const geometry = new THREE.BoxBufferGeometry();
+    const material = new THREE.MeshNormalMaterial();
+    
+    for ( let i = 0; i < 1000; i ++ ) {
+    
+      const object = new THREE.Mesh( geometry, material );
+      object.position.x = Math.random() * 80 - 40;
+      object.position.y = Math.random() * 80 - 40;
+      object.position.z = Math.random() * 80 - 40;
+      object.rotation.x = Math.random() * 2 * Math.PI;
+      object.rotation.y = Math.random() * 2 * Math.PI;
+      object.rotation.z = Math.random() * 2 * Math.PI;
+      this.world.globe.scene().add( object );
+          
+		}
   }
 
   setRotationFromVersion(version: Version) {

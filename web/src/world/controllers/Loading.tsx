@@ -27,7 +27,6 @@ export default class LoadingController {
     const that = this;
     THREE.DefaultLoadingManager.onProgress = debounce(
       (url, itemsLoaded, itemsTotal) => {
-        console.log('progress', itemsLoaded, itemsTotal)
         that.threeProgress = itemsLoaded / itemsTotal
       },
       50,

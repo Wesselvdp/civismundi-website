@@ -80,7 +80,6 @@ export default class Regions extends BaseObject {
             child.material = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, map: text });
             // child.visible = false
           } else {
-            console.log('name', child.name)
             const video = VIDEO_MAP[child.name]
             if (video) {
               child.material = video.material

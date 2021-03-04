@@ -28,7 +28,7 @@ var GlitchPass = function ( dt_size ) {
   this.goWild = false
 	this.curF = 0
 	this.generateTrigger()
-
+	this.enabled = true
 };
 
 GlitchPass.prototype = Object.assign( Object.create( Pass.prototype ), {
@@ -36,6 +36,7 @@ GlitchPass.prototype = Object.assign( Object.create( Pass.prototype ), {
 	constructor: GlitchPass,
 
 	render: function ( renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */ ) {
+		if (!this.enabled) return
 
 		this.uniforms[ 'tDiffuse' ].value = readBuffer.texture;
 		this.uniforms[ 'seed' ].value = Math.random();//default seeding
@@ -52,7 +53,7 @@ GlitchPass.prototype = Object.assign( Object.create( Pass.prototype ), {
 			this.curF = 0;
 			this.generateTrigger();
 
-		} else if ( this.curF % this.randX < this.randX / 10 ) {
+		} else if ( this.curF % this.randX < this.randX / 50 ) {
 
 			this.uniforms[ 'amount' ].value = 0.00000001
 			this.uniforms[ 'angle' ].value = THREE.MathUtils.randFloat( - Math.PI, Math.PI );

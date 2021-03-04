@@ -1,4 +1,6 @@
 // @ts-nocheck
+import * as THREE from 'three'
+import { throttle } from 'lodash'
 import World from '..';
 import { calculateCameraZ } from 'src/utils'
 export default class GlobeController {
@@ -16,32 +18,29 @@ export default class GlobeController {
     globe.controls().autoRotate = true
     globe.controls().autoRotateSpeed = 0.3
 
-    globe.camera().aspect = window.innerWidth / window.innerHeight
-    globe.camera().updateProjectionMatrix()
-
-    globe.renderer().setSize( window.innerWidth, window.innerHeight );
-
     globe.globeMaterial().opacity = 0
     globe.renderer().setClearColor( 0x000000, 0 );
     globe.scene().background = null
 
-    globe.camera().position.z = calculateCameraZ()
+    globe.camera().position.setLength(calculateCameraZ())
 
     const that = this
-    globe.controls().addEventListener('change', () => {
+    globe.controls().addEventListener('change', throttle(onControlsChanged, 100))
+    function onControlsChanged() {
       if (that.world.lightning) {
         that.world.lightning.object.position.copy(that.world.globe.camera().position)
       }
-    })
+    }
 
-    window.addEventListener('resize', () => {
+    // resize
+    function onResize() {
       that.world.globe.camera().aspect = window.innerWidth / window.innerHeight
       that.world.globe.camera().updateProjectionMatrix()
       that.world.globe.renderer().setSize(window.innerWidth, window.innerHeight)
       that.world.globe.camera().position.setLength(calculateCameraZ())
-    })
-
-    globe.camera().position.setLength(calculateCameraZ())
+    }
+    window.addEventListener('resize', onResize)
+    onResize()
   }
 
   public setGlobeOpacity(value: number) {
