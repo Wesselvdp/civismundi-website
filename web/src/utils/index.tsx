@@ -29,3 +29,18 @@ export const getVideoId = (url: string) => {
     return get(url.split('?v='), '[1]', url)
   }
 }
+
+export const calculateCameraZ = () => {
+  const base = 350
+  if (window.innerWidth > 760) return base
+
+  let aspect = window.innerWidth / window.innerHeight
+  if (aspect < 1) aspect = window.innerHeight / window.innerWidth
+  aspect = Math.min(aspect, 2)
+
+  // magic
+  const multiplier = 0.4
+  const z = base + aspect * multiplier * base - multiplier * base
+
+  return z
+}

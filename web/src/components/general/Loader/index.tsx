@@ -1,12 +1,13 @@
+// @ts-nocheck
+
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import Lottie from 'react-lottie'
 import TWEEN from '@tweenjs/tween.js'
-import { Mode } from '@components/world/WorldContainer'
 
 import animationData from './lottie-globe.json'
-import { SET_READY } from '../../../actions/types'
+import { SET_READY } from 'src/actions/types'
 
 const CIRCLE_SIZE = 60
 const CIRCUMFERENCE = CIRCLE_SIZE * 2 * Math.PI
@@ -21,7 +22,7 @@ const defaultOptions = {
 }
 
 const Loader = () => {
-  const world = useSelector(state => state.world)
+  const world = useSelector((state: any) => state.world)
   const dispatch = useDispatch()
 
   const ring = useRef(null)
@@ -35,7 +36,6 @@ const Loader = () => {
     if (!loading && !world.ready) {
       setTimeout(() => {
         dispatch({ type: SET_READY, ready: true })
-        world.world.controller.mode.setMode(Mode.EXPLORE)
       }, 1000)
     }
   }, [loading])
@@ -155,7 +155,6 @@ const Container = styled.div`
   }
 
   p {
-    // color: rgba(0, 0, 0, 1);
     color: rgba(255, 255, 255, 1);
   }
 

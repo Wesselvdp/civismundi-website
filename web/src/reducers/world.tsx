@@ -1,8 +1,8 @@
-import { WORLD_INITIALIZE_COMPLETE, SET_PROGRESS, SET_READY, SET_VERSION, SET_MODE } from '../actions/types'
-import { Mode } from '@components/world/WorldContainer'
+import { WORLD_INITIALIZE_COMPLETE, SET_PROGRESS, SET_READY, SET_VERSION, SET_MODE } from 'src/actions/types'
+import { Mode } from 'src/types/enums'
 
 const initialState = {
-  world: {},
+  ref: {},
   progress: 0,
   ready: false,
   mode: Mode.LOADING
@@ -11,7 +11,7 @@ const initialState = {
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case WORLD_INITIALIZE_COMPLETE: {
-      return { ...state, world: action.world }
+      return { ...state, ref: action.world }
     }
 
     case SET_PROGRESS: {

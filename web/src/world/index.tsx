@@ -1,11 +1,9 @@
-type Ref = { current: any };
-
 import Clouds from './objects/Clouds';
 import Lightning from './objects/Lightning';
 import Regions from './objects/Regions';
-
-import { tThreeObject, tProject, } from './types';
 import Controller from './controllers/Controller';
+
+import { tThreeObject } from '../types/interfaces';
 
 export default class World {
   public globe: any;
@@ -17,7 +15,7 @@ export default class World {
   public lightning?: Partial<tThreeObject>;
   public regions?: Partial<tThreeObject>;
 
-  constructor(reactGlobeRef: Ref, projects: tProject[], dispatch: any) {
+  constructor(reactGlobeRef: { current: any }, dispatch: any) {
     if (!reactGlobeRef.current) return
 
     this.globe = reactGlobeRef.current;

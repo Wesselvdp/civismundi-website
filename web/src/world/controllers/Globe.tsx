@@ -1,23 +1,6 @@
+// @ts-nocheck
 import World from '..';
-import { Mode } from '@components/world/WorldContainer'
-
-const calculateCameraZ = () => {
-  console.log('window.innerWidth', window.innerWidth)
-  const base = 350
-  if (window.innerWidth > 760) return base
-
-  let aspect = window.innerWidth / window.innerHeight
-  if (aspect < 1) aspect = window.innerHeight / window.innerWidth
-  aspect = Math.min(aspect, 2)
-
-  // magic
-  const multiplier = 0.4
-  const z = base + aspect * multiplier * base - multiplier * base
-
-  return z
-}
-
-
+import { calculateCameraZ } from 'src/utils'
 export default class GlobeController {
   world: World;
 
@@ -49,8 +32,6 @@ export default class GlobeController {
       if (that.world.lightning) {
         that.world.lightning.object.position.copy(that.world.globe.camera().position)
       }
-
-      that.world.controller.mode.setMode(Mode.EXPLORE)
     })
 
     window.addEventListener('resize', () => {

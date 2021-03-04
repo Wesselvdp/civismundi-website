@@ -3,7 +3,7 @@ import TWEEN from '@tweenjs/tween.js'
 import { debounce } from 'lodash'
 
 import World from '..';
-import { SET_PROGRESS } from 'src/actions/types';
+import { SET_READY, SET_PROGRESS } from 'src/actions/types';
 
 const MIN_PROGRESS_TIME: number = 3500;
 
@@ -38,7 +38,7 @@ export default class LoadingController {
     )
 
     THREE.DefaultLoadingManager.onLoad = function () {
-      that.world.globe.resumeAnimation();
+      that.world.globe.resumeAnimation()
     };
 
     this._startMinProgress();
