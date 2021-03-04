@@ -102,8 +102,8 @@ export default WorldContainer
 
 const scrollAnim = keyframes`
   0% {transform: translateY(0)}
-  50% {transform: translateY(-7px)}
-  55% {transform: translateY(-7px)}
+  50% {transform: translateY(-4px)}
+  55% {transform: translateY(-4px)}
   100% {transform: translateY(0)}
 `
 
@@ -245,12 +245,16 @@ const Home = styled.div`
     p {
       margin-top: 10px !important;
     }
+
+    @media ${breakpoints.phoneOnly} {
+      max-width: 280px;
+    }
   }
 
   .scroll-indicator {
     pointer-events: initial;
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     border: 1px solid grey;
     position: relative;
@@ -261,10 +265,10 @@ const Home = styled.div`
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -25%);
+      transform: translate(-50%, -35%);
 
       img {
-        width: 14px;
+        width: 10px;
         height: auto;
         animation: ${scrollAnim} 1.7s infinite ease;
       }

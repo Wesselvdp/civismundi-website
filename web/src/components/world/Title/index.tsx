@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import gsap from "gsap";
 
@@ -8,6 +8,7 @@ import { R } from 'src/utils'
 
 const Title = ({ show = false }) => {
   const SSR = typeof document === 'undefined'
+  const tl = useRef()
 
   useEffect(() => {
     if (SSR) return
@@ -16,9 +17,9 @@ const Title = ({ show = false }) => {
     document.querySelector('.world__title__wrapper').appendChild(title)
     title.classList.add('overtitle')
 
-    const tl = gsap.timeline({ repeat: -1 })
+    tl.current = gsap.timeline({ repeat: -1 })
     for (var i = 50; i--;) {
-      tl.to(title, {
+      tl.current.to(title, {
         opacity: R(0,1),
         y: R(-2.5, 2.5),
         x: R(-2.5, 2.5),
@@ -26,6 +27,16 @@ const Title = ({ show = false }) => {
       })
     }
   }, [SSR])
+
+  useEffect(() => {
+    if (tl.current) {
+      show ? tl.current.resume() : tl.current.pause()
+    }
+  }, [show])
+
+  // useEffect(() => {
+
+  // }, [world.version])
 
   return (
     <Wrapper className={`world__title__wrapper ${show ? 'show' : 'hide'}`}>
