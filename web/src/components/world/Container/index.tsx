@@ -162,6 +162,14 @@ const Home = styled.div`
           text-align: center;
           transition: all 4s;
 
+          p {
+            font-size: 14px;
+
+            @media ${breakpoints.phoneOnly} {
+              font-size: 12px;
+            }
+          }
+
           &.fade {
             opacity: 0;
             transition: all 1.2s;
