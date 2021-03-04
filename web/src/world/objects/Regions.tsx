@@ -75,8 +75,10 @@ export default class Regions extends BaseObject {
         if (child instanceof THREE.Mesh) {
           if (child.name === 'Globe_Mesh001') {
             const text = new THREE.TextureLoader().load( '/earth-blue-marble-alt.jpg');
+            text.flipY = false;
+
             child.material = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, map: text });
-            child.visible = false
+            // child.visible = false
           } else {
             console.log('name', child.name)
             const video = VIDEO_MAP[child.name]

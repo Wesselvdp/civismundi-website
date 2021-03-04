@@ -21,7 +21,7 @@ export default class GlobeController {
 
     globe.renderer().setSize( window.innerWidth, window.innerHeight );
 
-    globe.globeMaterial().opacity = 1
+    globe.globeMaterial().opacity = 0
     globe.renderer().setClearColor( 0x000000, 0 );
     globe.scene().background = null
 
