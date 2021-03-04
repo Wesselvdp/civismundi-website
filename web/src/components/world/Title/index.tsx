@@ -1,7 +1,7 @@
 // @ts-nocheck
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { TimelineMax } from 'gsap/all'
+import gsap from "gsap";
 
 import { breakpoints } from '@utils/breakpoints'
 import { R } from 'src/utils'
@@ -16,12 +16,13 @@ const Title = ({ show = false }) => {
     document.querySelector('.world__title__wrapper').appendChild(title)
     title.classList.add('overtitle')
 
-    const tl = new TimelineMax({ repeat: -1 })
+    const tl = gsap.timeline({ repeat: -1 })
     for (var i = 50; i--;) {
-      tl.to(title, R(0.03,0.17), {
+      tl.to(title, {
         opacity: R(0,1),
         y: R(-2.5, 2.5),
-        x: R(-2.5, 2.5)
+        x: R(-2.5, 2.5),
+        duration: R(0.03,0.17)
       })
     }
   }, [SSR])
