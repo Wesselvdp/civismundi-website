@@ -6,89 +6,6 @@ import * as dat from 'dat.gui';
 import World from '..'
 import { GlitchPass } from '../passes/GlitchPass'
 
-const GlitchEasyVertex = `
-  varying vec3 vPosition;
-  varying vec2 vUv;
-
-  void main(void) {
-    // coordinate transformation
-    vec4 mPosition = modelMatrix * vec4(position, 1.0);
-
-    vPosition = position;
-    vUv = uv;
-
-    gl_Position = projectionMatrix * viewMatrix * mPosition;
-  }
-`
-
-const GlitchEasyFragment = `
-  precision highp float;
-
-  uniform float time;
-  uniform sampler2D tDiffuse;
-  uniform sampler2D textureNoise;
-
-  varying vec3 vPosition;
-  varying vec2 vUv;
-
-  float random(vec2 c){
-    return fract(sin(dot(c.xy ,vec2(12.9898,78.233))) * 43758.5453);
-  }
-
-  vec4 getGlitchColor(vec2 uv, float force) {
-    vec2 r = vec2(
-      random(vec2(ceil(time * 20.0), 0.0)) * 2.0 - 1.0,
-      random(vec2(0.0, ceil(time * 20.0))) * 2.0 - 1.0
-    );
-    vec2 noiseUv = uv + r * 0.001;
-    float mask = smoothstep(
-      length(vec3(1.0)) - force * 0.004,
-      length(vec3(1.0)),
-      length(texture2D(textureNoise, uv * vec2(0.2, 0.4) * r).rgb)
-      );
-    vec4 texColor = texture2D(tDiffuse, noiseUv + r * 0.01 * force) * (1.0 - mask);
-    vec4 texColorDiff = texture2D(tDiffuse, noiseUv + r * force) * mask;
-    return texColor + texColorDiff;
-  }
-
-  void main() {
-    float shake = random(vec2(time));
-    float force = smoothstep(0.5, 1.0, sin(time * 4.0) * 0.8 + sin(time * 5.0) + 0.2);
-
-    vec2 uvR = vUv + vec2(-0.008 - shake * 0.002, 0.0);
-    vec2 uvG = vUv + vec2( 0.0, 0.0);
-    vec2 uvB = vUv + vec2( 0.008 + shake * 0.002, 0.0);
-
-    vec4 r = getGlitchColor(uvR, force) * vec4(1.0, 0.0, 0.0, 1.0);
-    vec4 g = getGlitchColor(uvG, force) * vec4(0.0, 1.0, 0.0, 1.0);
-    vec4 b = getGlitchColor(uvB, force) * vec4(0.0, 0.0, 1.0, 1.0);
-    vec4 color = r + g + b;
-
-    if (color.a < 0.1) discard;
-
-    gl_FragColor = color;
-  }
-`
-
-const GlitchEasyShader = {
-  uniforms: {
-    time: {
-      type: 'f',
-      value: 0
-    },
-    tDiffuse: {
-      type: 't',
-      value: null
-    },
-    textureNoise: {
-      type: 't',
-      value: null
-    },
-  },
-  vertexShader: GlitchEasyVertex,
-  fragmentShader: GlitchEasyFragment,
-}
-
 const StaticShader = {
 
 	uniforms: {
@@ -146,8 +63,6 @@ export default class PostProcessingController {
   composer: any
   glitchPass: any;
   staticPass: any;
-  glitchEasyPass: any;
-  noiseTexture: any;
 
   constructor(world: World) {
     this.world = world;
@@ -173,9 +88,6 @@ export default class PostProcessingController {
     copyPass.renderToScreen = true
     composer.addPass(copyPass)
 
-    // Noise texture
-    this.noiseTexture = new THREE.TextureLoader().load( '/noise.png');
-
     // - GUI
     this.addGUI()
 
@@ -194,15 +106,6 @@ export default class PostProcessingController {
     }
 
     window.requestAnimationFrame(frame)
-  }
-
-  addGlitchEasy() {
-    const composer = this.world.globe.postProcessingComposer()
-
-    this.glitchPass.enabled = false
-    this.glitchEasyPass = new ShaderPass( GlitchEasyShader )
-    this.glitchEasyPass.uniforms.textureNoise.value = this.noiseTexture
-    composer.addPass(this.glitchEasyPass)
   }
 
   private addGUI() {
@@ -227,7 +130,6 @@ export default class PostProcessingController {
     function onParamsChange() {
       that.staticPass.uniforms['amount'].value = staticParams.amount;
       that.staticPass.uniforms['size'].value = staticParams.size;
-      // that.glitchPass.uniforms['byp'].value = glitchParams.byp;
     }
   }
 }
