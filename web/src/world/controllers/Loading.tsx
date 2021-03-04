@@ -5,7 +5,7 @@ import { debounce } from 'lodash'
 import World from '..';
 import { SET_READY, SET_PROGRESS } from 'src/actions/types';
 
-const MIN_PROGRESS_TIME: number = 3500;
+const MIN_PROGRESS_TIME: number = 2500;
 
 export default class LoadingController {
   private _threeProgress: number = 0;

@@ -69,7 +69,7 @@ export default class Regions extends BaseObject {
     // })
     const loader = new GLTFLoader(THREE.DefaultLoadingManager)
 
-    loader.load('/Globe.gltf', ( gltf ) => {
+    loader.load('/Globe.glb', ( gltf ) => {
       gltf.scene.children.forEach((child: any) => {
         if (child instanceof THREE.Mesh) {
           if (child.name === 'Globe_Mesh001') {
@@ -87,7 +87,7 @@ export default class Regions extends BaseObject {
       })
 
       gltf.scene.scale.set(101, 101, 101)
-      gltf.scene.rotation.y = 1.110 * Math.PI
+      gltf.scene.rotation.y = 1.110 * Math.PI // magic
 
       that.object = gltf.scene
       that.world.globe.scene().add( gltf.scene )
