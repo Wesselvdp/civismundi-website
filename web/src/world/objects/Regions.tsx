@@ -40,6 +40,7 @@ export default class Regions extends BaseObject {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
       texture.format = THREE.RGBFormat;
+      texture.flipY = false;
 
       const material = new THREE.MeshLambertMaterial({ side: THREE.FrontSide, map: texture, opacity: 0.65, transparent: true });
       obj.material = material
@@ -86,7 +87,7 @@ export default class Regions extends BaseObject {
         }
       })
 
-      gltf.scene.scale.set(101, 101, 101)
+      gltf.scene.scale.set(100.5, 100.5, 100.5)
       gltf.scene.rotation.y = 1.110 * Math.PI // magic
 
       that.object = gltf.scene
