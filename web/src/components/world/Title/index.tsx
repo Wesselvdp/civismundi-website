@@ -44,6 +44,7 @@ const Title = ({ show = false }) => {
 
 const Wrapper = styled.div`
   position: relative;
+  overflow: hidden;
 
   .world__title {
     transition: opacity 1.2s;

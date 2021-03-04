@@ -1,17 +1,18 @@
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 
 import BaseObject from './BaseObject'
 import World from '..';
 
 const VIDEO_MAP: any = {
-  'Land_Mesh.002': { name: 'stargazing.mp4' },
-  'Land.001_Mesh.001': { name: 'dna.mp4' },
-  'Land.002_Mesh.001': { name: 'franca.mp4' },
-  'Land.003_Mesh.001': { name: 'libre.mp4' },
-  'Land.004_Mesh.001': { name: 'superbowl.mp4' },
-  'Land.005_Mesh.001': { name: 'milehigh.mp4' },
-  'Land.006_Mesh.001': { name: 'captureland.mp4' }
+  'Land_Mesh002': { name: 'stargazing.mp4' },
+  'Land001_Mesh001': { name: 'dna.mp4' },
+  'Land002_Mesh001': { name: 'franca.mp4' },
+  'Land003_Mesh001': { name: 'libre.mp4' },
+  'Land004_Mesh001': { name: 'superbowl.mp4' },
+  'Land005_Mesh001': { name: 'milehigh.mp4' },
+  'Land006_Mesh001': { name: 'captureland.mp4' }
 }
 
 export default class Regions extends BaseObject {
@@ -44,27 +45,52 @@ export default class Regions extends BaseObject {
       obj.material = material
     })
 
-    const objLoader = new OBJLoader(THREE.DefaultLoadingManager)
-    objLoader.load('/Globe_v5.obj', (object: any) => {
-      object.traverse((child: any) => {
+    // const loader = new OBJLoader(THREE.DefaultLoadingManager)
+    // loader.load('/Globe_v5.obj', (object: any) => {
+    //   object.traverse((child: any) => {
+    //     if (child instanceof THREE.Mesh) {
+    //       if (child.name === 'Globe_Mesh.001') {
+    //         const text = new THREE.TextureLoader().load( '/earth-blue-marble-alt.jpg');
+    //         child.material = new THREE.MeshLambertMaterial({ side: THREE.FrontSide, map: text });
+    //         // child.visible = false
+    //       } else {
+    //         const video = VIDEO_MAP[child.name]
+    //         if (video) {
+    //           child.material = video.material
+    //         }
+    //       }
+    //     }
+    //   });
+
+    //   object.scale.set(101, 101, 101)
+    //   object.rotation.y = 1.1 * Math.PI
+    //   that.object = object
+    //   that.world.globe.scene().add(that.object)
+    // })
+    const loader = new GLTFLoader(THREE.DefaultLoadingManager)
+
+    loader.load('/Globe.gltf', ( gltf ) => {
+      gltf.scene.children.forEach((child: any) => {
         if (child instanceof THREE.Mesh) {
-          if (child.name === 'Globe_Mesh.001') {
+          if (child.name === 'Globe_Mesh001') {
             const text = new THREE.TextureLoader().load( '/earth-blue-marble-alt.jpg');
-            child.material = new THREE.MeshLambertMaterial({ side: THREE.FrontSide, map: text });
-            // child.visible = false
+            child.material = new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, map: text });
+            child.visible = false
           } else {
+            console.log('name', child.name)
             const video = VIDEO_MAP[child.name]
             if (video) {
               child.material = video.material
             }
           }
         }
-      });
+      })
 
-      object.scale.set(101, 101, 101)
-      object.rotation.y = 1.1 * Math.PI
-      that.object = object
-      that.world.globe.scene().add(that.object)
+      gltf.scene.scale.set(101, 101, 101)
+      gltf.scene.rotation.y = 1.110 * Math.PI
+
+      that.object = gltf.scene
+      that.world.globe.scene().add( gltf.scene )
     })
   }
 }
