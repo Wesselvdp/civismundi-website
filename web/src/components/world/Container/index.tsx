@@ -259,6 +259,13 @@ const Home = styled.div`
         display: none;
       }
     }
+
+    h2, p {
+      color: rgba(255, 255, 255, 0.85);
+      -webkit-background-clip: text;
+      background-clip: text;
+      background-image: url(https://dl.dropbox.com/s/0nobgmnqhkqce5t/source.gif?dl=0);
+    }
   }
 
   .scroll-container {
