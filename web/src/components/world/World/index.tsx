@@ -1,15 +1,12 @@
-// @ts-nocheck
-
 import React, { useRef, useEffect, useState } from 'react'
 import loadable from '@loadable/component'
 import { useDispatch } from 'react-redux'
 
-import { initializeWorld } from '../../actions/initialize'
-// import console = require('console');
+import { initializeWorld } from 'src/actions/initialize'
 
 const Globe = loadable(() => import('react-globe.gl'))
 
-const World = ({ data }) => {
+const World = () => {
   const isSSR = typeof window === 'undefined' // prevents builderror
 
   const ref = useRef()
@@ -22,11 +19,11 @@ const World = ({ data }) => {
       return
     }
 
-    dispatch(initializeWorld(ref, data, location))
+    dispatch(initializeWorld(ref))
   }, [toggle])
 
   return (
-    !isSSR && (
+    !isSSR ? (
       <React.Suspense fallback={<div />}>
         <Globe
           ref={ref}
@@ -35,15 +32,14 @@ const World = ({ data }) => {
           showAtmosphere={false}
           animateIn={false}
           backgroundColor="#000000"
-          renderConfig={{
-            sortObjects: false,
+          rendererConfig={{
             antialias: true,
             alpha: true,
           }}
           waitForGlobeReady={true}
         />
       </React.Suspense>
-    )
+    ) : <></>
   )
 }
 

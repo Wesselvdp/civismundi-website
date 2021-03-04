@@ -35,14 +35,6 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-plugin-react-svg',
-      options: {
-        rule: {
-          include: `${__dirname}/src/assets/`
-        }
-      }
-    },    
-    {
       resolve: 'gatsby-source-sanity',
       options: {
         projectId: process.env.GATSBY_SANITY_PROJECT_ID,

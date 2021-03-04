@@ -40,7 +40,7 @@ export default class Regions extends BaseObject {
       texture.magFilter = THREE.LinearFilter;
       texture.format = THREE.RGBFormat;
 
-      const material = new THREE.MeshLambertMaterial({side: THREE.FrontSide, map: texture, opacity: 0.50, transparent: true });
+      const material = new THREE.MeshLambertMaterial({ side: THREE.FrontSide, map: texture, opacity: 0.65, transparent: true });
       obj.material = material
     })
 

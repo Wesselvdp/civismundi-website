@@ -1,6 +1,5 @@
 import World from '..';
-import BaseController from './Controller';
-import { Mode } from '@components/world/WorldContainer';
+import { Mode } from 'src/types/enums';
 import { SET_MODE } from 'src/actions/types';
 
 export default class ModeController {

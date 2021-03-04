@@ -1,4 +1,5 @@
-import WorldContainer from './WorldContainer'
 import World from './World'
+import Container from './Container'
+import Galaxy from './Galaxy'
 
-export { WorldContainer, World }
+export { World, Container, Galaxy }

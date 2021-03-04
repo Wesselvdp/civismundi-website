@@ -1,113 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
-import { useStaticQuery, graphql } from 'gatsby'
-import World from './World'
-import Galaxy from './Galaxy'
+import { World, Galaxy } from '@components/world'
 import Div100vh from 'react-div-100vh'
-import TWEEN from '@tweenjs/tween.js'
-import * as THREE from 'three'
-import { throttle } from 'lodash'
 
 import { breakpoints } from '@utils/breakpoints'
 
-export enum Mode {
-  LOADING,
-  EXPLORE,
-  CONTENT
-}
+const INTERACTION_THRESHOLD = 150
 
-const WorldContainer = ({ layout, location, isScrolling }) => {
-  const world = useSelector(state => state.world)
+const WorldContainer = ({}) => {
+  const world = useSelector((state: any) => state.world)
   const [showText, setShowText] = useState(false)
   const [finishedGlitch, setFinishedGlitch] = useState(false)
-  const interactionTimer = useRef(0)
-
-  // Projects
-  const data = useStaticQuery(graphql`
-    query HeaderQuery {
-      allSanityLocation {
-        edges {
-          node {
-            _id
-            _type
-            title
-            location {
-              lat
-              lng
-            }
-          }
-        }
-      }
-      allSanityProject(sort: { fields: order, order: ASC }) {
-        edges {
-          node {
-            _id
-            _type
-            order
-            slug {
-              current
-            }
-            title
-            featured
-            city
-            clients
-            vimeo
-            quote {
-              content
-              quotee
-            }
-            location {
-              lat
-              lng
-            }
-            locationGroup {
-              _id
-              title
-              location {
-                lat
-                lng
-              }
-            }
-            poster {
-              asset {
-                url
-              }
-            }
-            video {
-              asset {
-                url
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
+  const interactionTimer: { current: number | null } = useRef(0)
 
   useEffect(() => {
     if (world.ready) {
       setTimeout(() => {
-        world.world.controller.postprocessing.glitchPass.goWild = false
-        world.world.controller.postprocessing.staticPass.uniforms['amount'].value = 0.10
+        world.ref.controller.postprocessing.glitchPass.goWild = false
+        world.ref.controller.postprocessing.staticPass.uniforms['amount'].value = 0.10
         setFinishedGlitch(true)
 
         setTimeout(() => {
-          world.world.controller.postprocessing.glitchPass.range = [540, 660]
-          world.world.controller.postprocessing.glitchPass.generateTrigger()
+          world.ref.controller.postprocessing.glitchPass.range = [540, 660]
+          world.ref.controller.postprocessing.glitchPass.generateTrigger()
         }, 10000)
       }, 1000)
 
       // Add listener
-      world.world.globe.controls().addEventListener('start', () => {
+      world.ref.globe.controls().addEventListener('start', () => {
         interactionTimer.current = Date.now()
       })
 
-      world.world.globe.controls().addEventListener('end', () => {
+      world.ref.globe.controls().addEventListener('end', () => {
         if (interactionTimer.current) {
           const elapsed = Date.now() - interactionTimer.current
 
-          if (elapsed > 150) {
+          if (elapsed > INTERACTION_THRESHOLD) {
             setShowText(false)
           }
 
@@ -118,16 +47,22 @@ const WorldContainer = ({ layout, location, isScrolling }) => {
   }, [world.ready])
 
   useEffect(() => {
-    window.addEventListener('mousewheel', () => {
+    function listener() {
       setShowText(true)
-    })
+    }
+
+    if (finishedGlitch) {
+      window.addEventListener('mousewheel', listener)
+    }
+
+    return () => window.removeEventListener('mousewheel', listener)
   }, [finishedGlitch])
 
   return (
     <Home className="home">
       <div className="home__globe">
-        <World data={data} />
-        <Galaxy show={true} />
+        <World />
+        <Galaxy />
       </div>
 
       <Div100vh>
@@ -323,6 +258,13 @@ const Home = styled.div`
       br {
         display: none;
       }
+    }
+
+    h2, p {
+      color: rgba(255, 255, 255, 0.85);
+      -webkit-background-clip: text;
+      background-clip: text;
+      background-image: url(https://dl.dropbox.com/s/0nobgmnqhkqce5t/source.gif?dl=0);
     }
   }
 

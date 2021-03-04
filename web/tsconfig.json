@@ -26,7 +26,10 @@
       "@hooks/*": ["src/hooks/*"],
       "@media/*": ["src/media/*"],
       "@contexts/*": ["src/contexts/*"],
-      "@schemas/*": ["src/schemas/*"]
+      "@schemas/*": ["src/schemas/*"],
+      "@world/*": ["src/world/*"],
+      "@actions/*": ["src/actions/*"],
+      "@reducers/*": ["src/reducers/*"]
     }
   },
   "include": ["src", "types"],

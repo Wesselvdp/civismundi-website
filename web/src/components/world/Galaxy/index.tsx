@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 
-const Galaxy = ({ show }) => {
-  return <GalaxyContainer className={show ? 'show' : ''} />
+const Galaxy = () => {
+  return <GalaxyContainer />
 }
 
 const GalaxyContainer = styled.div`
@@ -20,16 +20,9 @@ const GalaxyContainer = styled.div`
   background-position: center center;
   background-repeat: no-repeat;
   z-index: -10;
-  opacity: 0;
-  transition: opacity 1s;
-  transition-delay: 1s;
 
   @media ${breakpoints.phoneOnly} {
     background-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0, rgba(0, 0, 0, 1) 60px, rgba(0,0,0,0) 61px, rgba(0,0,0,0) 100%, rgba(0,0,0,0) 100%), url('/stars-8.jpg');
-  }
-
-  &.show {
-    opacity: 1;
   }
 `
 export default Galaxy
