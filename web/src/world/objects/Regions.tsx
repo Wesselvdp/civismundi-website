@@ -11,8 +11,14 @@ const videoUrls = [
   'libre.mp4',
   'superbowl.mp4',
   'milehigh.mp4',
-  'captureland.mp4'
+  'captureland.mp4',
+  'armani.mp4',
+  'columbus.mp4',
+  'dont-start-now.mp4',
+  'lebron.mp4',
+  'spa-night.mp4'
 ]
+
 export default class Regions extends BaseObject {
   videos: any[] = []
 
