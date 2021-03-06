@@ -31,7 +31,7 @@ const World = () => {
           bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
           showAtmosphere={false}
           animateIn={false}
-          backgroundColor="#000000"
+          backgroundColor="rgba(0, 0, 0, 0)"
           rendererConfig={{
             antialias: true,
             alpha: true,

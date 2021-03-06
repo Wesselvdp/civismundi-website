@@ -20,7 +20,7 @@ export default class GlobeController {
 
     globe.globeMaterial().opacity = 0
     globe.renderer().setClearColor( 0x000000, 0 );
-    globe.scene().background = null
+    globe.scene().background = null 
 
     globe.camera().position.setLength(calculateCameraZ())
 
