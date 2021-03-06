@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js';
 import * as dat from 'dat.gui';
@@ -91,7 +90,6 @@ export default class PostProcessingController {
     // - GUI
     this.addGUI()
 
-    // this.staticPass.uniforms['amount'].value = 0.15
 
     const that = this
     function frame() {

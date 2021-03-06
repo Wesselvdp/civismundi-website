@@ -34,20 +34,19 @@ const Title = ({ show = false }) => {
     }
   }, [show])
 
-  // useEffect(() => {
-
-  // }, [world.version])
+  "A diverse group of humans telling stories, writing films, developing shows, designing things, and engaging art in all its forms."
+  "Creative liberty defines us. Humanity grounds us."
 
   return (
     <Wrapper className={`world__title__wrapper ${show ? 'show' : 'hide'}`}>
       <div id="world__title" className="world__title">
         <h2>
-          A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS WHO <br />
-          <span className="f-bold">TELL</span> STORIES, <span className="f-bold">WRITE</span> FILMS, <br />
-          <span className="f-bold">DEVELOP</span> SHOWS, <span className="f-bold">DESIGN</span> THINGS, <br />
-          <span className="f-bold">SUPPORT</span> THE ARTS &amp; <span className="f-bold">CREATE</span> MEMORIES
+          A <span className="f-bold">DIVERSE</span> GROUP OF HUMANS <br />
+          <span className="f-bold">TELLING</span> STORIES, <span className="f-bold">WRITING</span> FILMS, <br />
+          <span className="f-bold">DEVELOPING</span> SHOWS, <span className="f-bold">DESIGNING</span> THINGS, <br />
+          AND <span className="f-bold">ENGAGING</span> ART IN ALL ITS FORMS.
         </h2>
-        <p>CREATIVE LIBERY DEFINES US. RESPONSIBILITY GROUNDS US. WE ARE CITIZENS OF THE WORLD. LET'S ACT LIKE IT.</p>
+        <p>CREATIVE LIBERY DEFINES US. HUMANITY GROUNDS US.</p>
       </div>
     </Wrapper>
   )

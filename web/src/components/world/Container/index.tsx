@@ -78,7 +78,7 @@ const WorldContainer = ({}) => {
                     <img src="/arrow-down.svg" />
                   </div>
                 </div>
-                <p>MORE TO COME... WORKING ON BEING BETTER</p>
+                {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
               </div>
             </div>
 
@@ -107,7 +107,6 @@ const scrollAnim = keyframes`
   55% {transform: translateY(-4px)}
   100% {transform: translateY(0)}
 `
-
 
 const Home = styled.div`
   height: 100%;
