@@ -34,9 +34,6 @@ const Title = ({ show = false }) => {
     }
   }, [show])
 
-  "A diverse group of humans telling stories, writing films, developing shows, designing things, and engaging art in all its forms."
-  "Creative liberty defines us. Humanity grounds us."
-
   return (
     <Wrapper className={`world__title__wrapper ${show ? 'show' : 'hide'}`}>
       <div id="world__title" className="world__title">
