@@ -26,7 +26,7 @@ export default class World {
 
     // threejs objects
     this.sphere = this.globe.scene().children[0];
-    this.regions = new Regions(this);
+    // this.regions = new Regions(this);
     this.clouds = new Clouds(this);
     this.lightning = new Lightning(this);
   }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
-import { World, Title, Galaxy } from '@components/world'
+import { World, Title, Galaxy, InfiniteScroll } from '@components/world'
 import Div100vh from 'react-div-100vh'
 
 import { breakpoints } from '@utils/breakpoints'
@@ -66,31 +66,31 @@ const WorldContainer = ({}) => {
         <Galaxy />
       </div>
 
+      <InfiniteScroll>
+        <Title />
+      </InfiniteScroll>
+
       <Div100vh>
-        <div className="section">
-          <Title show={showText} />
-
-          <div className="section__footer">
-            <div className={`${showText || !finishedGlitch ? 'fade' : 'fade in'}`}>
-              <div className="scroll-container">
-                <div className="scroll-indicator" onClick={() => setShowText(true) }>
-                  <div>
-                    <img src="/arrow-down.svg" />
-                  </div>
+        <div className="section__footer">
+          <div className={`${showText || !finishedGlitch ? 'fade' : 'fade in'}`}>
+            <div className="scroll-container">
+              <div className="scroll-indicator" onClick={() => setShowText(true) }>
+                <div>
+                  <img src="/arrow-down.svg" />
                 </div>
-                {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
               </div>
+              {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
             </div>
+          </div>
 
-            <div className={`${showText ? 'fade in' : 'fade'}`}>
-              <div>
-                <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
-              </div>
-              <div>
-                <p>
-                  <a target="_blank" href="mailto: hello@civismundi.world">HELLO@CIVISMUNDI.WORLD</a> &middot; <a target="_blank" href="https://www.instagram.com">INSTAGRAM</a>
-                </p>
-              </div>
+          <div className={`${showText ? 'fade in' : 'fade'}`}>
+            <div>
+              <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
+            </div>
+            <div>
+              <p>
+                <a target="_blank" href="mailto: hello@civismundi.world">HELLO@CIVISMUNDI.WORLD</a> &middot; <a target="_blank" href="https://www.instagram.com">INSTAGRAM</a>
+              </p>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ const Home = styled.div`
     height: 100%;
     pointer-events: none;
 
-    .section__footer {
+    &__footer {
       position: absolute;
       left: 0;
       right: 0;
