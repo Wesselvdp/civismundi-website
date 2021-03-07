@@ -22,8 +22,13 @@ const videoUrls = [
 
 /* eslint-disable prettier/prettier */
 const alphaMapUrls = {
-  'Land004_Mesh001' : 'Africa.jpg',
-  'Land001_Mesh001': 'South-America.jpg'
+  'Land004_Mesh001' : 'Africa.jpg', // africa
+  'Land001_Mesh001': 'South-America.jpg', // south america
+  'Land006_Mesh001': 'North-America.jpg', // north america
+  // 'Land002_Mesh001': 'Europe.jpg', // europe,
+  'Land_Mesh002': 'Russia.jpg', // russia
+  'Land005_Mesh001' : 'South-Pole.jpg', // south pole
+  'Land003_Mesh001' : 'Australia.jpg', // australia
 }
 /* eslint-enable prettier/prettier */
 
@@ -104,7 +109,9 @@ export default class Regions extends BaseObject {
 
   createAlphaMaps() {
     // create video textures
-    this.alphaMaps = Object.values(alphaMapUrls).map((url: string) => {
+    this.alphaMaps = []
+
+    Object.values(alphaMapUrls).forEach((url: string) => {
       const img = document.createElement('img')
       const alphaMap = new THREE.Texture(img)
 
@@ -118,7 +125,7 @@ export default class Regions extends BaseObject {
       alphaMap.format = THREE.RGBFormat
       alphaMap.flipY = false
 
-      return { map: alphaMap, url }
+      this.alphaMaps.push({ map: alphaMap, url })
     })
   }
 
