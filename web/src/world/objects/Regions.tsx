@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { clone } from 'lodash'
+import { get } from 'lodash'
 
 import BaseObject from './BaseObject'
 import World from '..'
@@ -25,21 +25,20 @@ const alphaMapUrls = {
   'Land004_Mesh001' : 'Africa.jpg', // africa
   'Land001_Mesh001': 'South-America.jpg', // south america
   'Land006_Mesh001': 'North-America.jpg', // north america
-  // 'Land002_Mesh001': 'Europe.jpg', // europe,
+  'Land002_Mesh001': 'Europe.jpg', // europe,
   'Land_Mesh002': 'Russia.jpg', // russia
   'Land005_Mesh001' : 'South-Pole.jpg', // south pole
   'Land003_Mesh001' : 'Australia.jpg', // australia
 }
 /* eslint-enable prettier/prettier */
 
+const loader = new THREE.TextureLoader()
 export default class Regions extends BaseObject {
   videos: any[] = []
-  alphaMaps: any[] = []
 
   constructor(world: World) {
     super(world)
 
-    this.createAlphaMaps()
     this.createVideoTextures()
     this.loadFile()
   }
@@ -51,7 +50,7 @@ export default class Regions extends BaseObject {
         if (child instanceof THREE.Mesh) {
           child.name === 'Globe_Mesh001'
             ? this.setWorldTexture(child)
-            : this.setVideoTexture(child)
+            : this.createContinentMaterial(child)
         }
       })
 
@@ -75,8 +74,17 @@ export default class Regions extends BaseObject {
       video.muted = true
       video.crossOrigin = 'anonymous'
       video.id = slug
-
       video.load()
+      video.play()
+
+      const texture = new THREE.VideoTexture(video)
+      texture.minFilter = THREE.LinearFilter
+      texture.magFilter = THREE.LinearFilter
+      texture.format = THREE.RGBFormat
+      texture.flipY = false
+
+      that.videos.push({ texture, video, active: [] })
+
       video.addEventListener('ended', () => {
         const continents = that.object.children.filter(
           (child: any) =>
@@ -90,43 +98,32 @@ export default class Regions extends BaseObject {
 
         that.videos[i].active = []
       })
-
-      const texture = new THREE.VideoTexture(video)
-      texture.minFilter = THREE.LinearFilter
-      texture.magFilter = THREE.LinearFilter
-      texture.format = THREE.RGBFormat
-      texture.flipY = false
-
-      const material = new THREE.MeshBasicMaterial({
-        side: THREE.FrontSide,
-        map: texture,
-        opacity: 0.65,
-        transparent: true,
-      })
-      that.videos.push({ material, video, active: [] })
     })
   }
 
-  createAlphaMaps() {
-    // create video textures
-    this.alphaMaps = []
+  createContinentMaterial(child: any) {
+    child.material = new THREE.MeshBasicMaterial({
+      side: THREE.FrontSide,
+      opacity: 0.65,
+      transparent: true,
+    })
 
-    Object.values(alphaMapUrls).forEach((url: string) => {
-      const img = document.createElement('img')
-      const alphaMap = new THREE.Texture(img)
+    this.setVideoTexture(child)
+    this.setAlphaMap(child)
+  }
 
-      img.onload = function () {
-        alphaMap.needsUpdate = true
-      }
-
-      img.src = `/alpha-map/${url}`
+  setAlphaMap(child: THREE.Mesh) {
+    // add alpha map
+    if (alphaMapUrls[child.name]) {
+      const alphaMap = loader.load(`/alpha-map/${alphaMapUrls[child.name]}`)
       alphaMap.minFilter = THREE.LinearFilter
       alphaMap.magFilter = THREE.LinearFilter
       alphaMap.format = THREE.RGBFormat
       alphaMap.flipY = false
 
-      this.alphaMaps.push({ map: alphaMap, url })
-    })
+      child.material.alphaMap = alphaMap
+      child.material.needsUpdate = true
+    }
   }
 
   setVideoTexture(child: THREE.Mesh) {
@@ -140,21 +137,13 @@ export default class Regions extends BaseObject {
       obj.video.play()
       obj.active.push(child.uuid)
 
-      const mat = clone(obj.material)
-      const alphaMap = this.alphaMaps.find(
-        (obj: any) => obj.url === alphaMapUrls[child.name]
-      )
-      if (alphaMap) {
-        mat.alphaMap = alphaMap.map
-        mat.alphaMap.needsUpdate = true
-      }
-
-      child.material = mat
+      child.material.map = obj.texture
+      child.material.needsUpdate = true
     }
   }
 
   setWorldTexture(globe: THREE.Mesh) {
-    const text = new THREE.TextureLoader().load('/earth-blue-marble-alt.jpg')
+    const text = loader.load('/earth-blue-marble-alt.jpg')
     text.flipY = false
 
     globe.material = new THREE.MeshLambertMaterial({
