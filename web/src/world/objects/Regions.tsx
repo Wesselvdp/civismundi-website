@@ -11,7 +11,7 @@ const videoUrls = [
   'franca.mp4',
   'libre.mp4',
   'superbowl.mp4',
-  'milehigh.mp4',
+  // 'milehigh.mp4',
   'captureland.mp4',
   'armani.mp4',
   'columbus.mp4',
@@ -70,7 +70,7 @@ export default class Regions extends BaseObject {
     videoUrls.forEach((slug: string, i: number) => {
       const video = document.createElement('video')
       video.setAttribute('playsinline', 'playsinline')
-      video.src = `/videos/${slug}`
+      video.src = `/videos-compressed/${slug}`
       video.muted = true
       video.crossOrigin = 'anonymous'
       video.id = slug
