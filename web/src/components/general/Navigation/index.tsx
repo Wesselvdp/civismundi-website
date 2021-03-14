@@ -27,7 +27,7 @@ const Navigation: FC<T> = ({ location }) => {
 
         {/* Center logo */}
         <div className="item--center">
-          <Logo />
+          {/* <Logo /> */}
         </div>
 
         {/* Right */}

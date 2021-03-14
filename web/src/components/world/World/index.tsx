@@ -28,7 +28,7 @@ const World = () => {
         <Globe
           ref={ref}
           globeImageUrl="/earth-blue-marble-alt.jpg"
-          bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+          bumpImageUrl="/earth-topology.png"
           showAtmosphere={false}
           animateIn={false}
           backgroundColor="rgba(0, 0, 0, 0)"

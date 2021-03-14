@@ -15,8 +15,8 @@ export default class GlobeController {
     const globe = this.world.globe;
 
     globe.controls().enableZoom = false;
-    globe.controls().autoRotate = true
-    globe.controls().autoRotateSpeed = 0.3
+    // globe.controls().autoRotate = true
+    // globe.controls().autoRotateSpeed = 0.3
 
     globe.globeMaterial().opacity = 0
     globe.renderer().setClearColor( 0x000000, 0 );
