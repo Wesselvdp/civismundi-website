@@ -1,27 +1,28 @@
 import React, { Suspense } from 'react'
 import { Canvas as CanvasT } from 'react-three-fiber'
-import { Camera, World } from '..'
+import { Globe, Controls, Lightning, Clouds, Effects } from '..'
 
-const Scene = () => {
+function Scene() {
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <spotLight intensity={0.8} position={[300, 300, 400]} />
-
-      <World />
+      <Globe />
+      {/* <Clouds /> */}
+      <Lightning />
     </>
   )
 }
+
 const Canvas = () => {
   const isSSR = typeof window === 'undefined'
 
   return (
     <div style={{ position: 'fixed', height: '100vh', width: '100vw' }}>
       {!isSSR && (
-        <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 250] }}>
+        <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 2] }}>
           <Suspense fallback={null}>
-            <Camera />
             <Scene />
+            <Controls />
+            <Effects />
           </Suspense>
         </CanvasT>
       )}

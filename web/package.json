@@ -9,7 +9,6 @@
     "@loadable/component": "^5.13.1",
     "@reach/tooltip": "^0.8.5",
     "@reach/utils": "^0.8.5",
-    "@react-three/drei": "^3.11.0",
     "@sanity/block-content-to-react": "^2.0.7",
     "@types/loadable__component": "^5.10.0",
     "@types/react-transition-group": "^4.4.0",

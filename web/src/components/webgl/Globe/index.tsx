@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo, useEffect } from 'react'
 import { useLoader } from 'react-three-fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -7,7 +8,7 @@ import { textures } from './data'
 
 const loader = new THREE.TextureLoader()
 
-const World = () => {
+function World() {
   const gltf = useLoader(GLTFLoader, '/Globe.glb')
 
   const worldMaterial = useMemo(() => {
@@ -63,6 +64,8 @@ const World = () => {
   }, [])
 
   const setWorldTexture = (globe: any) => {
+    console.log('globe', globe)
+
     globe.material = worldMaterial
   }
 
@@ -79,7 +82,7 @@ const World = () => {
       }
     })
 
-    gltf.scene.scale.set(100, 100, 100)
+    // gltf.scene.scale.set(100, 100, 100)
     gltf.scene.rotation.y = 1.11 * Math.PI
   }, [])
 

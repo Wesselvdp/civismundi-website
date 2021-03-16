@@ -138,7 +138,7 @@
 // }
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
-  console.log('stage', stage);
+  console.log('stage', stage)
   if (stage === 'build-html' || stage === 'develop-html') {
     actions.setWebpackConfig({
       module: {
@@ -153,12 +153,12 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
           },
           {
             test: /smooth-scrolling/,
-            use: loaders.null()
+            use: loaders.null(),
           },
           {
             test: /dat.gui/,
-            use: loaders.null()
-          }
+            use: loaders.null(),
+          },
         ],
       },
     })

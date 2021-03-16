@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+// @ts-nocheck
 export const textures: any = {
   // africa
   'Land004_Mesh001' : {
