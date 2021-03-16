@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { Canvas, Loader, Navigation } from '../components/general'
-import { Container as WorldContainer } from '../components/world'
+import { Canvas } from '../components/webgl'
 
 const Layout = () => {
   return (
