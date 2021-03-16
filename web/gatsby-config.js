@@ -66,6 +66,12 @@ module.exports = {
         icon: `src/media/favicon-32x32.png` // This path is relative to the root of the site.
       }
     },
+    {
+      resolve: `gatsby-plugin-offline`,
+      options: {
+        appendScript: require.resolve(`./sw-range-request-handler.js`),
+      },
+    }
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

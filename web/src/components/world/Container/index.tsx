@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
 import { World, Title, Galaxy } from '@components/world'
 import Div100vh from 'react-div-100vh'
+import { useStaticQuery, graphql } from 'gatsby'
 
 import { breakpoints } from '@utils/breakpoints'
 
@@ -13,6 +14,68 @@ const WorldContainer = ({}) => {
   const [showText, setShowText] = useState(false)
   const [finishedGlitch, setFinishedGlitch] = useState(false)
   const interactionTimer: { current: number | null } = useRef(0)
+
+    // Projects
+    const data = useStaticQuery(graphql`
+    query HeaderQuery {
+      allSanityLocation {
+        edges {
+          node {
+            _id
+            _type
+            title
+            location {
+              lat
+              lng
+            }
+          }
+        }
+      }
+      allSanityProject(sort: { fields: order, order: ASC }) {
+        edges {
+          node {
+            _id
+            _type
+            order
+            slug {
+              current
+            }
+            title
+            featured
+            city
+            clients
+            vimeo
+            quote {
+              content
+              quotee
+            }
+            location {
+              lat
+              lng
+            }
+            locationGroup {
+              _id
+              title
+              location {
+                lat
+                lng
+              }
+            }
+            poster {
+              asset {
+                url
+              }
+            }
+            video {
+              asset {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  `)
 
   useEffect(() => {
     if (world.ready) {
@@ -58,6 +121,10 @@ const WorldContainer = ({}) => {
 
     return () => window.removeEventListener('mousewheel', listener)
   }, [finishedGlitch])
+
+  useEffect(() => {
+    console.log('data', data)
+  }, [data])
 
   return (
     <Home className="home">
