@@ -1,15 +1,16 @@
 import React from 'react'
 
-import { Loader, Navigation } from '../components/general'
+import { Test, Loader, Navigation } from '../components/general'
 import { Container as WorldContainer } from '../components/world'
 
 const Layout = ({}) => {
   return (
     <>
-      <Loader />
+      {/* <Loader />
       <Navigation />
 
-      <WorldContainer />
+      <WorldContainer /> */}
+      <Test />
     </>
   )
 }
