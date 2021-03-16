@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { SEO } from '@components/general'
+import { SEO } from '@components/html'
 
 const IndexPage = () => {
   return <SEO title="Home" />

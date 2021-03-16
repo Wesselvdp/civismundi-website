@@ -1,16 +1,10 @@
-import React, { FC } from 'react'
-import { Link } from 'gatsby'
+import React from 'react'
 import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
 
 import { breakpoints } from '@utils/breakpoints'
-import { Logo } from '@components/general'
+import { Logo } from '@components/html'
 
-type T = any
-
-const Navigation: FC<T> = ({ location }) => {
-  const dispatch = useDispatch()
-
+const Navigation = () => {
   return (
     <Container>
       <Nav>
