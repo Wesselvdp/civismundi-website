@@ -1,15 +1,11 @@
 import React from 'react'
 
-import { Loader, Navigation } from '../components/general'
-import { Container as WorldContainer } from '../components/world'
+import { Canvas } from '../components/webgl'
 
-const Layout = ({}) => {
+const Layout = () => {
   return (
     <>
-      <Loader />
-      <Navigation />
-
-      <WorldContainer />
+      <Canvas />
     </>
   )
 }
