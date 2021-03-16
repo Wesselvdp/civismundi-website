@@ -6,9 +6,6 @@ import { useDispatch } from 'react-redux'
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/general'
 
-import { WorldMode } from '../../actions'
-import { setWorldMode } from '../../actions/mode'
-
 type T = any
 
 const Navigation: FC<T> = ({ location }) => {
