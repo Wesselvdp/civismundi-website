@@ -120,7 +120,7 @@ export default class Regions extends BaseObject {
       video.id = obj.video
       video.loop = true
       video.style.display = 'none'
-      video.src = obj.videoSanity
+      video.src = 'https://hay.github.io/test/dog.mp4'
       video.load()
       video.play()
 
