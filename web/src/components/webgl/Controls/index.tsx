@@ -23,7 +23,7 @@ function Controls({ timerRef, onTimerEnd }) {
     controls.dampingFactor = 0.1
     controls.enableZoom = false
     controls.autoRotate = true
-    controls.autoRotateSpeed = 0.3
+    controls.autoRotateSpeed = window.innerWidth < 700 ? 0.4 : 0.3
     controls.rotateSpeed = window.innerWidth < 700 ? 0.5 : 0.3
 
     controls.addEventListener('start', () => {
@@ -48,6 +48,7 @@ function Controls({ timerRef, onTimerEnd }) {
       controls.maxDistance = dist
 
       controls.rotateSpeed = window.innerWidth < 700 ? 0.5 : 0.3
+      controls.autoRotateSpeed = window.innerWidth < 700 ? 0.4 : 0.3
     }
     window.addEventListener('resize', onResize)
 

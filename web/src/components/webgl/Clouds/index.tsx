@@ -9,8 +9,14 @@ function Clouds() {
 
 
   useEffect(() => {
-    const multiplier = window.innerWidth < 700 ? 1.2 : 1
-    rotation.current = { x: 0.00003 * multiplier, y: 0.00012 * multiplier }
+    function onResize() {
+      const multiplier = window.innerWidth < 700 ? 1.8 : 1
+      rotation.current = { x: 0.00003 * multiplier, y: 0.00012 * multiplier }
+    }
+    onResize()
+    window.addEventListener('resize', onResize)
+
+    return () => window.removeEventListener('resize', onResize)
   }, [])
 
   useFrame(() => {

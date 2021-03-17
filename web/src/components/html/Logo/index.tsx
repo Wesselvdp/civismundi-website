@@ -5,35 +5,38 @@ import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
 
 const Logo = ({ ready }) => {
-  // const ref = useRef()
-  // const { hideVideo, setHideVideo } = useLogo()
+  const ref = useRef()
+  const { hideVideo, setHideVideo } = useLogo()
 
-  // const canPlayLogoVideo = () => {
-  //   return true
-  //   // return ref.current.canPlayType('video/webm; codecs="vp8, vorbis"')
-  // }
+  const canPlayLogoVideo = () => {
+    // return true
+    return (
+      ref.current.canPlayType('video/webm; codecs="vp8, vorbis"') ||
+      ref.current.canPlayType('video/quicktime')
+    )
+  }
 
-  // useEffect(() => {
-  //   if (canPlayLogoVideo()) {
-  //     ref.current.load()
-  //   }
+  useEffect(() => {
+    canPlayLogoVideo() && ref.current.load()
 
-  //   if (ready) {
-  //     canPlayLogoVideo() ? ref.current.play() : setHideVideo(true)
-  //   }
-  // }, [ready])
+    if (ready) {
+      canPlayLogoVideo() ? ref.current.play() : setHideVideo(true)
+    }
+  }, [ready])
 
   return (
     <Link to="/">
       <Container>
-        <img src="/logo-still.png" />
-        {/* <video
+        <img src="/logo-still.png" className={!hideVideo ? 'hidden' : ''} />
+        <video
           ref={ref}
           className={hideVideo ? 'hidden' : ''}
           playsInline
           muted
         >
-        </video> */}
+          <source src="/logo.mov" type="video/quicktime" />
+          <source src="/logo4.webm" type="video/webm" />
+        </video>
       </Container>
     </Link>
   )
