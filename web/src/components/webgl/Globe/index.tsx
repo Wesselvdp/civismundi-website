@@ -22,8 +22,6 @@ function World() {
       map: texture,
     })
 
-    // material.map.minFilter = THREE.LinearFilter
-
     return material
   }, [])
 
@@ -55,7 +53,6 @@ function World() {
         transparent: true,
         alphaMap,
       })
-      // material.map.minFilter = THREE.LinearFilter
 
       materials[key] = material
     })

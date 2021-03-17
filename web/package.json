@@ -51,6 +51,7 @@
     "react-is-scrolling": "^1.0.1",
     "react-lottie": "^1.2.3",
     "react-modal-video": "^1.2.5",
+    "react-page-visibility": "^6.4.0",
     "react-parallax-tilt": "^1.4.66",
     "react-player": "^2.5.0",
     "react-redux": "^7.2.1",
