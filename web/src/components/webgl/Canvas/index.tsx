@@ -53,7 +53,7 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress }) => {
         <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 3] }}>
           <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
           <LoadingManager onProgress={onProgress} />
-          {/* <Effects /> */}
+          <Effects />
 
           <Suspense fallback={null}>
             <Scene />
