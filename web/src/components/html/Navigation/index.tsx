@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/html'
 
-const Navigation = () => {
+const Navigation = ({ ready }) => {
   return (
     <Container>
       <Nav>
@@ -18,7 +18,7 @@ const Navigation = () => {
 
         {/* Center logo */}
         <div className="item--center">
-          <Logo />
+          <Logo ready={ready} />
         </div>
 
         {/* Right */}

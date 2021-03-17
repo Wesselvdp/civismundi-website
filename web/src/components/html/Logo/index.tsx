@@ -4,16 +4,19 @@ import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
 
-const Logo = () => {
+const Logo = ({ ready }) => {
   const ref = useRef()
   const { hideVideo, setHideVideo } = useLogo()
 
   useEffect(() => {
-    ref.current.play()
-
+    ref.current.load()
     ref.current.addEventListener('ended', () => setHideVideo(true))
     ref.current.addEventListener('error', () => setHideVideo(true))
-  }, [])
+
+    if (ready) {
+      ref.current.play()
+    }
+  }, [ready])
 
   return (
     <Link to="/">
