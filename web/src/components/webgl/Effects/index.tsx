@@ -43,7 +43,7 @@ function Effects({ ready }) {
 
       setTimeout(() => {
         glitchPass.range = [540, 660]
-        glitchPass.generateTrigger()
+        glitchPass.generateTrigger() 
       }, 10000)
     }
   }, [ready])
