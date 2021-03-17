@@ -8,13 +8,18 @@ const Logo = ({ ready }) => {
   // const ref = useRef()
   // const { hideVideo, setHideVideo } = useLogo()
 
+  // const canPlayLogoVideo = () => {
+  //   return true
+  //   // return ref.current.canPlayType('video/webm; codecs="vp8, vorbis"')
+  // }
+
   // useEffect(() => {
-  //   ref.current.load()
-  //   ref.current.addEventListener('ended', () => setHideVideo(true))
-  //   ref.current.addEventListener('error', () => setHideVideo(true))
+  //   if (canPlayLogoVideo()) {
+  //     ref.current.load()
+  //   }
 
   //   if (ready) {
-  //     ref.current.play()
+  //     canPlayLogoVideo() ? ref.current.play() : setHideVideo(true)
   //   }
   // }, [ready])
 
@@ -28,8 +33,6 @@ const Logo = ({ ready }) => {
           playsInline
           muted
         >
-          <source src="/cm-logo-3-1.mov" type="video/quicktime" />
-          <source src="/logo4.webm" type="video/webm" />
         </video> */}
       </Container>
     </Link>

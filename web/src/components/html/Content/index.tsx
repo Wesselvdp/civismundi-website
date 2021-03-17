@@ -6,7 +6,7 @@ import { Title } from '@components/html'
 import { breakpoints } from '@utils/breakpoints'
 
 const Content = ({ show, setShow }) => {
-  const [finishedGlitch, setFinishedGlitch] = useState(true)
+  const [finishedGlitch, setFinishedGlitch] = useState(false)
 
   useEffect(() => {
     function listener() {
@@ -26,7 +26,7 @@ const Content = ({ show, setShow }) => {
         <Title show={show} />
 
         <div className="section__footer">
-          <div className={`${show || !finishedGlitch ? 'fade' : 'fade in'}`}>
+          <div className={`${show ? 'fade' : 'fade in'}`}>
             <div className="scroll-container">
               <div className="scroll-indicator" onClick={() => setShow(true)}>
                 <div>

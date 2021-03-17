@@ -10,7 +10,7 @@ function Controls({ timerRef, onTimerEnd }) {
   const { camera, gl } = useThree()
 
   const calculateMinDistance = () =>
-    GLOBE_RADIUS * 1.01 * (window.innerWidth < 700 ? 1.65 : 1.2)
+    GLOBE_RADIUS * 1.01 * (window.innerWidth < 700 ? 1.45 : 1.2)
 
   const controls = useMemo(() => {
     const controls = new OrbitControls(camera, gl.domElement)

@@ -8,7 +8,7 @@ import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js'
 import { StaticShader } from './shaders/StaticShader'
 import { GlitchPass } from './passes/GlitchPass'
 
-function Effects() {
+function Effects({ ready }) {
   const { gl, scene, camera, size } = useThree()
 
   const [composer, glitchPass, staticPass] = useMemo(() => {
@@ -36,15 +36,17 @@ function Effects() {
   }, [])
 
   useEffect(() => {
-    setTimeout(() => {
-      glitchPass.goWild = false
-    }, 2000)
+    if (ready) {
+      setTimeout(() => {
+        glitchPass.goWild = false
+      }, 1500)
 
-    setTimeout(() => {
-      glitchPass.range = [540, 660]
-      glitchPass.generateTrigger()
-    }, 10000)
-  }, [])
+      setTimeout(() => {
+        glitchPass.range = [540, 660]
+        glitchPass.generateTrigger()
+      }, 10000)
+    }
+  }, [ready])
 
   useEffect(() => {
     composer.setSize(size.width, size.height)
