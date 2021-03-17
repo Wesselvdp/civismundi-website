@@ -1,14 +1,16 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 // import useLogo from '@hooks/useLogo'
 import { isSafari, isMobileSafari } from 'react-device-detect'
-const canPlayVideo = !isSafari || isMobileSafari
+// const canPlayVideo = !isSafari || isMobileSafari
 
 const Logo = ({ ready }) => {
   const ref = useRef()
 
+  const [canPlayVideo] = useState(!isSafari || isMobileSafari)
+  console.log('device safari', isSafari, 'mobile safari', isMobileSafari)
   useEffect(() => {
     if (canPlayVideo) {
       ref.current.load()
