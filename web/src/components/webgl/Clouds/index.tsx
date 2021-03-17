@@ -7,6 +7,7 @@ function Clouds() {
   const rotation = useRef()
   const texture = useLoader(THREE.TextureLoader, '/clouds.png')
 
+
   useEffect(() => {
     const multiplier = window.innerWidth < 700 ? 1.2 : 1
     rotation.current = { x: 0.00003 * multiplier, y: 0.00012 * multiplier }
@@ -19,7 +20,7 @@ function Clouds() {
 
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
-      <sphereBufferGeometry args={[1.01, 32, 32]} attach="geometry" />
+      <sphereBufferGeometry args={[1.03, 32, 32]} attach="geometry" />
       <meshPhongMaterial
         map={texture}
         transparent
