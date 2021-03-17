@@ -50,7 +50,11 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress }) => {
   return (
     <div style={style}>
       {!isSSR && (
-        <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 3] }}>
+        <CanvasT
+          gl={{ antialias: false }}
+          camera={{ position: [0, 0, 3] }}
+          pixelRatio={window.devicePixelRatio}
+        >
           <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
           <LoadingManager onProgress={onProgress} />
           <Effects />
