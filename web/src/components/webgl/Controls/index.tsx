@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useFrame, useThree } from 'react-three-fiber'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
@@ -8,18 +8,23 @@ const INTERACTION_THRESHOLD = 150
 
 function Controls({ timerRef, onTimerEnd }) {
   const { camera, gl } = useThree()
+
+  const calculateMinDistance = () =>
+    GLOBE_RADIUS * 1.01 * (window.innerWidth < 700 ? 1.65 : 1.2)
+
   const controls = useMemo(() => {
     const controls = new OrbitControls(camera, gl.domElement)
 
-    controls.minDistance = GLOBE_RADIUS * (window.innerWidth < 700 ? 2 : 1.2) // just above the surface
-    controls.maxDistance = GLOBE_RADIUS * 100 // apply async  after renderObjs sets maxDistance
+    const dist = calculateMinDistance()
+    controls.minDistance = dist // just above the surface
+    controls.maxDistance = dist // apply async  after renderObjs sets maxDistance
     controls.enablePan = false
     controls.enableDamping = true
     controls.dampingFactor = 0.1
-    controls.rotateSpeed = 0.3
     controls.enableZoom = false
     controls.autoRotate = true
     controls.autoRotateSpeed = 0.3
+    controls.rotateSpeed = window.innerWidth < 700 ? 0.5 : 0.3
 
     controls.addEventListener('start', () => {
       timerRef.current = Date.now()
@@ -38,7 +43,11 @@ function Controls({ timerRef, onTimerEnd }) {
     })
 
     function onResize() {
-      controls.minDistance = GLOBE_RADIUS * (window.innerWidth < 700 ? 2 : 1.2) 
+      const dist = calculateMinDistance()
+      controls.minDistance = dist
+      controls.maxDistance = dist
+
+      controls.rotateSpeed = window.innerWidth < 700 ? 0.5 : 0.3
     }
     window.addEventListener('resize', onResize)
 

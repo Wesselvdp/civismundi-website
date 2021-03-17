@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useMemo, useEffect } from 'react'
-import { useLoader } from 'react-three-fiber'
+import { useLoader, useThree } from 'react-three-fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import * as THREE from 'three'
 
@@ -10,15 +10,19 @@ const loader = new THREE.TextureLoader()
 
 function World() {
   const gltf = useLoader(GLTFLoader, '/Globe.glb')
+  const { gl } = useThree()
 
   const worldMaterial = useMemo(() => {
     const texture = loader.load('/earth-blue-marble-alt.jpg')
     texture.flipY = false
+    texture.anisotropy = gl.capabilities.getMaxAnisotropy()
 
     const material = new THREE.MeshLambertMaterial({
       side: THREE.DoubleSide,
       map: texture,
     })
+
+    // material.map.minFilter = THREE.LinearFilter
 
     return material
   }, [])
@@ -29,14 +33,7 @@ function World() {
     Object.keys(textures).forEach((key) => {
       const obj = textures[key]
 
-      const vid = document.createElement('video')
-      vid.setAttribute('playsinline', 'playsinline')
-      vid.muted = true
-      vid.crossOrigin = 'anonymous'
-      vid.loop = true
-      vid.style.display = 'none'
-      vid.src = obj.videoSanity
-      vid.load()
+      const vid = document.getElementById(key)
       vid.play()
 
       const texture = new THREE.VideoTexture(vid)
@@ -44,6 +41,7 @@ function World() {
       texture.magFilter = THREE.LinearFilter
       texture.format = THREE.RGBFormat
       texture.flipY = false
+      texture.anisotropy = gl.capabilities.getMaxAnisotropy()
 
       const alphaMap = loader.load(`/alpha-map/${obj.alpha}`)
       alphaMap.minFilter = THREE.LinearFilter
@@ -57,6 +55,8 @@ function World() {
         transparent: true,
         alphaMap,
       })
+      // material.map.minFilter = THREE.LinearFilter
+
       materials[key] = material
     })
 
@@ -82,7 +82,6 @@ function World() {
       }
     })
 
-    // gltf.scene.scale.set(100, 100, 100)
     gltf.scene.rotation.y = 1.11 * Math.PI
   }, [])
 

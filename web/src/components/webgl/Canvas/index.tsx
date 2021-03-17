@@ -34,18 +34,29 @@ function LoadingManager({ onProgress }) {
   return null
 }
 
+const style = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  height: '100%',
+  with: '100%',
+}
+
 const Canvas = ({ timerRef, onTimerEnd, onProgress }) => {
   const isSSR = typeof window === 'undefined'
 
   return (
-    <div style={{ position: 'fixed', height: '100vh', width: '100vw' }}>
+    <div style={style}>
       {!isSSR && (
-        <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 2] }}>
+        <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 3] }}>
+          <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
+          <LoadingManager onProgress={onProgress} />
+          {/* <Effects /> */}
+
           <Suspense fallback={null}>
             <Scene />
-            <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
-            <LoadingManager onProgress={onProgress} />
-            <Effects />
           </Suspense>
         </CanvasT>
       )}

@@ -21,7 +21,7 @@ function Clouds() {
 
   return (
     <mesh ref={mesh}>
-      <sphereGeometry args={[1.78, 32, 32]} />
+      <sphereGeometry args={[GLOBE_RADIUS * 1.02, 32, 32]} />
       <meshPhongMaterial
         map={texture}
         transparent

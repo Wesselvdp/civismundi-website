@@ -113,7 +113,7 @@ const Loader = ({ progress, onFinish }) => {
             />
           </svg>
         </div>
-        <p>{`${parseInt(pseudoProgress * 100, 10)}%`}</p>
+        <p>{`${parseInt((pseudoProgress || 0) * 100, 10)}%`}</p>
       </div>
     </Container>
   )
@@ -127,6 +127,8 @@ const Container = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  height: 100%;
+  width: 100%;
   z-index: 10000000;
   background-color: rgb(0, 0, 0);
   opacity: 1;

@@ -22,41 +22,40 @@ const Content = ({ show, setShow }) => {
 
   return (
     <Home className="home">
-      <Div100vh>
-        <div className="section">
-          <Title show={show} />
+      <div className="section">
+        <Title show={show} />
 
-          <div className="section__footer">
-            <div className={`${show || !finishedGlitch ? 'fade' : 'fade in'}`}>
-              <div className="scroll-container">
-                <div className="scroll-indicator" onClick={() => setShow(true)}>
-                  <div>
-                    <img src="/arrow-down.svg" />
-                  </div>
+        <div className="section__footer">
+          <div className={`${show || !finishedGlitch ? 'fade' : 'fade in'}`}>
+            <div className="scroll-container">
+              <div className="scroll-indicator" onClick={() => setShow(true)}>
+                <div>
+                  <img src="/arrow-down.svg" />
                 </div>
-                {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
               </div>
+              {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
             </div>
+          </div>
 
-            <div className={`${show ? 'fade in' : 'fade'}`}>
-              <div>
-                <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
-              </div>
-              <div>
-                <p>
-                  <a target="_blank" href="mailto: hello@civismundi.world">
-                    HELLO@CIVISMUNDI.WORLD
-                  </a>{' '}
-                  &middot;{' '}
-                  <a target="_blank" href="https://www.instagram.com">
-                    INSTAGRAM
-                  </a>
-                </p>
-              </div>
+          <div className={`${show ? 'fade in' : 'fade'}`}>
+            <div>
+              <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
+            </div>
+            <div>
+              <p>
+                <a target="_blank" href="mailto: hello@civismundi.world">
+                  HELLO@CIVISMUNDI.WORLD
+                </a>{' '}
+                &middot;{' '}
+                <a target="_blank" href="https://www.instagram.com">
+                  INSTAGRAM
+                </a>
+              </p>
             </div>
           </div>
         </div>
-      </Div100vh>
+      </div>
+==
     </Home>
   )
 }
@@ -72,6 +71,8 @@ const Home = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   height: 100%;
   width: 100%;
   z-index: 1;

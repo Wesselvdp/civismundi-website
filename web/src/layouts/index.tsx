@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-
-import { Navigation, Galaxy, Content, Loader } from '../components/html'
+import React, { useRef, useState } from 'react'
+import Div100vh from 'react-div-100vh'
+import { Navigation, Galaxy, Content, Loader, Videos } from '../components/html'
 import { Canvas } from '../components/webgl'
 
 const Layout = () => {
@@ -12,14 +12,18 @@ const Layout = () => {
   return (
     <>
       <Navigation ready={ready} />
-      <Galaxy />
-      <Loader progress={progress} onFinish={setReady} />
-      <Content show={showContent} setShow={setShowContent} />
-      <Canvas
-        timerRef={interactionTimer}
-        onTimerEnd={setShowContent}
-        onProgress={setProgress}
-      />
+      <Div100vh>
+        <Loader progress={progress} onFinish={setReady} />
+        <Content show={showContent} setShow={setShowContent} />
+        <Canvas
+          timerRef={interactionTimer}
+          onTimerEnd={setShowContent}
+          onProgress={setProgress}
+        />
+        <Galaxy />
+      </Div100vh>
+
+      <Videos />
     </>
   )
 }
