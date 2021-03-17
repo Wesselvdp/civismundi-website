@@ -2,21 +2,21 @@ import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
-import useLogo from '@hooks/useLogo'
+// import useLogo from '@hooks/useLogo'
 import { isSafari, isMobileSafari } from 'react-device-detect'
+const canPlayVideo = !isSafari || isMobileSafari
 
 const Logo = ({ ready }) => {
   const ref = useRef()
 
-  const canPlayLogoVideo = () => {
-    return !isSafari || isMobileSafari
-  }
+  useEffect(() => {
+    if (canPlayVideo) {
+      ref.current.load()
+    }
+  }, [])
 
   useEffect(() => {
-    if (!canPlayLogoVideo()) return
-    ref.current.load()
-
-    if (ready) {
+    if (ready && canPlayVideo) {
       ref.current.play()
     }
   }, [ready])
@@ -24,12 +24,16 @@ const Logo = ({ ready }) => {
   return (
     <Link to="/">
       <Container>
-        {!canPlayLogoVideo() && <img src="/logo-still.png" />}
-        {canPlayLogoVideo() && (
-          <video ref={ref} playsInline muted>
-            <source src="/logo4.webm" type="video/webm" />
-          </video>
-        )}
+        <img src="/logo-still.png" className={canPlayVideo ? 'hidden' : ''} />
+        <video
+          ref={ref}
+          className={canPlayVideo ? '' : 'hidden'}
+          playsInline
+          muted
+        >
+          <source src="/cm-logo-3-1.mov" type="video/quicktime" />
+          <source src="/logo4.webm" type="video/webm" />
+        </video>
       </Container>
     </Link>
   )
