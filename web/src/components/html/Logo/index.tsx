@@ -3,40 +3,33 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
+import { isSafari } from 'react-device-detect'
 
 const Logo = ({ ready }) => {
   const ref = useRef()
-  const { hideVideo, setHideVideo } = useLogo()
 
   const canPlayLogoVideo = () => {
-    // return true
-    return (
-      ref.current.canPlayType('video/webm; codecs="vp8, vorbis"') ||
-      ref.current.canPlayType('video/quicktime')
-    )
+    return !isSafari
   }
 
   useEffect(() => {
-    canPlayLogoVideo() && ref.current.load()
+    if (!canPlayLogoVideo()) return
+    ref.current.load()
 
     if (ready) {
-      canPlayLogoVideo() ? ref.current.play() : setHideVideo(true)
+      ref.current.play()
     }
   }, [ready])
 
   return (
     <Link to="/">
       <Container>
-        <img src="/logo-still.png" className={!hideVideo ? 'hidden' : ''} />
-        <video
-          ref={ref}
-          className={hideVideo ? 'hidden' : ''}
-          playsInline
-          muted
-        >
-          <source src="/logo.mov" type="video/quicktime" />
-          <source src="/logo4.webm" type="video/webm" />
-        </video>
+        {!canPlayLogoVideo() && <img src="/logo-still.png" />}
+        {canPlayLogoVideo() && (
+          <video ref={ref} playsInline muted>
+            <source src="/logo4.webm" type="video/webm" />
+          </video>
+        )}
       </Container>
     </Link>
   )
