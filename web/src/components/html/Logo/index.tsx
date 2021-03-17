@@ -5,24 +5,24 @@ import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
 
 const Logo = ({ ready }) => {
-  const ref = useRef()
-  const { hideVideo, setHideVideo } = useLogo()
+  // const ref = useRef()
+  // const { hideVideo, setHideVideo } = useLogo()
 
-  useEffect(() => {
-    ref.current.load()
-    ref.current.addEventListener('ended', () => setHideVideo(true))
-    ref.current.addEventListener('error', () => setHideVideo(true))
+  // useEffect(() => {
+  //   ref.current.load()
+  //   ref.current.addEventListener('ended', () => setHideVideo(true))
+  //   ref.current.addEventListener('error', () => setHideVideo(true))
 
-    if (ready) {
-      ref.current.play()
-    }
-  }, [ready])
+  //   if (ready) {
+  //     ref.current.play()
+  //   }
+  // }, [ready])
 
   return (
     <Link to="/">
       <Container>
-        <img src="/logo-still.png" className={hideVideo ? '' : 'hidden'} />
-        <video
+        <img src="/logo-still.png" />
+        {/* <video
           ref={ref}
           className={hideVideo ? 'hidden' : ''}
           playsInline
@@ -30,7 +30,7 @@ const Logo = ({ ready }) => {
         >
           <source src="/cm-logo-3-1.mov" type="video/quicktime" />
           <source src="/logo4.webm" type="video/webm" />
-        </video>
+        </video> */}
       </Container>
     </Link>
   )
