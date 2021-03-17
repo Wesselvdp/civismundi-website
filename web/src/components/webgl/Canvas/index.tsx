@@ -4,13 +4,13 @@ import * as THREE from 'three'
 
 import { Globe, Controls, Lightning, Clouds, Effects } from '..'
 
-const OBJECTS_TO_LOAD = 10
+const OBJECTS_TO_LOAD = 11
 
 function Scene() {
   return (
     <>
       <Globe />
-      {/* <Clouds /> */}
+      <Clouds />
       <Lightning />
     </>
   )

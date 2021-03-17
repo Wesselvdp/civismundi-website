@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useLayoutEffect, useMemo } from 'react'
 import { useFrame, useThree } from 'react-three-fiber'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
@@ -11,7 +11,7 @@ function Controls({ timerRef, onTimerEnd }) {
   const controls = useMemo(() => {
     const controls = new OrbitControls(camera, gl.domElement)
 
-    controls.minDistance = GLOBE_RADIUS * 1.2 // just above the surface
+    controls.minDistance = GLOBE_RADIUS * (window.innerWidth < 700 ? 2 : 1.2) // just above the surface
     controls.maxDistance = GLOBE_RADIUS * 100 // apply async  after renderObjs sets maxDistance
     controls.enablePan = false
     controls.enableDamping = true
@@ -36,6 +36,11 @@ function Controls({ timerRef, onTimerEnd }) {
         timerRef.current = null
       }
     })
+
+    function onResize() {
+      controls.minDistance = GLOBE_RADIUS * (window.innerWidth < 700 ? 2 : 1.2) 
+    }
+    window.addEventListener('resize', onResize)
 
     return controls
   }, [])
