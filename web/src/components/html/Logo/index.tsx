@@ -2,32 +2,30 @@ import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
-// import useLogo from '@hooks/useLogo'
-import { isSafari, isMobileSafari } from 'react-device-detect'
-// const canPlayVideo = !isSafari || isMobileSafari
+// import { isSafari, isMobileSafari } from 'react-device-detect'
 
 const Logo = ({ ready }) => {
-  const ref = useRef()
+  // const ref = useRef()
 
-  const [canPlayVideo] = useState(!isSafari || isMobileSafari)
-  console.log('device safari', isSafari, 'mobile safari', isMobileSafari)
-  useEffect(() => {
-    if (canPlayVideo) {
-      ref.current.load()
-    }
-  }, [])
+  // const [canPlayVideo] = useState(!isSafari || isMobileSafari)
 
-  useEffect(() => {
-    if (ready && canPlayVideo) {
-      ref.current.play()
-    }
-  }, [ready])
+  // useEffect(() => {
+  //   if (canPlayVideo) {
+  //     ref.current.load()
+  //   }
+  // }, [])
+
+  // useEffect(() => {
+  //   if (ready && canPlayVideo) {
+  //     ref.current.play()
+  //   }
+  // }, [ready])
 
   return (
     <Link to="/">
       <Container>
-        <img src="/logo-still.png" className={canPlayVideo ? 'hidden' : ''} />
-        <video
+        <img src="/logo-still.png" />
+        {/* <video
           ref={ref}
           className={canPlayVideo ? '' : 'hidden'}
           playsInline
@@ -35,7 +33,7 @@ const Logo = ({ ready }) => {
         >
           <source src="/cm-logo-3-1.mov" type="video/quicktime" />
           <source src="/logo4.webm" type="video/webm" />
-        </video>
+        </video> */}
       </Container>
     </Link>
   )
