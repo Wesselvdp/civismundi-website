@@ -20,14 +20,14 @@ function Clouds() {
   })
 
   return (
-    <mesh renderOrder={1} ref={mesh}>
-      <sphereGeometry args={[1.125 * GLOBE_RADIUS, 32, 32]} />
+    <mesh ref={mesh}>
+      <sphereGeometry args={[1.78, 32, 32]} />
       <meshPhongMaterial
         map={texture}
         transparent
         side={THREE.DoubleSide}
         alphaTest={0.1}
-        opacity={1}
+        opacity={0.6}
       />
     </mesh>
   )
