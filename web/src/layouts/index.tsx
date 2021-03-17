@@ -14,13 +14,13 @@ const Layout = () => {
       <Navigation ready={ready} />
       <Div100vh>
         <Loader progress={progress} onFinish={setReady} />
-        <Content show={showContent} setShow={setShowContent} />
+        {/* <Content show={showContent} setShow={setShowContent} /> */}
         <Canvas
           timerRef={interactionTimer}
           onTimerEnd={setShowContent}
           onProgress={setProgress}
         />
-        <Galaxy />
+        {/* <Galaxy /> */}
       </Div100vh>
 
       <Videos />

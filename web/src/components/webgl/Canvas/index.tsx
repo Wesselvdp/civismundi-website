@@ -1,5 +1,5 @@
-import React, { Suspense, useMemo } from 'react'
-import { Canvas as CanvasT } from 'react-three-fiber'
+import React, { Suspense, useEffect, useMemo, useRef } from 'react'
+import { Canvas as CanvasT, useLoader, useFrame } from 'react-three-fiber'
 import * as THREE from 'three'
 
 import { Globe, Controls, Lightning, Clouds, Effects } from '..'
@@ -11,7 +11,6 @@ function Scene() {
     <>
       <Globe />
       <Clouds />
-      <Lightning />
     </>
   )
 }
@@ -55,9 +54,10 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress }) => {
           camera={{ position: [0, 0, 3] }}
           pixelRatio={window.devicePixelRatio}
         >
+          <Lightning />
           <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
-          <LoadingManager onProgress={onProgress} />
           <Effects />
+          <LoadingManager onProgress={onProgress} />
 
           <Suspense fallback={null}>
             <Scene />

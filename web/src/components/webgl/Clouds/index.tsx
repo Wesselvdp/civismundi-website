@@ -2,10 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import { useLoader, useFrame } from 'react-three-fiber'
 import * as THREE from 'three'
 
-import { GLOBE_RADIUS } from '../utils/constants'
-
 function Clouds() {
-  const mesh = useRef()
+  const meshRef = useRef()
   const rotation = useRef()
   const texture = useLoader(THREE.TextureLoader, '/clouds.png')
 
@@ -15,22 +13,22 @@ function Clouds() {
   }, [])
 
   useFrame(() => {
-    mesh.current.rotation.y -= rotation.current.y
-    mesh.current.rotation.x -= rotation.current.x
+    meshRef.current.rotation.y -= rotation.current.y
+    meshRef.current.rotation.x -= rotation.current.x
   })
 
   return (
-    <mesh ref={mesh}>
-      <sphereGeometry args={[GLOBE_RADIUS * 1.02, 32, 32]} />
+    <mesh ref={meshRef} position={[0, 0, 0]}>
+      <sphereBufferGeometry args={[1.01, 32, 32]} attach="geometry" />
       <meshPhongMaterial
         map={texture}
         transparent
         side={THREE.DoubleSide}
+        attach="material"
         alphaTest={0.1}
         opacity={0.6}
       />
     </mesh>
   )
 }
-
 export default Clouds
