@@ -22,7 +22,7 @@ export const textures: any = {
   // europe,
   'Land002_Mesh001': {
     alpha: 'Europe.jpg',
-    video: 'franca.mp4',
+    video: 'armani.mp4',
     videoSanity: 'https://cdn.sanity.io/files/aail6zsu/dev/569f22b69aa7aba92434eead87e5e9202e2db638.mp4'
   },
   // russia

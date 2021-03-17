@@ -10,7 +10,7 @@ const Videos = () => {
     () =>
       Object.keys(textures).map((key) => ({
         id: key,
-        src: `/videos/${textures[key].video}`,
+        src: `${textures[key].videoSanity}`,
       })),
     []
   )
