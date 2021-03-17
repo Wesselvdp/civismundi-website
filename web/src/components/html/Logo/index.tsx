@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import useLogo from '@hooks/useLogo'
-import { isSafari } from 'react-device-detect'
+import { isSafari, isMobileSafari } from 'react-device-detect'
 
 const Logo = ({ ready }) => {
   const ref = useRef()
 
   const canPlayLogoVideo = () => {
-    return !isSafari
+    return !isSafari || isMobileSafari
   }
 
   useEffect(() => {
