@@ -43,7 +43,7 @@ const style = {
   with: '100%',
 }
 
-const Canvas = ({ timerRef, onTimerEnd, onProgress, ready }) => {
+const Canvas = ({ timerRef, onTimerEnd, onProgress, ready, onGlitchFinished }) => {
   const isSSR = typeof window === 'undefined'
 
   return (
@@ -56,7 +56,7 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress, ready }) => {
         >
           <Lightning />
           <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
-          <Effects ready={ready} />
+          <Effects ready={ready} onGlitchFinished={onGlitchFinished} />
           <LoadingManager onProgress={onProgress} />
 
           <Suspense fallback={null}>

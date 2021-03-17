@@ -5,20 +5,18 @@ import Div100vh from 'react-div-100vh'
 import { Title } from '@components/html'
 import { breakpoints } from '@utils/breakpoints'
 
-const Content = ({ show, setShow }) => {
-  const [finishedGlitch, setFinishedGlitch] = useState(false)
-
+const Content = ({ show, setShow, glitchFinished }) => {
   useEffect(() => {
     function listener() {
       setShow(true)
     }
 
-    if (finishedGlitch) {
+    if (glitchFinished) {
       window.addEventListener('mousewheel', listener)
     }
 
     return () => window.removeEventListener('mousewheel', listener)
-  }, [])
+  }, [glitchFinished])
 
   return (
     <Home className="home">
@@ -37,7 +35,7 @@ const Content = ({ show, setShow }) => {
             </div>
           </div>
 
-          <div className={`${show ? 'fade in' : 'fade'}`}>
+          <div className={`${show && glitchFinished ? 'fade in' : 'fade'}`}>
             <div>
               <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
             </div>

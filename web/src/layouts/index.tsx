@@ -6,6 +6,7 @@ import { Canvas } from '../components/webgl'
 const Layout = () => {
   const interactionTimer = useRef()
   const [showContent, setShowContent] = useState(false)
+  const [glitchFinished, setGlitchFinished] = useState(false)
   const [progress, setProgress] = useState(0)
   const [ready, setReady] = useState(false)
 
@@ -14,11 +15,17 @@ const Layout = () => {
       <Navigation ready={ready} />
       <Div100vh>
         <Loader progress={progress} onFinish={setReady} />
-        <Content show={showContent} setShow={setShowContent} ready={ready} />
+        <Content
+          show={showContent}
+          setShow={setShowContent}
+          ready={ready}
+          glitchFinished={glitchFinished}
+        />
         <Canvas
           timerRef={interactionTimer}
           onTimerEnd={setShowContent}
           onProgress={setProgress}
+          onGlitchFinished={setGlitchFinished}
           ready={ready}
         />
         <Galaxy />

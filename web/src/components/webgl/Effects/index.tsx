@@ -8,7 +8,7 @@ import { CopyShader } from 'three/examples/jsm/shaders/CopyShader.js'
 import { StaticShader } from './shaders/StaticShader'
 import { GlitchPass } from './passes/GlitchPass'
 
-function Effects({ ready }) {
+function Effects({ ready, onGlitchFinished }) {
   const { gl, scene, camera, size } = useThree()
 
   const [composer, glitchPass, staticPass] = useMemo(() => {
@@ -39,6 +39,7 @@ function Effects({ ready }) {
     if (ready) {
       setTimeout(() => {
         glitchPass.goWild = false
+        onGlitchFinished(true)
       }, 1500)
 
       setTimeout(() => {
