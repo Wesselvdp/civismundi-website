@@ -4,7 +4,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { GLOBE_RADIUS } from '../utils/constants'
 
-function Controls() {
+const INTERACTION_THRESHOLD = 150
+
+function Controls({ timerRef, onTimerEnd }) {
   const { camera, gl } = useThree()
   const controls = useMemo(() => {
     const controls = new OrbitControls(camera, gl.domElement)
@@ -18,6 +20,22 @@ function Controls() {
     controls.enableZoom = false
     controls.autoRotate = true
     controls.autoRotateSpeed = 0.3
+
+    controls.addEventListener('start', () => {
+      timerRef.current = Date.now()
+    })
+
+    controls.addEventListener('end', () => {
+      if (timerRef.current) {
+        const elapsed = Date.now() - timerRef.current
+
+        if (elapsed > INTERACTION_THRESHOLD) {
+          onTimerEnd(false)
+        }
+
+        timerRef.current = null
+      }
+    })
 
     return controls
   }, [])

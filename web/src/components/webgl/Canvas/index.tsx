@@ -12,7 +12,7 @@ function Scene() {
   )
 }
 
-const Canvas = () => {
+const Canvas = ({ timerRef, onTimerEnd }) => {
   const isSSR = typeof window === 'undefined'
 
   return (
@@ -21,7 +21,7 @@ const Canvas = () => {
         <CanvasT gl={{ antialias: true }} camera={{ position: [0, 0, 2] }}>
           <Suspense fallback={null}>
             <Scene />
-            <Controls />
+            <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
             <Effects />
           </Suspense>
         </CanvasT>
