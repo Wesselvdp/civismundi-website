@@ -50,16 +50,15 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress, ready, onGlitchFinished }) =
     <div style={style}>
       {!isSSR && (
         <CanvasT
-          gl={{ antialias: false }}
+          gl={{ antialias: false, powerPreferene: 'low-power' }}
           camera={{ position: [0, 0, 3] }}
-          pixelRatio={window.devicePixelRatio}
+          pixelRatio={1}
         >
-          <Lightning />
-          <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
-          <Effects ready={ready} onGlitchFinished={onGlitchFinished} />
-          <LoadingManager onProgress={onProgress} />
-
           <Suspense fallback={null}>
+            <Lightning />
+            <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />
+            <Effects ready={ready} onGlitchFinished={onGlitchFinished} />
+            <LoadingManager onProgress={onProgress} />
             <Scene />
           </Suspense>
         </CanvasT>
