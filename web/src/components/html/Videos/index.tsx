@@ -16,6 +16,8 @@ const Videos = () => {
   )
 
   useEffect(() => {
+    console.log('is visible changed')
+
     if (isVisible) {
       const videos = document.querySelectorAll('.video-container video')
       for (let i = 0; i < videos.length; i += 1) {

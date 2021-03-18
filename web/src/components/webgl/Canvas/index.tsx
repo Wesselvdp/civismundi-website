@@ -52,7 +52,7 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress, ready, onGlitchFinished }) =
         <CanvasT
           gl={{ antialias: false }}
           camera={{ position: [0, 0, 3] }}
-          pixelRatio={window.devicePixelRatio}
+          pixelRatio={1}
         >
           <Lightning />
           <Controls timerRef={timerRef} onTimerEnd={onTimerEnd} />

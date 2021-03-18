@@ -15,7 +15,7 @@ function World() {
   const worldMaterial = useMemo(() => {
     const texture = loader.load('/earth-blue-marble-alt.jpg')
     texture.flipY = false
-    texture.anisotropy = gl.capabilities.getMaxAnisotropy()
+    // texture.anisotropy = gl.capabilities.getMaxAnisotropy()
 
     const material = new THREE.MeshLambertMaterial({
       side: THREE.DoubleSide,
@@ -39,7 +39,7 @@ function World() {
       texture.magFilter = THREE.LinearFilter
       texture.format = THREE.RGBFormat
       texture.flipY = false
-      texture.anisotropy = gl.capabilities.getMaxAnisotropy()
+      // texture.anisotropy = gl.capabilities.getMaxAnisotropy()
 
       const alphaMap = loader.load(`/alpha-map/${obj.alpha}`)
       alphaMap.minFilter = THREE.LinearFilter

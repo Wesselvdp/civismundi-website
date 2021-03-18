@@ -3,7 +3,7 @@ export const StaticShader = {
     tDiffuse: { type: 't', value: null },
     time: { type: 'f', value: 0.0 },
     amount: { type: 'f', value: 0.03 },
-    size: { type: 'f', value: 2.0 },
+    size: { type: 'f', value: 3.0 },
   },
 
   vertexShader: [
