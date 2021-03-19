@@ -4,13 +4,13 @@ import * as THREE from 'three'
 
 import { Globe, Controls, Lightning, Clouds, Effects } from '..'
 
-const OBJECTS_TO_LOAD = 11
+const OBJECTS_TO_LOAD = 10
 
 function Scene() {
   return (
     <>
       <Globe />
-      <Clouds />
+      {/* <Clouds /> */}
     </>
   )
 }
@@ -50,7 +50,7 @@ const Canvas = ({ timerRef, onTimerEnd, onProgress, ready, onGlitchFinished }) =
     <div style={style}>
       {!isSSR && (
         <CanvasT
-          gl={{ antialias: false, powerPreferene: 'low-power' }}
+          gl={{ antialias: false }}
           camera={{ position: [0, 0, 3] }}
           pixelRatio={1}
         >
