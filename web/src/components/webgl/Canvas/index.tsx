@@ -10,7 +10,7 @@ function Scene() {
   return (
     <>
       <Globe />
-      <Clouds />
+      {/* <Clouds /> */}
     </>
   )
 }

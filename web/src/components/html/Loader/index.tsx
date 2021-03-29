@@ -20,103 +20,111 @@ const defaultOptions = {
 }
 
 const Loader = ({ progress, onFinish }) => {
-  const ring = useRef()
-  const finalRing = useRef()
-  const tween = useRef()
-
-  const [pseudoProgress, setPseudoProgress] = useState(0)
   const [show, setShow] = useState(true)
 
-  const startFinalRing = () => {
-    new TWEEN.Tween({ progress: 0 })
-      .to({ progress: 1 }, FINAL_CIRCLE_DURATION)
-      .onStart((d) => {
-        finalRing.current.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`
-        finalRing.current.style.strokeDashoffset = CIRCUMFERENCE
-      })
-      .onUpdate((d) => {
-        const offset = CIRCUMFERENCE - d.progress * CIRCUMFERENCE
-        finalRing.current.style.strokeDashoffset = offset
-      })
-      .onComplete(() => {
-        setShow(false)
-        onFinish(true)
-      })
-      .easing(TWEEN.Easing.Cubic.InOut)
-      .start()
-  }
-
-  function animate(time) {
-    requestAnimationFrame(animate)
-    TWEEN.update(time)
-  }
-
   useEffect(() => {
-    requestAnimationFrame(animate)
+    setShow(false)
+    onFinish(true)
   }, [])
 
-  useEffect(() => {
-    if (tween.current) tween.current.stop()
+  return null
+  // const ring = useRef()
+  // const finalRing = useRef()
+  // const tween = useRef()
 
-    tween.current = new TWEEN.Tween({ progress: pseudoProgress })
-      .to({ progress: progress }, 1000)
-      .onUpdate((d) => {
-        setPseudoProgress(d.progress)
-      })
-      .easing(TWEEN.Easing.Cubic.InOut)
-      .start()
-  }, [progress])
+  // const [pseudoProgress, setPseudoProgress] = useState(0)
+  // const [show, setShow] = useState(true)
 
-  useEffect(() => {
-    ring.current.style.strokeDashoffset = CIRCUMFERENCE - pseudoProgress * CIRCUMFERENCE
+  // const startFinalRing = () => {
+  //   new TWEEN.Tween({ progress: 0 })
+  //     .to({ progress: 1 }, FINAL_CIRCLE_DURATION)
+  //     .onStart((d) => {
+  //       finalRing.current.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`
+  //       finalRing.current.style.strokeDashoffset = CIRCUMFERENCE
+  //     })
+  //     .onUpdate((d) => {
+  //       const offset = CIRCUMFERENCE - d.progress * CIRCUMFERENCE
+  //       finalRing.current.style.strokeDashoffset = offset
+  //     })
+  //     .onComplete(() => {
+  //       setShow(false)
+  //       onFinish(true)
+  //     })
+  //     .easing(TWEEN.Easing.Cubic.InOut)
+  //     .start()
+  // }
 
-    if (pseudoProgress >= 1) {
-      startFinalRing()
-    }
-  }, [pseudoProgress])
+  // function animate(time) {
+  //   requestAnimationFrame(animate)
+  //   TWEEN.update(time)
+  // }
 
-  return (
-    <Container className={!show ? 'hidden' : ''}>
-      <div>
-        <div className="lottie-wrapper">
-          <Lottie
-            options={defaultOptions}
-            height={87}
-            width={87}
-            isStopped={false}
-            isPaused={false}
-          />
-          <svg
-            className="progress-ring"
-            width={CIRCLE_SIZE * 2}
-            height={CIRCLE_SIZE * 2}
-          >
-            <circle
-              ref={ring}
-              className="progress-ring__circle"
-              stroke="rgba(255, 255, 255, 1)"
-              strokeWidth="1"
-              fill="transparent"
-              r={CIRCLE_SIZE - 2}
-              cx={CIRCLE_SIZE}
-              cy={CIRCLE_SIZE}
-            />
-            <circle
-              ref={finalRing}
-              className="progress-ring__circle"
-              stroke="rgba(255, 255, 255, 1)"
-              strokeWidth="2"
-              fill="transparent"
-              r={CIRCLE_SIZE - 2}
-              cx={CIRCLE_SIZE}
-              cy={CIRCLE_SIZE}
-            />
-          </svg>
-        </div>
-        <p>{`${parseInt((pseudoProgress || 0) * 100, 10)}%`}</p>
-      </div>
-    </Container>
-  )
+  // useEffect(() => {
+  //   requestAnimationFrame(animate)
+  // }, [])
+
+  // useEffect(() => {
+  //   if (tween.current) tween.current.stop()
+
+  //   tween.current = new TWEEN.Tween({ progress: pseudoProgress })
+  //     .to({ progress: progress }, 1000)
+  //     .onUpdate((d) => {
+  //       setPseudoProgress(d.progress)
+  //     })
+  //     .easing(TWEEN.Easing.Cubic.InOut)
+  //     .start()
+  // }, [progress])
+
+  // useEffect(() => {
+  //   ring.current.style.strokeDashoffset = CIRCUMFERENCE - pseudoProgress * CIRCUMFERENCE
+
+  //   if (pseudoProgress >= 1) {
+  //     startFinalRing()
+  //   }
+  // }, [pseudoProgress])
+
+  // return (
+  //   <Container className={!show ? 'hidden' : ''}>
+  //     <div>
+  //       <div className="lottie-wrapper">
+  //         <Lottie
+  //           options={defaultOptions}
+  //           height={87}
+  //           width={87}
+  //           isStopped={false}
+  //           isPaused={false}
+  //         />
+  //         <svg
+  //           className="progress-ring"
+  //           width={CIRCLE_SIZE * 2}
+  //           height={CIRCLE_SIZE * 2}
+  //         >
+  //           <circle
+  //             ref={ring}
+  //             className="progress-ring__circle"
+  //             stroke="rgba(255, 255, 255, 1)"
+  //             strokeWidth="1"
+  //             fill="transparent"
+  //             r={CIRCLE_SIZE - 2}
+  //             cx={CIRCLE_SIZE}
+  //             cy={CIRCLE_SIZE}
+  //           />
+  //           <circle
+  //             ref={finalRing}
+  //             className="progress-ring__circle"
+  //             stroke="rgba(255, 255, 255, 1)"
+  //             strokeWidth="2"
+  //             fill="transparent"
+  //             r={CIRCLE_SIZE - 2}
+  //             cx={CIRCLE_SIZE}
+  //             cy={CIRCLE_SIZE}
+  //           />
+  //         </svg>
+  //       </div>
+  //       <p>{`${parseInt((pseudoProgress || 0) * 100, 10)}%`}</p>
+  //     </div>
+  //   </Container>
+  // )
 }
 
 export default Loader
