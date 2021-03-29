@@ -45,3 +45,13 @@ export const textures: any = {
   }
 }
 /* eslint-enable prettier/prettier */
+
+export const positions = [
+  [0, 0, 0],
+  [1, 0, 0],
+  [-1, 0, 0],
+  [0, 1, 0],
+  [-1, 1, 0],
+  [1, 1, 0],
+  [0, -1, 0]
+]
