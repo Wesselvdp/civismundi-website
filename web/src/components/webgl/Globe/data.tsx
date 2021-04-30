@@ -16,7 +16,7 @@ export const textures: any = {
   // north america
   'Land006_Mesh001': {
     alpha: 'North-America.jpg',
-    video: 'vid3.mp4',
+    video: 'vid6.mp4',
     videoSanity: 'https://cdn.sanity.io/files/aail6zsu/dev/5e8f124a1bf59792a60b59b07333bef3c01c77b4.mp4'
   },
   // europe,
@@ -40,7 +40,7 @@ export const textures: any = {
   // australia
   'Land003_Mesh001' : {
     alpha: 'Australia.jpg',
-    video: 'vid6.mp4',
+    video: 'vid7.mp4',
     videoSanity: 'https://cdn.sanity.io/files/aail6zsu/dev/d87a2ff51ccd755e3c3e17b93d796a14d1c2eab2.mp4'
   }
 }
