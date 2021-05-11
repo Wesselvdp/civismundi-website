@@ -10,8 +10,8 @@ function Clouds() {
 
   useEffect(() => {
     function onResize() {
-      const multiplier = window.innerWidth < 700 ? 1.8 : 1
-      rotation.current = { x: 0.00003 * multiplier, y: 0.00012 * multiplier }
+      const multiplier = window.innerWidth < 700 ? 1.2 : 1
+      rotation.current = { x: 2 * 0.00003 * multiplier, y: 2 * 0.00012 * multiplier }
     }
     onResize()
     window.addEventListener('resize', onResize)
@@ -19,7 +19,7 @@ function Clouds() {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     meshRef.current.rotation.y -= rotation.current.y
     meshRef.current.rotation.x -= rotation.current.x
   })

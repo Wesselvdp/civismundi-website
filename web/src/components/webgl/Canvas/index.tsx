@@ -22,7 +22,7 @@ function LoadingManager({ onProgress }) {
       itemsLoaded,
       itemsTotal
     ) {
-      onProgress(itemsLoaded / OBJECTS_TO_LOAD)
+      onProgress(itemsLoaded / itemsTotal)
     }
 
     THREE.DefaultLoadingManager.onError = function (url) {

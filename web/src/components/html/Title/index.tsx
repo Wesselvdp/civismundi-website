@@ -68,6 +68,7 @@ const Wrapper = styled.div`
 
     @media ${breakpoints.phoneOnly} {
       padding: 0 15px;
+      transition: opacity 0.8s;
 
       h2 {
         font-size: 22px;
