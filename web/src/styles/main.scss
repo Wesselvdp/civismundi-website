@@ -8,6 +8,8 @@ body {
   margin: 0;
   font-family: $font-family;
   text-align: center;
+  height: 100%;
+  overflow: hidden;
 
   * {
     box-sizing: border-box;
