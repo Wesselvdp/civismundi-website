@@ -36,3 +36,19 @@ $break-lg: 1200px;
     @content;
   }
 }
+
+.hidden-xs {
+  @include phone-only {
+    display: none !important;
+  }
+}
+
+.visible-xs {
+  @include tablet-portrait-up {
+    display: none !important;
+  }
+
+  @include phone-only {
+    display: block;
+  }
+}

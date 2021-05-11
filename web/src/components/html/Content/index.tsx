@@ -14,10 +14,10 @@ const Content = ({ show, setShow, glitchFinished }) => {
         <div className="section__footer">
           <div>
             <div className="scroll-container">
-              <div className="scroll-indicator" onClick={() => setShow(!show)}>
+              <div className={`scroll-indicator ${show ? 'hidden-xs' : ''}`}onClick={() => setShow(!show)}>
                 <div>
                   <img className={`scroll-anim ${!show ? 'fade in' : 'fade'}`} src="/arrow-down.svg" />
-                  <img className={`${show ? 'fade in' : 'fade'}`} src="/close-1.svg" />
+                  <img className={`hidden-xs ${show ? 'fade in' : 'fade'}`} src="/close-1.svg" />
                 </div>
               </div>
               {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
@@ -25,6 +25,13 @@ const Content = ({ show, setShow, glitchFinished }) => {
           </div>
 
           <div className={`${show && glitchFinished ? 'fade in' : 'fade'}`}>
+            <div className="visible-xs">
+              <div className="scroll-indicator" style={{ margin: '0 auto 10px' }} onClick={() => setShow(!show)}>
+                <div className="close-only">
+                  <img className={`${show ? 'fade in' : 'fade'}`} src="/close-1.svg" />
+                </div>
+              </div>
+            </div>
             <div>
               <p>&copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED</p>
             </div>
@@ -141,16 +148,20 @@ const Home = styled.div`
             & > div {
               width: 100%;
 
-              &:first-child {
-                order: 2;
+              &:nth-child(1) {
+                order: 1;
+              }
+
+              &:nth-child(2) {
+                order: 3;
 
                 p {
                   font-size: 9px;
                 }
               }
 
-              &:last-child {
-                order: 1;
+              &:nth-child(3) {
+                order: 2;
                 padding-bottom: 5px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.85);
                 margin-bottom: 5px;
@@ -203,12 +214,16 @@ const Home = styled.div`
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -35%);
+      transform: translate(-50%, -50%);
+      
+      &:not(.close-only) {
+        transform: translate(-50%, -35%);
+      }
 
       img {
         width: 10px;
         height: auto;
-
+    
         &.scroll-anim {
           animation: ${scrollAnim} 1.7s infinite ease;
         }
