@@ -6,29 +6,18 @@ import { Title } from '@components/html'
 import { breakpoints } from '@utils/breakpoints'
 
 const Content = ({ show, setShow, glitchFinished }) => {
-  useEffect(() => {
-    function listener() {
-      setShow(true)
-    }
-
-    if (glitchFinished) {
-      window.addEventListener('mousewheel', listener)
-    }
-
-    return () => window.removeEventListener('mousewheel', listener)
-  }, [glitchFinished])
-
   return (
     <Home className="home">
       <div className="section">
         <Title show={show} />
 
         <div className="section__footer">
-          <div className={`${show ? 'fade' : 'fade in'}`}>
+          <div>
             <div className="scroll-container">
-              <div className="scroll-indicator" onClick={() => setShow(true)}>
+              <div className="scroll-indicator" onClick={() => setShow(!show)}>
                 <div>
-                  <img src="/arrow-down.svg" />
+                  <img className={`scroll-anim ${!show ? 'fade in' : 'fade'}`} src="/arrow-down.svg" />
+                  <img className={`${show ? 'fade in' : 'fade'}`} src="/close-1.svg" />
                 </div>
               </div>
               {/* <p>MORE TO COME... WORKING ON BEING BETTER</p> */}
@@ -45,7 +34,7 @@ const Content = ({ show, setShow, glitchFinished }) => {
                   HELLO@CIVISMUNDI.WORLD
                 </a>{' '}
                 &middot;{' '}
-                <a target="_blank" href="https://www.instagram.com">
+                <a target="_blank" href="https://www.instagram.com/civismundi.world/">
                   INSTAGRAM
                 </a>
               </p>
@@ -53,16 +42,15 @@ const Content = ({ show, setShow, glitchFinished }) => {
           </div>
         </div>
       </div>
-==
     </Home>
   )
 }
 
 const scrollAnim = keyframes`
-  0% {transform: translateY(0)}
-  50% {transform: translateY(-4px)}
-  55% {transform: translateY(-4px)}
-  100% {transform: translateY(0)}
+  0% {transform: translate(-50%, 0)}
+  50% {transform: translate(-50%, -4px)}
+  55% {transform: translate(-50%, -4px)}
+  100% {transform: translate(-50%, 0)}
 `
 
 const Home = styled.div`
@@ -118,13 +106,15 @@ const Home = styled.div`
             }
           }
 
-          &.fade {
+          img.fade {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             opacity: 0;
-            transition: all 1.2s;
 
             &.in {
               opacity: 1;
-              transition: all 4s;
             }
           }
         }
@@ -218,7 +208,10 @@ const Home = styled.div`
       img {
         width: 10px;
         height: auto;
-        animation: ${scrollAnim} 1.7s infinite ease;
+
+        &.scroll-anim {
+          animation: ${scrollAnim} 1.7s infinite ease;
+        }
       }
     }
   }

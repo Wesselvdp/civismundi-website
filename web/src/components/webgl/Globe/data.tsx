@@ -4,7 +4,8 @@ export const textures: any = {
   // NA
   'Land004_Mesh001' : {
     video: 'vid5.mp4',
-    videoSanity: 'https://cdn.sanity.io/files/aail6zsu/dev/f6039f241605e534f903fb598e20ec7e6973e00a.mp4'
+    videoSanity: 'https://cdn.sanity.io/files/aail6zsu/dev/f6039f241605e534f903fb598e20ec7e6973e00a.mp4',
+    alphaMap: 'alpha-na.jpg'
   },
   // SA
   'Land001_Mesh001': {

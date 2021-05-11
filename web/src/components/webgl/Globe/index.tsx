@@ -30,6 +30,7 @@ function World() {
 
     Object.keys(textures).forEach((key) => {
       const obj = textures[key]
+      const payload = { opacity: 0.65, transparent: true }
 
       const vid = document.getElementById(key)
       vid.play()
@@ -40,19 +41,18 @@ function World() {
       texture.format = THREE.RGBFormat
       texture.flipY = false
       texture.anisotropy = gl.capabilities.getMaxAnisotropy()
+      payload.map = texture
 
-      // const alphaMap = loader.load(`/alpha-map/${obj.alpha}`)
-      // alphaMap.minFilter = THREE.LinearFilter
-      // alphaMap.magFilter = THREE.LinearFilter
-      // alphaMap.format = THREE.RGBFormat
-      // // alphaMap.flipY = false
+      if (obj.alphaMap) {
+        const alphaMap = loader.load(`/alpha-map/${obj.alphaMap}`)
+        alphaMap.minFilter = THREE.LinearFilter
+        alphaMap.magFilter = THREE.LinearFilter
+        alphaMap.format = THREE.RGBFormat
+        alphaMap.flipY = false
+        payload.alphaMap = alphaMap
+      }
 
-      const material = new THREE.MeshBasicMaterial({
-        map: texture,
-        opacity: 0.65,
-        transparent: true,
-        // alphaMap,
-      })
+      const material = new THREE.MeshBasicMaterial(payload)
 
       materials.push(material)
     })

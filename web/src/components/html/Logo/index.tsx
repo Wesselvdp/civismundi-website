@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
-// import { isSafari, isMobileSafari } from 'react-device-detect'
+import { isSafari, isMobileSafari } from 'react-device-detect'
 
 const Logo = ({ ready }) => {
   // const ref = useRef()
@@ -10,13 +10,12 @@ const Logo = ({ ready }) => {
   // const [canPlayVideo] = useState(!isSafari || isMobileSafari)
 
   // useEffect(() => {
-  //   if (canPlayVideo) {
   //     ref.current.load()
-  //   }
+  
   // }, [])
 
   // useEffect(() => {
-  //   if (ready && canPlayVideo) {
+  //   if (ready) {
   //     ref.current.play()
   //   }
   // }, [ready])
@@ -27,7 +26,6 @@ const Logo = ({ ready }) => {
         <img src="/logo-still.png" />
         {/* <video
           ref={ref}
-          className={canPlayVideo ? '' : 'hidden'}
           playsInline
           muted
         >
