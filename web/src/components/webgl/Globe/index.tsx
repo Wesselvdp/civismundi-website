@@ -8,67 +8,8 @@ import { textures, positions } from './data'
 
 const loader = new THREE.TextureLoader()
 
-// const World = () => {
-//   const { gl } = useThree()
-
-//   const texs = useMemo(() => {
-//     const materials: any = []
-
-//     Object.keys(textures).forEach((key) => {
-//       const obj = textures[key]
-
-//       const vid = document.getElementById(key)
-//       vid.play()
-
-//       const texture = new THREE.VideoTexture(vid)
-//       texture.minFilter = THREE.LinearFilter
-//       texture.magFilter = THREE.LinearFilter
-//       texture.format = THREE.RGBFormat
-//       // texture.flipY = false
-//       texture.anisotropy = gl.capabilities.getMaxAnisotropy()
-
-//       // const alphaMap = loader.load(`/alpha-map/${obj.alpha}`)
-//       // alphaMap.minFilter = THREE.LinearFilter
-//       // alphaMap.magFilter = THREE.LinearFilter
-//       // alphaMap.format = THREE.RGBFormat
-//       // alphaMap.flipY = false
-
-//       // const material = new THREE.MeshBasicMaterial({
-//       //   map: texture,
-//       //   opacity: 0.65,
-//       //   transparent: true,
-//       //   alphaMap,
-//       // })
-
-//       materials.push(texture)
-//     })
-
-//     return materials
-//   }, [])
-
-//     return (
-//       <>
-//         {texs.map((texture, i) => (
-//           <mesh position={positions[i]}>
-//               <planeBufferGeometry args={[1, 1]} attach="geometry" />
-//               <meshPhongMaterial
-//                 map={texture}
-//                 transparent
-//                 side={THREE.DoubleSide}
-//                 attach="material"
-//                 alphaTest={0.1}
-//                 opacity={0.6}
-//               />
-//           </mesh>
-//         ))}
-//        </>
-//     )
-// }
-
-// export default World
-
 function World() {
-  const gltf = useLoader(GLTFLoader, '/cm-globe-new.glb')
+  const gltf = useLoader(GLTFLoader, '/cm-globe-11-05-21.glb')
   const { gl } = useThree()
 
   const worldMaterial = useMemo(() => {
@@ -97,7 +38,7 @@ function World() {
       texture.minFilter = THREE.LinearFilter
       texture.magFilter = THREE.LinearFilter
       texture.format = THREE.RGBFormat
-      // texture.flipY = false
+      texture.flipY = false
       texture.anisotropy = gl.capabilities.getMaxAnisotropy()
 
       // const alphaMap = loader.load(`/alpha-map/${obj.alpha}`)
@@ -145,18 +86,6 @@ function World() {
 
   return (
     <>
-      {/* This is the world object */}
-      {/* <mesh position={[0, 0, 0]}>
-        <sphereGeometry attach="geometry" args={[1, 16, 16]} />
-        <meshStandardMaterial
-          attach="material"
-          color="white"
-          transparent
-          map={worldTexture}
-          // roughness={0.1}
-          // metalness={0.1}
-        />
-      </mesh> */}
       <primitive
         object={gltf.scene}
         position={[0, 0, 0]}
