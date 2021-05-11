@@ -13,7 +13,7 @@ function World() {
   const { gl } = useThree()
 
   const worldMaterial = useMemo(() => {
-    const texture = loader.load('/earth-blue-marble-alt.jpg')
+    const texture = loader.load('/globe-texture.jpg')
     texture.flipY = false
     texture.anisotropy = gl.capabilities.getMaxAnisotropy()
 
