@@ -23,7 +23,7 @@ const Logo = ({ ready }) => {
   return (
     <Link to="/">
       <Container>
-        <img src="/logo-still.png" />
+        {/* <img src="/logo-still.png" /> */}
         <video
           ref={ref}
           playsInline
