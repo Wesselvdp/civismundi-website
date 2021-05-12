@@ -5,33 +5,33 @@ import { breakpoints } from '@utils/breakpoints'
 import { isSafari, isMobileSafari } from 'react-device-detect'
 
 const Logo = ({ ready }) => {
-  // const ref = useRef()
+  const ref = useRef()
 
-  // const [canPlayVideo] = useState(!isSafari || isMobileSafari)
+  const [canPlayVideo] = useState(!isSafari || isMobileSafari)
 
   // useEffect(() => {
   //     ref.current.load()
   
   // }, [])
 
-  // useEffect(() => {
-  //   if (ready) {
-  //     ref.current.play()
-  //   }
-  // }, [ready])
+  useEffect(() => {
+    if (ready) {
+      ref.current.play()
+    }
+  }, [ready])
 
   return (
     <Link to="/">
       <Container>
         <img src="/logo-still.png" />
-        {/* <video
+        <video
           ref={ref}
           playsInline
           muted
         >
-          <source src="/cm-logo-3-1.mov" type="video/quicktime" />
-          <source src="/logo4.webm" type="video/webm" />
-        </video> */}
+          <source src="/cm-logo-new.mov" type="video/quicktime" />
+           {/* <source src="/logo4.webm" type="video/webm" /> */}
+        </video>
       </Container>
     </Link>
   )
