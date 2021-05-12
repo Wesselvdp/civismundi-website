@@ -30,7 +30,7 @@ const Logo = ({ ready }) => {
           muted
         >
           <source src="/cm-logo-new.mov" type="video/quicktime" />
-           {/* <source src="/logo4.webm" type="video/webm" /> */}
+           <source src="/logo-new.webm" type="video/webm" />
         </video>
       </Container>
     </Link>
