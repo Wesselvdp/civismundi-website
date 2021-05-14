@@ -16,13 +16,26 @@ const Videos = () => {
   )
 
   useEffect(() => {
-    if (isVisible) {
-      const videos = document.querySelectorAll('.video-container video')
-      for (let i = 0; i < videos.length; i += 1) {
-        videos[i].play()
-      }
+    const playVideos = function( event) {
+      console.log('fired event!', event)
+
+      document.querySelectorAll('.video-container video').forEach(video => video.play())
+      document.removeEventListener('click', playVideos)
+      document.removeEventListener('touchstart', playVideos)
     }
-  }, [isVisible])
+
+    document.addEventListener('click', playVideos, false)
+    document.addEventListener('touchstart', playVideos, false)
+  }, [])
+
+  // useEffect(() => {
+  //   if (isVisible) {
+  //     const videos = document.querySelectorAll('.video-container video')
+  //     for (let i = 0; i < videos.length; i += 1) {
+  //       videos[i].play()
+  //     }
+  //   }
+  // }, [isVisible])
 
   return (
     <div className="video-container">
@@ -37,6 +50,7 @@ const Videos = () => {
             key={video.id}
             style={{ display: 'none' }}
             crossOrigin="anonymous"
+            className="world-video"
           >
             <source src={video.src} type="video/mp4" />
           </video>
