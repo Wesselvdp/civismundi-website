@@ -19,7 +19,7 @@ const Videos = () => {
     const playVideos = function( event) {
       console.log('fired event!', event)
 
-      document.querySelectorAll('.video-container video').forEach(video => video.play())
+      document.querySelectorAll('video').forEach(video => video.play())
       document.removeEventListener('click', playVideos)
       document.removeEventListener('touchstart', playVideos)
     }
