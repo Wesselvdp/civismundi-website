@@ -25,15 +25,15 @@ function Clouds() {
   })
 
   return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      <sphereBufferGeometry args={[1.03, 32, 32]} attach="geometry" />
+    <mesh ref={meshRef} position={[0, 0, 0]} renderOrder={1}>
+      <sphereBufferGeometry args={[1.02, 32, 32]} attach="geometry" />
       <meshPhongMaterial
         map={texture}
         transparent
         side={THREE.DoubleSide}
         attach="material"
         alphaTest={0.1}
-        opacity={0.6}
+        opacity={0.5}
       />
     </mesh>
   )
