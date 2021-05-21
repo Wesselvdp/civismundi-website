@@ -1,24 +1,20 @@
 import React, { useEffect, useMemo } from 'react'
-import { usePageVisibility } from 'react-page-visibility'
 
-import { textures } from '@components/webgl/Globe/data'
+import { videoNames } from '@components/webgl/Globe/data'
 
 const Videos = () => {
-  const isVisible = usePageVisibility()
-
   const videos = useMemo(
     () =>
-      Object.keys(textures).map((key) => ({
-        id: key,
-        src: `/${textures[key].video}`,
+      videoNames.map((video: string) => ({
+        id: video,
+        src: `/videos/${video}.mp4`,
       })),
     []
   )
 
   useEffect(() => {
-    const playVideos = function( event) {
-      console.log('fired event!', event)
-
+    // Fix autoplay when in low-power mode
+    const playVideos = function() {
       document.querySelectorAll('video').forEach(video => video.play())
       document.removeEventListener('click', playVideos)
       document.removeEventListener('touchstart', playVideos)
@@ -28,22 +24,12 @@ const Videos = () => {
     document.addEventListener('touchstart', playVideos, false)
   }, [])
 
-  // useEffect(() => {
-  //   if (isVisible) {
-  //     const videos = document.querySelectorAll('.video-container video')
-  //     for (let i = 0; i < videos.length; i += 1) {
-  //       videos[i].play()
-  //     }
-  //   }
-  // }, [isVisible])
 
   return (
     <div className="video-container">
       {videos &&
-        videos.map((video) => (
+        videos.map((video: any) => (
           <video
-            autoPlay
-            loop
             muted
             playsInline
             id={video.id}
