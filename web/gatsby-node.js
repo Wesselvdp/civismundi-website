@@ -1,7 +1,7 @@
 const { defaultLanguage, languages } = require('../studio/supportedLanguages')
 
 // // Filter the default language.
-const extraLanguages = languages.filter((lang) => !lang.isDefault)
+const extraLanguages = languages.filter(lang => !lang.isDefault)
 
 const createLocalePage = (page, createPage) => {
   const { context, ...rest } = page
@@ -11,12 +11,12 @@ const createLocalePage = (page, createPage) => {
     context: {
       ...context,
       languages,
-      locale: defaultLanguage,
-    },
+      locale: defaultLanguage
+    }
   })
 
   if (extraLanguages.length) {
-    extraLanguages.forEach((lang) => {
+    extraLanguages.forEach(lang => {
       const { path, context, ...rest } = page
 
       createPage({
@@ -27,8 +27,8 @@ const createLocalePage = (page, createPage) => {
         context: {
           ...context,
           languages,
-          locale: lang.id,
-        },
+          locale: lang.id
+        }
       })
     })
   }
@@ -38,7 +38,11 @@ exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions
 
   page.context.layout = 'home'
-  if (page.path.match('/about') || page.path.match('/projects')) {
+  if (
+    page.path.match('/about') ||
+    page.path.match('/projects') ||
+    page.path.match('/shop')
+  ) {
     page.context.layout = 'other'
   }
 
@@ -101,8 +105,8 @@ const createCustomPages = async (graphql, createPage) => {
       context: {
         id: node.id,
         city: node.slug.current,
-        layout: 'project-detailed',
-      },
+        layout: 'project-detailed'
+      }
     }
     // We want local pages
     createLocalePage(page, createPage)

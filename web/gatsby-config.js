@@ -26,13 +26,13 @@ module.exports = {
       }
     },
     {
-      resolve: "gatsby-plugin-web-font-loader",
+      resolve: 'gatsby-plugin-web-font-loader',
       options: {
         custom: {
           families: ['OriyaMN', 'Druk Wide Bold'],
-          urls: ['/fonts/font.css'],
-        },
-      },
+          urls: ['/fonts/font.css']
+        }
+      }
     },
     {
       resolve: 'gatsby-plugin-react-svg',
@@ -41,7 +41,7 @@ module.exports = {
           include: `${__dirname}/src/assets/`
         }
       }
-    },    
+    },
     {
       resolve: 'gatsby-source-sanity',
       options: {
@@ -57,7 +57,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-sass',
       options: {
-        data: `@import "${__dirname}/src/styles/main";`,
+        data: `@import "${__dirname}/src/styles/main";`
       }
     },
     `gatsby-transformer-sharp`,
@@ -74,6 +74,13 @@ module.exports = {
         icon: `src/media/favicon-32x32.png` // This path is relative to the root of the site.
       }
     },
+    {
+      resolve: 'gatsby-plugin-load-script',
+      options: {
+        disable: false, // When do you want to disable it ?
+        src: 'http://sdks.shopifycdn.com/buy-button/1.0.0/buybutton.js'
+      }
+    }
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
