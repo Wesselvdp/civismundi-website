@@ -137,6 +137,10 @@
 //   createCustomPages(graphql, createPage)
 // }
 
+// exports.createPages = async ({ graphql, actions }) => {
+
+// }
+
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   console.log('stage', stage)
   if (stage === 'build-html' || stage === 'develop-html') {

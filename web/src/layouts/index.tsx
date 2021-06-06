@@ -2,10 +2,10 @@ import React, { useRef, useState, useEffect } from 'react'
 import Div100vh from 'react-div-100vh'
 import { throttle } from 'lodash'
 
-import { Navigation, Galaxy, Content, Loader, Videos } from '../components/html'
+import { Navigation, Footer, Galaxy, Loader, Videos } from '../components/html'
 import { Canvas } from '../components/webgl'
 
-const Layout = () => {
+const Layout = ({ children, location, ...props }) => {
   const interactionTimer = useRef()
   const [showContent, _setShowContent] = useState(false)
   const [glitchFinished, setGlitchFinished] = useState(false)
@@ -15,7 +15,7 @@ const Layout = () => {
   const showRef = useRef(showContent)
 
   useEffect(() => {
-    const listener = throttle(function(event) {
+    const listener = throttle(function (event) {
       const show = event.deltaY > 0 // show if scrolling down, hide if scrolling up
       if (showRef.current !== show) {
         setShowContent(show)
@@ -37,14 +37,16 @@ const Layout = () => {
 
   return (
     <>
-      <Navigation ready={ready} />
       <Div100vh>
+        <Navigation location={location} ready={ready} />
         <Loader progress={progress} onFinish={setReady} />
-        <Content
-          show={showContent}
-          setShow={setShowContent}
-          glitchFinished={glitchFinished}
-        />
+        {React.cloneElement(children, {
+          ...props,
+          glitchFinished,
+          showContent,
+          setShowContent,
+          ready,
+        })}
         <Canvas
           timerRef={interactionTimer}
           onTimerEnd={setShowContent}
@@ -53,6 +55,12 @@ const Layout = () => {
           ready={ready}
         />
         <Galaxy />
+        <Footer
+          setShow={setShowContent}
+          show={showContent}
+          glitchFinished={glitchFinished}
+          location={location}
+        />
       </Div100vh>
 
       <Videos />

@@ -1,32 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/html'
 
-const Navigation = ({ ready }) => {
+const DefaultNavigation = ({ ready }: any) => (
+  <>
+    {/* Left */}
+    <div className="item item--left" />
+
+    {/* Center logo */}
+    <div className="item--center">
+      <Logo ready={ready} />
+    </div>
+
+    {/* Right */}
+    <div className="item item--right" />
+  </>
+)
+
+const ShopNavigation = () => {
+  return (
+    <>
+      <div className="item item--left">TEST</div>
+
+      <div className="item--center"></div>
+
+      {/* Right */}
+      <div className="item item--right">TEST</div>
+    </>
+  )
+}
+
+const Navigation = ({ ready, location }: any) => {
+  const isWebshop = location && location.pathname.includes('/shop')
+
   return (
     <Container>
       <Nav>
-        {/* Left */}
-        <div className="item item--left">
-          {/* <Link to="/projects" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/projects' ? 'active' : ''}>
-            <span className="desktop">All projects</span>
-            <span className="mobile">Work</span>
-          </Link> */}
-        </div>
-
-        {/* Center logo */}
-        <div className="item--center">
-          <Logo ready={ready} />
-        </div>
-
-        {/* Right */}
-        <div className="item item--right">
-          {/* <Link to="/about" onClick={() => dispatch(setWorldMode(WorldMode.IN_BACKGROUND))} className={location.pathname === '/about' ? 'active' : ''}>
-            <span>About</span>
-          </Link> */}
-        </div>
+        {!isWebshop ? <DefaultNavigation ready={ready} /> : <ShopNavigation />}
       </Nav>
     </Container>
   )

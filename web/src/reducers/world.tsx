@@ -1,11 +1,17 @@
-import { WORLD_INITIALIZE_COMPLETE, SET_PROGRESS, SET_READY, SET_VERSION, SET_MODE } from 'src/actions/types'
+import {
+  WORLD_INITIALIZE_COMPLETE,
+  SET_PROGRESS,
+  SET_READY,
+  SET_VERSION,
+  SET_MODE,
+} from 'src/actions/types'
 import { Mode } from 'src/types/enums'
 
 const initialState = {
   ref: {},
   progress: 0,
   ready: false,
-  mode: Mode.LOADING
+  mode: Mode.LOADING,
 }
 
 const reducer = (state = initialState, action: any) => {
@@ -19,11 +25,11 @@ const reducer = (state = initialState, action: any) => {
     }
 
     case SET_READY: {
-      return { ...state, ready: action.ready };
+      return { ...state, ready: action.ready }
     }
 
     case SET_VERSION: {
-      return { ...state, version: action.version };
+      return { ...state, version: action.version }
     }
 
     case SET_MODE: {

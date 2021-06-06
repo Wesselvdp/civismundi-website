@@ -6,5 +6,6 @@ import Galaxy from './Galaxy'
 import Content from './Content'
 import Title from './Title'
 import Videos from './Videos'
+import Footer from './Footer'
 
-export { Navigation, Logo, SEO, Loader, Galaxy, Content, Title, Videos }
+export { Navigation, Footer, Logo, SEO, Loader, Galaxy, Content, Title, Videos }
