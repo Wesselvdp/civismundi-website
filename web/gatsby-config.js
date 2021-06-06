@@ -43,8 +43,15 @@ module.exports = {
         // if you have a private dataset
         token: process.env.SANITY_READ_TOKEN,
         watchMode: false, //!isProduction,
-        overlayDrafts: !isProduction
-      }
+        overlayDrafts: !isProduction,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-load-script',
+      options: {
+        disable: false, // When do you want to disable it ?
+        src: 'https://sdks.shopifycdn.com/buy-button/1.0.0/buybutton.js',
+      },
     },
     {
       resolve: 'gatsby-plugin-sass',
