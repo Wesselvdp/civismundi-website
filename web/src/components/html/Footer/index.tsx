@@ -102,6 +102,7 @@ const FooterStyled = styled.div`
   bottom: 15px;
   width: 100%;
   pointer-events: initial;
+  z-index: 100000;
 
   & > div {
     display: flex;
