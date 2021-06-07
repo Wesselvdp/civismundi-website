@@ -4,11 +4,11 @@ import styled, { keyframes } from 'styled-components'
 
 import { breakpoints } from '@utils/breakpoints'
 
-const Footer = ({ location, show, setShow, glitchFinished }: any) => {
+const Footer = ({ location, show, setShow, glitchFinished, isShop }: any) => {
   const isWebshop = location && location.pathname.includes('/shop')
 
   return (
-    <FooterStyled>
+    <FooterStyled className={isShop && 'is-shop'}>
       <div>
         {!isWebshop && (
           <div className="scroll-container">
@@ -37,25 +37,29 @@ const Footer = ({ location, show, setShow, glitchFinished }: any) => {
           isWebshop || (show && glitchFinished) ? 'fade in' : 'fade'
         }`}
       >
-        {!isWebshop && (
-          <div className="visible-xs">
-            <div
-              className="scroll-indicator"
-              style={{ margin: '0 auto 10px' }}
-              onClick={() => setShow(!show)}
-            >
-              <div className="close-only">
-                <img
-                  className={`${show ? 'fade in' : 'fade'}`}
-                  src="/close-1.svg"
-                />
-              </div>
+        <div
+          className={`visible-xs`}
+          style={{ visibility: isWebshop ? 'hidden' : undefined }}
+        >
+          <div
+            className="scroll-indicator"
+            style={{ margin: '0 auto 10px' }}
+            onClick={() => setShow(!show)}
+          >
+            <div className="close-only">
+              <img
+                className={`${show ? 'fade in' : 'fade'}`}
+                src="/close-1.svg"
+              />
             </div>
           </div>
-        )}
+        </div>
         <div>
           <p>
-            &copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED &middot;{' '}
+            <div style={{ display: 'inline' }}>
+              &copy; CIVIS MUNDI 2021 ALL RIGHTS RESERVED{' '}
+              <span> &middot; </span>
+            </div>
             {!isWebshop ? (
               <Link to="/shop">SHOP</Link>
             ) : (
@@ -71,8 +75,8 @@ const Footer = ({ location, show, setShow, glitchFinished }: any) => {
               rel="noreferrer"
             >
               HELLO@CIVISMUNDI.WORLD
-            </a>{' '}
-            &middot;{' '}
+              <span> &middot; </span>
+            </a>
             <a
               target="_blank"
               href="https://www.instagram.com/civismundi.world/"
@@ -98,11 +102,23 @@ const FooterStyled = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  padding: 0 15px;
-  bottom: 15px;
+  padding: 0 15px 15px;
+  bottom: 0;
   width: 100%;
   pointer-events: initial;
   z-index: 100000;
+
+  @media ${breakpoints.phoneOnly} {
+    padding: 0 15px 5px;
+  }
+
+  &.is-shop {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: 0 auto;
+    z-index: initial;
+  }
 
   & > div {
     display: flex;
@@ -127,6 +143,11 @@ const FooterStyled = styled.div`
           font-size: 12px;
         }
       }
+
+      // @media ${breakpoints.phoneOnly} {
+      //   order: 1;
+      //   border-bottom: 1px solid rgba(255, 255, 255, 0.75);
+      // }
 
       img.fade {
         position: absolute;
@@ -163,15 +184,30 @@ const FooterStyled = styled.div`
         & > div {
           width: 100%;
 
+          p span {
+            display: none;
+          }
+
+          p {
+            display: flex;
+            justify-content: space-between;
+          }
+
           &:nth-child(1) {
             order: 1;
+            padding-top: 5px;
+
+            p {
+              font-size: 9px;
+            }
           }
 
           &:nth-child(2) {
             order: 3;
+            padding-bottom: 5px;
 
             p {
-              font-size: 9px;
+              font-size: 12px;
             }
           }
 
@@ -222,6 +258,10 @@ const FooterStyled = styled.div`
     position: relative;
     display: block;
     cursor: pointer;
+
+    @media ${breakpoints.phoneOnly} {
+      margin-bottom: 20px;
+    }
 
     & > div {
       position: absolute;

@@ -73,7 +73,9 @@ const Loader = ({ progress, onFinish }) => {
   }, [progress])
 
   useEffect(() => {
-    ring.current.style.strokeDashoffset = CIRCUMFERENCE - pseudoProgress * CIRCUMFERENCE
+    if (ring.current) {
+      ring.current.style.strokeDashoffset = CIRCUMFERENCE - pseudoProgress * CIRCUMFERENCE
+    }
 
     if (pseudoProgress >= 1) {
       startFinalRing()

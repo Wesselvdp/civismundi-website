@@ -43,11 +43,24 @@ const style = {
   with: '100%',
 }
 
-const Canvas = ({ timerRef, onTimerEnd, onProgress, ready, onGlitchFinished }) => {
+const Canvas = ({
+  timerRef,
+  onTimerEnd,
+  onProgress,
+  ready,
+  onGlitchFinished,
+  isShop,
+}: any) => {
   const isSSR = typeof window === 'undefined'
 
   return (
-    <div style={style}>
+    <div
+      style={{
+        ...style,
+        zIndex: isShop ? -1 : undefined,
+        opacity: isShop ? 0.7 : undefined,
+      }}
+    >
       {!isSSR && (
         <CanvasT
           gl={{ antialias: false }}

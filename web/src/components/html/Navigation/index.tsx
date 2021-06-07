@@ -27,7 +27,7 @@ const ShopNavigation = () => {
       <div className="item--center"></div>
 
       {/* Right */}
-      <div className="item item--right">TEST</div>
+      <div className="item item--right"></div>
     </>
   )
 }

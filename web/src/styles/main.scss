@@ -9,10 +9,17 @@ body {
   font-family: $font-family;
   text-align: center;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 
   * {
     box-sizing: border-box;
     outline: 0;
+  }
+}
+
+body {
+  .shopify-buy-frame--toggle.is-sticky {
+    top: 15px;
+    transform: none;
   }
 }
