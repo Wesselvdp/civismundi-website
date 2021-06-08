@@ -61,9 +61,13 @@ const Footer = ({ location, show, setShow, glitchFinished, isShop }: any) => {
               <span> &middot; </span>
             </div>
             {!isWebshop ? (
-              <Link to="/shop">SHOP</Link>
+              <Link className="page-link" to="/shop">
+                SHOP
+              </Link>
             ) : (
-              <Link to="/">HOME</Link>
+              <Link className="page-link" to="/">
+                HOME
+              </Link>
             )}
           </p>
         </div>
@@ -74,14 +78,15 @@ const Footer = ({ location, show, setShow, glitchFinished, isShop }: any) => {
               href="mailto: hello@civismundi.world"
               rel="noreferrer"
             >
-              HELLO@CIVISMUNDI.WORLD
-              <span> &middot; </span>
+              HELLO@CIVISMUNDI.WORLD &middot;{' '}
             </a>
             <a
               target="_blank"
               href="https://www.instagram.com/civismundi.world/"
               rel="noreferrer"
+              className="instagram-link"
             >
+              {' '}
               INSTAGRAM
             </a>
           </p>
@@ -110,6 +115,19 @@ const FooterStyled = styled.div`
 
   @media ${breakpoints.phoneOnly} {
     padding: 0 15px 5px;
+  }
+
+  .page-link {
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+  }
+
+  .instagram-link {
+    margin-left: 5px;
   }
 
   &.is-shop {
@@ -214,8 +232,14 @@ const FooterStyled = styled.div`
           &:nth-child(3) {
             order: 2;
             padding-bottom: 5px;
+            padding-top: 5px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+            border-top: 1px solid rgba(255, 255, 255, 0.85);
             margin-bottom: 5px;
+
+            p {
+              justify-content: flex-start;
+            }
 
             p,
             a {
@@ -239,6 +263,7 @@ const FooterStyled = styled.div`
     width: 100%;
     max-width: 315px;
     flex-wrap: wrap;
+    margin-bottom: 15px;
 
     p {
       margin-top: 10px !important;
@@ -246,6 +271,7 @@ const FooterStyled = styled.div`
 
     @media ${breakpoints.phoneOnly} {
       max-width: 280px;
+      margin-bottom: 0;
     }
   }
 
