@@ -43,7 +43,7 @@ const Container = styled.div`
     margin-top: -15px;
     height: 75px;
     width: 245px;
-    position: fixed;
+    position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);

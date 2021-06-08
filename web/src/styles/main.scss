@@ -18,8 +18,120 @@ body {
 }
 
 body {
+  .shopify-buy__collection-products {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .shopify-buy__collection {
+    margin-top: 40px;
+    padding: 0 45px;
+  }
+
   .shopify-buy-frame--toggle.is-sticky {
     top: 15px;
     transform: none;
+    position: absolute;
+  }
+
+  .has-image.shopify-buy__layout-vertical.shopify-buy__product {
+    width: 50%;
+    margin-bottom: 75px;
+
+    & > * {
+      max-width: 400px;
+    }
+
+    &:nth-child(odd) > * {
+      margin-left: auto;
+      margin-right: 40px;
+    }
+
+    &:nth-child(even) > * {
+      margin-right: auto;
+      margin-left: 40px;
+    }
+
+    @include phone-only {
+      width: 100%;
+
+      & > * {
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+    }
+  }
+
+  img.shopify-buy__product__variant-img {
+    width: 300px;
+    max-width: 100%;
+  }
+
+  .shopify-buy__option-select-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+  }
+
+  select.shopify-buy__option-select__select {
+    appearance: none;
+    padding: 10px 35px 10px 15px;
+    border: none;
+    color: white;
+    background: transparent;
+    font-family: 'Druk Wide Super';
+    font-weight: 700;
+    text-align-last:center;
+  }
+
+  svg.shopify-buy__select-icon {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(-50%, -50%);
+    height: 20px;
+    fill: white;
+    pointer-events: none;
+  }
+
+  label.shopify-buy__option-select__label.visuallyhidden {
+    display: none;
+  }
+
+  button.shopify-buy__collection-pagination-button.shopify-buy__btn {
+    display: none;
+  }
+
+  button.shopify-buy__btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    font-family: 'Druk Wide Super';
+    font-weight: 700;
+    color: #fff;
+    padding: 15px 25px;
+    border: 1px solid #fff;
+    margin-top: 16px;
+    text-transform: uppercase;
+    animation: 0.30s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: #fff;
+      color: #000;
+    }
+  }
+
+  h1.shopify-buy__product__title {
+    font-size: 24px;
+    margin: 25px 0 15px;
+    font-family: 'OriyaMN';
+  }
+
+  .shopify-buy__product__price {
+    font-family: 'Druk Wide Super';
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 20px;
   }
 }

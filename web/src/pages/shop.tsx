@@ -32,13 +32,11 @@ const ShopPage = () => {
       ],
       node: document.getElementById('products'),
       options: {
+        productSet: {
+          iframe: false,
+        },
         product: {
-          templates: {
-            title:
-              '<span style="font-size:20px; text-transform: uppercase; color:#fff; font-family:OriyaMN, Helvetica Neue LT, Helvetica, Arial, sans-serif;">{{data.title}}</span>',
-            price: `<h5 style="font-size:20px; color:#fff; font-weight: 700; margin: 10px 0 15px; font-family:'Druk Wide Super';">&#36;{{data.selectedVariant.price}}</h5>`,
-            // button: '<button>TEST</button>',
-          },
+          iframe: false,
           styles: {
             button: {
               color: '#fff',
@@ -106,7 +104,14 @@ const ShopPage = () => {
       <Products>
         <h2 className="subtitle">SHOP</h2>
         <div id="products" />
-        <Link to="/">HOMEPAGE</Link>
+        <Disclaimer>
+          <p>ALLOW 2-3 WEEKS FOR SHIPMENT</p>
+          <p>ALL SALES ARE FINAL</p>
+        </Disclaimer>
+        <Link to="/">
+          <img src="/arrow-left.svg" />
+          HOMEPAGE
+        </Link>
       </Products>
     </>
   )
@@ -116,6 +121,12 @@ const Products = styled.div`
   text-align: center;
   margin-top: 100px;
   padding-bottom: 100px;
+
+  @media ${breakpoints.phoneOnly} {
+    h2 {
+      display: none;
+    }
+  }
 
   #products {
     display: flex !important;
@@ -130,15 +141,32 @@ const Products = styled.div`
     font-size: 40px;
   }
 
-  iframe {
-    z-index: 100000;
-    overflow: scroll !important;
-  }
-
   a {
-    border: 2px solid #fff;
-    padding: 1.2rem 2rem;
+    border: 1px solid #fff;
+    padding: 1.2rem 3.5rem;
     font-family: Druk Wide Super;
+    font-size: 16px;
+
+    img {
+      width: 21px;
+      vertical-align: middle;
+      margin-right: 15px;
+      margin-bottom: 5px;
+      transform: translateX(-0);
+      transition: all 0.3s ease;
+    }
+
+    &:hover img {
+      transform: translateX(-50%);
+    }
+  }
+`
+
+const Disclaimer = styled.div`
+  margin-bottom: 50px;
+
+  p {
+    margin: 0;
   }
 `
 

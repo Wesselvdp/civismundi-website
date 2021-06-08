@@ -19,12 +19,16 @@ const DefaultNavigation = ({ ready }: any) => (
   </>
 )
 
-const ShopNavigation = () => {
+const ShopNavigation = ({ ready }) => {
   return (
     <>
-      <div className="item item--left">TEST</div>
+      <div className="item item--left">
+        <img src="/globe-shop.svg" />
+      </div>
 
-      <div className="item--center"></div>
+      <div className="item--center">
+        <Logo ready={ready} />
+      </div>
 
       {/* Right */}
       <div className="item item--right"></div>
@@ -38,7 +42,11 @@ const Navigation = ({ ready, location }: any) => {
   return (
     <Container>
       <Nav>
-        {!isWebshop ? <DefaultNavigation ready={ready} /> : <ShopNavigation />}
+        {!isWebshop ? (
+          <DefaultNavigation ready={ready} />
+        ) : (
+          <ShopNavigation ready={ready} />
+        )}
       </Nav>
     </Container>
   )

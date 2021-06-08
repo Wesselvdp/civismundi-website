@@ -32,12 +32,16 @@ const Loader = ({ progress, onFinish }) => {
     new TWEEN.Tween({ progress: 0 })
       .to({ progress: 1 }, FINAL_CIRCLE_DURATION)
       .onStart((d) => {
-        finalRing.current.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`
-        finalRing.current.style.strokeDashoffset = CIRCUMFERENCE
+        if (finalRing.current) {
+          finalRing.current.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`
+          finalRing.current.style.strokeDashoffset = CIRCUMFERENCE
+        }
       })
       .onUpdate((d) => {
-        const offset = CIRCUMFERENCE - d.progress * CIRCUMFERENCE
-        finalRing.current.style.strokeDashoffset = offset
+        if (finalRing.current) {
+          const offset = CIRCUMFERENCE - d.progress * CIRCUMFERENCE
+          finalRing.current.style.strokeDashoffset = offset
+        }
       })
       .onComplete(() => {
         setShow(false)
