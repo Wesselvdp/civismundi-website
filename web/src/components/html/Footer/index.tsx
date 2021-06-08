@@ -118,7 +118,7 @@ const FooterStyled = styled.div`
   }
 
   .page-link {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.35);
     transition: all 0.3s ease;
 
     &:hover {
