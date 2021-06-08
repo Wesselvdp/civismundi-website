@@ -68,24 +68,79 @@ const ShopPage = () => {
           },
         },
         toggle: {
-          contents: {
-            count: false,
-          },
           styles: {
             toggle: {
               'background-color': 'transparent',
               ':hover': {
                 'background-color': 'transparent',
               },
+              count: {
+                position: 'absolute',
+                top: 0,
+                right: '5px',
+                'font-weight': 700,
+                'font-size': '12px',
+              },
             },
           },
         },
-        options: {
+        cart: {
+          popup: false,
+          contents: {
+            button: true,
+          },
+          // text: {
+          //   title: 'WARENKORB',
+          //   total: 'Zwischensumme',
+          //   notice:
+          //     'Versand- und Rabattcodes werden beim Checkout hinzugefügt.',
+          //   empty: 'Dein Warenkorb ist leer.',
+          // },
           styles: {
-            options: {
-              color: '#fff',
-              background: 'transparent',
-              'font-weight': '700',
+            button: {
+              'background-color': '#000000',
+              'font-family': 'Source Sans Pro, sans-serif',
+              ':hover': {
+                'background-color': '#000000',
+              },
+              'border-radius': '0px',
+              'font-weight': 'bold',
+              ':focus': {
+                'background-color': '#000000',
+              },
+            },
+            title: {
+              color: '#000000',
+            },
+            footer: {
+              'background-color': '#ffffff',
+            },
+            header: {
+              color: '#000000',
+            },
+            lineItems: {
+              color: '#000000',
+            },
+            subtotalText: {
+              color: '#000000',
+            },
+            subtotal: {
+              color: '#000000',
+            },
+            notice: {
+              color: '#000000',
+            },
+            currency: {
+              color: '#000000',
+            },
+            close: {
+              ':hover': {
+                color: '#000000',
+              },
+              color: '#000000',
+            },
+            emptyCart: {
+              color: '#000000',
             },
           },
         },

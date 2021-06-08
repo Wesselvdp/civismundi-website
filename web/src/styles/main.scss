@@ -26,10 +26,14 @@ body {
   .shopify-buy__collection {
     margin-top: 40px;
     padding: 0 45px;
+
+    @include phone-only {
+      margin-top: 20px;
+    }
   }
 
   .shopify-buy-frame--toggle.is-sticky {
-    top: 15px;
+    top: 10px;
     transform: none;
     position: absolute;
   }
@@ -65,6 +69,10 @@ body {
   img.shopify-buy__product__variant-img {
     width: 300px;
     max-width: 100%;
+
+    @include phone-only {
+      width: 250px;
+    }
   }
 
   .shopify-buy__option-select-wrapper {

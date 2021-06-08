@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-
+import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/html'
 
@@ -23,7 +23,9 @@ const ShopNavigation = ({ ready }) => {
   return (
     <>
       <div className="item item--left">
-        <img src="/globe-shop.svg" />
+        <Link to="/">
+          <img src="/globe-shop.svg" style={{ marginBottom: '-2px' }} />
+        </Link>
       </div>
 
       <div className="item--center">
