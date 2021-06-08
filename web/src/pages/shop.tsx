@@ -157,7 +157,7 @@ const ShopPage = () => {
     <>
       <SEO title="Webshop" />
       <Products>
-        <h2 className="subtitle">SHOP</h2>
+        {/* <h2 className="subtitle">SHOP</h2> */}
         <div id="products" />
         <Disclaimer>
           <p>ALLOW 2-3 WEEKS FOR SHIPMENT</p>
