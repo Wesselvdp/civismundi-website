@@ -4,51 +4,28 @@ import { Link } from 'gatsby'
 import { breakpoints } from '@utils/breakpoints'
 import { Logo } from '@components/html'
 
-const DefaultNavigation = ({ ready }: any) => (
-  <>
-    {/* Left */}
-    <div className="item item--left" />
-
-    {/* Center logo */}
-    <div className="item--center">
-      <Logo ready={ready} />
-    </div>
-
-    {/* Right */}
-    <div className="item item--right" />
-  </>
-)
-
-const ShopNavigation = ({ ready }) => {
-  return (
-    <>
-      <div className="item item--left">
-        <Link to="/">
-          <img src="/globe-shop.svg" style={{ marginBottom: '-2px' }} />
-        </Link>
-      </div>
-
-      <div className="item--center">
-        <Logo ready={ready} />
-      </div>
-
-      {/* Right */}
-      <div className="item item--right"></div>
-    </>
-  )
-}
-
 const Navigation = ({ ready, location }: any) => {
   const isWebshop = location && location.pathname.includes('/shop')
 
   return (
     <Container>
       <Nav>
-        {!isWebshop ? (
-          <DefaultNavigation ready={ready} />
-        ) : (
-          <ShopNavigation ready={ready} />
-        )}
+        {/* Left */}
+        <div className="item item--left">
+          {isWebshop && (
+            <Link to="/">
+              <img src="/globe-shop.svg" style={{ marginBottom: '-2px' }} />
+            </Link>
+          )}
+        </div>
+
+        {/* Center logo */}
+        <div className="item--center">
+          <Logo ready={ready} />
+        </div>
+
+        {/* Right */}
+        <div className="item item--right" />
       </Nav>
     </Container>
   )
