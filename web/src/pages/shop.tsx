@@ -37,6 +37,10 @@ const ShopPage = () => {
         },
         product: {
           iframe: false,
+          contents: {
+            imgWithCarousel: true,
+            img: false,
+          },
           styles: {
             button: {
               color: '#fff',
