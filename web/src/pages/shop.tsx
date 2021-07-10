@@ -8,6 +8,8 @@ import { SEO } from '@components/html'
 import { ShopProducts } from '@components/webshop'
 import { breakpoints } from '@utils/breakpoints'
 
+// import '../../shopfiy-buy/buybutton.min.js'
+
 const ShopPage = () => {
   const shopify = useRef({ client: null, ui: null })
 
@@ -24,11 +26,9 @@ const ShopPage = () => {
     shopify.current.ui.createComponent('productSet', {
       id: [
         6162482266264,
+        6868444348568,
         6162482266264,
-        6162482266264,
-        6162482266264,
-        6162482266264,
-        6162482266264,
+        6868444348568,
       ],
       node: document.getElementById('products'),
       options: {
@@ -37,6 +37,7 @@ const ShopPage = () => {
         },
         product: {
           iframe: false,
+          width: '1080px',
           contents: {
             imgWithCarousel: true,
             img: false,
