@@ -26,9 +26,11 @@ const ShopPage = () => {
     shopify.current.ui.createComponent('productSet', {
       id: [
         6162482266264,
+        6878707351704,
+        6878698930328,
+        6878683267224,
         6868444348568,
-        6162482266264,
-        6868444348568,
+        6878678843544,
       ],
       node: document.getElementById('products'),
       options: {
