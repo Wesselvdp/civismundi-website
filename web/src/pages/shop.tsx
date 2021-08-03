@@ -16,8 +16,8 @@ const ShopPage = () => {
   useEffect(() => {
     // eslint-disable-next-line no-undef
     shopify.current.client = ShopifyBuy.buildClient({
-      domain: 'roybro1.myshopify.com',
-      storefrontAccessToken: '6e5af8fe47e1068f0eff6c177e96897a',
+      domain: 'civismundi.myshopify.com',
+      storefrontAccessToken: 'a82a87514f02397e2146834f1ad04d70',
     })
 
     // eslint-disable-next-line no-undef
@@ -167,7 +167,7 @@ const ShopPage = () => {
         {/* <h2 className="subtitle">SHOP</h2> */}
         <div id="products" />
         <Disclaimer>
-          <p>ALLOW 2-3 WEEKS FOR SHIPMENT</p>
+          <p>ALL ITEMS ARE MADE TO ORDER. PLEASE ALLOW 3-4 WEEKS FOR DELIVERY</p>
           <p>ALL SALES ARE FINAL</p>
         </Disclaimer>
         <Link to="/">
