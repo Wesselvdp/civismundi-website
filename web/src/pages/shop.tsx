@@ -68,7 +68,7 @@ const ShopPage = () => {
             },
             options: {
               color: '#fff',
-              background: 'transparent',
+              background: '#000',
               'font-weight': '700',
             },
           },
