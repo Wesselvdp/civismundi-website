@@ -38,6 +38,7 @@ body {
     }
   }
 
+
   .shopify-buy-frame--toggle.is-sticky {
     top: 10px;
     transform: none;
@@ -138,6 +139,11 @@ body {
     font-family: 'Druk Wide Super';
     font-weight: 700;
     text-align-last:center;
+
+    option {
+      background: #000;
+      color: #fff;
+    }
   }
 
   svg.shopify-buy__select-icon {
